@@ -1,0 +1,30 @@
+.wp-autoplugin-card {
+    background-color: #f9f9f9;
+    border: 1px solid #e5e5e5;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    padding: 20px;
+    text-align: center;
+}
+
+.wp-autoplugin-card h2 {
+    margin-top: 0;
+}
+
+.wp-autoplugin-card p {
+    margin-bottom: 20px;
+}
+
+.wp-autoplugin-card .button-primary {
+    
+}
+
+.wp-list-table tbody .active-plugin {
+    background-color: #cce5ff;
+}
+
+/* Always show row-actions */
+.wp-list-table .row-actions {
+    position: static;
+}
