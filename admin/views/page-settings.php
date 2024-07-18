@@ -27,6 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<th scope="row"><?php _e( 'Model', 'wp-autoplugin' ); ?></th>
 				<td>
 					<select name="wp_autoplugin_model">
+						<option value="gpt-4o-mini" <?php selected( get_option( 'wp_autoplugin_model' ), 'gpt-4o' ); ?>>GPT-4o mini</option>
 						<option value="gpt-4o" <?php selected( get_option( 'wp_autoplugin_model' ), 'gpt-4o' ); ?>>GPT-4o</option>
 						<option value="gpt-4-turbo" <?php selected( get_option( 'wp_autoplugin_model' ), 'gpt-4-turbo' ); ?>>GPT-4 Turbo</option>
 						<option value="gpt-3.5-turbo" <?php selected( get_option( 'wp_autoplugin_model' ), 'gpt-3.5-turbo' ); ?>>GPT-3.5 Turbo</option>

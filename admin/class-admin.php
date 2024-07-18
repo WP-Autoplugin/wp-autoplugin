@@ -17,7 +17,7 @@ class Admin {
 		$anthropic_api_key = get_option( 'wp_autoplugin_anthropic_api_key' );
 		$model = get_option( 'wp_autoplugin_model' );
 
-		if ( ! empty( $openai_api_key ) && in_array( $model, array( 'gpt-4o', 'gpt-4-turbo', 'gpt-3.5-turbo' ), true ) ) {
+		if ( ! empty( $openai_api_key ) && in_array( $model, array( 'gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-3.5-turbo' ), true ) ) {
 			$this->ai_api = new OpenAI_API();
 			$this->ai_api->set_api_key( $openai_api_key );
 			$this->ai_api->set_model( $model );

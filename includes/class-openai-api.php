@@ -25,6 +25,10 @@ class OpenAI_API {
 				'temperature' => 0.2,
 				'max_tokens'  => 4096,
 			),
+			'gpt-4o-mini' => array(
+				'temperature' => 0.2,
+				'max_tokens'  => 4096,
+			),
 			'gpt-4-turbo' => array(
 				'temperature' => 0.2,
 				'max_tokens'  => 4096,
