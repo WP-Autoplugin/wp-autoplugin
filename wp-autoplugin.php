@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Define constants
-define( 'WP_AUTOPLUGIN_VERSION', '1.0' );
+define( 'WP_AUTOPLUGIN_VERSION', '1.0.1' );
 define( 'WP_AUTOPLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'WP_AUTOPLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
