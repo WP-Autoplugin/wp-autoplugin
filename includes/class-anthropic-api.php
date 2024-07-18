@@ -154,9 +154,6 @@ class Anthropic_API {
 				'body' => wp_json_encode( $body ),
 			) );
 
-error_log( 'Sent a new request because the response was too long.' );
-error_log( print_r( $body, true ) );
-
 			if ( is_wp_error( $response ) ) {
 				return $response;
 			}
