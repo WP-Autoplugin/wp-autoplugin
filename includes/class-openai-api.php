@@ -23,11 +23,11 @@ class OpenAI_API {
 		$model_params = array(
 			'gpt-4o' => array(
 				'temperature' => 0.2,
-				'max_tokens'  => 8192,
+				'max_tokens'  => 4096,
 			),
 			'gpt-4-turbo' => array(
 				'temperature' => 0.2,
-				'max_tokens'  => 8192,
+				'max_tokens'  => 4096,
 			),
 			'gpt-3.5-turbo' => array(
 				'temperature' => 0.2,
