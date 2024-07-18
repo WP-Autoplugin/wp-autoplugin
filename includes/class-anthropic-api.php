@@ -23,7 +23,7 @@ class Anthropic_API {
 		$model_params = array(
 			'claude-3-5-sonnet-20240620' => array(
 				'temperature' => 0.2,
-				'max_tokens'  => 4096,
+				'max_tokens'  => 8192,
 			),
 			'claude-3-opus-20240229' => array(
 				'temperature' => 0.2,
@@ -106,13 +106,20 @@ class Anthropic_API {
 		$override_body = array_intersect_key( $override_body, array_flip( $allowed_keys ) );
 		$body = array_merge( $body, $override_body );
 
+		$headers = array(
+			'x-api-key' => $this->api_key,
+			'anthropic-version' => '2023-06-01',
+			'content-type' => 'application/json',
+		);
+
+		// If the model is claude-3-5-sonnet-20240620, we should send this header: "anthropic-beta: max-tokens-3-5-sonnet-2024-07-15"
+		if ( 'claude-3-5-sonnet-20240620' === $this->model ) {
+			$headers['anthropic-beta'] = 'max-tokens-3-5-sonnet-2024-07-15';
+		}
+
 		$response = wp_remote_post( 'https://api.anthropic.com/v1/messages', array(
 			'timeout' => 60,
-			'headers' => array(
-				'x-api-key' => $this->api_key,
-				'anthropic-version' => '2023-06-01',
-				'content-type' => 'application/json',
-			),
+			'headers' => $headers,
 			'body' => wp_json_encode( $body ),
 		) );
 
@@ -146,11 +153,7 @@ class Anthropic_API {
 
 			$response = wp_remote_post( 'https://api.anthropic.com/v1/messages', array(
 				'timeout' => 60,
-				'headers' => array(
-					'x-api-key' => $this->api_key,
-					'anthropic-version' => '2023-06-01',
-					'content-type' => 'application/json',
-				),
+				'headers' => $headers,
 				'body' => wp_json_encode( $body ),
 			) );
 
