@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class OpenAI_API {
+class OpenAI_API extends API {
 	private $api_key;
 	private $model;
 	private $temperature = 0.2;
@@ -46,6 +46,7 @@ class OpenAI_API {
 	}
 
 	public function send_prompt( $prompt, $system_message = '', $override_body = array() ) {
+		$prompt = $this->trim_prompt( $prompt );
 		$messages = array();
 		if ( ! empty( $system_message ) ) {
 			$messages[] = array(

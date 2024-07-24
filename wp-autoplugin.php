@@ -19,6 +19,7 @@ define( 'WP_AUTOPLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'WP_AUTOPLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
 // Include required files
+require_once WP_AUTOPLUGIN_DIR . 'includes/class-api.php';
 require_once WP_AUTOPLUGIN_DIR . 'includes/class-openai-api.php';
 require_once WP_AUTOPLUGIN_DIR . 'includes/class-anthropic-api.php';
 require_once WP_AUTOPLUGIN_DIR . 'includes/class-plugin-generator.php';
