@@ -116,5 +116,16 @@ WP-Autoplugin is licensed under the GPLv3 or later.
 
 ## Changelog
 
+### 1.0.3
+- Added support for gpt-4o-2024-08-06
+- Cleaned up prompts for better readability
+
+### 1.0.2
+- Added support for GPT-4o mini
+- Added support for the high-limit (8192 tokens) version of Claude 3.5 Sonnet
+
+### 1.0.1
+- Fixed max_tokens value for OpenAI models
+
 ### 1.0
 - Initial release

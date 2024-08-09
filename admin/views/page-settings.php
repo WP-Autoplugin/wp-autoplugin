@@ -29,6 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<select name="wp_autoplugin_model">
 						<option value="gpt-4o-mini" <?php selected( get_option( 'wp_autoplugin_model' ), 'gpt-4o' ); ?>>GPT-4o mini</option>
 						<option value="gpt-4o" <?php selected( get_option( 'wp_autoplugin_model' ), 'gpt-4o' ); ?>>GPT-4o</option>
+						<option value="gpt-4o-2024-08-06" <?php selected( get_option( 'wp_autoplugin_model' ), 'gpt-4o-2024-08-06' ); ?>>GPT-4o-2024-08-06</option>
 						<option value="gpt-4-turbo" <?php selected( get_option( 'wp_autoplugin_model' ), 'gpt-4-turbo' ); ?>>GPT-4 Turbo</option>
 						<option value="gpt-3.5-turbo" <?php selected( get_option( 'wp_autoplugin_model' ), 'gpt-3.5-turbo' ); ?>>GPT-3.5 Turbo</option>
 						<option value="claude-3-5-sonnet-20240620" <?php selected( get_option( 'wp_autoplugin_model' ), 'claude-3-5-sonnet-20240620' ); ?>>Claude 3.5 Sonnet</option>
@@ -36,6 +37,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<option value="claude-3-sonnet-20240229" <?php selected( get_option( 'wp_autoplugin_model' ), 'claude-3-sonnet-20240229' ); ?>>Claude 3 Sonnet</option>
 						<option value="claude-3-haiku-20240307" <?php selected( get_option( 'wp_autoplugin_model' ), 'claude-3-haiku-20240307' ); ?>>Claude 3 Haiku</option>
 					</select>
+					
+					<p class="description"><?php _e( '<code>gpt-4o-2024-08-06</code> is a snapshot of the model that currently costs 33-50% less than the original GPT-4o model, and has a higher output token limit.', 'wp-autoplugin' ); ?></p>
 				</td>
 			</tr>
 		</table>

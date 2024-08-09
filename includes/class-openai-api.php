@@ -25,6 +25,10 @@ class OpenAI_API extends API {
 				'temperature' => 0.2,
 				'max_tokens'  => 4096,
 			),
+			'gpt-4o-2024-08-06' => array(
+				'temperature' => 0.2,
+				'max_tokens'  => 16384,
+			),
 			'gpt-4o-mini' => array(
 				'temperature' => 0.2,
 				'max_tokens'  => 4096,
