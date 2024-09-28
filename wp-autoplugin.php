@@ -22,6 +22,7 @@ define( 'WP_AUTOPLUGIN_URL', plugin_dir_url( __FILE__ ) );
 require_once WP_AUTOPLUGIN_DIR . 'includes/class-api.php';
 require_once WP_AUTOPLUGIN_DIR . 'includes/class-openai-api.php';
 require_once WP_AUTOPLUGIN_DIR . 'includes/class-anthropic-api.php';
+require_once WP_AUTOPLUGIN_DIR . 'includes/class-google-gemini-api.php';
 require_once WP_AUTOPLUGIN_DIR . 'includes/class-plugin-generator.php';
 require_once WP_AUTOPLUGIN_DIR . 'includes/class-plugin-installer.php';
 require_once WP_AUTOPLUGIN_DIR . 'includes/class-plugin-fixer.php';
