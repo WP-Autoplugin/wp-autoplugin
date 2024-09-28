@@ -24,21 +24,28 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<td><input type="password" name="wp_autoplugin_anthropic_api_key" value="<?php echo esc_attr( get_option( 'wp_autoplugin_anthropic_api_key' ) ); ?>" class="large-text" /></td>
 			</tr>
 			<tr valign="top">
+				<th scope="row"><?php _e( 'Google Gemini API Key', 'wp-autoplugin' ); ?></th>
+				<td><input type="password" name="wp_autoplugin_google_api_key" value="<?php echo esc_attr( get_option( 'wp_autoplugin_google_api_key' ) ); ?>" class="large-text" /></td>
+			</tr>
+			<tr valign="top">
 				<th scope="row"><?php _e( 'Model', 'wp-autoplugin' ); ?></th>
 				<td>
 					<select name="wp_autoplugin_model">
-						<option value="gpt-4o-mini" <?php selected( get_option( 'wp_autoplugin_model' ), 'gpt-4o' ); ?>>GPT-4o mini</option>
+						<option value="gpt-4o-mini" <?php selected( get_option( 'wp_autoplugin_model' ), 'gpt-4o-mini' ); ?>>GPT-4o mini</option>
 						<option value="gpt-4o" <?php selected( get_option( 'wp_autoplugin_model' ), 'gpt-4o' ); ?>>GPT-4o</option>
-						<option value="gpt-4o-2024-08-06" <?php selected( get_option( 'wp_autoplugin_model' ), 'gpt-4o-2024-08-06' ); ?>>GPT-4o-2024-08-06</option>
+						<option value="gpt-4o-latest" <?php selected( get_option( 'wp_autoplugin_model' ), 'gpt-4o-latest' ); ?>>GPT-4o-latest</option>
 						<option value="gpt-4-turbo" <?php selected( get_option( 'wp_autoplugin_model' ), 'gpt-4-turbo' ); ?>>GPT-4 Turbo</option>
 						<option value="gpt-3.5-turbo" <?php selected( get_option( 'wp_autoplugin_model' ), 'gpt-3.5-turbo' ); ?>>GPT-3.5 Turbo</option>
 						<option value="claude-3-5-sonnet-20240620" <?php selected( get_option( 'wp_autoplugin_model' ), 'claude-3-5-sonnet-20240620' ); ?>>Claude 3.5 Sonnet</option>
 						<option value="claude-3-opus-20240229" <?php selected( get_option( 'wp_autoplugin_model' ), 'claude-3-opus-20240229' ); ?>>Claude 3 Opus</option>
 						<option value="claude-3-sonnet-20240229" <?php selected( get_option( 'wp_autoplugin_model' ), 'claude-3-sonnet-20240229' ); ?>>Claude 3 Sonnet</option>
 						<option value="claude-3-haiku-20240307" <?php selected( get_option( 'wp_autoplugin_model' ), 'claude-3-haiku-20240307' ); ?>>Claude 3 Haiku</option>
+						<option value="gemini-1.5-flash" <?php selected( get_option( 'wp_autoplugin_model' ), 'gemini-1.5-flash' ); ?>>Gemini 1.5 Flash</option>
+						<option value="gemini-1.5-pro" <?php selected( get_option( 'wp_autoplugin_model' ), 'gemini-1.5-pro' ); ?>>Gemini 1.5 Pro</option>
+						<option value="gemini-1.0-pro" <?php selected( get_option( 'wp_autoplugin_model' ), 'gemini-1.0-pro' ); ?>>Gemini 1.0 Pro</option>
 					</select>
 					
-					<p class="description"><?php _e( '<code>gpt-4o-2024-08-06</code> is a snapshot of the model that currently costs 33-50% less than the original GPT-4o model, and has a higher output token limit.', 'wp-autoplugin' ); ?></p>
+					<p class="description"><?php _e( '<code>gpt-4o-latest</code> continuously points to the version of GPT-4o used in ChatGPT, and is updated frequently.', 'wp-autoplugin' ); ?></p>
 				</td>
 			</tr>
 		</table>

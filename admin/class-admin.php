@@ -15,6 +15,7 @@ class Admin {
 
 		$openai_api_key = get_option( 'wp_autoplugin_openai_api_key' );
 		$anthropic_api_key = get_option( 'wp_autoplugin_anthropic_api_key' );
+		$google_api_key = get_option( 'wp_autoplugin_google_api_key' );
 		$model = get_option( 'wp_autoplugin_model' );
 
 		if ( ! empty( $openai_api_key ) && in_array( $model, array( 'gpt-4o', 'gpt-4o-2024-08-06', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-3.5-turbo' ), true ) ) {
@@ -24,6 +25,10 @@ class Admin {
 		} elseif ( ! empty( $anthropic_api_key ) && in_array( $model, array( 'claude-3-5-sonnet-20240620', 'claude-3-opus-20240229', 'claude-3-sonnet-20240229', 'claude-3-haiku-20240307' ), true ) ) {
 			$this->ai_api = new Anthropic_API();
 			$this->ai_api->set_api_key( $anthropic_api_key );
+			$this->ai_api->set_model( $model );
+		} elseif ( ! empty( $google_api_key ) && in_array( $model, array( 'gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-1.0-pro' ), true ) ) {
+			$this->ai_api = new Google_Gemini_API();
+			$this->ai_api->set_api_key( $google_api_key );
 			$this->ai_api->set_model( $model );
 		} else {
 			$this->ai_api = null;
@@ -133,6 +138,7 @@ class Admin {
 	public function register_settings() {
 		register_setting( 'wp_autoplugin_settings', 'wp_autoplugin_openai_api_key' );
 		register_setting( 'wp_autoplugin_settings', 'wp_autoplugin_anthropic_api_key' );
+		register_setting( 'wp_autoplugin_settings', 'wp_autoplugin_google_api_key' );
 		register_setting( 'wp_autoplugin_settings', 'wp_autoplugin_model' );
 	}
 

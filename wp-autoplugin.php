@@ -2,7 +2,7 @@
 /*
 Plugin Name: WP-Autoplugin
 Description: A plugin that generates other plugins on-demand using AI.
-Version: 1.0.3
+Version: 1.0.4
 Author: Balazs Piller
 Author URI: https://wp-autoplugin.com
 Text Domain: wp-autoplugin
@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Define constants
-define( 'WP_AUTOPLUGIN_VERSION', '1.0.3' );
+define( 'WP_AUTOPLUGIN_VERSION', '1.0.4' );
 define( 'WP_AUTOPLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'WP_AUTOPLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
@@ -22,6 +22,7 @@ define( 'WP_AUTOPLUGIN_URL', plugin_dir_url( __FILE__ ) );
 require_once WP_AUTOPLUGIN_DIR . 'includes/class-api.php';
 require_once WP_AUTOPLUGIN_DIR . 'includes/class-openai-api.php';
 require_once WP_AUTOPLUGIN_DIR . 'includes/class-anthropic-api.php';
+require_once WP_AUTOPLUGIN_DIR . 'includes/class-google-gemini-api.php';
 require_once WP_AUTOPLUGIN_DIR . 'includes/class-plugin-generator.php';
 require_once WP_AUTOPLUGIN_DIR . 'includes/class-plugin-installer.php';
 require_once WP_AUTOPLUGIN_DIR . 'includes/class-plugin-fixer.php';
