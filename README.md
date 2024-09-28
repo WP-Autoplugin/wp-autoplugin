@@ -9,7 +9,7 @@ WP-Autoplugin is a free WordPress plugin that uses AI to assist in generating, f
 - Generate plugins using AI
 - Fix and extend existing plugins
 - Full control over the generation process
-- Support for multiple AI models (OpenAI and Anthropic)
+- Support for multiple AI models (OpenAI, Anthropic, Google Gemini)
 - View the list of generated plugins for easy management
 
 ---
@@ -25,7 +25,7 @@ WP-Autoplugin offers practical solutions for various WordPress development scena
 - **Completely Free**: No premium version, no ads, no account required.
 - **Open Source**: Contributions are welcome.
 - **Privacy-Focused**: No data collection or external communication (except for the AI API you choose).
-- **BYOK (Bring Your Own Key)**: Use your own OpenAI or Anthropic API key.
+- **BYOK (Bring Your Own Key)**: Use your own OpenAI, Anthropic, or Google AI Studio API key.
 
 ## How It Works
 
@@ -37,7 +37,7 @@ You can also use WP-Autoplugin to **fix bugs** or **add new features** to existi
 
 ## Supported Models
 
-WP-Autoplugin supports various models from OpenAI and Anthropic:
+WP-Autoplugin supports various models:
 
 - GPT-3.5 Turbo
 - GPT-4
@@ -47,12 +47,17 @@ WP-Autoplugin supports various models from OpenAI and Anthropic:
 - Claude 3 Sonnet
 - Claude 3 Opus
 - Claude 3.5 Sonnet
+- Google Gemini Flash 1.5
+- Google Gemini Pro 1.5
+- Google Gemini Pro 1.0
 
-We recommend using the **Claude 3.5 Sonnet** model for optimal results. While WP-Autoplugin is free to use, you'll need to pay for API usage based on your chosen model. Refer to the OpenAI or Anthropic pricing page for more information.
+We recommend using the **Claude 3.5 Sonnet** model for optimal results. While WP-Autoplugin is free to use, you may need to pay for API usage based on your chosen model.
 
 ## BYOK (Bring Your Own Key)
 
-To use WP-Autoplugin, you'll need an API key from OpenAI or Anthropic. Insert your key in the plugin settings to get started. Your API key remains on your server and is not shared with anyone.
+To use WP-Autoplugin, you'll need an API key from OpenAI, Anthropic, or Google AI Studio. Insert your key in the plugin settings to get started. Your API key remains on your server and is not shared with anyone.
+
+Google AI Studio keys are currently free to use, while OpenAI and Anthropic keys require payment. Refer to the respective websites for pricing information.
 
 ## AI-Generated Plugins
 
@@ -82,7 +87,7 @@ WP-Autoplugin has some limitations to be aware of:
 1. Download the latest release from the [Releases](https://github.com/WP-Autoplugin/wp-autoplugin/releases) page.
 2. Upload the plugin zip file through the 'Plugins' screen in WordPress, or unzip the file and upload the `wp-autoplugin` folder to the `/wp-content/plugins/` directory.
 3. Activate the plugin through the 'Plugins' screen in WordPress.
-4. Go to the WP-Autoplugin settings page and enter your OpenAI or Anthropic API key.
+4. Go to the WP-Autoplugin settings page and enter your API key(s).
 5. Choose your preferred AI model in the settings.
 6. Start generating plugins!
 
