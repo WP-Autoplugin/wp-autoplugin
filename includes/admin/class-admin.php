@@ -18,7 +18,7 @@ class Admin {
 		$google_api_key = get_option( 'wp_autoplugin_google_api_key' );
 		$model = get_option( 'wp_autoplugin_model' );
 
-		if ( ! empty( $openai_api_key ) && in_array( $model, array( 'gpt-4o', 'gpt-4o-2024-08-06', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-3.5-turbo' ), true ) ) {
+		if ( ! empty( $openai_api_key ) && in_array( $model, array( 'gpt-4o', 'gpt-4o-latest', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-3.5-turbo' ), true ) ) {
 			$this->ai_api = new OpenAI_API();
 			$this->ai_api->set_api_key( $openai_api_key );
 			$this->ai_api->set_model( $model );
@@ -67,6 +67,9 @@ class Admin {
 
 		// Process bulk actions.
 		add_action( 'admin_init', array( $this, 'process_bulk_action' ) );
+
+		// Github updater.
+		add_action( 'admin_init', array( $this, 'github_updater_init' ) );
 	}
 
 	public function ajax_actions() {
@@ -538,5 +541,24 @@ class Admin {
 			'type'    => $type,
 		);
 		update_option( 'wp_autoplugin_notices', $notices );
+	}
+
+	public function github_updater_init() {
+		$config = array(
+			'slug'               => plugin_basename( WP_AUTOPLUGIN_DIR . 'wp-autoplugin.php' ),
+			'proper_folder_name' => dirname( plugin_basename( WP_AUTOPLUGIN_DIR . 'wp-autoplugin.php' ) ),
+			'api_url'            => 'https://api.github.com/repos/WP-Autoplugin/wp-autoplugin',
+			'raw_url'            => 'https://raw.githubusercontent.com/WP-Autoplugin/wp-autoplugin/main/',
+			'github_url'         => 'https://github.com/WP-Autoplugin/wp-autoplugin',
+			'zip_url'            => 'https://github.com/WP-Autoplugin/wp-autoplugin/archive/refs/heads/main.zip',
+			'requires'           => '6.0',
+			'tested'             => '6.6.2',
+			'description'        => 'A plugin that generates other plugins on-demand using AI.',
+			'homepage'           => 'https://github.com/WP-Autoplugin/wp-autoplugin',
+			'version'            => WP_AUTOPLUGIN_VERSION,
+		);
+
+		// Instantiate the updater class
+		new GitHub_Updater( $config );
 	}
 }

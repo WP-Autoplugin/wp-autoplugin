@@ -18,16 +18,8 @@ define( 'WP_AUTOPLUGIN_VERSION', '1.0.4' );
 define( 'WP_AUTOPLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'WP_AUTOPLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
-// Include required files
-require_once WP_AUTOPLUGIN_DIR . 'includes/class-api.php';
-require_once WP_AUTOPLUGIN_DIR . 'includes/class-openai-api.php';
-require_once WP_AUTOPLUGIN_DIR . 'includes/class-anthropic-api.php';
-require_once WP_AUTOPLUGIN_DIR . 'includes/class-google-gemini-api.php';
-require_once WP_AUTOPLUGIN_DIR . 'includes/class-plugin-generator.php';
-require_once WP_AUTOPLUGIN_DIR . 'includes/class-plugin-installer.php';
-require_once WP_AUTOPLUGIN_DIR . 'includes/class-plugin-fixer.php';
-require_once WP_AUTOPLUGIN_DIR . 'includes/class-plugin-extender.php';
-require_once WP_AUTOPLUGIN_DIR . 'admin/class-admin.php';
+// Include the autoloader
+
 
 // Initialize the plugin
 function wp_autoplugin_init() {

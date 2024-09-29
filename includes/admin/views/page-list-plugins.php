@@ -6,8 +6,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-require_once WP_AUTOPLUGIN_DIR . 'includes/class-plugin-list-table.php';
-
 // Initialize the WP_List_Table class
 $plugin_list_table = new Plugin_List_Table();
 $plugin_list_table->prepare_items();
