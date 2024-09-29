@@ -146,23 +146,28 @@ class Admin {
 	}
 
 	public function render_settings_page() {
-		include WP_AUTOPLUGIN_DIR . 'admin/views/page-settings.php';
+		include WP_AUTOPLUGIN_DIR . 'views/page-settings.php';
 	}
 
 	public function render_generate_plugin_page() {
-		include WP_AUTOPLUGIN_DIR . 'admin/views/page-generate-plugin.php';
+		include WP_AUTOPLUGIN_DIR . 'views/page-generate-plugin.php';
 	}
 
 	public function render_list_plugins_page() {
-		include WP_AUTOPLUGIN_DIR . 'admin/views/page-list-plugins.php';
+		include WP_AUTOPLUGIN_DIR . 'views/page-list-plugins.php';
 	}
 
 	public function render_extend_plugin_page() {
-		include WP_AUTOPLUGIN_DIR . 'admin/views/page-extend-plugin.php';
+		$this->validate_plugin();
+		include WP_AUTOPLUGIN_DIR . 'views/page-extend-plugin.php';
 	}
 
 	public function render_fix_plugin_page() {
+		$this->validate_plugin();
+		include WP_AUTOPLUGIN_DIR . 'views/page-fix-plugin.php';
+	}
 
+	public function validate_plugin() {
 		if ( ! isset( $_GET['plugin'] ) ) {
 			wp_die( __( 'No plugin specified.', 'wp-autoplugin' ) );
 		}
@@ -181,16 +186,16 @@ class Admin {
 			wp_die( __( 'The specified plugin does not exist.', 'wp-autoplugin' ) );
 		}
 
-		include WP_AUTOPLUGIN_DIR . 'admin/views/page-fix-plugin.php';
+		return true;
 	}
 
 	public function enqueue_scripts() {
 		// Enqueue generator.js and generator.css only on the plugin generation page.
 		$screen = get_current_screen();
-		wp_register_script( 'wp-autoplugin-utils', WP_AUTOPLUGIN_URL . 'admin/assets/js/utils.js', array(), WP_AUTOPLUGIN_VERSION, true );
+		wp_register_script( 'wp-autoplugin-utils', WP_AUTOPLUGIN_URL . 'assets/admin/js/utils.js', array(), WP_AUTOPLUGIN_VERSION, true );
 		if ( $screen->id === 'toplevel_page_wp-autoplugin' ) {
-			wp_enqueue_script( 'wp-autoplugin', WP_AUTOPLUGIN_URL . 'admin/assets/js/list-plugins.js', array(), WP_AUTOPLUGIN_VERSION, true );
-			wp_enqueue_style( 'wp-autoplugin', WP_AUTOPLUGIN_URL . 'admin/assets/css/list-plugins.css', array(), WP_AUTOPLUGIN_VERSION );
+			wp_enqueue_script( 'wp-autoplugin', WP_AUTOPLUGIN_URL . 'assets/admin/js/list-plugins.js', array(), WP_AUTOPLUGIN_VERSION, true );
+			wp_enqueue_style( 'wp-autoplugin', WP_AUTOPLUGIN_URL . 'assets/admin/css/list-plugins.css', array(), WP_AUTOPLUGIN_VERSION );
 		} elseif ( $screen->id === 'wp-autoplugin_page_wp-autoplugin-generate' ) {
 			// Settings for the CodeMirror editor for PHP code
 			$settings = wp_enqueue_code_editor(array(
@@ -203,7 +208,7 @@ class Admin {
 				wp_enqueue_style('wp-codemirror');
 			}
 
-			wp_enqueue_script( 'wp-autoplugin-generator', WP_AUTOPLUGIN_URL . 'admin/assets/js/generator.js', array( 'wp-autoplugin-utils' ), WP_AUTOPLUGIN_VERSION, true );
+			wp_enqueue_script( 'wp-autoplugin-generator', WP_AUTOPLUGIN_URL . 'assets/admin/js/generator.js', array( 'wp-autoplugin-utils' ), WP_AUTOPLUGIN_VERSION, true );
 			wp_localize_script( 'wp-autoplugin-generator', 'wp_autoplugin', array(
 				'ajax_url'     => admin_url( 'admin-ajax.php' ),
 				'nonce'        => wp_create_nonce( 'wp_autoplugin_generate' ),
@@ -211,7 +216,7 @@ class Admin {
 				'activate_url' => admin_url( 'admin.php?page=wp-autoplugin&action=activate&nonce=' . wp_create_nonce( 'wp-autoplugin-activate-plugin' ) ),
 				'testing_plan' => '',
 			) );
-			wp_enqueue_style( 'wp-autoplugin-generator', WP_AUTOPLUGIN_URL . 'admin/assets/css/generator.css', array(), WP_AUTOPLUGIN_VERSION );
+			wp_enqueue_style( 'wp-autoplugin-generator', WP_AUTOPLUGIN_URL . 'assets/admin/css/generator.css', array(), WP_AUTOPLUGIN_VERSION );
 		} elseif ( $screen->id === 'admin_page_wp-autoplugin-fix' ) {
 			// Settings for the CodeMirror editor for PHP code
 			$settings = wp_enqueue_code_editor(array(
@@ -231,14 +236,14 @@ class Admin {
 				$is_plugin_active = is_plugin_active( $plugin_file );
 			}
 
-			wp_enqueue_script( 'wp-autoplugin-fix', WP_AUTOPLUGIN_URL . 'admin/assets/js/fixer.js', array( 'wp-autoplugin-utils' ), WP_AUTOPLUGIN_VERSION, true );
+			wp_enqueue_script( 'wp-autoplugin-fix', WP_AUTOPLUGIN_URL . 'assets/admin/js/fixer.js', array( 'wp-autoplugin-utils' ), WP_AUTOPLUGIN_VERSION, true );
 			wp_localize_script( 'wp-autoplugin-fix', 'wp_autoplugin', array(
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
 				'nonce'    => wp_create_nonce( 'wp_autoplugin_generate' ),
 				'activate_url' => admin_url( 'admin.php?page=wp-autoplugin&action=activate&nonce=' . wp_create_nonce( 'wp-autoplugin-activate-plugin' ) ),
 				'is_plugin_active' => $is_plugin_active,
 			) );
-			wp_enqueue_style( 'wp-autoplugin-fix', WP_AUTOPLUGIN_URL . 'admin/assets/css/fixer.css', array(), WP_AUTOPLUGIN_VERSION );
+			wp_enqueue_style( 'wp-autoplugin-fix', WP_AUTOPLUGIN_URL . 'assets/admin/css/fixer.css', array(), WP_AUTOPLUGIN_VERSION );
 		} elseif ( $screen->id === 'admin_page_wp-autoplugin-extend' ) {
 			// Settings for the CodeMirror editor for PHP code
 			$settings = wp_enqueue_code_editor(array(
@@ -258,14 +263,14 @@ class Admin {
 				$is_plugin_active = is_plugin_active( $plugin_file );
 			}
 
-			wp_enqueue_script( 'wp-autoplugin-extend', WP_AUTOPLUGIN_URL . 'admin/assets/js/extender.js', array( 'wp-autoplugin-utils' ), WP_AUTOPLUGIN_VERSION, true );
+			wp_enqueue_script( 'wp-autoplugin-extend', WP_AUTOPLUGIN_URL . 'assets/admin/js/extender.js', array( 'wp-autoplugin-utils' ), WP_AUTOPLUGIN_VERSION, true );
 			wp_localize_script( 'wp-autoplugin-extend', 'wp_autoplugin', array(
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
 				'nonce'    => wp_create_nonce( 'wp_autoplugin_generate' ),
 				'activate_url' => admin_url( 'admin.php?page=wp-autoplugin&action=activate&nonce=' . wp_create_nonce( 'wp-autoplugin-activate-plugin' ) ),
 				'is_plugin_active' => $is_plugin_active,
 			) );
-			wp_enqueue_style( 'wp-autoplugin-extend', WP_AUTOPLUGIN_URL . 'admin/assets/css/extender.css', array(), WP_AUTOPLUGIN_VERSION );
+			wp_enqueue_style( 'wp-autoplugin-extend', WP_AUTOPLUGIN_URL . 'assets/admin/css/extender.css', array(), WP_AUTOPLUGIN_VERSION );
 		}
 	}
 

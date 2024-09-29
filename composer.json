@@ -1,0 +1,18 @@
+{
+    "name": "wp-autoplugin/wp-autoplugin",
+    "description": "A WordPress plugin that generates other plugins on-demand using AI.",
+    "type": "wordpress-plugin",
+    "license": "GPLv2",
+    "authors": [
+        {
+            "name": "Balazs Piller",
+            "email": "hello@wp-autoplugin.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "classmap": [
+            "includes/"
+        ]
+    }
+}
