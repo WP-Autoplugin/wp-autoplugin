@@ -42,7 +42,7 @@ class Plugin_List_Table extends \WP_List_Table {
 		}
 
 		$actions['fix'] = sprintf( '<a href="%s">%s</a>', wp_nonce_url( admin_url( 'admin.php?page=wp-autoplugin-fix&plugin=' . $item['plugin_path'] ), 'wp-autoplugin-fix-plugin', 'nonce' ), __( 'Fix', 'wp-autoplugin' ) );
-		$actions['extend'] = sprintf( '<a href="%s">%s</a>', wp_nonce_url( admin_url( 'admin.php?page=wp-autoplugin-extend&plugin=' . $item['plugin_path'] ), 'wp-autoplugin-extend-plugin' ), __( 'Extend', 'wp-autoplugin' ) );
+		$actions['extend'] = sprintf( '<a href="%s">%s</a>', wp_nonce_url( admin_url( 'admin.php?page=wp-autoplugin-extend&plugin=' . $item['plugin_path'] ), 'wp-autoplugin-extend-plugin', 'nonce' ), __( 'Extend', 'wp-autoplugin' ) );
 		$actions['delete'] = sprintf( '<a href="%s">%s</a>', wp_nonce_url( admin_url( 'admin.php?page=wp-autoplugin&action=delete&plugin=' . $item['plugin_path'] ), 'wp-autoplugin-activate-plugin', 'nonce' ), __( 'Delete', 'wp-autoplugin' ) );
 
 		// Replicate the default Plugin List Table column rendering.

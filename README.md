@@ -121,6 +121,11 @@ WP-Autoplugin is licensed under the GPLv3 or later.
 
 ## Changelog
 
+### 1.0.5
+- Added update from GitHub feature
+- Reorganized files and folders and added Composer support
+- Fixed small bugs
+
 ### 1.0.4
 - Added support for Google Gemini models
 

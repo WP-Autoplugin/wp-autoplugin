@@ -158,16 +158,16 @@ class Admin {
 	}
 
 	public function render_extend_plugin_page() {
-		$this->validate_plugin();
+		$this->validate_plugin( 'wp-autoplugin-extend-plugin' );
 		include WP_AUTOPLUGIN_DIR . 'views/page-extend-plugin.php';
 	}
 
 	public function render_fix_plugin_page() {
-		$this->validate_plugin();
+		$this->validate_plugin( 'wp-autoplugin-fix-plugin' );
 		include WP_AUTOPLUGIN_DIR . 'views/page-fix-plugin.php';
 	}
 
-	public function validate_plugin() {
+	public function validate_plugin( $nonce ) {
 		if ( ! isset( $_GET['plugin'] ) ) {
 			wp_die( __( 'No plugin specified.', 'wp-autoplugin' ) );
 		}
@@ -177,7 +177,7 @@ class Admin {
 		}
 
 		// Check nonce.
-		if ( ! isset( $_GET['nonce'] ) || ! wp_verify_nonce( $_GET['nonce'], 'wp-autoplugin-fix-plugin' ) ) {
+		if ( ! isset( $_GET['nonce'] ) || ! wp_verify_nonce( $_GET['nonce'], $nonce ) ) {
 			wp_die( __( 'Security check failed.', 'wp-autoplugin' ) );
 		}
 
