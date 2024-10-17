@@ -11,7 +11,7 @@ class ComposerStaticInit62b8c0a821dc44c3b86fc9def1bcbee9
         'WP_Autoplugin\\API' => __DIR__ . '/../..' . '/includes/api/class-api.php',
         'WP_Autoplugin\\Admin' => __DIR__ . '/../..' . '/includes/admin/class-admin.php',
         'WP_Autoplugin\\Anthropic_API' => __DIR__ . '/../..' . '/includes/api/class-anthropic-api.php',
-        'WP_Autoplugin\\GitHub_Updater' => __DIR__ . '/../..' . '/includes/api/class-github-updater.php',
+        'WP_Autoplugin\\GitHub_Updater' => __DIR__ . '/../..' . '/includes/class-github-updater.php',
         'WP_Autoplugin\\Google_Gemini_API' => __DIR__ . '/../..' . '/includes/api/class-google-gemini-api.php',
         'WP_Autoplugin\\OpenAI_API' => __DIR__ . '/../..' . '/includes/api/class-openai-api.php',
         'WP_Autoplugin\\Plugin_Extender' => __DIR__ . '/../..' . '/includes/class-plugin-extender.php',

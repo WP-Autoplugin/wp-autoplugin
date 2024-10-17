@@ -73,7 +73,7 @@ class GitHub_Updater {
 		);
 
 		foreach ( $required_config_params as $required_param ) {
-			if ( empty( $this->config[$required_param] ) )
+			if ( empty( $this->config[ $required_param ] ) )
 				$this->missing_config[] = $required_param;
 		}
 
@@ -125,20 +125,20 @@ class GitHub_Updater {
 	}
 
 	public function http_request_sslverify( $args, $url ) {
-		if ( $this->config[ 'zip_url' ] == $url ) {
-			$args[ 'sslverify' ] = $this->config[ 'sslverify' ];
+		if ( $this->config['zip_url'] == $url ) {
+			$args['sslverify'] = $this->config['sslverify'];
 		}
 		return $args;
 	}
 
 	public function get_new_version() {
-		$version = get_site_transient( md5($this->config['slug']).'_new_version' );
+		$version = get_site_transient( md5( $this->config['slug'] ) . '_new_version' );
 
 		if ( $this->overrule_transients() || ( ! isset( $version ) || !$version || '' == $version ) ) {
 			$raw_response = $this->remote_get( trailingslashit( $this->config['raw_url'] ) . basename( $this->config['slug'] ) );
 
 			if ( is_wp_error( $raw_response ) ) {
-				error_log('GitHub Updater Error: ' . $raw_response->get_error_message());
+				error_log( 'GitHub Updater Error: ' . $raw_response->get_error_message() );
 				$version = false;
 			}
 
@@ -160,9 +160,9 @@ class GitHub_Updater {
 				}
 			}
 
-			$transient_expiration = apply_filters('github_updater_transient_expiration', 60*60*6); // 6 hours
+			$transient_expiration = apply_filters( 'github_updater_transient_expiration', 6 * HOUR_IN_SECONDS );
 			if ( false !== $version ) {
-				set_site_transient( md5($this->config['slug']).'_new_version', $version, $transient_expiration );
+				set_site_transient( md5( $this->config['slug'] ) . '_new_version', $version, $transient_expiration );
 			}
 		}
 

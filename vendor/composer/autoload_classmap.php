@@ -10,7 +10,7 @@ return array(
     'WP_Autoplugin\\API' => $baseDir . '/includes/api/class-api.php',
     'WP_Autoplugin\\Admin' => $baseDir . '/includes/admin/class-admin.php',
     'WP_Autoplugin\\Anthropic_API' => $baseDir . '/includes/api/class-anthropic-api.php',
-    'WP_Autoplugin\\GitHub_Updater' => $baseDir . '/includes/api/class-github-updater.php',
+    'WP_Autoplugin\\GitHub_Updater' => $baseDir . '/includes/class-github-updater.php',
     'WP_Autoplugin\\Google_Gemini_API' => $baseDir . '/includes/api/class-google-gemini-api.php',
     'WP_Autoplugin\\OpenAI_API' => $baseDir . '/includes/api/class-openai-api.php',
     'WP_Autoplugin\\Plugin_Extender' => $baseDir . '/includes/class-plugin-extender.php',
