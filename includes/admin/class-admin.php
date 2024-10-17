@@ -186,6 +186,12 @@ class Admin {
 			wp_die( __( 'The specified plugin does not exist.', 'wp-autoplugin' ) );
 		}
 
+		// Check if it's a WP-Autoplugin generated plugin.
+		$plugins = get_option( 'wp_autoplugins', array() );
+		if ( ! in_array( $_GET['plugin'], $plugins, true ) ) {
+			wp_die( __( 'The specified plugin does not exist.', 'wp-autoplugin' ) );
+		}
+
 		return true;
 	}
 

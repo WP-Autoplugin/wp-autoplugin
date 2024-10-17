@@ -47,7 +47,7 @@ class GitHub_Updater {
 		if ( ! $this->has_minimum_config() ) {
 			$message = 'The GitHub Updater was initialized without the minimum required configuration, please check the config in your plugin. The following params are missing: ';
 			$message .= implode( ',', $this->missing_config );
-			_doing_it_wrong( __CLASS__, $message , self::VERSION );
+			_doing_it_wrong( __CLASS__, $message, self::VERSION );
 			return;
 		}
 
@@ -73,8 +73,9 @@ class GitHub_Updater {
 		);
 
 		foreach ( $required_config_params as $required_param ) {
-			if ( empty( $this->config[ $required_param ] ) )
+			if ( empty( $this->config[ $required_param ] ) ) {
 				$this->missing_config[] = $required_param;
+			}
 		}
 
 		return ( empty( $this->missing_config ) );
