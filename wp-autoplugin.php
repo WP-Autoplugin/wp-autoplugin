@@ -3,7 +3,7 @@
 Plugin Name: WP-Autoplugin
 Description: A plugin that generates other plugins on-demand using AI.
 Version: 1.0.5
-Author: Balazs Piller
+Author: Balázs Piller
 Author URI: https://wp-autoplugin.com
 Text Domain: wp-autoplugin
 */

@@ -4,7 +4,7 @@
  *
  * This is a modified version of the WP_GitHub_Updater class originally created by Joachim Kudish.
  *
- * @version 1.7
+ * @version 1.0.1
  * @author WP-Autoplugin
  * @link https://wp-autoplugin.com
  *
@@ -19,6 +19,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * GitHub Updater class.
+ */
 class GitHub_Updater {
 
 	const VERSION = 1.7;
