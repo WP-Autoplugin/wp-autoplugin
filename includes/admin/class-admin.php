@@ -69,7 +69,7 @@ class Admin {
 		add_action( 'admin_init', array( $this, 'process_bulk_action' ) );
 
 		// Github updater.
-		add_action( 'admin_init', array( $this, 'github_updater_init' ) );
+		add_action( 'init', array( $this, 'github_updater_init' ) );
 	}
 
 	public function ajax_actions() {
@@ -555,6 +555,10 @@ class Admin {
 	}
 
 	public function github_updater_init() {
+		if ( ! is_admin() ) {
+			return;
+		}
+
 		$config = array(
 			'slug'               => plugin_basename( WP_AUTOPLUGIN_DIR . 'wp-autoplugin.php' ),
 			'proper_folder_name' => dirname( plugin_basename( WP_AUTOPLUGIN_DIR . 'wp-autoplugin.php' ) ),
