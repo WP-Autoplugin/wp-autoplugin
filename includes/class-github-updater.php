@@ -122,7 +122,7 @@ class GitHub_Updater {
 	}
 
 	public function http_request_timeout() {
-		return apply_filters('github_updater_http_timeout', 2);
+		return apply_filters( 'github_updater_http_timeout', 2 );
 	}
 
 	public function http_request_sslverify( $args, $url ) {
@@ -135,7 +135,7 @@ class GitHub_Updater {
 	public function get_new_version() {
 		$version = get_site_transient( md5( $this->config['slug'] ) . '_new_version' );
 
-		if ( $this->overrule_transients() || ( ! isset( $version ) || !$version || '' == $version ) ) {
+		if ( $this->overrule_transients() || ( ! isset( $version ) || ! $version || '' == $version ) ) {
 			$raw_response = $this->remote_get( trailingslashit( $this->config['raw_url'] ) . basename( $this->config['slug'] ) );
 
 			if ( is_wp_error( $raw_response ) ) {
@@ -228,7 +228,7 @@ class GitHub_Updater {
 		$update = version_compare( $this->config['new_version'], $this->config['version'] );
 
 		if ( 1 === $update ) {
-			$response              = new stdClass;
+			$response              = new \stdClass();
 			$response->new_version = $this->config['new_version'];
 			$response->slug        = $this->config['proper_folder_name'];
 			$response->url         = $this->config['github_url'];
