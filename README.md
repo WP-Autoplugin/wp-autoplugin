@@ -121,6 +121,13 @@ WP-Autoplugin is licensed under the GPLv3 or later.
 
 ## Changelog
 
+### 1.0.6
+- Fixed Github updater class
+- Fixed a few bugs
+- Added i18n support and Hungarian translation
+- Adjusted prompt for better code generation
+- Added docblocks to the code
+
 ### 1.0.5
 - Added update from GitHub feature
 - Reorganized files and folders and added Composer support
