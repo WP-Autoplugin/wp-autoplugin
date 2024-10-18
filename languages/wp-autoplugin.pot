@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-10-17T16:27:53+00:00\n"
+"POT-Creation-Date: 2024-10-18T02:52:00+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: wp-autoplugin\n"
@@ -38,7 +38,7 @@ msgstr ""
 
 #: includes/admin/class-admin.php:119
 #: includes/admin/class-admin.php:120
-#: includes/admin/class-admin.php:338
+#: includes/admin/class-admin.php:381
 #: views/page-list-plugins.php:30
 #: views/page-list-plugins.php:39
 msgid "Generate New Plugin"
@@ -46,7 +46,7 @@ msgstr ""
 
 #: includes/admin/class-admin.php:128
 #: includes/admin/class-admin.php:129
-#: includes/admin/class-admin.php:337
+#: includes/admin/class-admin.php:380
 msgid "Settings"
 msgstr ""
 
@@ -67,12 +67,12 @@ msgid "No plugin specified."
 msgstr ""
 
 #: includes/admin/class-admin.php:190
-#: includes/admin/class-admin.php:564
+#: includes/admin/class-admin.php:607
 msgid "You do not have sufficient permissions to access this page."
 msgstr ""
 
 #: includes/admin/class-admin.php:195
-#: includes/admin/class-admin.php:559
+#: includes/admin/class-admin.php:602
 msgid "Security check failed."
 msgstr ""
 
@@ -81,170 +81,268 @@ msgstr ""
 msgid "The specified plugin does not exist."
 msgstr ""
 
-#: includes/admin/class-admin.php:239
-msgid "A simple contact form with honeypot spam protection"
-msgstr ""
-
-#: includes/admin/class-admin.php:240
-msgid "A custom post type for testimonials"
-msgstr ""
-
 #: includes/admin/class-admin.php:241
-msgid "A widget that displays recent posts"
+#: includes/admin/class-admin.php:324
+msgid "Please enter a plugin description."
 msgstr ""
 
 #: includes/admin/class-admin.php:242
-msgid "A shortcode that shows a random quote"
+#: includes/admin/class-admin.php:325
+#: includes/admin/class-admin.php:365
+msgid "Generating a plan for your plugin"
 msgstr ""
 
 #: includes/admin/class-admin.php:243
-msgid "A user profile widget displaying avatar, bio, and website link"
+msgid "Error generating the plugin plan."
 msgstr ""
 
 #: includes/admin/class-admin.php:244
-msgid "A custom post type for managing FAQs"
+msgid "Generating code"
 msgstr ""
 
 #: includes/admin/class-admin.php:245
-msgid "A post views counter that tracks and displays view counts"
+msgid "Error generating the plugin code."
 msgstr ""
 
 #: includes/admin/class-admin.php:246
-msgid "Maintenance mode with a countdown timer to site return"
+msgid "Error creating the plugin."
 msgstr ""
 
 #: includes/admin/class-admin.php:247
-msgid "An admin quick links widget for the dashboard"
+msgid "Installing the plugin"
 msgstr ""
 
 #: includes/admin/class-admin.php:248
-msgid "Hide the admin bar for non-admin users"
+msgid "Plugin successfully installed."
 msgstr ""
 
 #: includes/admin/class-admin.php:249
-msgid "Hide specific menu items in the admin area"
+msgid "How to test it?"
 msgstr ""
 
 #: includes/admin/class-admin.php:250
-msgid "A social media share buttons plugin for posts"
+msgid "If you notice any issues, use the Fix button in the Autoplugins list."
 msgstr ""
 
 #: includes/admin/class-admin.php:251
-msgid "A custom footer credit remover"
-msgstr ""
-
-#: includes/admin/class-admin.php:252
-msgid "A plugin to add custom CSS to the WordPress login page"
-msgstr ""
-
-#: includes/admin/class-admin.php:253
-msgid "A related posts display below single post content"
-msgstr ""
-
-#: includes/admin/class-admin.php:254
-msgid "A custom excerpt length controller"
-msgstr ""
-
-#: includes/admin/class-admin.php:255
-msgid "A \"Back to Top\" button for long pages"
+#: includes/admin/class-admin.php:331
+#: includes/admin/class-admin.php:371
+msgid "Activate Plugin"
 msgstr ""
 
 #: includes/admin/class-admin.php:256
-msgid "A plugin to disable comments on specific post types"
+msgid "A simple contact form with honeypot spam protection"
 msgstr ""
 
 #: includes/admin/class-admin.php:257
-msgid "A simple Google Analytics integration"
+msgid "A custom post type for testimonials"
 msgstr ""
 
 #: includes/admin/class-admin.php:258
-msgid "An author box display below posts"
+msgid "A widget that displays recent posts"
 msgstr ""
 
 #: includes/admin/class-admin.php:259
-msgid "A custom breadcrumb generator"
+msgid "A shortcode that shows a random quote"
 msgstr ""
 
 #: includes/admin/class-admin.php:260
-msgid "A plugin to add nofollow to external links"
+msgid "A user profile widget displaying avatar, bio, and website link"
 msgstr ""
 
 #: includes/admin/class-admin.php:261
-msgid "A simple cookie consent banner"
+msgid "A custom post type for managing FAQs"
 msgstr ""
 
 #: includes/admin/class-admin.php:262
-msgid "A post expiration date setter"
+msgid "A post views counter that tracks and displays view counts"
 msgstr ""
 
 #: includes/admin/class-admin.php:263
-msgid "A basic XML sitemap generator"
+msgid "Maintenance mode with a countdown timer to site return"
 msgstr ""
 
 #: includes/admin/class-admin.php:264
-msgid "A custom login URL creator for added security"
+msgid "An admin quick links widget for the dashboard"
 msgstr ""
 
 #: includes/admin/class-admin.php:265
-msgid "A simple contact information display shortcode"
+msgid "Hide the admin bar for non-admin users"
 msgstr ""
 
 #: includes/admin/class-admin.php:266
-msgid "A plugin to add estimated reading time to posts"
+msgid "Hide specific menu items in the admin area"
 msgstr ""
 
 #: includes/admin/class-admin.php:267
-msgid "A custom RSS feed footer"
+msgid "A social media share buttons plugin for posts"
 msgstr ""
 
 #: includes/admin/class-admin.php:268
-msgid "A simple post duplication tool"
+msgid "A custom footer credit remover"
 msgstr ""
 
 #: includes/admin/class-admin.php:269
-msgid "A basic schema markup generator"
+msgid "A plugin to add custom CSS to the WordPress login page"
 msgstr ""
 
 #: includes/admin/class-admin.php:270
-msgid "A plugin to add custom admin footer text"
+msgid "A related posts display below single post content"
 msgstr ""
 
 #: includes/admin/class-admin.php:271
-msgid "A plugin to add custom taxonomies easily"
+msgid "A custom excerpt length controller"
 msgstr ""
 
 #: includes/admin/class-admin.php:272
-msgid "A simple email obfuscator to prevent spam"
+msgid "A \"Back to Top\" button for long pages"
 msgstr ""
 
 #: includes/admin/class-admin.php:273
-msgid "A basic redirection manager"
+msgid "A plugin to disable comments on specific post types"
 msgstr ""
 
 #: includes/admin/class-admin.php:274
-msgid "A plugin to add custom fields to user profiles"
+msgid "A simple Google Analytics integration"
 msgstr ""
 
 #: includes/admin/class-admin.php:275
+msgid "An author box display below posts"
+msgstr ""
+
+#: includes/admin/class-admin.php:276
+msgid "A custom breadcrumb generator"
+msgstr ""
+
+#: includes/admin/class-admin.php:277
+msgid "A plugin to add nofollow to external links"
+msgstr ""
+
+#: includes/admin/class-admin.php:278
+msgid "A simple cookie consent banner"
+msgstr ""
+
+#: includes/admin/class-admin.php:279
+msgid "A post expiration date setter"
+msgstr ""
+
+#: includes/admin/class-admin.php:280
+msgid "A basic XML sitemap generator"
+msgstr ""
+
+#: includes/admin/class-admin.php:281
+msgid "A custom login URL creator for added security"
+msgstr ""
+
+#: includes/admin/class-admin.php:282
+msgid "A simple contact information display shortcode"
+msgstr ""
+
+#: includes/admin/class-admin.php:283
+msgid "A plugin to add estimated reading time to posts"
+msgstr ""
+
+#: includes/admin/class-admin.php:284
+msgid "A custom RSS feed footer"
+msgstr ""
+
+#: includes/admin/class-admin.php:285
+msgid "A simple post duplication tool"
+msgstr ""
+
+#: includes/admin/class-admin.php:286
+msgid "A basic schema markup generator"
+msgstr ""
+
+#: includes/admin/class-admin.php:287
+msgid "A plugin to add custom admin footer text"
+msgstr ""
+
+#: includes/admin/class-admin.php:288
+msgid "A plugin to add custom taxonomies easily"
+msgstr ""
+
+#: includes/admin/class-admin.php:289
+msgid "A simple email obfuscator to prevent spam"
+msgstr ""
+
+#: includes/admin/class-admin.php:290
+msgid "A basic redirection manager"
+msgstr ""
+
+#: includes/admin/class-admin.php:291
+msgid "A plugin to add custom fields to user profiles"
+msgstr ""
+
+#: includes/admin/class-admin.php:292
 msgid "A simple image compression tool"
 msgstr ""
 
-#: includes/admin/class-admin.php:512
+#: includes/admin/class-admin.php:326
+msgid "Error generating the plan."
+msgstr ""
+
+#: includes/admin/class-admin.php:327
+msgid "Error creating the fixed plugin."
+msgstr ""
+
+#: includes/admin/class-admin.php:328
+msgid "Generating the fixed plugin code"
+msgstr ""
+
+#: includes/admin/class-admin.php:329
+msgid "Error generating the fixed code."
+msgstr ""
+
+#: includes/admin/class-admin.php:330
+#: includes/admin/class-admin.php:370
+msgid "The plugin code has been updated."
+msgstr ""
+
+#: includes/admin/class-admin.php:332
+msgid "Installing the fix"
+msgstr ""
+
+#: includes/admin/class-admin.php:364
+msgid "Please describe the changes you want to make to the plugin."
+msgstr ""
+
+#: includes/admin/class-admin.php:366
+msgid "Error generating the development plan."
+msgstr ""
+
+#: includes/admin/class-admin.php:367
+msgid "Generating the extended plugin code"
+msgstr ""
+
+#: includes/admin/class-admin.php:368
+msgid "Error generating the extended code."
+msgstr ""
+
+#: includes/admin/class-admin.php:369
+msgid "Error creating the extended plugin."
+msgstr ""
+
+#: includes/admin/class-admin.php:372
+msgid "Creating the plugin"
+msgstr ""
+
+#: includes/admin/class-admin.php:555
 msgid "The plugin could not be activated due to a fatal error."
 msgstr ""
 
 #. translators: %s: fix URL
-#: includes/admin/class-admin.php:515
+#: includes/admin/class-admin.php:558
 msgid "You can <a href=\"%s\">fix the error automatically</a>."
 msgstr ""
 
 #. translators: %s: plugin version
-#: includes/admin/class-admin.php:540
+#: includes/admin/class-admin.php:583
 msgid "WP-Autoplugin v%s"
 msgstr ""
 
 #. translators: %s: model name
-#: includes/admin/class-admin.php:545
+#: includes/admin/class-admin.php:588
 msgid "Model: %s"
 msgstr ""
 
