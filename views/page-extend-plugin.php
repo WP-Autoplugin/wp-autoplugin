@@ -24,6 +24,7 @@ $plugin_data = get_plugin_data( $plugin_path );
 $value = '';
 if ( ! empty( $_GET['error_message'] ) ) {
 	$value = sprintf(
+		// translators: %s: error message.
 		__( 'Error while activating the plugin: %s', 'wp-autoplugin' ),
 		wp_unslash( $_GET['error_message'] )
 	);
@@ -38,6 +39,7 @@ if ( isset( $_GET['plugin'] ) ) {
 ?>
 <div class="wp-autoplugin-admin-container">
 	<div class="wrap wp-autoplugin step-1-extend">
+		<?php /* translators: %s: plugin name. */ ?>
 		<h1><?php printf( __( 'Extend This Plugin: %s', 'wp-autoplugin' ), esc_html( $plugin_data['Name'] ) ); ?></h1>
 		<form method="post" action="" id="extend-plugin-form">
 			<?php wp_nonce_field( 'extend_plugin', 'extend_plugin_nonce' ); ?>
@@ -62,6 +64,7 @@ if ( isset( $_GET['plugin'] ) ) {
 		<div id="extend-code-message" class="autoplugin-message"></div>
 	</div>
 	<div class="wrap wp-autoplugin step-3-done" style="display: none;">
+		<?php /* translators: %s: plugin name. */ ?>
 		<h1><?php printf( __( 'Extended Plugin: %s', 'wp-autoplugin' ), esc_html( $plugin_data['Name'] ) ); ?></h1>
 		<form method="post" action="" id="extended-plugin-form">
 			<?php wp_nonce_field( 'extended_plugin', 'extended_plugin_nonce' ); ?>

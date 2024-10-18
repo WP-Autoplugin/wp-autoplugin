@@ -6,6 +6,7 @@ Version: 1.0.5
 Author: Balázs Piller
 Author URI: https://wp-autoplugin.com
 Text Domain: wp-autoplugin
+Domain Path: /languages
 */
 
 // Exit if accessed directly
@@ -23,6 +24,7 @@ require_once WP_AUTOPLUGIN_DIR . 'vendor/autoload.php';
 
 // Initialize the plugin
 function wp_autoplugin_init() {
+	load_plugin_textdomain( 'wp-autoplugin', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
 	$admin_pages = new \WP_Autoplugin\Admin();
 }
 add_action( 'plugins_loaded', 'wp_autoplugin_init' );

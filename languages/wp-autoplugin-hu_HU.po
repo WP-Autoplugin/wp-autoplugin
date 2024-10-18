@@ -1,0 +1,460 @@
+# Copyright (C) 2024 Balázs Piller
+# This file is distributed under the same license as the WP-Autoplugin plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: WP-Autoplugin 1.0.5\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-autoplugin\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Magyar <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2024-10-17T16:11:14+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: wp-autoplugin\n"
+
+#. Plugin Name of the plugin
+#: wp-autoplugin.php
+#: includes/admin/class-admin.php:108
+#: includes/admin/class-admin.php:109
+msgid "WP-Autoplugin"
+msgstr "WP-Autoplugin"
+
+#. Description of the plugin
+#: wp-autoplugin.php
+msgid "A plugin that generates other plugins on-demand using AI."
+msgstr "AI alapú bővítmény-generáló bővítmény."
+
+#. Author of the plugin
+#: wp-autoplugin.php
+msgid "Balázs Piller"
+msgstr "Piller Balázs"
+
+#. Author URI of the plugin
+#: wp-autoplugin.php
+msgid "https://wp-autoplugin.com"
+msgstr "https://wp-autoplugin.com"
+
+#: includes/admin/class-admin.php:119
+#: includes/admin/class-admin.php:120
+#: includes/admin/class-admin.php:299
+#: views/page-list-plugins.php:30
+#: views/page-list-plugins.php:39
+msgid "Generate New Plugin"
+msgstr "Új bővítmény"
+
+#: includes/admin/class-admin.php:128
+#: includes/admin/class-admin.php:129
+#: includes/admin/class-admin.php:298
+msgid "Settings"
+msgstr "Beállítások"
+
+#: includes/admin/class-admin.php:138
+#: includes/admin/class-admin.php:139
+#: views/page-extend-plugin.php:48
+msgid "Extend Plugin"
+msgstr "Bővítmény továbbfejlesztése"
+
+#: includes/admin/class-admin.php:147
+#: includes/admin/class-admin.php:148
+#: views/page-fix-plugin.php:55
+msgid "Fix Plugin"
+msgstr "Bővítmény javítása"
+
+#: includes/admin/class-admin.php:186
+msgid "No plugin specified."
+msgstr "Nincs megadva bővítmény."
+
+#: includes/admin/class-admin.php:190
+#: includes/admin/class-admin.php:525
+msgid "You do not have sufficient permissions to access this page."
+msgstr "Nincs megfelelő jogosultságod az oldal eléréséhez."
+
+#: includes/admin/class-admin.php:195
+#: includes/admin/class-admin.php:520
+msgid "Security check failed."
+msgstr "A biztonsági ellenőrzés sikertelen volt."
+
+#: includes/admin/class-admin.php:200
+#: includes/admin/class-admin.php:206
+msgid "The specified plugin does not exist."
+msgstr "A megadott bővítmény nem létezik."
+
+#: includes/admin/class-admin.php:239
+msgid "A simple contact form with honeypot spam protection"
+msgstr "Egyszerű kapcsolatfelvételi űrlap spam védelemmel"
+
+#: includes/admin/class-admin.php:240
+msgid "A custom post type for testimonials"
+msgstr "Egyedi bejegyzéstípus értékelésekhez"
+
+#: includes/admin/class-admin.php:241
+msgid "A widget that displays recent posts"
+msgstr "Widget, a legújabb bejegyzések megjelenítéséhez"
+
+#: includes/admin/class-admin.php:242
+msgid "A shortcode that shows a random quote"
+msgstr "Egy shortcode, véletlenszerű idézetekhez"
+
+#: includes/admin/class-admin.php:243
+msgid "A user profile widget displaying avatar, bio, and website link"
+msgstr "Felhasználói profil widget, avatarral, leírással, és linkkel"
+
+#: includes/admin/class-admin.php:244
+msgid "A custom post type for managing FAQs"
+msgstr "Egyedi bejegyzéstípus GYIK kezeléséhez"
+
+#: includes/admin/class-admin.php:245
+msgid "A post views counter that tracks and displays view counts"
+msgstr "Bejegyzés megtekintés számláló"
+
+#: includes/admin/class-admin.php:246
+msgid "Maintenance mode with a countdown timer to site return"
+msgstr "Karbantartási mód, visszaszámlálóval az oldal visszatéréséhez"
+
+#: includes/admin/class-admin.php:247
+msgid "An admin quick links widget for the dashboard"
+msgstr "Gyorslinkek widget a WP-admin felülethez"
+
+#: includes/admin/class-admin.php:248
+msgid "Hide the admin bar for non-admin users"
+msgstr "A felső admin sáv elrejtése nem-admin felhasználók számára"
+
+#: includes/admin/class-admin.php:249
+msgid "Hide specific menu items in the admin area"
+msgstr "Specifikus menüpontok elrejtése az admin menüben"
+
+#: includes/admin/class-admin.php:250
+msgid "A social media share buttons plugin for posts"
+msgstr "Közösségi megosztás gombok bővítmény bejegyzésekhez"
+
+#: includes/admin/class-admin.php:251
+msgid "A custom footer credit remover"
+msgstr "Credits szöveg eltávolítása a láblécből"
+
+#: includes/admin/class-admin.php:252
+msgid "A plugin to add custom CSS to the WordPress login page"
+msgstr "Egyedi CSS a WordPress bejelentkező oldalhoz"
+
+#: includes/admin/class-admin.php:253
+msgid "A related posts display below single post content"
+msgstr "Kapcsolódó bejegyzések megjelenítése a bejegyzés tartalma alatt"
+
+#: includes/admin/class-admin.php:254
+msgid "A custom excerpt length controller"
+msgstr "Egyedi kivonat hosszúság vezérlő"
+
+#: includes/admin/class-admin.php:255
+msgid "A \"Back to Top\" button for long pages"
+msgstr "\"Vissza az elejére\" gomb hosszú oldalakhoz"
+
+#: includes/admin/class-admin.php:256
+msgid "A plugin to disable comments on specific post types"
+msgstr "Hozzászólások letiltása választott bejegyzéstípusoknál"
+
+#: includes/admin/class-admin.php:257
+msgid "A simple Google Analytics integration"
+msgstr "Egyszerű Google Analytics integráció"
+
+#: includes/admin/class-admin.php:258
+msgid "An author box display below posts"
+msgstr "Szerzői doboz megjelenítése a bejegyzések alatt"
+
+#: includes/admin/class-admin.php:259
+msgid "A custom breadcrumb generator"
+msgstr "Egyedi kenyérmorzsa-navigáció"
+
+#: includes/admin/class-admin.php:260
+msgid "A plugin to add nofollow to external links"
+msgstr "Nofollow hozzáadása a külső hivatkozásokhoz"
+
+#: includes/admin/class-admin.php:261
+msgid "A simple cookie consent banner"
+msgstr "Egyszerű, sütik elfogadására figyelmeztető banner"
+
+#: includes/admin/class-admin.php:262
+msgid "A post expiration date setter"
+msgstr "A bejegyzésekhez beállítható lejárati dátum, amikor azok eltűnnek"
+
+#: includes/admin/class-admin.php:263
+msgid "A basic XML sitemap generator"
+msgstr "Egyszerű XML oldaltérkép generátor"
+
+#: includes/admin/class-admin.php:264
+msgid "A custom login URL creator for added security"
+msgstr "Egyedi bejelentkezési URL, a biztonságért"
+
+#: includes/admin/class-admin.php:265
+msgid "A simple contact information display shortcode"
+msgstr "Kapcsolati információkat megjelenítő rövidkód"
+
+#: includes/admin/class-admin.php:266
+msgid "A plugin to add estimated reading time to posts"
+msgstr "Becsült olvasási idő megjelenítése a bejegyzéseknél"
+
+#: includes/admin/class-admin.php:267
+msgid "A custom RSS feed footer"
+msgstr "Egyedi RSS hírcsatorna lábléc"
+
+#: includes/admin/class-admin.php:268
+msgid "A simple post duplication tool"
+msgstr "Egyszerű bejegyzés másoló eszköz"
+
+#: includes/admin/class-admin.php:269
+msgid "A basic schema markup generator"
+msgstr "Egyszerű schema markup generátor"
+
+#: includes/admin/class-admin.php:270
+msgid "A plugin to add custom admin footer text"
+msgstr "Bővítmény egyedi admin lábléc szöveg hozzáadásához"
+
+#: includes/admin/class-admin.php:271
+msgid "A plugin to add custom taxonomies easily"
+msgstr "Bővítmény egyedi taxonómiák könnyű hozzáadásához"
+
+#: includes/admin/class-admin.php:272
+msgid "A simple email obfuscator to prevent spam"
+msgstr "Egyszerű e-mail elrejtő eszköz a spam elkerülésére"
+
+#: includes/admin/class-admin.php:273
+msgid "A basic redirection manager"
+msgstr "Egyszerű átirányítás kezelő"
+
+#: includes/admin/class-admin.php:274
+msgid "A plugin to add custom fields to user profiles"
+msgstr "Egyedi mezők hozzáadása a felhasználói profilokhoz"
+
+#: includes/admin/class-admin.php:275
+msgid "A simple image compression tool"
+msgstr "Egyszerű képtömörítő eszköz"
+
+#: includes/admin/class-admin.php:473
+msgid "The plugin could not be activated due to a fatal error."
+msgstr "A bővítményt nem lehetett aktiválni végzetes hiba miatt."
+
+#. translators: %s: fix URL
+#: includes/admin/class-admin.php:476
+msgid "You can <a href=\"%s\">fix the error automatically</a>."
+msgstr "A hibát <a href=\"%s\">automatikusan javíthatod</a>."
+
+#. translators: %s: plugin version
+#: includes/admin/class-admin.php:501
+msgid "WP-Autoplugin v%s"
+msgstr "WP-Autoplugin v%s"
+
+#. translators: %s: model name
+#: includes/admin/class-admin.php:506
+msgid "Model: %s"
+msgstr "Modell: %s"
+
+#: includes/admin/class-plugin-list-table.php:34
+msgid "Plugin"
+msgstr "Bővítmény"
+
+#: includes/admin/class-plugin-list-table.php:51
+msgid "Deactivate"
+msgstr "Kikapcsolás"
+
+#: includes/admin/class-plugin-list-table.php:54
+msgid "Activate"
+msgstr "Bekapcsolás"
+
+#: includes/admin/class-plugin-list-table.php:57
+msgid "Fix"
+msgstr "Javítás"
+
+#: includes/admin/class-plugin-list-table.php:58
+msgid "Extend"
+msgstr "Kibővítés"
+
+#: includes/admin/class-plugin-list-table.php:59
+msgid "Delete"
+msgstr "Törlés"
+
+#: includes/admin/class-plugin-list-table.php:122
+msgid "No plugins found."
+msgstr "Nincs találat bővítményre."
+
+#: includes/admin/class-plugin-list-table.php:150
+msgid "All"
+msgstr "Összes"
+
+#: includes/admin/class-plugin-list-table.php:151
+msgid "Active"
+msgstr "Aktív"
+
+#: includes/admin/class-plugin-list-table.php:152
+msgid "Inactive"
+msgstr "Inaktív"
+
+#: includes/class-github-updater.php:274
+msgid "The plugin has been updated, but could not be reactivated. Please reactivate it manually."
+msgstr "A bővítmény frissítve lett, de nem sikerült újraaktiválni. Kérlek, aktiváld újra kézzel."
+
+#: includes/class-github-updater.php:275
+msgid "Plugin reactivated successfully."
+msgstr "A bővítmény sikeresen újraaktiválva."
+
+#. translators: %s: error message.
+#: views/page-extend-plugin.php:28
+#: views/page-fix-plugin.php:27
+msgid "Error while activating the plugin: %s"
+msgstr "Hiba történt a bővítmény aktiválása közben: %s"
+
+#. translators: %s: plugin name.
+#: views/page-extend-plugin.php:43
+msgid "Extend This Plugin: %s"
+msgstr "Kibővítés: %s"
+
+#: views/page-extend-plugin.php:46
+msgid "Describe the changes you would like to make to the plugin. Include as much detail as possible:"
+msgstr "Írd le a bővítményen végrehajtani kívánt módosításokat. Minél részletesebb leírást adj meg:"
+
+#: views/page-extend-plugin.php:54
+#: views/page-fix-plugin.php:61
+#: views/page-generate-plugin.php:31
+msgid "Generated Plan"
+msgstr "Generált terv"
+
+#: views/page-extend-plugin.php:57
+#: views/page-fix-plugin.php:64
+#: views/page-generate-plugin.php:34
+msgid "Review or edit the generated plan:"
+msgstr "Nézd át vagy szerkeszd a generált tervet:"
+
+#: views/page-extend-plugin.php:60
+#: views/page-fix-plugin.php:67
+msgid "&laquo; Edit Issue"
+msgstr "&laquo; Hiba szerkesztése"
+
+#: views/page-extend-plugin.php:61
+#: views/page-fix-plugin.php:68
+#: views/page-generate-plugin.php:41
+msgid "Generate Plugin Code"
+msgstr "Bővítménykód generálása"
+
+#. translators: %s: plugin name.
+#: views/page-extend-plugin.php:68
+msgid "Extended Plugin: %s"
+msgstr "Kibővített bővítmény: %s"
+
+#: views/page-extend-plugin.php:71
+msgid "The plugin has been extended successfully. You can review the changes before activating it:"
+msgstr "A bővítmény sikeresen kibővítve. Aktiválás előtt áttekintheted a módosításokat:"
+
+#: views/page-extend-plugin.php:76
+#: views/page-fix-plugin.php:83
+#: views/page-generate-plugin.php:54
+msgid "Warning:"
+msgstr "Figyelmeztetés:"
+
+#: views/page-extend-plugin.php:76
+#: views/page-fix-plugin.php:83
+msgid "This plugin is active, changes will take effect immediately."
+msgstr "Ez a bővítmény aktív, a változások azonnal érvénybe lépnek."
+
+#: views/page-extend-plugin.php:81
+#: views/page-fix-plugin.php:88
+#: views/page-generate-plugin.php:58
+msgid "&laquo; Edit Plan"
+msgstr "&laquo; Terv szerkesztése"
+
+#: views/page-extend-plugin.php:82
+#: views/page-fix-plugin.php:89
+msgid "Save Changes"
+msgstr "Változtatások mentése"
+
+#. translators: %s: plugin name.
+#: views/page-fix-plugin.php:42
+msgid "Fix This Plugin: %s"
+msgstr "Javítás: %s"
+
+#: views/page-fix-plugin.php:45
+msgid "Describe the issue you are experiencing with the plugin. Include as much detail as possible and any error messages you are seeing:"
+msgstr "Írd le a bővítmény használata közben tapasztalt problémát. Minél részletesebb leírást adj meg, és tüntesd fel a hibaüzeneteket is:"
+
+#: views/page-fix-plugin.php:50
+msgid "Look for other issues in the plugin code as well"
+msgstr "Keressen más hibákat is a bővítmény kódban"
+
+#: views/page-fix-plugin.php:52
+msgid "Focus on the issue at hand"
+msgstr "Csak a megadott problémára koncentráljon"
+
+#. translators: %s: plugin name.
+#: views/page-fix-plugin.php:75
+msgid "Fixed Plugin: %s"
+msgstr "Javított bővítmény: %s"
+
+#: views/page-fix-plugin.php:78
+msgid "The plugin has been fixed successfully. You can review the changes before activating it:"
+msgstr "A bővítmény sikeresen javítva. Aktiválás előtt áttekintheted a változtatásokat:"
+
+#: views/page-generate-plugin.php:21
+msgid "Generate Plugin"
+msgstr "Bővítmény generálása"
+
+#: views/page-generate-plugin.php:24
+msgid "Enter a description of the plugin you want to generate:"
+msgstr "Add meg a létrehozni kívánt bővítmény leírását:"
+
+#: views/page-generate-plugin.php:26
+msgid "Generate Plan"
+msgstr "Plugin terv generálása"
+
+#: views/page-generate-plugin.php:40
+msgid "&laquo; Edit Description"
+msgstr "&laquo; Leírás szerkesztése"
+
+#: views/page-generate-plugin.php:47
+msgid "Generated Plugin Code"
+msgstr "Generált bővítménykód"
+
+#: views/page-generate-plugin.php:50
+msgid "The plugin code has been generated successfully. You can review and edit the plugin file before activating it:"
+msgstr "A bővítménykód sikeresen generálva. Aktiválás előtt áttekintheted és szerkesztheted a bővítmény fájlt:"
+
+#: views/page-generate-plugin.php:54
+msgid "AI-generated code may be unstable or insecure; use only after careful review and testing."
+msgstr "Az AI által generált kód instabil vagy biztonságtalan lehet; csak alapos átnézés és tesztelés után használd."
+
+#: views/page-generate-plugin.php:59
+msgid "Install Plugin"
+msgstr "Bővítmény telepítése"
+
+#: views/page-list-plugins.php:29
+msgid "Autoplugins"
+msgstr "Autopluginok"
+
+#: views/page-list-plugins.php:37
+msgid "You don't have any autoplugins yet."
+msgstr "Még nincsenek autopluginok."
+
+#: views/page-list-plugins.php:38
+msgid "Autoplugins are regular plugins, but they are generated by AI. You can manage them just like any other plugin. They will be listed here for your convenience."
+msgstr "Az autopluginok hagyományos bővítmények, amelyeket mesterséges intelligencia hozott létre. Ugyanúgy kezelheted őket, mint bármely más bővítményt. Itt fel vannak sorolva, hogy könnyen elérhetőek legyenek."
+
+#: views/page-settings.php:21
+msgid "WP-Autoplugin Settings"
+msgstr "WP-Autoplugin beállítások"
+
+#: views/page-settings.php:30
+msgid "OpenAI API Key"
+msgstr "OpenAI API-kulcs"
+
+#: views/page-settings.php:34
+msgid "Anthropic API Key"
+msgstr "Anthropic API-kulcs"
+
+#: views/page-settings.php:38
+msgid "Google Gemini API Key"
+msgstr "Google Gemini API-kulcs"
+
+#: views/page-settings.php:42
+msgid "Model"
+msgstr "Modell"
+
+#: views/page-settings.php:65
+msgid "<code>gpt-4o-latest</code> continuously points to the version of GPT-4o used in ChatGPT, and is updated frequently."
+msgstr "A <code>gpt-4o-latest</code> folyamatosan a ChatGPT által használt GPT-4o verzióra mutat, és gyakran frissül."

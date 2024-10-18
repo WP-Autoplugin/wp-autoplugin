@@ -90,7 +90,7 @@
 
 		// If the field is empty, show an error message.
 		if (document.getElementById('plugin_issue').value.trim() === '') {
-			messageGeneratePlan.innerHTML = 'Please describe the changes you want to make to the plugin.';
+			messageGeneratePlan.innerHTML = wp_autoplugin.messages.empty_description;
 			return;
 		}
 
@@ -98,7 +98,7 @@
 		generatePlanForm.parentElement.classList.add('loading');
 
 		issueDescription = document.getElementById('plugin_issue').value;
-		var loader = loadingIndicator(messageGeneratePlan, 'Generating a plan...');
+		var loader = loadingIndicator(messageGeneratePlan, wp_autoplugin.messages.generating_plan);
 		loader.start();
 	
 		var formData = new FormData();
@@ -116,7 +116,7 @@
 
                 // Check if success=false
                 if ( ! response.success ) {
-                    messageGeneratePlan.innerHTML = 'Error generating the development plan. Please try again. <pre>' + response.data + '</pre>';
+                    messageGeneratePlan.innerHTML = wp_autoplugin.messages.plan_generation_error + ' <pre>' + response.data + '</pre>';
                     return;
                 }
 
@@ -137,7 +137,7 @@
         // Add loading class for form parent container.
         generateCodeForm.parentElement.classList.add('loading');
 
-        var loader = loadingIndicator(messageReviewPlan, 'Generating the extended plugin code');
+        var loader = loadingIndicator(messageReviewPlan, wp_autoplugin.messages.generating_code);
         loader.start();
 
         var formData = new FormData();
@@ -156,7 +156,7 @@
 
                 // Check if success=false
                 if ( ! response.success ) {
-                    messageReviewPlan.innerHTML = 'Error generating the plugin code. Please try again. <pre>' + response.data + '</pre>';
+                    messageReviewPlan.innerHTML = wp_autoplugin.messages.code_generation_error + ' <pre>' + response.data + '</pre>';
 
                     // Remove loading class for form parent container.
                     generateCodeForm.parentElement.classList.remove('loading');
@@ -177,7 +177,7 @@
         // Add loading class for form parent container.
         createPluginForm.parentElement.classList.add('loading');
 
-        var loader = loadingIndicator(messageReviewCode, 'Creating the extended plugin');
+        var loader = loadingIndicator(messageReviewCode, wp_autoplugin.messages.creating_plugin);
         loader.start();
 
         var formData = new FormData();
@@ -196,18 +196,18 @@
 
                 // Check if success=false
                 if ( ! response.success ) {
-                    messageReviewCode.innerHTML = 'Error creating the extended plugin. Please try again. <pre>' + response.data + '</pre>';
+                    messageReviewCode.innerHTML = wp_autoplugin.messages.plugin_creation_error + ' <pre>' + response.data + '</pre>';
 
                     // Remove loading class for form parent container.
                     createPluginForm.parentElement.classList.remove('loading');
                     return;
                 }
 
-                var activateBtnHtml = '<div style="margin-top: 10px;"><a href="' + wp_autoplugin.activate_url + '&plugin=' + response.data + '" class="button button-primary">Activate Plugin</a></div>';
+                var activateBtnHtml = '<div style="margin-top: 10px;"><a href="' + wp_autoplugin.activate_url + '&plugin=' + response.data + '" class="button button-primary">' + wp_autoplugin.messages.activate + '</a></div>';
                 if ( wp_autoplugin.is_plugin_active ) {
                     activateBtnHtml = '';
                 }
-                messageReviewCode.innerHTML = 'The plugin code has been updated.' + activateBtnHtml;
+                messageReviewCode.innerHTML = wp_autoplugin.messages.code_updated + activateBtnHtml;
 
                 // Hide the form and show the success message.
                 createPluginForm.style.display = 'none';

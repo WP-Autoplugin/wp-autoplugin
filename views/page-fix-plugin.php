@@ -38,6 +38,7 @@ if ( isset( $_GET['plugin'] ) ) {
 ?>
 <div class="wp-autoplugin-admin-container">
 	<div class="wrap wp-autoplugin step-1-fix">
+		<?php /* translators: %s: plugin name. */ ?>
 		<h1><?php printf( __( 'Fix This Plugin: %s', 'wp-autoplugin' ), esc_html( $plugin_data['Name'] ) ); ?></h1>
 		<form method="post" action="" id="fix-plugin-form">
 			<?php wp_nonce_field( 'fix_plugin', 'fix_plugin_nonce' ); ?>
@@ -70,6 +71,7 @@ if ( isset( $_GET['plugin'] ) ) {
 		<div id="fix-code-message" class="autoplugin-message"></div>
 	</div>
 	<div class="wrap wp-autoplugin step-3-done" style="display: none;">
+		<?php /* translators: %s: plugin name. */ ?>
 		<h1><?php printf( __( 'Fixed Plugin: %s', 'wp-autoplugin' ), esc_html( $plugin_data['Name'] ) ); ?></h1>
 		<form method="post" action="" id="fixed-plugin-form">
 			<?php wp_nonce_field( 'fixed_plugin', 'fixed_plugin_nonce' ); ?>

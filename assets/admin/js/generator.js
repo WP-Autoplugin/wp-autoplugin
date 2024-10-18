@@ -72,7 +72,7 @@
 
 		// If the field is empty, show an error message.
 		if (document.getElementById('plugin_description').value.trim() === '') {
-			document.getElementById('generate-plan-message').innerHTML = 'Please enter a plugin description.';
+			document.getElementById('generate-plan-message').innerHTML = wp_autoplugin.messages.empty_description;
 			return;
 		}
 
@@ -80,7 +80,7 @@
 		generatePlanForm.parentElement.classList.add('loading');
 
 		pluginDescription = document.getElementById('plugin_description').value;
-		var loader = loadingIndicator(document.getElementById('generate-plan-message'), 'Generating a plan for your plugin');
+		var loader = loadingIndicator(document.getElementById('generate-plan-message'), wp_autoplugin.messages.generating_plan);
 		loader.start();
 	
 		var formData = new FormData();
@@ -97,7 +97,7 @@
 
 			// Check if success=false
 			if ( ! response.success ) {
-				document.getElementById('generate-plan-message').innerHTML = 'Error generating the plugin plan. <pre>' + response.data + '</pre>';
+				document.getElementById('generate-plan-message').innerHTML = wp_autoplugin.messages.plan_generation_error + ' <pre>' + response.data + '</pre>';
 				return;
 			}
 
@@ -118,7 +118,7 @@
 	  // Add loading class for form parent container.
 	  generateCodeForm.parentElement.classList.add('loading');
 
-	  var loader = loadingIndicator(document.getElementById('generate-code-message'), 'Generating code');
+	  var loader = loadingIndicator(document.getElementById('generate-code-message'), wp_autoplugin.messages.generating_code);
 	  loader.start();
   
 	  var formData = new FormData();
@@ -147,7 +147,7 @@
 		  loader.stop();
 		  var response = JSON.parse(xhr.responseText);
 		  if ( ! response.success ) {
-			document.getElementById('generate-code-message').innerHTML = 'Error generating the plugin code. <pre>' + response.data + '</pre>';
+			document.getElementById('generate-code-message').innerHTML = wp_autoplugin.code_generation_error + ' <pre>' + response.data + '</pre>';
 			return;
 		  }
 
@@ -172,7 +172,7 @@
 	  pluginCode = pluginCodeTextarea.value;
 	  var pluginName = document.getElementById('plugin_name').value;
   
-	  var loader = loadingIndicator(document.getElementById('create-plugin-message'), 'Installing the plugin');
+	  var loader = loadingIndicator(document.getElementById('create-plugin-message'), wp_autoplugin.messages.creating_plugin);
 	  loader.start();
   
 	  var formData = new FormData();
@@ -188,15 +188,15 @@
 		  loader.stop();
 		  var response = JSON.parse(xhr.responseText);
 		  if (response.success) {
-			document.getElementById('create-plugin-message').innerHTML = 'Plugin successfully installed.';
-			document.getElementById('create-plugin-message').insertAdjacentHTML('beforeend', '<h2>How to test it?</h2><pre class="autoplugin-testing-plan">' + nl2br(wp_autoplugin.testing_plan) + '</pre><p>If you notice any issues, use the Fix button in the Autoplugins list.</p>');
-			document.getElementById('create-plugin-message').insertAdjacentHTML('beforeend', '<a href="' + wp_autoplugin.activate_url + '&plugin=' + response.data + '" class="button button-primary">Activate Plugin</a>');
+			document.getElementById('create-plugin-message').innerHTML = wp_autoplugin.messages.plugin_created;
+			document.getElementById('create-plugin-message').insertAdjacentHTML('beforeend', '<h2>' + wp_autoplugin.messages.how_to_test + '</h2><pre class="autoplugin-testing-plan">' + nl2br(wp_autoplugin.testing_plan) + '</pre><p>' + wp_autoplugin.messages.use_fixer + '</p>');
+			document.getElementById('create-plugin-message').insertAdjacentHTML('beforeend', '<a href="' + wp_autoplugin.activate_url + '&plugin=' + response.data + '" class="button button-primary">' + wp_autoplugin.messages.activate + '</a>');
 			
 			// Hide #create-plugin-form.
 			createPluginForm.style.display = 'none';
 			
 		  } else {
-			document.getElementById('create-plugin-message').innerHTML = 'Error installing the plugin: <pre>' + response.data + '</pre>';
+			document.getElementById('create-plugin-message').innerHTML = wp_autoplugin.messages.plugin_creation_error + ' <pre>' + response.data + '</pre>';
 		  }
 		}
 
@@ -231,45 +231,7 @@
 	showStep('generatePlan');
 
 	// Typing placeholder for #plugin_description
-	let messages = [
-		'A simple contact form with honeypot spam protection',
-		'A custom post type for testimonials',
-		'A widget that displays recent posts',
-		'A shortcode that shows a random quote',
-		'A user profile widget displaying avatar, bio, and website link',
-		'A custom post type for managing FAQs',
-		'A post views counter that tracks and displays view counts',
-		'Maintenance mode with a countdown timer to site return',
-		'An admin quick links widget for the dashboard',
-		'Hide the admin bar for non-admin users',
-		'Hide specific menu items in the admin area',
-		'A social media share buttons plugin for posts',
-		'A custom footer credit remover',
-		'A plugin to add custom CSS to the WordPress login page',
-		'A related posts display below single post content',
-		'A custom excerpt length controller',
-		'A "Back to Top" button for long pages',
-		'A plugin to disable comments on specific post types',
-		'A simple Google Analytics integration',
-		'An author box display below posts',
-		'A custom breadcrumb generator',
-		'A plugin to add nofollow to external links',
-		'A simple cookie consent banner',
-		'A post expiration date setter',
-		'A basic XML sitemap generator',
-		'A custom login URL creator for added security',
-		'A simple contact information display shortcode',
-		'A plugin to add estimated reading time to posts',
-		'A custom RSS feed footer',
-		'A simple post duplication tool',
-		'A basic schema markup generator',
-		'A plugin to add custom admin footer text',
-		'A plugin to add custom taxonomies easily',
-		'A simple email obfuscator to prevent spam',
-		'A basic redirection manager',
-		'A plugin to add custom fields to user profiles',
-		'A simple image compression tool',
-	];
+	let messages = wp_autoplugin.plugin_examples;
 	messages.sort(() => Math.random() - 0.5);
 	typingPlaceholder(document.getElementById('plugin_description'), messages);
   })();
