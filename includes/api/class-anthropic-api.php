@@ -72,6 +72,10 @@ class Anthropic_API extends API {
 				'temperature' => 0.2,
 				'max_tokens'  => 8192,
 			),
+			'claude-3-5-sonnet-latest' => array(
+				'temperature' => 0.2,
+				'max_tokens'  => 4096,
+			),
 			'claude-3-opus-20240229' => array(
 				'temperature' => 0.2,
 				'max_tokens'  => 4096,
