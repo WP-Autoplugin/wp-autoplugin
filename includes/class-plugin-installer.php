@@ -49,6 +49,11 @@ class Plugin_Installer {
 	 * @return string|WP_Error
 	 */
 	public function install_plugin( $code, $plugin_name ) {
+		// If DISALLOW_FILE_MODS is set, we can't install plugins.
+		if ( defined( 'DISALLOW_FILE_MODS' ) && DISALLOW_FILE_MODS ) {
+			return \WP_Error( 'file_mods_disabled', 'Plugin installation is disabled.' );
+		}
+
 		// If the plugin name is a file path, save the code to that file.
 		$plugin_file = '';
 		if ( strpos( $plugin_name, '/' ) !== false && substr( $plugin_name, -4 ) === '.php' ) {

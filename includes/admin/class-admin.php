@@ -666,6 +666,15 @@ class Admin {
 			return;
 		}
 
+		// Show a notice if DISALLOW_FILE_MODS is defined.
+		if ( defined( 'DISALLOW_FILE_MODS' ) && DISALLOW_FILE_MODS ) {
+			?>
+			<div class="notice notice-error">
+				<p><?php _e( 'The <code>DISALLOW_FILE_MODS</code> constant is defined in your wp-config.php file, which prevents WP-Autoplugin from installing or updating plugins on your site.', 'wp-autoplugin' ); ?></p>
+			</div>
+			<?php
+		}
+
 		// Show a notice if there was a fatal error while activating a plugin.
 		$error = get_option( 'wp_autoplugin_fatal_error' );
 		if ( $error && is_array( $error ) ) {
