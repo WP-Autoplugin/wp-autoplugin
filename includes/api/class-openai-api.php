@@ -17,15 +17,49 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class OpenAI_API extends API {
+
+	/**
+	 * API key.
+	 *
+	 * @var string
+	 */
 	private $api_key;
+
+	/**
+	 * Selected model.
+	 *
+	 * @var string
+	 */
 	private $model;
+
+	/**
+	 * Temperature parameter.
+	 *
+	 * @var float
+	 */
 	private $temperature = 0.2;
+
+	/**
+	 * Max tokens parameter.
+	 *
+	 * @var int
+	 */
 	private $max_tokens  = 4096;
 
+	/**
+	 * Set the API key.
+	 *
+	 * @param string $api_key The API key.
+	 */
 	public function set_api_key( $api_key ) {
 		$this->api_key = sanitize_text_field( $api_key );
 	}
 
+	/**
+	 * Set the model, temperature, and max tokens.
+	 *
+	 * @param string $model The model.
+	 */
 	public function set_model( $model ) {
 		$this->model = sanitize_text_field( $model );
 
@@ -59,6 +93,13 @@ class OpenAI_API extends API {
 		}
 	}
 
+	/**
+	 * Send a prompt to the API.
+	 *
+	 * @param string $prompt The prompt.
+	 * @param string $system_message The system message.
+	 * @param array  $override_body The override body.
+	 */
 	public function send_prompt( $prompt, $system_message = '', $override_body = array() ) {
 		$prompt = $this->trim_prompt( $prompt );
 		$messages = array();
@@ -103,6 +144,7 @@ class OpenAI_API extends API {
 
 		$data = json_decode( $body, true );
 
+		// "Continue" functionality:
 		// If finish_reason is "length", the response is too long.
 		// We need to send a new request with the whole conversation so far, so the AI can continue from where it left off.
 		if ( isset( $data['choices'][0]['finish_reason'] ) && 'length' === $data['choices'][0]['finish_reason'] ) {

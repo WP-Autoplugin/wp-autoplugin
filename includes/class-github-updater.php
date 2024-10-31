@@ -15,6 +15,7 @@
 
 namespace WP_Autoplugin;
 
+// Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -24,12 +25,39 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class GitHub_Updater {
 
+	/**
+	 * Updater version.
+	 *
+	 * @var string
+	 */
 	const VERSION = 1.7;
 
-	public $config         = [];
-	public $missing_config = [];
-	private $github_data   = null;
+	/**
+	 * Configuration parameters.
+	 *
+	 * @var array
+	 */
+	public $config = [];
 
+	/**
+	 * Missing configuration.
+	 *
+	 * @var array
+	 */
+	public $missing_config = [];
+
+	/**
+	 * GitHub data.
+	 *
+	 * @var object
+	 */
+	private $github_data = null;
+
+	/**
+	 * Set up the updater.
+	 *
+	 * @param array $config Configuration parameters.
+	 */
 	public function __construct( $config = array() ) {
 
 		$defaults = array(
@@ -63,6 +91,11 @@ class GitHub_Updater {
 		add_filter( 'http_request_args', array( $this, 'http_request_sslverify' ), 10, 2 );
 	}
 
+	/**
+	 * Check if the required configuration parameters are set.
+	 *
+	 * @return bool
+	 */
 	public function has_minimum_config() {
 		$this->missing_config = array();
 
@@ -93,6 +126,11 @@ class GitHub_Updater {
 		return ( defined( 'WP_GITHUB_FORCE_UPDATE' ) && WP_GITHUB_FORCE_UPDATE );
 	}
 
+	/**
+	 * Set default values for the configuration parameters.
+	 *
+	 * @return void
+	 */
 	public function set_defaults() {
 		if ( ! isset( $this->config['new_version'] ) ) {
 			$this->config['new_version'] = $this->get_new_version();
@@ -124,10 +162,23 @@ class GitHub_Updater {
 		}
 	}
 
+	/**
+	 * Get the HTTP request timeout.
+	 *
+	 * @return int
+	 */
 	public function http_request_timeout() {
 		return apply_filters( 'github_updater_http_timeout', 2 );
 	}
 
+	/**
+	 * Set the SSL verification for the HTTP request.
+	 *
+	 * @param array  $args HTTP request arguments.
+	 * @param string $url  URL.
+	 *
+	 * @return array
+	 */
 	public function http_request_sslverify( $args, $url ) {
 		if ( $this->config['zip_url'] == $url ) {
 			$args['sslverify'] = $this->config['sslverify'];
@@ -135,6 +186,11 @@ class GitHub_Updater {
 		return $args;
 	}
 
+	/**
+	 * Get the new version number for the plugin.
+	 *
+	 * @return string|bool
+	 */
 	public function get_new_version() {
 		$version = get_site_transient( md5( $this->config['slug'] ) . '_new_version' );
 
@@ -173,6 +229,13 @@ class GitHub_Updater {
 		return $version;
 	}
 
+	/**
+	 * Perform a remote GET request.
+	 *
+	 * @param string $query URL to query.
+	 *
+	 * @return bool|array
+	 */
 	public function remote_get( $query ) {
 		$raw_response = wp_remote_get( $query, array(
 			'sslverify' => $this->config['sslverify'],
@@ -186,12 +249,17 @@ class GitHub_Updater {
 		return $raw_response;
 	}
 
+	/**
+	 * Fetch the GitHub data.
+	 *
+	 * @return object
+	 */
 	public function get_github_data() {
 		if ( isset( $this->github_data ) && ! empty( $this->github_data ) ) {
 			return $this->github_data;
 		}
 
-		$github_data = get_site_transient( md5($this->config['slug']).'_github_data' );
+		$github_data = get_site_transient( md5( $this->config['slug'] ) . '_github_data' );
 
 		if ( $this->overrule_transients() || ! isset( $github_data ) || ! $github_data || '' == $github_data ) {
 			$github_data = $this->remote_get( $this->config['api_url'] );
@@ -201,28 +269,50 @@ class GitHub_Updater {
 			}
 
 			$github_data = json_decode( $github_data['body'] );
-			set_site_transient( md5($this->config['slug']).'_github_data', $github_data, 60*60*6 );
+			set_site_transient( md5( $this->config['slug'] ) . '_github_data', $github_data, 60 * 60 * 6 );
 		}
 
 		$this->github_data = $github_data;
 		return $github_data;
 	}
 
+	/**
+	 * Get the date the plugin was last updated.
+	 *
+	 * @return string|bool
+	 */
 	public function get_date() {
 		$_date = $this->get_github_data();
 		return ( ! empty( $_date->updated_at ) ) ? date( 'Y-m-d', strtotime( $_date->updated_at ) ) : false;
 	}
 
+	/**
+	 * Get the plugin description.
+	 *
+	 * @return string|bool
+	 */
 	public function get_description() {
 		$_description = $this->get_github_data();
 		return ( ! empty( $_description->description ) ) ? $_description->description : false;
 	}
 
+	/**
+	 * Get the plugin data.
+	 *
+	 * @return array
+	 */
 	public function get_plugin_data() {
 		include_once ABSPATH . '/wp-admin/includes/plugin.php';
 		return get_plugin_data( WP_PLUGIN_DIR . '/' . $this->config['slug'] );
 	}
 
+	/**
+	 * Check for updates.
+	 *
+	 * @param object $transient The plugin data transient.
+	 *
+	 * @return object
+	 */
 	public function api_check( $transient ) {
 		if ( empty( $transient->checked ) ) {
 			return $transient;
@@ -245,6 +335,15 @@ class GitHub_Updater {
 		return $transient;
 	}
 
+	/**
+	 * Get plugin information.
+	 *
+	 * @param bool   $false    False.
+	 * @param string $action   Action.
+	 * @param object $response Response.
+	 *
+	 * @return object
+	 */
 	public function get_plugin_info( $false, $action, $response ) {
 		if ( ! isset( $response->slug ) || $response->slug != $this->config['slug'] ) {
 			return false;
@@ -263,6 +362,15 @@ class GitHub_Updater {
 		return $response;
 	}
 
+	/**
+	 * Post-installation hook.
+	 *
+	 * @param bool   $true       True.
+	 * @param array  $hook_extra Hook extra.
+	 * @param object $result     Result.
+	 *
+	 * @return object
+	 */
 	public function upgrader_post_install( $true, $hook_extra, $result ) {
 		global $wp_filesystem;
 

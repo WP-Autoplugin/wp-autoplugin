@@ -24,6 +24,7 @@ $plugin_data = get_plugin_data( $plugin_path );
 $value = '';
 if ( ! empty( $_GET['error_message'] ) ) {
 	$value = sprintf(
+		// translators: %s: error message.
 		__( 'Error while activating the plugin: %s', 'wp-autoplugin' ),
 		wp_unslash( $_GET['error_message'] )
 	);

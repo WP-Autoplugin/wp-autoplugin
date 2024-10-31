@@ -21,10 +21,18 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Plugin_Installer {
 
-	// Singleton instance
+	/**
+	 * Singleton instance.
+	 *
+	 * @var Plugin_Installer
+	 */
 	private static $instance;
 
-	// Get the singleton instance
+	/**
+	 * Get the singleton instance.
+	 *
+	 * @return Plugin_Installer
+	 */
 	public static function get_instance() {
 		if ( ! isset( self::$instance ) ) {
 			self::$instance = new self();
@@ -32,7 +40,14 @@ class Plugin_Installer {
 		return self::$instance;
 	}
 
-	// Install a plugin from code
+	/**
+	 * Install a plugin from code.
+	 *
+	 * @param string $code        The plugin code.
+	 * @param string $plugin_name The plugin name.
+	 *
+	 * @return string|WP_Error
+	 */
 	public function install_plugin( $code, $plugin_name ) {
 		// If the plugin name is a file path, save the code to that file.
 		$plugin_file = '';
@@ -68,6 +83,12 @@ class Plugin_Installer {
 		return $plugin_name . '/index.php';
 	}
 
+	/**
+	 * Try to activate a plugin and catch fatal errors.
+	 *
+	 * @param string $plugin The plugin file.
+	 * @return void
+	 */
 	public function activate_plugin( $plugin ) {
 		// Check if the plugin is in the list of autoplugins
 		$autoplugins = get_option( 'wp_autoplugins', array() );
@@ -138,6 +159,13 @@ class Plugin_Installer {
 		wp_redirect( admin_url( 'admin.php?page=wp-autoplugin' ) );
 	}
 
+	/**
+	 * Deactivate a plugin and redirect to the autoplugins list page.
+	 *
+	 * @param string $plugin The plugin file.
+	 *
+	 * @return void
+	 */
 	public function deactivate_plugin( $plugin ) {
 		// Check if the plugin is in the list of autoplugins
 		$autoplugins = get_option( 'wp_autoplugins', array() );
@@ -154,6 +182,13 @@ class Plugin_Installer {
 		wp_redirect( admin_url( 'admin.php?page=wp-autoplugin' ) );
 	}
 
+	/**
+	 * Delete a plugin.
+	 *
+	 * @param string $plugin The plugin file.
+	 *
+	 * @return void
+	 */
 	public function delete_plugin( $plugin ) {
 		// Check if the plugin is in the list of autoplugins
 		$autoplugins = get_option( 'wp_autoplugins', array() );

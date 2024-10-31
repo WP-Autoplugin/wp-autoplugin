@@ -20,12 +20,32 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Plugin Fixer class.
  */
 class Plugin_Fixer {
+
+	/**
+	 * The AI API in use.
+	 *
+	 * @var API
+	 */
 	private $ai_api;
 
+	/**
+	 * Constructor.
+	 *
+	 * @param API $ai_api The AI API in use.
+	 */
 	public function __construct( $ai_api ) {
 		$this->ai_api = $ai_api;
 	}
 
+	/**
+	 * Prompt the AI to identify an issue in a WordPress plugin.
+	 *
+	 * @param string $plugin_code        The plugin code.
+	 * @param string $problem            The problem encountered.
+	 * @param bool   $check_other_issues Whether to check for other issues in the code.
+	 *
+	 * @return string|WP_Error
+	 */
 	public function identify_issue( $plugin_code, $problem, $check_other_issues = true ) {
 		$prompt = <<<PROMPT
 			I have a WordPress plugin file that needs fixing. Here is the code:
@@ -72,6 +92,15 @@ class Plugin_Fixer {
 		return $this->ai_api->send_prompt( $prompt, '' );
 	}
 
+	/**
+	 * Prompt the AI to fix a WordPress plugin.
+	 *
+	 * @param string $plugin_code    The plugin code.
+	 * @param string $problem        The problem encountered.
+	 * @param string $ai_description The developer's description and solution.
+	 *
+	 * @return string|WP_Error
+	 */
 	public function fix_plugin( $plugin_code, $problem, $ai_description ) {
 		$prompt = <<<PROMPT
 			I have a WordPress plugin file that needs fixing. Here is the code:

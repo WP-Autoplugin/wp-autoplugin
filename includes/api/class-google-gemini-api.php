@@ -20,51 +20,93 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Google Gemini API class.
  */
 class Google_Gemini_API extends API {
+
+	/**
+	 * API key.
+	 *
+	 * @var string
+	 */
 	private $api_key;
+
+	/**
+	 * Selected model.
+	 *
+	 * @var string
+	 */
 	private $model;
+
+	/**
+	 * Temperature parameter.
+	 *
+	 * @var float
+	 */
 	private $temperature = 0.2;
+
+	/**
+	 * Max tokens parameter.
+	 *
+	 * @var int
+	 */
 	private $max_tokens  = 8192;
 
+	/**
+	 * Set the API key.
+	 *
+	 * @param string $api_key The API key.
+	 */
 	public function set_api_key( $api_key ) {
 		$this->api_key = sanitize_text_field( $api_key );
 	}
 
+	/**
+	 * Set the model.
+	 *
+	 * @param string $model The model.
+	 */
 	public function set_model( $model ) {
 		$this->model = sanitize_text_field( $model );
 	}
 
+	/**
+	 * Send a prompt to the API.
+	 *
+	 * @param string $prompt         The prompt.
+	 * @param string $system_message The system message.
+	 * @param array  $override_body  The override body.
+	 * @return mixed
+	 */
 	public function send_prompt( $prompt, $system_message = '', $override_body = array() ) {
 		$prompt = $this->trim_prompt( $prompt );
 
 		$url = 'https://generativelanguage.googleapis.com/v1beta/models/' . $this->model . ':generateContent?key=' . $this->api_key;
 
-		// Default safetySettings
+		// Default safetySettings.
 		$safety_settings = array(
 			array(
-				'category' => 'HARM_CATEGORY_DANGEROUS_CONTENT',
+				'category'  => 'HARM_CATEGORY_DANGEROUS_CONTENT',
 				'threshold' => 'BLOCK_ONLY_HIGH',
 			),
 		);
 
-		// Default generationConfig
+		// Default generationConfig.
 		$generation_config = array(
 			'temperature'     => $this->temperature,
 			'maxOutputTokens' => $this->max_tokens,
 		);
 
-		// Merge override_body['generationConfig'] into $generation_config
+		// Merge override_body['generationConfig'] into $generation_config.
 		if ( isset( $override_body['generationConfig'] ) && is_array( $override_body['generationConfig'] ) ) {
 			$generation_config = array_merge( $generation_config, $override_body['generationConfig'] );
 			unset( $override_body['generationConfig'] );
 		}
 
-		// Override safetySettings if provided
+		// Override safetySettings if provided.
 		if ( isset( $override_body['safetySettings'] ) && is_array( $override_body['safetySettings'] ) ) {
 			$safety_settings = $override_body['safetySettings'];
 			unset( $override_body['safetySettings'] );
 		}
 
-		// Build the request body
+		// Build the request body.
 		$body = array(
 			'contents' => array(
 				array(
@@ -95,7 +137,7 @@ class Google_Gemini_API extends API {
 
 		$data = json_decode( $body, true );
 
-		// Parse the response
+		// Parse the response.
 		if ( isset( $data['candidates'][0]['content']['parts'][0]['text'] ) ) {
 			return $data['candidates'][0]['content']['parts'][0]['text'];
 		} else {

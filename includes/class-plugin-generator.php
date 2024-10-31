@@ -20,12 +20,30 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Plugin Generator class.
  */
 class Plugin_Generator {
+
+	/**
+	 * AI API in use.
+	 *
+	 * @var API
+	 */
 	private $ai_api;
 
+	/**
+	 * Constructor.
+	 *
+	 * @param API $ai_api The AI API in use.
+	 */
 	public function __construct( $ai_api ) {
 		$this->ai_api = $ai_api;
 	}
 
+	/**
+	 * Prompt the AI to generate a plan for a WordPress plugin.
+	 *
+	 * @param string $input The plugin features.
+	 *
+	 * @return string|WP_Error
+	 */
 	public function generate_plugin_plan( $input ) {
 		$prompt = <<<PROMPT
 			Generate a detailed technical specification and development plan for a WordPress plugin with the following features:
@@ -49,6 +67,13 @@ class Plugin_Generator {
 		return $this->ai_api->send_prompt( $prompt, '', array( 'response_format' => array( 'type' => 'json_object' ) ) );
 	}
 
+	/**
+	 * Prompt the AI to generate a WordPress plugin code based on a plan.
+	 *
+	 * @param string $plan The plugin plan.
+	 *
+	 * @return string|WP_Error
+	 */
 	public function generate_plugin_code( $plan ) {
 		$prompt = <<<PROMPT
 			Build a single-file WordPress plugin based on the specification below. Do not use Markdown formatting in your answer. Ensure the response does not contain any explanation or commentary, ONLY the complete, working code without any placeholders. "Add X here" comments are not allowed in the code, you need to write out the full, working code.

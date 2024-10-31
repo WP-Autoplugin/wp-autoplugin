@@ -20,12 +20,31 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Plugin Extender class.
  */
 class Plugin_Extender {
+
+	/**
+	 * The AI API in use.
+	 *
+	 * @var API
+	 */
 	private $ai_api;
 
+	/**
+	 * Constructor.
+	 *
+	 * @param API $ai_api The AI API in use.
+	 */
 	public function __construct( $ai_api ) {
 		$this->ai_api = $ai_api;
 	}
 
+	/**
+	 * Prompt the AI to plan the extension of a WordPress plugin.
+	 *
+	 * @param string $plugin_code    The plugin code.
+	 * @param string $plugin_changes The plugin changes to be made.
+	 *
+	 * @return string|WP_Error
+	 */
 	public function plan_plugin_extension( $plugin_code, $plugin_changes ) {
 		$prompt = <<<PROMPT
 			I have a WordPress plugin file I would like to extend. Here is the code:
@@ -46,6 +65,15 @@ class Plugin_Extender {
 		return $this->ai_api->send_prompt( $prompt );
 	}
 
+	/**
+	 * Prompt the AI to extend a WordPress plugin based on a plan.
+	 *
+	 * @param string $plugin_code    The plugin code.
+	 * @param string $plugin_changes The plugin changes.
+	 * @param string $ai_plan        The AI plan for extending the plugin.
+	 *
+	 * @return string|WP_Error
+	 */
 	public function extend_plugin( $plugin_code, $plugin_changes, $ai_plan ) {
 		$prompt = <<<PROMPT
 			I have a WordPress plugin file I would like to extend. Here is the code:

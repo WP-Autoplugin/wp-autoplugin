@@ -20,15 +20,49 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Anthropic API class.
  */
 class Anthropic_API extends API {
-	private $api_key;
-	private $model;
-	private $temperature = 0.2;
-	private $max_tokens  = 4096;
 
+	/**
+	 * API key.
+	 *
+	 * @var string
+	 */
+	private $api_key;
+
+	/**
+	 * Selected model.
+	 *
+	 * @var string
+	 */
+	private $model;
+
+	/**
+	 * Temperature parameter.
+	 *
+	 * @var float
+	 */
+	private $temperature = 0.2;
+
+	/**
+	 * Max tokens parameter.
+	 *
+	 * @var int
+	 */
+	private $max_tokens = 4096;
+
+	/**
+	 * Set the API key.
+	 *
+	 * @param string $api_key The API key.
+	 */
 	public function set_api_key( $api_key ) {
 		$this->api_key = sanitize_text_field( $api_key );
 	}
 
+	/**
+	 * Set the model, and the parameters based on the model.
+	 *
+	 * @param string $model The model.
+	 */
 	public function set_model( $model ) {
 		$this->model = sanitize_text_field( $model );
 
@@ -58,40 +92,14 @@ class Anthropic_API extends API {
 		}
 	}
 
-	/*
-	Example request:
-	curl https://api.anthropic.com/v1/messages \
-		--header "x-api-key: $ANTHROPIC_API_KEY" \
-		--header "anthropic-version: 2023-06-01" \
-		--header "content-type: application/json" \
-		--data \
-	'{
-		"model": "claude-3-5-sonnet-20240620",
-		"max_tokens": 1024,
-		"messages": [
-			{"role": "user", "content": "Hello, world"}
-		]
-	}'
-
-	Successful response:
-	{
-		"content": [
-			{
-			"text": "Hi! My name is Claude.",
-			"type": "text"
-			}
-		],
-		"id": "msg_013Zva2CMHLNnXjNJJKqJ2EF",
-		"model": "claude-3-5-sonnet-20240620",
-		"role": "assistant",
-		"stop_reason": "end_turn",
-		"stop_sequence": null,
-		"type": "message",
-		"usage": {
-			"input_tokens": 10,
-			"output_tokens": 25
-		}
-	}
+	/**
+	 * Send a prompt to the API.
+	 *
+	 * @param string $prompt         The prompt.
+	 * @param string $system_message The system message.
+	 * @param array  $override_body  The override body.
+	 *
+	 * @return mixed The response from the API.
 	 */
 	public function send_prompt( $prompt, $system_message = '', $override_body = array() ) {
 		$prompt = $this->trim_prompt( $prompt );
@@ -145,6 +153,7 @@ class Anthropic_API extends API {
 
 		$data = json_decode( $body, true );
 
+		// "Continue" functionality:
 		// If stop_reason is "max_tokens", the response is too long.
 		// We need to send a new request with the whole conversation so far, so the AI can continue from where it left off.
 		if ( isset( $data['stop_reason'] ) && 'max_tokens' === $data['stop_reason'] ) {
