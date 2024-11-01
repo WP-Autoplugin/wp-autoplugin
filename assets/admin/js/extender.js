@@ -184,7 +184,7 @@
         formData.append('action', 'wp_autoplugin_extend_plugin');
         formData.append('plugin_issue', issueDescription);
         formData.append('plugin_file', document.getElementById('plugin_file').value);
-        formData.append('plugin_code', pluginCodeTextarea.value);
+        formData.append('plugin_code', editorInstance.codemirror.getValue());
         formData.append('security', wp_autoplugin.nonce);
 
         var xhr = new XMLHttpRequest();

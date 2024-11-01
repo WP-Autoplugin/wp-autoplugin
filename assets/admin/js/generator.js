@@ -169,7 +169,6 @@
 	  // Add loading class for form parent container.
 	  createPluginForm.parentElement.classList.add('loading');
 
-	  pluginCode = pluginCodeTextarea.value;
 	  var pluginName = document.getElementById('plugin_name').value;
   
 	  var loader = loadingIndicator(document.getElementById('create-plugin-message'), wp_autoplugin.messages.creating_plugin);
@@ -177,7 +176,7 @@
   
 	  var formData = new FormData();
 	  formData.append('action', 'wp_autoplugin_create_plugin');
-	  formData.append('plugin_code', pluginCode);
+	  formData.append('plugin_code', editorInstance.codemirror.getValue());
 	  formData.append('plugin_name', pluginName);
 	  formData.append('security', wp_autoplugin.nonce);
   
