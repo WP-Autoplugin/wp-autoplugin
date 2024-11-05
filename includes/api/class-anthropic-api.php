@@ -74,7 +74,15 @@ class Anthropic_API extends API {
 			),
 			'claude-3-5-sonnet-latest' => array(
 				'temperature' => 0.2,
-				'max_tokens'  => 4096,
+				'max_tokens'  => 8192,
+			),
+			'claude-3-5-haiku-latest' => array(
+				'temperature' => 0.2,
+				'max_tokens'  => 8192,
+			),
+			'claude-3-5-haiku-20241022' => array(
+				'temperature' => 0.2,
+				'max_tokens'  => 8192,
 			),
 			'claude-3-opus-20240229' => array(
 				'temperature' => 0.2,

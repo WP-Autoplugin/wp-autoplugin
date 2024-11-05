@@ -50,7 +50,7 @@ class Admin {
 			$this->ai_api = new OpenAI_API();
 			$this->ai_api->set_api_key( $openai_api_key );
 			$this->ai_api->set_model( $model );
-		} elseif ( ! empty( $anthropic_api_key ) && in_array( $model, array( 'claude-3-5-sonnet-20240620', 'claude-3-5-sonnet-latest', 'claude-3-opus-20240229', 'claude-3-sonnet-20240229', 'claude-3-haiku-20240307' ), true ) ) {
+		} elseif ( ! empty( $anthropic_api_key ) && in_array( $model, array( 'claude-3-5-sonnet-20240620', 'claude-3-5-sonnet-latest', 'claude-3-5-haiku-latest', 'claude-3-5-haiku-20241022', 'claude-3-opus-20240229', 'claude-3-sonnet-20240229', 'claude-3-haiku-20240307' ), true ) ) {
 			$this->ai_api = new Anthropic_API();
 			$this->ai_api->set_api_key( $anthropic_api_key );
 			$this->ai_api->set_model( $model );

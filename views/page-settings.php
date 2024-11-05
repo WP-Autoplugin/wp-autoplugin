@@ -52,6 +52,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<optgroup label="Anthropic">
 							<option value="claude-3-5-sonnet-latest" <?php selected( get_option( 'wp_autoplugin_model' ), 'claude-3-5-sonnet-latest' ); ?>>Claude 3.5 Sonnet-latest</option>
 							<option value="claude-3-5-sonnet-20240620" <?php selected( get_option( 'wp_autoplugin_model' ), 'claude-3-5-sonnet-20240620' ); ?>>Claude 3.5 Sonnet-20240620</option>
+							<option value="claude-3-5-haiku-latest" <?php selected( get_option( 'wp_autoplugin_model' ), 'claude-3-5-haiku-latest' ); ?>>Claude 3.5 Haiku-latest</option>
+							<option value="claude-3-5-haiku-20241022" <?php selected( get_option( 'wp_autoplugin_model' ), 'claude-3-5-haiku-20241022' ); ?>>Claude 3.5 Haiku-20241022</option>
 							<option value="claude-3-opus-20240229" <?php selected( get_option( 'wp_autoplugin_model' ), 'claude-3-opus-20240229' ); ?>>Claude 3 Opus</option>
 							<option value="claude-3-sonnet-20240229" <?php selected( get_option( 'wp_autoplugin_model' ), 'claude-3-sonnet-20240229' ); ?>>Claude 3 Sonnet</option>
 							<option value="claude-3-haiku-20240307" <?php selected( get_option( 'wp_autoplugin_model' ), 'claude-3-haiku-20240307' ); ?>>Claude 3 Haiku</option>
