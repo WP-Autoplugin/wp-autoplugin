@@ -43,7 +43,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<td>
 					<select name="wp_autoplugin_model">
 						<optgroup label="OpenAI">
-							<option value="gpt-4o-latest" <?php selected( get_option( 'wp_autoplugin_model' ), 'gpt-4o-latest' ); ?>>GPT-4o-latest</option>
+							<option value="chatgpt-4o-latest" <?php selected( get_option( 'wp_autoplugin_model' ), 'chatgpt-4o-latest' ); ?>>ChatGPT-4o-latest</option>
 							<option value="gpt-4o" <?php selected( get_option( 'wp_autoplugin_model' ), 'gpt-4o' ); ?>>GPT-4o</option>
 							<option value="gpt-4o-mini" <?php selected( get_option( 'wp_autoplugin_model' ), 'gpt-4o-mini' ); ?>>GPT-4o mini</option>
 							<option value="gpt-4-turbo" <?php selected( get_option( 'wp_autoplugin_model' ), 'gpt-4-turbo' ); ?>>GPT-4 Turbo</option>
@@ -63,7 +63,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						</optgroup>
 					</select>
 					
-					<p class="description"><?php _e( '<code>gpt-4o-latest</code> and <code>claude-3-5-sonnet-latest</code> continuously point to the latest model version from OpenAI and Anthropic, respectively.', 'wp-autoplugin' ); ?></p>
+					<p class="description"><?php _e( '<code>chatgpt-4o-latest</code> and <code>claude-3-5-sonnet-latest</code> continuously point to the latest model version from OpenAI and Anthropic, respectively.', 'wp-autoplugin' ); ?></p>
 				</td>
 			</tr>
 		</table>

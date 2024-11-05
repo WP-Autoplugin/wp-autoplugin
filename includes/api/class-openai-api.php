@@ -69,7 +69,7 @@ class OpenAI_API extends API {
 				'temperature' => 0.2,
 				'max_tokens'  => 4096,
 			),
-			'gpt-4o-latest' => array(
+			'chatgpt-4o-latest' => array(
 				'temperature' => 0.2,
 				'max_tokens'  => 16384,
 			),

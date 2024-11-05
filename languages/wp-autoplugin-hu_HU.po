@@ -554,5 +554,5 @@ msgid "Model"
 msgstr "Modell"
 
 #: views/page-settings.php:65
-msgid "<code>gpt-4o-latest</code> continuously points to the version of GPT-4o used in ChatGPT, and is updated frequently."
-msgstr "A <code>gpt-4o-latest</code> folyamatosan a ChatGPT által használt GPT-4o verzióra mutat, és gyakran frissül."
+msgid "<code>chatgpt-4o-latest</code> continuously points to the version of GPT-4o used in ChatGPT, and is updated frequently."
+msgstr "A <code>chatgpt-4o-latest</code> folyamatosan a ChatGPT által használt GPT-4o verzióra mutat, és gyakran frissül."
