@@ -43,10 +43,12 @@ WP-Autoplugin supports various models:
 - GPT-4
 - GPT-4o
 - GPT-4o mini
+- Claude 3.5 Sonnet
+- Claude 3.5 Haiku
 - Claude 3 Haiku
 - Claude 3 Sonnet
 - Claude 3 Opus
-- Claude 3.5 Sonnet
+- xAI Grok-beta
 - Google Gemini Flash 1.5
 - Google Gemini Pro 1.5
 - Google Gemini Pro 1.0
@@ -120,6 +122,14 @@ Or watch the [WP-Autoplugin demo video on Youtube](https://www.youtube.com/watch
 WP-Autoplugin is licensed under the GPLv3 or later.
 
 ## Changelog
+
+### 1.1
+- Added support for Claude 3.5 Haiku
+- Added support for xAI and its only current model, Grok-beta
+- Fixed an issue that prevented the code from being edited in the code editor
+- Fixed wrong model name for "chatgpt-4o-latest"
+- Improved the generator prompt for better code generation on lower-end models
+- Improved inline documentation
 
 ### 1.0.6
 - Fixed Github updater class
