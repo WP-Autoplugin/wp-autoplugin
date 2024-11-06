@@ -39,6 +39,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<td><input type="password" name="wp_autoplugin_google_api_key" value="<?php echo esc_attr( get_option( 'wp_autoplugin_google_api_key' ) ); ?>" class="large-text" /></td>
 			</tr>
 			<tr valign="top">
+				<th scope="row"><?php _e( 'xAI API Key', 'wp-autoplugin' ); ?></th>
+				<td><input type="password" name="wp_autoplugin_xai_api_key" value="<?php echo esc_attr( get_option( 'wp_autoplugin_xai_api_key' ) ); ?>" class="large-text" /></td>
+			</tr>
+			<tr valign="top">
 				<th scope="row"><?php _e( 'Model', 'wp-autoplugin' ); ?></th>
 				<td>
 					<select name="wp_autoplugin_model">
@@ -62,6 +66,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 							<option value="gemini-1.5-flash" <?php selected( get_option( 'wp_autoplugin_model' ), 'gemini-1.5-flash' ); ?>>Gemini 1.5 Flash</option>
 							<option value="gemini-1.5-pro" <?php selected( get_option( 'wp_autoplugin_model' ), 'gemini-1.5-pro' ); ?>>Gemini 1.5 Pro</option>
 							<option value="gemini-1.0-pro" <?php selected( get_option( 'wp_autoplugin_model' ), 'gemini-1.0-pro' ); ?>>Gemini 1.0 Pro</option>
+						</optgroup>
+						<optgroup label="xAI">
+							<option value="grok-beta" <?php selected( get_option( 'wp_autoplugin_model' ), 'grok-beta' ); ?>>Grok-Beta</option>
 						</optgroup>
 					</select>
 					

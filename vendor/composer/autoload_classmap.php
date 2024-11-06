@@ -18,4 +18,5 @@ return array(
     'WP_Autoplugin\\Plugin_Generator' => $baseDir . '/includes/class-plugin-generator.php',
     'WP_Autoplugin\\Plugin_Installer' => $baseDir . '/includes/class-plugin-installer.php',
     'WP_Autoplugin\\Plugin_List_Table' => $baseDir . '/includes/admin/class-plugin-list-table.php',
+    'WP_Autoplugin\\XAI_API' => $baseDir . '/includes/api/class-xai-api.php',
 );

@@ -19,18 +19,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 class OpenAI_API extends API {
 
 	/**
-	 * API key.
-	 *
-	 * @var string
-	 */
-	private $api_key;
-
-	/**
 	 * Selected model.
 	 *
 	 * @var string
 	 */
-	private $model;
+	protected $model;
 
 	/**
 	 * Temperature parameter.
@@ -44,16 +37,14 @@ class OpenAI_API extends API {
 	 *
 	 * @var int
 	 */
-	private $max_tokens  = 4096;
+	protected $max_tokens  = 4096;
 
 	/**
-	 * Set the API key.
+	 * API URL.
 	 *
-	 * @param string $api_key The API key.
+	 * @var string
 	 */
-	public function set_api_key( $api_key ) {
-		$this->api_key = sanitize_text_field( $api_key );
-	}
+	protected $api_url = 'https://api.openai.com/v1/chat/completions';
 
 	/**
 	 * Set the model, temperature, and max tokens.
@@ -123,11 +114,11 @@ class OpenAI_API extends API {
 		);
 
 		// Keep only allowed keys in the override body.
-		$allowed_keys = array( 'model', 'temperature', 'max_tokens', 'messages', 'response_format' );
+		$allowed_keys = $this->get_allowed_parameters();
 		$override_body = array_intersect_key( $override_body, array_flip( $allowed_keys ) );
 		$body = array_merge( $body, $override_body );
 
-		$response = wp_remote_post( 'https://api.openai.com/v1/chat/completions', array(
+		$response = wp_remote_post( $this->api_url, array(
 			'timeout' => 60,
 			'headers' => array(
 				'Authorization' => 'Bearer ' . $this->api_key,
@@ -160,7 +151,7 @@ class OpenAI_API extends API {
 				'messages'    => $messages,
 			);
 
-			$response = wp_remote_post( 'https://api.openai.com/v1/chat/completions', array(
+			$response = wp_remote_post( $this->api_url, array(
 				'timeout' => 60,
 				'headers' => array(
 					'Authorization' => 'Bearer ' . $this->api_key,
@@ -178,7 +169,7 @@ class OpenAI_API extends API {
 			$new_data = json_decode( $body, true );
 
 			if ( ! isset( $new_data['choices'][0]['message']['content'] ) ) {
-				return new \WP_Error( 'api_error', 'Error communicating with the OpenAI API.' . "\n" . print_r( $new_data, true ) );
+				return new \WP_Error( 'api_error', 'Error communicating with the API.' . "\n" . print_r( $new_data, true ) );
 			}
 
 			// Merge the new response with the old one.
@@ -188,7 +179,22 @@ class OpenAI_API extends API {
 		if ( isset( $data['choices'][0]['message']['content'] ) ) {
 			return $data['choices'][0]['message']['content'];
 		} else {
-			return new \WP_Error( 'api_error', 'Error communicating with the OpenAI API.' . "\n" . print_r( $data, true ) );
+			return new \WP_Error( 'api_error', 'Error communicating with the API.' . "\n" . print_r( $data, true ) );
 		}
+	}
+
+	/**
+	 * Get the allowed parameters.
+	 *
+	 * @return array The allowed parameters.
+	 */
+	protected function get_allowed_parameters() {
+		return array(
+			'model',
+			'temperature',
+			'max_tokens',
+			'messages',
+			'response_format',
+		);
 	}
 }

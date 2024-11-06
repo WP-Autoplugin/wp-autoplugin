@@ -22,13 +22,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Anthropic_API extends API {
 
 	/**
-	 * API key.
-	 *
-	 * @var string
-	 */
-	private $api_key;
-
-	/**
 	 * Selected model.
 	 *
 	 * @var string
@@ -48,15 +41,6 @@ class Anthropic_API extends API {
 	 * @var int
 	 */
 	private $max_tokens = 4096;
-
-	/**
-	 * Set the API key.
-	 *
-	 * @param string $api_key The API key.
-	 */
-	public function set_api_key( $api_key ) {
-		$this->api_key = sanitize_text_field( $api_key );
-	}
 
 	/**
 	 * Set the model, and the parameters based on the model.

@@ -22,6 +22,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 class API {
 
 	/**
+	 * API key.
+	 *
+	 * @var string
+	 */
+	protected $api_key;
+
+	/**
+	 * Set the API key.
+	 *
+	 * @param string $api_key The API key.
+	 */
+	public function set_api_key( $api_key ) {
+		$this->api_key = sanitize_text_field( $api_key );
+	}
+
+	/**
 	 * Deal with the indentations in the prompts that make them more readable in the code, but less desirable for the AI.
 	 * We count the number of spaces in the first non-empty line of the prompt and remove that number of spaces from all lines.
 	 * Except for in between code blocks, where we keep the indentation starting from line 2.

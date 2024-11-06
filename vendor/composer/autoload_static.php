@@ -19,6 +19,7 @@ class ComposerStaticInit62b8c0a821dc44c3b86fc9def1bcbee9
         'WP_Autoplugin\\Plugin_Generator' => __DIR__ . '/../..' . '/includes/class-plugin-generator.php',
         'WP_Autoplugin\\Plugin_Installer' => __DIR__ . '/../..' . '/includes/class-plugin-installer.php',
         'WP_Autoplugin\\Plugin_List_Table' => __DIR__ . '/../..' . '/includes/admin/class-plugin-list-table.php',
+        'WP_Autoplugin\\XAI_API' => __DIR__ . '/../..' . '/includes/api/class-xai-api.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

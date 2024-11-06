@@ -41,9 +41,11 @@ class Admin {
 	 * @return void
 	 */
 	public function __construct() {
-		$openai_api_key = get_option( 'wp_autoplugin_openai_api_key' );
+		$openai_api_key    = get_option( 'wp_autoplugin_openai_api_key' );
 		$anthropic_api_key = get_option( 'wp_autoplugin_anthropic_api_key' );
-		$google_api_key = get_option( 'wp_autoplugin_google_api_key' );
+		$google_api_key    = get_option( 'wp_autoplugin_google_api_key' );
+		$xai_api_key       = get_option( 'wp_autoplugin_xai_api_key' );
+
 		$model = get_option( 'wp_autoplugin_model' );
 
 		if ( ! empty( $openai_api_key ) && in_array( $model, array( 'gpt-4o', 'chatgpt-4o-latest', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-3.5-turbo' ), true ) ) {
@@ -57,6 +59,10 @@ class Admin {
 		} elseif ( ! empty( $google_api_key ) && in_array( $model, array( 'gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-1.0-pro' ), true ) ) {
 			$this->ai_api = new Google_Gemini_API();
 			$this->ai_api->set_api_key( $google_api_key );
+			$this->ai_api->set_model( $model );
+		} elseif ( ! empty( $xai_api_key ) && in_array( $model, array( 'grok-beta' ), true ) ) {
+			$this->ai_api = new XAI_API();
+			$this->ai_api->set_api_key( $xai_api_key );
 			$this->ai_api->set_model( $model );
 		} else {
 			$this->ai_api = null;
@@ -185,6 +191,7 @@ class Admin {
 		register_setting( 'wp_autoplugin_settings', 'wp_autoplugin_openai_api_key' );
 		register_setting( 'wp_autoplugin_settings', 'wp_autoplugin_anthropic_api_key' );
 		register_setting( 'wp_autoplugin_settings', 'wp_autoplugin_google_api_key' );
+		register_setting( 'wp_autoplugin_settings', 'wp_autoplugin_xai_api_key' );
 		register_setting( 'wp_autoplugin_settings', 'wp_autoplugin_model' );
 	}
 
