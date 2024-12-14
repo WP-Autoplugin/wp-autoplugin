@@ -36,37 +36,46 @@ class Admin {
 	private $action;
 
 	/**
+	 * The built-in models.
+	 *
+	 * @var array
+	 */
+	public static $models = array(
+		'OpenAI'    => array(
+			'gpt-4o'            => 'GPT-4o',
+			'chatgpt-4o-latest' => 'ChatGPT-4o-latest',
+			'gpt-4o-mini'       => 'GPT-4o mini',
+			'gpt-4-turbo'       => 'GPT-4 Turbo',
+			'gpt-3.5-turbo'     => 'GPT-3.5 Turbo',
+		),
+		'Anthropic' => array(
+			'claude-3-5-sonnet-latest'   => 'Claude 3.5 Sonnet-latest',
+			'claude-3-5-sonnet-20240620' => 'Claude 3.5 Sonnet-20240620',
+			'claude-3-5-haiku-latest'    => 'Claude 3.5 Haiku-latest',
+			'claude-3-5-haiku-20241022'  => 'Claude 3.5 Haiku-20241022',
+			'claude-3-opus-20240229'     => 'Claude 3 Opus-20240229',
+			'claude-3-sonnet-20240229'   => 'Claude 3 Sonnet-20240229',
+			'claude-3-haiku-20240307'    => 'Claude 3 Haiku-20240307',
+		),
+		'Google'    => array(
+			'gemini-1.5-flash' => 'Gemini 1.5 Flash',
+			'gemini-1.5-pro'   => 'Gemini 1.5 Pro',
+			'gemini-1.0-pro'   => 'Gemini 1.0 Pro',
+		),
+		'xAI'       => array(
+			'grok-beta' => 'Grok Beta',
+		),
+	);
+
+	/**
 	 * Constructor: set up API, add actions and filters.
 	 *
 	 * @return void
 	 */
 	public function __construct() {
-		$openai_api_key    = get_option( 'wp_autoplugin_openai_api_key' );
-		$anthropic_api_key = get_option( 'wp_autoplugin_anthropic_api_key' );
-		$google_api_key    = get_option( 'wp_autoplugin_google_api_key' );
-		$xai_api_key       = get_option( 'wp_autoplugin_xai_api_key' );
-
 		$model = get_option( 'wp_autoplugin_model' );
 
-		if ( ! empty( $openai_api_key ) && in_array( $model, array( 'gpt-4o', 'chatgpt-4o-latest', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-3.5-turbo' ), true ) ) {
-			$this->ai_api = new OpenAI_API();
-			$this->ai_api->set_api_key( $openai_api_key );
-			$this->ai_api->set_model( $model );
-		} elseif ( ! empty( $anthropic_api_key ) && in_array( $model, array( 'claude-3-5-sonnet-20240620', 'claude-3-5-sonnet-latest', 'claude-3-5-haiku-latest', 'claude-3-5-haiku-20241022', 'claude-3-opus-20240229', 'claude-3-sonnet-20240229', 'claude-3-haiku-20240307' ), true ) ) {
-			$this->ai_api = new Anthropic_API();
-			$this->ai_api->set_api_key( $anthropic_api_key );
-			$this->ai_api->set_model( $model );
-		} elseif ( ! empty( $google_api_key ) && in_array( $model, array( 'gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-1.0-pro' ), true ) ) {
-			$this->ai_api = new Google_Gemini_API();
-			$this->ai_api->set_api_key( $google_api_key );
-			$this->ai_api->set_model( $model );
-		} elseif ( ! empty( $xai_api_key ) && in_array( $model, array( 'grok-beta' ), true ) ) {
-			$this->ai_api = new XAI_API();
-			$this->ai_api->set_api_key( $xai_api_key );
-			$this->ai_api->set_model( $model );
-		} else {
-			$this->ai_api = null;
-		}
+		$this->ai_api = $this->get_api( $model );
 
 		add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
@@ -104,6 +113,42 @@ class Admin {
 
 		// Github updater.
 		add_action( 'init', array( $this, 'github_updater_init' ) );
+	}
+
+	/**
+	 * Get the API object based on the model.
+	 *
+	 * @param string $model The model to use.
+	 *
+	 * @return API|null
+	 */
+	public function get_api( $model ) {
+		$openai_api_key    = get_option( 'wp_autoplugin_openai_api_key' );
+		$anthropic_api_key = get_option( 'wp_autoplugin_anthropic_api_key' );
+		$google_api_key    = get_option( 'wp_autoplugin_google_api_key' );
+		$xai_api_key       = get_option( 'wp_autoplugin_xai_api_key' );
+
+		if ( ! empty( $openai_api_key ) && array_key_exists( $model, self::$models['OpenAI'] ) ) {
+			$api = new OpenAI_API();
+			$api->set_api_key( $openai_api_key );
+			$api->set_model( $model );
+		} elseif ( ! empty( $anthropic_api_key ) && array_key_exists( $model, self::$models['Anthropic'] ) ) {
+			$api = new Anthropic_API();
+			$api->set_api_key( $anthropic_api_key );
+			$api->set_model( $model );
+		} elseif ( ! empty( $google_api_key ) && array_key_exists( $model, self::$models['Google'] ) ) {
+			$api = new Google_Gemini_API();
+			$api->set_api_key( $google_api_key );
+			$api->set_model( $model );
+		} elseif ( ! empty( $xai_api_key ) && array_key_exists( $model, self::$models['xAI'] ) ) {
+			$api = new XAI_API();
+			$api->set_api_key( $xai_api_key );
+			$api->set_model( $model );
+		} else {
+			$api = null;
+		}
+
+		return $api;
 	}
 
 	/**
