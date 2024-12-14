@@ -127,6 +127,10 @@ WP-Autoplugin is licensed under the GPLv3 or later.
 
 ## Changelog
 
+### 1.1.1
+- Added support for Claude 3.5 Sonnet-20241022, Gemini 2.0 Flash Experimental, and Gemini Experimental 1206 models
+- Some refactoring and code cleanup
+
 ### 1.1
 - Added support for Claude 3.5 Haiku
 - Added support for xAI and its only current model, Grok-beta
