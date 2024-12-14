@@ -46,30 +46,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<th scope="row"><?php _e( 'Model', 'wp-autoplugin' ); ?></th>
 				<td>
 					<select name="wp_autoplugin_model">
-						<optgroup label="OpenAI">
-							<option value="chatgpt-4o-latest" <?php selected( get_option( 'wp_autoplugin_model' ), 'chatgpt-4o-latest' ); ?>>ChatGPT-4o-latest</option>
-							<option value="gpt-4o" <?php selected( get_option( 'wp_autoplugin_model' ), 'gpt-4o' ); ?>>GPT-4o</option>
-							<option value="gpt-4o-mini" <?php selected( get_option( 'wp_autoplugin_model' ), 'gpt-4o-mini' ); ?>>GPT-4o mini</option>
-							<option value="gpt-4-turbo" <?php selected( get_option( 'wp_autoplugin_model' ), 'gpt-4-turbo' ); ?>>GPT-4 Turbo</option>
-							<option value="gpt-3.5-turbo" <?php selected( get_option( 'wp_autoplugin_model' ), 'gpt-3.5-turbo' ); ?>>GPT-3.5 Turbo</option>
-						</optgroup>
-						<optgroup label="Anthropic">
-							<option value="claude-3-5-sonnet-latest" <?php selected( get_option( 'wp_autoplugin_model' ), 'claude-3-5-sonnet-latest' ); ?>>Claude 3.5 Sonnet-latest</option>
-							<option value="claude-3-5-sonnet-20240620" <?php selected( get_option( 'wp_autoplugin_model' ), 'claude-3-5-sonnet-20240620' ); ?>>Claude 3.5 Sonnet-20240620</option>
-							<option value="claude-3-5-haiku-latest" <?php selected( get_option( 'wp_autoplugin_model' ), 'claude-3-5-haiku-latest' ); ?>>Claude 3.5 Haiku-latest</option>
-							<option value="claude-3-5-haiku-20241022" <?php selected( get_option( 'wp_autoplugin_model' ), 'claude-3-5-haiku-20241022' ); ?>>Claude 3.5 Haiku-20241022</option>
-							<option value="claude-3-opus-20240229" <?php selected( get_option( 'wp_autoplugin_model' ), 'claude-3-opus-20240229' ); ?>>Claude 3 Opus</option>
-							<option value="claude-3-sonnet-20240229" <?php selected( get_option( 'wp_autoplugin_model' ), 'claude-3-sonnet-20240229' ); ?>>Claude 3 Sonnet</option>
-							<option value="claude-3-haiku-20240307" <?php selected( get_option( 'wp_autoplugin_model' ), 'claude-3-haiku-20240307' ); ?>>Claude 3 Haiku</option>
-						</optgroup>
-						<optgroup label="Google Gemini">
-							<option value="gemini-1.5-flash" <?php selected( get_option( 'wp_autoplugin_model' ), 'gemini-1.5-flash' ); ?>>Gemini 1.5 Flash</option>
-							<option value="gemini-1.5-pro" <?php selected( get_option( 'wp_autoplugin_model' ), 'gemini-1.5-pro' ); ?>>Gemini 1.5 Pro</option>
-							<option value="gemini-1.0-pro" <?php selected( get_option( 'wp_autoplugin_model' ), 'gemini-1.0-pro' ); ?>>Gemini 1.0 Pro</option>
-						</optgroup>
-						<optgroup label="xAI">
-							<option value="grok-beta" <?php selected( get_option( 'wp_autoplugin_model' ), 'grok-beta' ); ?>>Grok-Beta</option>
-						</optgroup>
+						<?php
+						$models = Admin::$models;
+						foreach ( $models as $provider => $model ) {
+							echo '<optgroup label="' . esc_attr( $provider ) . '">';
+							foreach ( $model as $key => $value ) {
+								echo '<option value="' . esc_attr( $key ) . '" ' . selected( get_option( 'wp_autoplugin_model' ), $key ) . '>' . esc_html( $value ) . '</option>';
+							}
+							echo '</optgroup>';
+						}
+						?>
 					</select>
 					
 					<p class="description"><?php _e( '<code>chatgpt-4o-latest</code> and <code>claude-3-5-sonnet-latest</code> continuously point to the latest model version from OpenAI and Anthropic, respectively.', 'wp-autoplugin' ); ?></p>
