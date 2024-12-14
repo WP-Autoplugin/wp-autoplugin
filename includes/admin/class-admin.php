@@ -50,6 +50,7 @@ class Admin {
 		),
 		'Anthropic' => array(
 			'claude-3-5-sonnet-latest'   => 'Claude 3.5 Sonnet-latest',
+			'claude-3-5-sonnet-20241022' => 'Claude 3.5 Sonnet-20241022',
 			'claude-3-5-sonnet-20240620' => 'Claude 3.5 Sonnet-20240620',
 			'claude-3-5-haiku-latest'    => 'Claude 3.5 Haiku-latest',
 			'claude-3-5-haiku-20241022'  => 'Claude 3.5 Haiku-20241022',
@@ -58,8 +59,11 @@ class Admin {
 			'claude-3-haiku-20240307'    => 'Claude 3 Haiku-20240307',
 		),
 		'Google'    => array(
-			'gemini-1.5-flash' => 'Gemini 1.5 Flash',
+			'gemini-2.0-flash-exp' => 'Gemini 2.0 Flash Experimental',
+			'gemini-exp-1206'	  => 'Gemini Experimental 1206',
+			'gemini-exp-1121'	  => 'Gemini Experimental 1121',
 			'gemini-1.5-pro'   => 'Gemini 1.5 Pro',
+			'gemini-1.5-flash' => 'Gemini 1.5 Flash',
 			'gemini-1.0-pro'   => 'Gemini 1.0 Pro',
 		),
 		'xAI'       => array(
