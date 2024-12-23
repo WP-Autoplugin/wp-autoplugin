@@ -121,11 +121,12 @@ class Google_Gemini_API extends API {
 
 		$data = json_decode( $body, true );
 
-		// Parse the response.
-		if ( isset( $data['candidates'][0]['content']['parts'][0]['text'] ) ) {
-			return $data['candidates'][0]['content']['parts'][0]['text'];
-		} else {
+		if ( ! is_array( $data ) || ! isset( $data['candidates'][0]['content']['parts'] ) ) {
 			return new \WP_Error( 'api_error', 'Error communicating with the Google Gemini API.' . "\n" . print_r( $data, true ) );
 		}
+
+		$parts = $data['candidates'][0]['content']['parts'];
+		$last_part = end( $parts );
+		return $last_part['text'];
 	}
 }

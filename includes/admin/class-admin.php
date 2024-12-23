@@ -59,6 +59,7 @@ class Admin {
 			'claude-3-haiku-20240307'    => 'Claude 3 Haiku-20240307',
 		),
 		'Google'    => array(
+			'gemini-2.0-flash-thinking-exp' => 'Gemini 2.0 Flash Thinking Experimental',
 			'gemini-2.0-flash-exp' => 'Gemini 2.0 Flash Experimental',
 			'gemini-exp-1206'	  => 'Gemini Experimental 1206',
 			'gemini-exp-1121'	  => 'Gemini Experimental 1121',
@@ -67,7 +68,8 @@ class Admin {
 			'gemini-1.0-pro'   => 'Gemini 1.0 Pro',
 		),
 		'xAI'       => array(
-			'grok-beta' => 'Grok Beta',
+			'grok-beta'   => 'Grok Beta',
+			'grok-2-1212' => 'Grok 2 1212',
 		),
 	);
 

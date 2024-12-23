@@ -52,10 +52,12 @@ WP-Autoplugin supports various models:
 - Claude 3 Haiku
 - Claude 3 Sonnet
 - Claude 3 Opus
+- Google Gemini Flash 2.0
 - Google Gemini Flash 1.5
 - Google Gemini Pro 1.5
 - Google Gemini Pro 1.0
 - xAI Grok-beta
+- xAI Grok-2-1212
 
 We recommend using the **Claude 3.5 Sonnet** model for optimal results. While WP-Autoplugin is free to use, you may need to pay for API usage based on your chosen model.
 
@@ -126,6 +128,10 @@ Or watch the [WP-Autoplugin demo video on Youtube](https://www.youtube.com/watch
 WP-Autoplugin is licensed under the GPLv3 or later.
 
 ## Changelog
+
+### 1.1.2
+- Added support for Google Gemini Flash 2.0 Thinking model
+- Added support for xAI Grok-2-1212 model
 
 ### 1.1.1
 - Added support for Claude 3.5 Sonnet-20241022, Gemini 2.0 Flash Experimental, and Gemini Experimental 1206 models
