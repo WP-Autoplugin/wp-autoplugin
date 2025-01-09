@@ -111,6 +111,10 @@ class Admin {
 			add_action( 'wp_ajax_wp_autoplugin_' . $action, array( $this, 'ajax_actions' ) );
 		}
 
+		// Add or delete custom model AJAX action.
+		add_action( 'wp_ajax_wp_autoplugin_add_model', array( $this, 'ajax_add_model' ) );
+		add_action( 'wp_ajax_wp_autoplugin_remove_model', array( $this, 'ajax_remove_model' ) );
+
 		// Show notices.
 		add_action( 'admin_notices', array( $this, 'show_notices' ) );
 
@@ -133,6 +137,9 @@ class Admin {
 		$anthropic_api_key = get_option( 'wp_autoplugin_anthropic_api_key' );
 		$google_api_key    = get_option( 'wp_autoplugin_google_api_key' );
 		$xai_api_key       = get_option( 'wp_autoplugin_xai_api_key' );
+		$custom_models     = get_option( 'wp_autoplugin_custom_models', array() );
+
+		$api = null;
 
 		if ( ! empty( $openai_api_key ) && array_key_exists( $model, self::$models['OpenAI'] ) ) {
 			$api = new OpenAI_API();
@@ -150,10 +157,26 @@ class Admin {
 			$api = new XAI_API();
 			$api->set_api_key( $xai_api_key );
 			$api->set_model( $model );
-		} else {
-			$api = null;
 		}
 
+		// Check custom models:
+		if ( ! empty( $custom_models ) ) {
+			foreach ( $custom_models as $custom_model ) {
+				// If the "modelParameter" in the DB matches the user’s selected $model.
+				if ( $custom_model['name'] === $model ) {
+					$api = new Custom_API();
+					$api->set_custom_config(
+						$custom_model['url'],
+						$custom_model['apiKey'],
+						$custom_model['modelParameter'],
+						$custom_model['headers']
+					);
+					return $api;
+				}
+			}
+		}
+
+		// If nothing matches, $api will be null.
 		return $api;
 	}
 
@@ -509,7 +532,7 @@ class Admin {
 	 */
 	public function add_settings_link( $links ) {
 		$settings_link = '<a href="' . admin_url( 'admin.php?page=wp-autoplugin-settings' ) . '">' . __( 'Settings', 'wp-autoplugin' ) . '</a>';
-		$generate_link = '<a href="' . admin_url( 'admin.php?page=wp-autoplugin-generate' ) . '">' . __( 'Generate New Plugin', 'wp-autoplugin' ) . '</a>';
+		$generate_link = '<a href="' . admin_url( 'admin.php?page=wp-autoplugin-generate' ) . '">' . __( 'Generate Plugin', 'wp-autoplugin' ) . '</a>';
 		array_unshift( $links, $settings_link, $generate_link );
 		return $links;
 	}
@@ -709,6 +732,100 @@ class Admin {
 		}
 
 		wp_send_json_success( $result );
+	}
+
+	/**
+	 * AJAX handler for adding a custom model.
+	 *
+	 * @return void
+	 */
+	public function ajax_add_model() {
+		// Verify nonce  
+		if ( ! check_ajax_referer( 'wp_autoplugin_nonce', 'nonce', false ) ) {
+			wp_send_json_error( array(
+				'message' => __( 'Security check failed', 'wp-autoplugin' ),
+			) );
+		}
+
+		// Get and validate model data
+		$model = isset( $_POST['model'] ) ? $_POST['model'] : null;
+		if ( ! $model || ! isset( $model['name'] ) || ! isset( $model['url'] ) || ! isset( $model['apiKey'] ) ) {
+			wp_send_json_error( array(
+				'message' => __( 'Invalid model data', 'wp-autoplugin' ),
+			) );
+		}
+
+		// Sanitize input
+		$new_model = array(
+			'name'           => sanitize_text_field( $model['name'] ),
+			'url'            => esc_url_raw( $model['url'] ),
+			'modelParameter' => sanitize_text_field( $model['modelParameter'] ),
+			'apiKey'         => sanitize_text_field( $model['apiKey'] ),
+			'headers'        => array_map(
+				'sanitize_text_field',
+				isset( $model['headers'] ) ? (array) $model['headers'] : array()
+			),
+		);
+
+		// Get existing models
+		$models = get_option( 'wp_autoplugin_custom_models', array() );
+		if ( ! is_array( $models ) ) {
+			$models = array();
+		}
+
+		// Add new model
+		$models[] = $new_model;
+
+		// Update option
+		update_option( 'wp_autoplugin_custom_models', $models );
+
+		// Send success response
+		wp_send_json_success( array(
+			'models'  => $models,
+			'message' => __( 'Model added successfully', 'wp-autoplugin' ),
+		) );
+	}
+
+	/**
+	 * AJAX handler for removing a custom model.
+	 *
+	 * @return void
+	 */
+	public function ajax_remove_model() {
+		// Verify nonce
+		if ( ! check_ajax_referer( 'wp_autoplugin_nonce', 'nonce', false ) ) {
+			wp_send_json_error( array(
+				'message' => __( 'Security check failed', 'wp-autoplugin' ),
+			) );
+		}
+
+		// Get existing models
+		$models = get_option( 'wp_autoplugin_custom_models', array() );
+		if ( ! is_array( $models ) ) {
+			$models = array();
+		}
+
+		// Get and validate model index
+		$index = isset( $_POST['index'] ) ? intval( $_POST['index'] ) : null;
+		if ( ! is_int( $index ) || $index >= count( $models ) ) {
+			wp_send_json_error( array(
+				'message' => __( 'Invalid model index', 'wp-autoplugin' ),
+			) );
+		}
+
+		// Remove model
+		if ( isset( $models[ $index ] ) ) {
+			unset( $models[ $index ] );
+		}
+
+		// Update option
+		update_option( 'wp_autoplugin_custom_models', $models );
+
+		// Send success response
+		wp_send_json_success( array(
+			'models'  => $models,
+			'message' => __( 'Model removed successfully', 'wp-autoplugin' ),
+		) );
 	}
 
 	/**

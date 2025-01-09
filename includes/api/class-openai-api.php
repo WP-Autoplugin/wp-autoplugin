@@ -30,7 +30,7 @@ class OpenAI_API extends API {
 	 *
 	 * @var float
 	 */
-	private $temperature = 0.2;
+	protected $temperature = 0.2;
 
 	/**
 	 * Max tokens parameter.

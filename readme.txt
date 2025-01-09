@@ -4,7 +4,7 @@ Donate link: https://wp-autoplugin.com
 Tags: ai, plugin generator, development, wordpress, automation
 Requires at least: 6.0
 Tested up to: 6.7.1
-Stable tag: 1.1.2
+Stable tag: 1.2
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -60,16 +60,18 @@ While WP-Autoplugin aims to generate high-quality code adhering to WordPress sta
 
 == Changelog ==
 
+= 1.2 =
+* Added support for any OpenAI-compatible model with the custom models option
+* Added French translation
+* Fixed PHP notice on "Add New Plugin" screen.
+
+= 1.1.2 =
+* Added support for Google Gemini Flash 2.0 Thinking model
+* Added support for xAI Grok-2-1212 model
+
 = 1.1.1 =
-* Added support for Claude 3.5 Sonnet-20241022, Gemini 2.0 Flash Experimental, and Gemini Experimental 1206 models.
-* Code cleanup and minor refactoring.
-
-= 1.1 =
-* Added support for Claude 3.5 Haiku and xAI Grok-beta.
-* Fixed code editor issues and improved prompts for lower-end models.
-
-= 1.0 =
-* Initial release.
+* Added support for Claude 3.5 Sonnet-20241022, Gemini 2.0 Flash Experimental, and Gemini Experimental 1206 models
+* Some refactoring and code cleanup
 
 == License ==
 
