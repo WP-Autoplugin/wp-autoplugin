@@ -98,6 +98,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 	jQuery(document).ready(function($) {
 		let customModels = JSON.parse($('#wp_autoplugin_custom_models').val() || '[]');
 		const nonce = $('#wp_autoplugin_settings_nonce').val();
+		
+		// Later this may be moved to a wp_localize_script call
+		const wp_autoplugin_i18n = {
+			details: '<?php echo esc_js( __( 'Details', 'wp-autoplugin' ) ); ?>',
+			url: '<?php echo esc_js( __( 'URL', 'wp-autoplugin' ) ); ?>',
+			modelParameter: '<?php echo esc_js( __( 'Model Parameter', 'wp-autoplugin' ) ); ?>',
+			apiKey: '<?php echo esc_js( __( 'API Key', 'wp-autoplugin' ) ); ?>',
+			headers: '<?php echo esc_js( __( 'Headers', 'wp-autoplugin' ) ); ?>',
+			remove: '<?php echo esc_js( __( 'Remove', 'wp-autoplugin' ) ); ?>',
+			fillOutFields: '<?php echo esc_js( __( 'Please fill out all required fields.', 'wp-autoplugin' ) ); ?>',
+			removeModel: '<?php echo esc_js( __( 'Are you sure you want to remove this model?', 'wp-autoplugin' ) ); ?>',
+			errorSavingModel: '<?php echo esc_js( __( 'Error saving model', 'wp-autoplugin' ) ); ?>',
+		};
 
 		function updateCustomModelsList() {
 			const selected = $('#wp_autoplugin_model').val();
@@ -106,9 +119,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 			customModels.forEach((model, index) => {
 				const $item = $('<div class="custom-model-item">')
 					.append(`<strong>${model.name}</strong>`)
-					// <summary> tag is used to create a disclosure widget in the browser
-					.append(`<details><summary>Details</summary><p><strong>URL:</strong> ${model.url}</p><p><strong>Model Parameter:</strong> ${model.modelParameter}</p><p><strong>API Key:</strong> ***${model.apiKey.substr(-3)}</p><p><strong>Headers:</strong> ${model.headers.join(', ')}</p></details>`)
-					.append(`<button type="button" class="button remove-model" data-index="${index}">Remove</button>`);
+					.append(`<details><summary>${wp_autoplugin_i18n.details}</summary><p><strong>${wp_autoplugin_i18n.url}:</strong> ${model.url}</p><p><strong>${wp_autoplugin_i18n.modelParameter}:</strong> ${model.modelParameter}</p><p><strong>${wp_autoplugin_i18n.apiKey}:</strong> ***${model.apiKey.substr(-3)}</p><p><strong>${wp_autoplugin_i18n.headers}:</strong> ${model.headers.join(', ')}</p></details>`)
+					.append(`<button type="button" class="button remove-model" data-index="${index}">${wp_autoplugin_i18n.remove}</button>`);
 				$list.append($item);
 
 				$optgroup.append(`<option value="${model.name}">${model.name}</option>`);
@@ -126,7 +138,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			const headers = $('#custom-model-headers').val();
 
 			if (!name || !url || !apiKey) {
-				alert('Please fill in all required fields');
+				alert(wp_autoplugin_i18n.fillOutFields);
 				return;
 			}
 
@@ -160,7 +172,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		$(document).on('click', '.remove-model', function() {
 			const index = $(this).data('index');
-			if (confirm('Are you sure you want to remove this model?')) {
+			if (confirm(wp_autoplugin_i18n.removeModel)) {
 				$.ajax({
 					url: ajaxurl,
 					method: 'POST',
@@ -174,7 +186,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 							customModels = response.data.models;
 							updateCustomModelsList();
 						} else {
-							alert(response.data.message || 'Error removing model');
+							alert(response.data.message || wp_autoplugin_i18n.errorSavingModel);
 						}
 					}
 				});

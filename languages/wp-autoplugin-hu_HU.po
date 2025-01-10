@@ -42,7 +42,7 @@ msgstr "https://wp-autoplugin.com"
 #: views/page-list-plugins.php:30
 #: views/page-list-plugins.php:39
 msgid "Generate New Plugin"
-msgstr "Új bővítmény"
+msgstr "Új bővítmény generálása"
 
 #: includes/admin/class-admin.php:128
 #: includes/admin/class-admin.php:129
@@ -58,7 +58,7 @@ msgstr "Bővítmény továbbfejlesztése"
 
 #: includes/admin/class-admin.php:147
 #: includes/admin/class-admin.php:148
-#: views/page-fix-plugin.php:55
+#: views/page-fix-plugin.php:56
 msgid "Fix Plugin"
 msgstr "Bővítmény javítása"
 
@@ -295,7 +295,6 @@ msgid "Error generating the fixed code."
 msgstr "Hiba történt a javított kód generálása közben."
 
 #: includes/admin/class-admin.php:330
-#: includes/admin/class-admin.php:370
 msgid "The plugin code has been updated."
 msgstr "A bővítmény kódja frissítve."
 
@@ -386,6 +385,10 @@ msgstr "Aktív"
 msgid "Inactive"
 msgstr "Inaktív"
 
+#: includes/api/class-custom-api.php:110
+msgid "Error communicating with the API."
+msgstr "Hiba történt az API-val való kommunikáció közben."
+
 #: includes/class-github-updater.php:274
 msgid "The plugin has been updated, but could not be reactivated. Please reactivate it manually."
 msgstr "A bővítmény frissítve lett, de nem sikerült újraaktiválni. Kérlek, aktiváld újra kézzel."
@@ -403,7 +406,7 @@ msgstr "Hiba történt a bővítmény aktiválása közben: %s"
 #. translators: %s: plugin name.
 #: views/page-extend-plugin.php:43
 msgid "Extend This Plugin: %s"
-msgstr "Kibővítés: %s"
+msgstr "Bővítés: %s"
 
 #: views/page-extend-plugin.php:46
 msgid "Describe the changes you would like to make to the plugin. Include as much detail as possible:"
@@ -439,7 +442,7 @@ msgstr "Kibővített bővítmény: %s"
 
 #: views/page-extend-plugin.php:71
 msgid "The plugin has been extended successfully. You can review the changes before activating it:"
-msgstr "A bővítmény sikeresen kibővítve. Aktiválás előtt áttekintheted a módosításokat:"
+msgstr "A bővítmény sikeresen kibővítve. Aktiválás előtt áttekintheted a változtatásokat:"
 
 #: views/page-extend-plugin.php:76
 #: views/page-fix-plugin.php:83
@@ -511,7 +514,7 @@ msgstr "Generált bővítménykód"
 
 #: views/page-generate-plugin.php:50
 msgid "The plugin code has been generated successfully. You can review and edit the plugin file before activating it:"
-msgstr "Bővítménykód sikeresen generálva. Aktiválás előtt áttekintheted és szerkesztheted a bővítmény fájlt:"
+msgstr "A bővítménykód sikeresen generálva. Aktiválás előtt áttekintheted és szerkesztheted a bővítmény fájlt:"
 
 #: views/page-generate-plugin.php:54
 msgid "AI-generated code may be unstable or insecure; use only after careful review and testing."
@@ -556,3 +559,64 @@ msgstr "Modell"
 #: views/page-settings.php:65
 msgid "<code>chatgpt-4o-latest</code> continuously points to the version of GPT-4o used in ChatGPT, and is updated frequently."
 msgstr "A <code>chatgpt-4o-latest</code> folyamatosan a ChatGPT által használt GPT-4o verzióra mutat, és gyakran frissül."
+
+#: views/page-settings.php:79
+msgid "Model Name (User-defined Label)"
+msgstr "Modell neve (Felhasználó által definiált címke)"
+
+#: views/page-settings.php:80
+msgid "API Endpoint URL"
+msgstr "API végpont URL"
+
+#: views/page-settings.php:81
+msgid "\"model\" Parameter Value"
+msgstr "A \"model\" paraméter értéke"
+
+#: views/page-settings.php:82
+#: views/page-settings.php:107
+msgid "API Key"
+msgstr "API-kulcs"
+
+#: views/page-settings.php:83
+msgid "Additional Headers (one per line, name=value)"
+msgstr "További fejlécadatok (soronként egy, név=érték)"
+
+#: views/page-settings.php:84
+msgid "Add Custom Model"
+msgstr "Egyedi modell hozzáadása"
+
+#: views/page-settings.php:90
+msgid "Add any custom models you want to use with WP-Autoplugin. These models will be available in the model selection dropdown. The API must be compatible with the OpenAI API."
+msgstr "Adj hozzá bármilyen egyedi modellt, amelyet a WP-Autoplugin-nel szeretnél használni. Ezek a modellek elérhetőek lesznek a modellválasztó legördülő menüben. Az API-nak kompatibilisnek kell lennie az OpenAI API-val."
+
+#: views/page-settings.php:104
+msgid "Details"
+msgstr "Részletek"
+
+#: views/page-settings.php:105
+msgid "URL"
+msgstr "URL"
+
+#: views/page-settings.php:106
+msgid "Model Parameter"
+msgstr "Modell paraméter"
+
+#: views/page-settings.php:108
+msgid "Headers"
+msgstr "Fejlécek"
+
+#: views/page-settings.php:109
+msgid "Remove"
+msgstr "Eltávolítás"
+
+#: views/page-settings.php:110
+msgid "Please fill out all required fields."
+msgstr "Kérjük, töltsd ki az összes kötelező mezőt."
+
+#: views/page-settings.php:111
+msgid "Are you sure you want to remove this model?"
+msgstr "Biztosan el akarod távolítani ezt a modellt?"
+
+#: views/page-settings.php:112
+msgid "Error saving model"
+msgstr "Hiba történt a modell mentése közben."

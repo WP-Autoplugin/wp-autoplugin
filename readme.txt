@@ -18,7 +18,7 @@ WP-Autoplugin is a free and open-source WordPress plugin that leverages AI to as
 **Features:**
 - Generate WordPress plugins using AI.
 - Fix bugs and extend functionality of plugins.
-- Support for multiple AI models, including OpenAI, Anthropic, Google Gemini, and xAI Grok.
+- Support for multiple AI models, including OpenAI, Anthropic, Google Gemini, with custom API support to use any OpenAI-compatible model.
 - Full control over generated code.
 - Privacy-focused: no data collection or external communication, except for the AI API you choose.
 - Completely free, with no ads or account requirements.
@@ -61,8 +61,8 @@ While WP-Autoplugin aims to generate high-quality code adhering to WordPress sta
 == Changelog ==
 
 = 1.2 =
-* Added support for any OpenAI-compatible model with the custom models option
-* Added French translation
+* Added support for any OpenAI-compatible API with the custom models option
+* Added translations for 10 more languages
 * Fixed PHP notice on "Add New Plugin" screen.
 
 = 1.1.2 =

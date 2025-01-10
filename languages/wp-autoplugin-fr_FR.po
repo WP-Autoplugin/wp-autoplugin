@@ -2,13 +2,13 @@
 # This file is distributed under the same license as the wp-autoplugin package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-01-04 23:51:36+0000\n"
+"PO-Revision-Date: 2025-01-10 12:00+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: GlotPress/4.0.1\n"
-"Language: fr\n"
+"X-Generator: ChatGPT\n"
+"Language: fr_FR\n"
 "Project-Id-Version: wp-autoplugin\n"
 
 #. Plugin Name of the plugin
@@ -65,7 +65,7 @@ msgstr "Vous ne disposez pas des autorisations suffisantes pour accéder à cett
 msgid "Security check failed."
 msgstr "Le contrôle de sécurité a échoué."
 
-#: includes/admin/class-admin.php:200 includes/admin/class-admin.php:206
+#: includes/admin/class-admin.php:200 includes/admin/class-admin.php:348
 msgid "The specified plugin does not exist."
 msgstr "L’extension spécifiée n’existe pas."
 
@@ -370,6 +370,10 @@ msgstr "Actives"
 msgid "Inactive"
 msgstr "Inactives"
 
+#: includes/api/class-custom-api.php:110
+msgid "Error communicating with the API."
+msgstr "Erreur de communication avec l’API."
+
 #: includes/class-github-updater.php:274
 msgid "The plugin has been updated, but could not be reactivated. Please reactivate it manually."
 msgstr "L’extension a été mise à jour, mais n’a pas pu être réactivée. Veuillez la réactiver manuellement."
@@ -379,7 +383,8 @@ msgid "Plugin reactivated successfully."
 msgstr "L’extension a été réactivée avec succès."
 
 #. translators: %s: error message.
-#: views/page-extend-plugin.php:28 views/page-fix-plugin.php:27
+#: views/page-extend-plugin.php:28
+#: views/page-fix-plugin.php:27
 msgid "Error while activating the plugin: %s"
 msgstr "Erreur lors de l’activation de l’extension : %s"
 
@@ -392,21 +397,25 @@ msgstr "Améliorer cette extension : %s"
 msgid "Describe the changes you would like to make to the plugin. Include as much detail as possible:"
 msgstr "Décrivez les modifications que vous souhaitez apporter à l’extension. Incluez autant de détails que possible :"
 
-#: views/page-extend-plugin.php:54 views/page-fix-plugin.php:61
+#: views/page-extend-plugin.php:54
+#: views/page-fix-plugin.php:61
 #: views/page-generate-plugin.php:31
 msgid "Generated Plan"
 msgstr "Plan généré"
 
-#: views/page-extend-plugin.php:57 views/page-fix-plugin.php:64
+#: views/page-extend-plugin.php:57
+#: views/page-fix-plugin.php:64
 #: views/page-generate-plugin.php:34
 msgid "Review or edit the generated plan:"
 msgstr "Vérifier ou modifier le plan généré :"
 
-#: views/page-extend-plugin.php:60 views/page-fix-plugin.php:67
+#: views/page-extend-plugin.php:60
+#: views/page-fix-plugin.php:67
 msgid "&laquo; Edit Issue"
-msgstr "\" Modifier le problème"
+msgstr "« Modifier le problème"
 
-#: views/page-extend-plugin.php:61 views/page-fix-plugin.php:68
+#: views/page-extend-plugin.php:61
+#: views/page-fix-plugin.php:68
 #: views/page-generate-plugin.php:41
 msgid "Generate Plugin Code"
 msgstr "Générer le code de l’extension"
@@ -414,34 +423,38 @@ msgstr "Générer le code de l’extension"
 #. translators: %s: plugin name.
 #: views/page-extend-plugin.php:68
 msgid "Extended Plugin: %s"
-msgstr "Extension amériorée : %s"
+msgstr "Extension améliorée : %s"
 
 #: views/page-extend-plugin.php:71
 msgid "The plugin has been extended successfully. You can review the changes before activating it:"
 msgstr "L’extension a été améliorée avec succès. Vous pouvez consulter les changements avant de l'activer :"
 
-#: views/page-extend-plugin.php:76 views/page-fix-plugin.php:83
+#: views/page-extend-plugin.php:76
+#: views/page-fix-plugin.php:83
 #: views/page-generate-plugin.php:54
 msgid "Warning:"
 msgstr "Avertissement :"
 
-#: views/page-extend-plugin.php:76 views/page-fix-plugin.php:83
+#: views/page-extend-plugin.php:76
+#: views/page-fix-plugin.php:83
 msgid "This plugin is active, changes will take effect immediately."
 msgstr "Cette extension est active, les modifications prendront effet immédiatement."
 
-#: views/page-extend-plugin.php:81 views/page-fix-plugin.php:88
+#: views/page-extend-plugin.php:81
+#: views/page-fix-plugin.php:88
 #: views/page-generate-plugin.php:58
 msgid "&laquo; Edit Plan"
-msgstr "\"Modifier le plan"
+msgstr "« Modifier le plan"
 
-#: views/page-extend-plugin.php:82 views/page-fix-plugin.php:89
+#: views/page-extend-plugin.php:82
+#: views/page-fix-plugin.php:89
 msgid "Save Changes"
 msgstr "Enregistrer les modifications"
 
 #. translators: %s: plugin name.
 #: views/page-fix-plugin.php:42
 msgid "Fix This Plugin: %s"
-msgstr "Corrigez cette extension : %s"
+msgstr "Corriger cette extension : %s"
 
 #: views/page-fix-plugin.php:45
 msgid "Describe the issue you are experiencing with the plugin. Include as much detail as possible and any error messages you are seeing:"
@@ -478,7 +491,7 @@ msgstr "Générer un plan"
 
 #: views/page-generate-plugin.php:40
 msgid "&laquo; Edit Description"
-msgstr "\"Modifier la description"
+msgstr "« Modifier la description"
 
 #: views/page-generate-plugin.php:47
 msgid "Generated Plugin Code"
@@ -529,5 +542,67 @@ msgid "Model"
 msgstr "Modèle"
 
 #: views/page-settings.php:65
-msgid "<code>chatgpt-4o-latest</code> continuously points to the version of GPT-4o used in ChatGPT, and is updated frequently."
-msgstr "<code>chatgpt-4o-latest</code> pointe en permanence vers la version de GPT-4o utilisée dans ChatGPT, et est fréquemment mise à jour."
+#: views/page-settings.php:71
+msgid "Custom Models"
+msgstr "Modèles personnalisés"
+
+#: views/page-settings.php:79
+msgid "Model Name (User-defined Label)"
+msgstr "Nom du modèle (Étiquette définie par l'utilisateur)"
+
+#: views/page-settings.php:80
+msgid "API Endpoint URL"
+msgstr "URL du point final de l'API"
+
+#: views/page-settings.php:81
+msgid "\"model\" Parameter Value"
+msgstr "Valeur du paramètre \"model\""
+
+#: views/page-settings.php:82
+#: views/page-settings.php:107
+msgid "API Key"
+msgstr "Clé API"
+
+#: views/page-settings.php:83
+msgid "Additional Headers (one per line, name=value)"
+msgstr "En-têtes supplémentaires (un par ligne, nom=valeur)"
+
+#: views/page-settings.php:84
+msgid "Add Custom Model"
+msgstr "Ajouter un modèle personnalisé"
+
+#: views/page-settings.php:90
+msgid "Add any custom models you want to use with WP-Autoplugin. These models will be available in the model selection dropdown. The API must be compatible with the OpenAI API."
+msgstr "Ajoutez les modèles personnalisés que vous souhaitez utiliser avec WP-Autoplugin. Ces modèles seront disponibles dans le menu déroulant de sélection des modèles. L'API doit être compatible avec l'API OpenAI."
+
+#: views/page-settings.php:104
+msgid "Details"
+msgstr "Détails"
+
+#: views/page-settings.php:105
+msgid "URL"
+msgstr "URL"
+
+#: views/page-settings.php:106
+msgid "Model Parameter"
+msgstr "Paramètre du modèle"
+
+#: views/page-settings.php:108
+msgid "Headers"
+msgstr "En-têtes"
+
+#: views/page-settings.php:109
+msgid "Remove"
+msgstr "Supprimer"
+
+#: views/page-settings.php:110
+msgid "Please fill out all required fields."
+msgstr "Veuillez remplir tous les champs obligatoires."
+
+#: views/page-settings.php:111
+msgid "Are you sure you want to remove this model?"
+msgstr "Êtes-vous sûr de vouloir supprimer ce modèle ?"
+
+#: views/page-settings.php:112
+msgid "Error saving model"
+msgstr "Erreur lors de l'enregistrement du modèle"
