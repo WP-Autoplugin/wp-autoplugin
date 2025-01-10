@@ -1,17 +1,17 @@
-# Copyright (C) 2025 Balázs Piller
-# This file is distributed under the same license as the WP-Autoplugin plugin.
+# Turkish translations for WP-Autoplugin
+# Created by ChatGPT
 msgid ""
 msgstr ""
 "Project-Id-Version: WP-Autoplugin 1.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-autoplugin\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Last-Translator: Tam İsim <EMAIL@ADDRESS>\n"
+"Language-Team: Turkish <tr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-01-10T03:01:31+00:00\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.11.0\n"
+"PO-Revision-Date: 2025-01-10 12:00+0000\n"
+"Language: tr_TR\n"
+"X-Generator: ChatGPT\n"
 "X-Domain: wp-autoplugin\n"
 
 #. Plugin Name of the plugin
@@ -19,635 +19,639 @@ msgstr ""
 #: includes/admin/class-admin.php:212
 #: includes/admin/class-admin.php:213
 msgid "WP-Autoplugin"
-msgstr ""
+msgstr "WP-Autoplugin"
 
 #. Description of the plugin
 #: wp-autoplugin.php
 msgid "A plugin that generates other plugins on-demand using AI."
-msgstr ""
+msgstr "Yapay zeka kullanarak isteğe bağlı olarak diğer eklentileri oluşturan bir eklenti."
 
 #. Author of the plugin
 #: wp-autoplugin.php
 msgid "Balázs Piller"
-msgstr ""
+msgstr "Balázs Piller"
 
 #. Author URI of the plugin
 #: wp-autoplugin.php
 msgid "https://wp-autoplugin.com"
-msgstr ""
+msgstr "https://wp-autoplugin.com"
 
 #: includes/admin/class-admin.php:223
 #: includes/admin/class-admin.php:224
 #: views/page-list-plugins.php:30
 #: views/page-list-plugins.php:39
 msgid "Generate New Plugin"
-msgstr ""
+msgstr "Yeni Eklenti Oluştur"
 
 #: includes/admin/class-admin.php:232
 #: includes/admin/class-admin.php:233
 #: includes/admin/class-admin.php:534
 msgid "Settings"
-msgstr ""
+msgstr "Ayarlar"
 
 #: includes/admin/class-admin.php:242
 #: includes/admin/class-admin.php:243
 #: views/page-extend-plugin.php:48
 msgid "Extend Plugin"
-msgstr ""
+msgstr "Eklentiyi Genişlet"
 
 #: includes/admin/class-admin.php:251
 #: includes/admin/class-admin.php:252
 #: views/page-fix-plugin.php:56
 msgid "Fix Plugin"
-msgstr ""
+msgstr "Eklentiyi Düzelt"
 
 #: includes/admin/class-admin.php:328
 msgid "No plugin specified."
-msgstr ""
+msgstr "Herhangi bir eklenti belirtilmedi."
 
 #: includes/admin/class-admin.php:332
 #: includes/admin/class-admin.php:924
 msgid "You do not have sufficient permissions to access this page."
-msgstr ""
+msgstr "Bu sayfaya erişmek için yeterli izniniz yok."
 
 #: includes/admin/class-admin.php:337
 #: includes/admin/class-admin.php:919
 msgid "Security check failed."
-msgstr ""
+msgstr "Güvenlik kontrolü başarısız oldu."
 
 #: includes/admin/class-admin.php:342
 #: includes/admin/class-admin.php:348
 msgid "The specified plugin does not exist."
-msgstr ""
+msgstr "Belirtilen eklenti mevcut değil."
 
 #: includes/admin/class-admin.php:388
 #: includes/admin/class-admin.php:471
 msgid "Please enter a plugin description."
-msgstr ""
+msgstr "Lütfen bir eklenti açıklaması girin."
 
 #: includes/admin/class-admin.php:389
 #: includes/admin/class-admin.php:472
 #: includes/admin/class-admin.php:512
 msgid "Generating a plan for your plugin"
-msgstr ""
+msgstr "Eklentiniz için bir plan oluşturuluyor"
 
 #: includes/admin/class-admin.php:390
 msgid "Error generating the plugin plan."
-msgstr ""
+msgstr "Eklenti planı oluşturulurken hata oluştu."
 
 #: includes/admin/class-admin.php:391
 msgid "Generating code"
-msgstr ""
+msgstr "Kod oluşturuluyor"
 
 #: includes/admin/class-admin.php:392
 msgid "Error generating the plugin code."
-msgstr ""
+msgstr "Eklenti kodu oluşturulurken hata oluştu."
 
 #: includes/admin/class-admin.php:393
 msgid "Error creating the plugin."
-msgstr ""
+msgstr "Eklenti oluşturulurken hata oluştu."
 
 #: includes/admin/class-admin.php:394
 msgid "Installing the plugin"
-msgstr ""
+msgstr "Eklenti yükleniyor"
 
 #: includes/admin/class-admin.php:395
 msgid "Plugin successfully installed."
-msgstr ""
+msgstr "Eklenti başarıyla yüklendi."
 
 #: includes/admin/class-admin.php:396
 msgid "How to test it?"
-msgstr ""
+msgstr "Nasıl test edebilirim?"
 
 #: includes/admin/class-admin.php:397
 msgid "If you notice any issues, use the Fix button in the Autoplugins list."
-msgstr ""
+msgstr "Herhangi bir sorun fark ederseniz, Autoplugins listesinde bulunan Düzelt düğmesini kullanın."
 
 #: includes/admin/class-admin.php:398
 #: includes/admin/class-admin.php:478
 #: includes/admin/class-admin.php:518
 msgid "Activate Plugin"
-msgstr ""
+msgstr "Eklentiyi Etkinleştir"
 
 #: includes/admin/class-admin.php:403
 msgid "A simple contact form with honeypot spam protection"
-msgstr ""
+msgstr "Honeypot spam korumasına sahip basit bir iletişim formu"
 
 #: includes/admin/class-admin.php:404
 msgid "A custom post type for testimonials"
-msgstr ""
+msgstr "Referanslar için özel bir yazı türü"
 
 #: includes/admin/class-admin.php:405
 msgid "A widget that displays recent posts"
-msgstr ""
+msgstr "Son yazıları gösteren bir bileşen (widget)"
 
 #: includes/admin/class-admin.php:406
 msgid "A shortcode that shows a random quote"
-msgstr ""
+msgstr "Rastgele bir alıntı gösteren bir kısa kod (shortcode)"
 
 #: includes/admin/class-admin.php:407
 msgid "A user profile widget displaying avatar, bio, and website link"
-msgstr ""
+msgstr "Avatar, biyografi ve web sitesi bağlantısını gösteren bir kullanıcı profili bileşeni"
 
 #: includes/admin/class-admin.php:408
 msgid "A custom post type for managing FAQs"
-msgstr ""
+msgstr "SSS (Sık Sorulan Sorular) yönetimi için özel bir yazı türü"
 
 #: includes/admin/class-admin.php:409
 msgid "A post views counter that tracks and displays view counts"
-msgstr ""
+msgstr "Gösterim sayılarını izleyen ve gösteren bir yazı görüntüleme sayacı"
 
 #: includes/admin/class-admin.php:410
 msgid "Maintenance mode with a countdown timer to site return"
-msgstr ""
+msgstr "Bakım modunda siteye geri dönüş için geri sayım sayacı"
 
 #: includes/admin/class-admin.php:411
 msgid "An admin quick links widget for the dashboard"
-msgstr ""
+msgstr "Yönetim paneli için hızlı bağlantılar bileşeni"
 
 #: includes/admin/class-admin.php:412
 msgid "Hide the admin bar for non-admin users"
-msgstr ""
+msgstr "Yönetici olmayan kullanıcılar için yönetici çubuğunu gizle"
 
 #: includes/admin/class-admin.php:413
 msgid "Hide specific menu items in the admin area"
-msgstr ""
+msgstr "Yönetim alanında belirli menü öğelerini gizle"
 
 #: includes/admin/class-admin.php:414
 msgid "A social media share buttons plugin for posts"
-msgstr ""
+msgstr "Yazılar için sosyal medya paylaşım düğmeleri sunan bir eklenti"
 
 #: includes/admin/class-admin.php:415
 msgid "A custom footer credit remover"
-msgstr ""
+msgstr "Alt bilgi (footer) kredilerini kaldırmaya yönelik özel bir araç"
 
 #: includes/admin/class-admin.php:416
 msgid "A plugin to add custom CSS to the WordPress login page"
-msgstr ""
+msgstr "WordPress giriş sayfasına özel CSS eklemek için bir eklenti"
 
 #: includes/admin/class-admin.php:417
 msgid "A related posts display below single post content"
-msgstr ""
+msgstr "Tek yazı içeriğinin altında ilgili yazıları gösteren bir özellik"
 
 #: includes/admin/class-admin.php:418
 msgid "A custom excerpt length controller"
-msgstr ""
+msgstr "Özel alıntı (excerpt) uzunluğu denetleyicisi"
 
 #: includes/admin/class-admin.php:419
 msgid "A \"Back to Top\" button for long pages"
-msgstr ""
+msgstr "Uzun sayfalar için \"Başa Dön\" düğmesi"
 
 #: includes/admin/class-admin.php:420
 msgid "A plugin to disable comments on specific post types"
-msgstr ""
+msgstr "Belirli yazı türlerinde yorumları devre dışı bırakmak için bir eklenti"
 
 #: includes/admin/class-admin.php:421
 msgid "A simple Google Analytics integration"
-msgstr ""
+msgstr "Basit bir Google Analytics entegrasyonu"
 
 #: includes/admin/class-admin.php:422
 msgid "An author box display below posts"
-msgstr ""
+msgstr "Yazıların altında yazar kutusu görüntüleme"
 
 #: includes/admin/class-admin.php:423
 msgid "A custom breadcrumb generator"
-msgstr ""
+msgstr "Özel bir breadcrumb (iz yolu) oluşturucu"
 
 #: includes/admin/class-admin.php:424
 msgid "A plugin to add nofollow to external links"
-msgstr ""
+msgstr "Harici bağlantılara nofollow eklemek için bir eklenti"
 
 #: includes/admin/class-admin.php:425
 msgid "A simple cookie consent banner"
-msgstr ""
+msgstr "Basit bir çerez onay bandı"
 
 #: includes/admin/class-admin.php:426
 msgid "A post expiration date setter"
-msgstr ""
+msgstr "Yazılar için bir son kullanma tarihi belirleyici"
 
 #: includes/admin/class-admin.php:427
 msgid "A basic XML sitemap generator"
-msgstr ""
+msgstr "Basit bir XML site haritası oluşturucu"
 
 #: includes/admin/class-admin.php:428
 msgid "A custom login URL creator for added security"
-msgstr ""
+msgstr "Güvenliği artırmak için özel bir giriş URL’si oluşturucu"
 
 #: includes/admin/class-admin.php:429
 msgid "A simple contact information display shortcode"
-msgstr ""
+msgstr "İletişim bilgilerini görüntülemek için basit bir kısa kod"
 
 #: includes/admin/class-admin.php:430
 msgid "A plugin to add estimated reading time to posts"
-msgstr ""
+msgstr "Yazılara tahmini okuma süresi eklemek için bir eklenti"
 
 #: includes/admin/class-admin.php:431
 msgid "A custom RSS feed footer"
-msgstr ""
+msgstr "RSS beslemesi için özel bir alt bilgi"
 
 #: includes/admin/class-admin.php:432
 msgid "A simple post duplication tool"
-msgstr ""
+msgstr "Basit bir yazı kopyalama aracı"
 
 #: includes/admin/class-admin.php:433
 msgid "A basic schema markup generator"
-msgstr ""
+msgstr "Basit bir schema işaretleme oluşturucu"
 
 #: includes/admin/class-admin.php:434
 msgid "A plugin to add custom admin footer text"
-msgstr ""
+msgstr "Yönetici alt bilgisine özel metin eklemek için bir eklenti"
 
 #: includes/admin/class-admin.php:435
 msgid "A plugin to add custom taxonomies easily"
-msgstr ""
+msgstr "Özel taksonomileri kolayca eklemek için bir eklenti"
 
 #: includes/admin/class-admin.php:436
 msgid "A simple email obfuscator to prevent spam"
-msgstr ""
+msgstr "Spam’i önlemek için basit bir e-posta gizleyici"
 
 #: includes/admin/class-admin.php:437
 msgid "A basic redirection manager"
-msgstr ""
+msgstr "Basit bir yönlendirme yöneticisi"
 
 #: includes/admin/class-admin.php:438
 msgid "A plugin to add custom fields to user profiles"
-msgstr ""
+msgstr "Kullanıcı profillerine özel alanlar eklemek için bir eklenti"
 
 #: includes/admin/class-admin.php:439
 msgid "A simple image compression tool"
-msgstr ""
+msgstr "Basit bir resim sıkıştırma aracı"
 
 #: includes/admin/class-admin.php:473
 msgid "Error generating the plan."
-msgstr ""
+msgstr "Plan oluşturulurken hata oluştu."
 
 #: includes/admin/class-admin.php:474
 msgid "Error creating the fixed plugin."
-msgstr ""
+msgstr "Düzeltilmiş eklenti oluşturulurken hata oluştu."
 
 #: includes/admin/class-admin.php:475
 msgid "Generating the fixed plugin code"
-msgstr ""
+msgstr "Düzeltilmiş eklenti kodu oluşturuluyor"
 
 #: includes/admin/class-admin.php:476
 msgid "Error generating the fixed code."
-msgstr ""
+msgstr "Düzeltilmiş kod oluşturulurken hata oluştu."
 
 #: includes/admin/class-admin.php:477
 #: includes/admin/class-admin.php:517
 msgid "The plugin code has been updated."
-msgstr ""
+msgstr "Eklenti kodu güncellendi."
 
 #: includes/admin/class-admin.php:479
 msgid "Installing the fix"
-msgstr ""
+msgstr "Düzeltme yükleniyor"
 
 #: includes/admin/class-admin.php:511
 msgid "Please describe the changes you want to make to the plugin."
-msgstr ""
+msgstr "Lütfen eklentiye yapmak istediğiniz değişiklikleri açıklayın."
 
 #: includes/admin/class-admin.php:513
 msgid "Error generating the development plan."
-msgstr ""
+msgstr "Geliştirme planı oluşturulurken hata oluştu."
 
 #: includes/admin/class-admin.php:514
 msgid "Generating the extended plugin code"
-msgstr ""
+msgstr "Genişletilmiş eklenti kodu oluşturuluyor"
 
 #: includes/admin/class-admin.php:515
 msgid "Error generating the extended code."
-msgstr ""
+msgstr "Genişletilmiş kod oluşturulurken hata oluştu."
 
 #: includes/admin/class-admin.php:516
 msgid "Error creating the extended plugin."
-msgstr ""
+msgstr "Genişletilmiş eklenti oluşturulurken hata oluştu."
 
 #: includes/admin/class-admin.php:519
 msgid "Creating the plugin"
-msgstr ""
+msgstr "Eklenti oluşturuluyor"
 
 #: includes/admin/class-admin.php:535
 #: views/page-generate-plugin.php:21
 msgid "Generate Plugin"
-msgstr ""
+msgstr "Eklenti Oluştur"
 
 #: includes/admin/class-admin.php:746
 #: includes/admin/class-admin.php:798
 msgid "Security check failed"
-msgstr ""
+msgstr "Güvenlik kontrolü başarısız oldu"
 
 #: includes/admin/class-admin.php:754
 msgid "Invalid model data"
-msgstr ""
+msgstr "Geçersiz model verisi"
 
 #: includes/admin/class-admin.php:785
 msgid "Model added successfully"
-msgstr ""
+msgstr "Model başarıyla eklendi"
 
 #: includes/admin/class-admin.php:812
 msgid "Invalid model index"
-msgstr ""
+msgstr "Geçersiz model indeksi"
 
 #: includes/admin/class-admin.php:827
 msgid "Model removed successfully"
-msgstr ""
+msgstr "Model başarıyla kaldırıldı"
 
 #: includes/admin/class-admin.php:848
 msgid "The <code>DISALLOW_FILE_MODS</code> constant is defined in your wp-config.php file, which prevents WP-Autoplugin from installing or updating plugins on your site."
-msgstr ""
+msgstr "<code>DISALLOW_FILE_MODS</code> sabiti wp-config.php dosyanızda tanımlı, bu da WP-Autoplugin’in sitenize eklenti yüklemesini veya güncellemesini engelliyor."
 
 #: includes/admin/class-admin.php:863
 msgid "The plugin could not be activated due to a fatal error."
-msgstr ""
+msgstr "Bir kritik hata nedeniyle eklenti etkinleştirilemedi."
 
 #. translators: %s: fix URL
 #: includes/admin/class-admin.php:866
 msgid "You can <a href=\"%s\">fix the error automatically</a>."
-msgstr ""
+msgstr "Hatasını <a href=\"%s\">otomatik olarak düzeltebilirsiniz</a>."
 
 #. translators: %s: plugin version
 #: includes/admin/class-admin.php:896
 msgid "WP-Autoplugin v%s"
-msgstr ""
+msgstr "WP-Autoplugin sürüm %s"
 
 #. translators: %s: model name
 #: includes/admin/class-admin.php:901
 msgid "Model: %s"
-msgstr ""
+msgstr "Model: %s"
 
 #: includes/admin/class-plugin-list-table.php:44
 msgid "Plugin"
-msgstr ""
+msgstr "Eklenti"
 
 #: includes/admin/class-plugin-list-table.php:82
 msgid "Deactivate"
-msgstr ""
+msgstr "Devre Dışı Bırak"
 
 #: includes/admin/class-plugin-list-table.php:85
 msgid "Activate"
-msgstr ""
+msgstr "Etkinleştir"
 
 #: includes/admin/class-plugin-list-table.php:88
 msgid "Fix"
-msgstr ""
+msgstr "Düzelt"
 
 #: includes/admin/class-plugin-list-table.php:89
 msgid "Extend"
-msgstr ""
+msgstr "Genişlet"
 
 #: includes/admin/class-plugin-list-table.php:90
 msgid "Delete"
-msgstr ""
+msgstr "Sil"
 
 #: includes/admin/class-plugin-list-table.php:176
 msgid "No plugins found."
-msgstr ""
+msgstr "Hiç eklenti bulunamadı."
 
 #: includes/admin/class-plugin-list-table.php:216
 msgid "All"
-msgstr ""
+msgstr "Hepsi"
 
 #: includes/admin/class-plugin-list-table.php:217
 msgid "Active"
-msgstr ""
+msgstr "Etkin"
 
 #: includes/admin/class-plugin-list-table.php:218
 msgid "Inactive"
-msgstr ""
+msgstr "Etkin Değil"
 
 #: includes/api/class-custom-api.php:110
 msgid "Error communicating with the API."
-msgstr ""
+msgstr "API ile iletişimde hata oluştu."
 
 #: includes/class-github-updater.php:384
 msgid "The plugin has been updated, but could not be reactivated. Please reactivate it manually."
-msgstr ""
+msgstr "Eklenti güncellendi ancak yeniden etkinleştirilemedi. Lütfen elle etkinleştirin."
 
 #: includes/class-github-updater.php:385
 msgid "Plugin reactivated successfully."
-msgstr ""
+msgstr "Eklenti başarıyla yeniden etkinleştirildi."
 
 #. translators: %s: error message.
 #: views/page-extend-plugin.php:28
 #: views/page-fix-plugin.php:28
 msgid "Error while activating the plugin: %s"
-msgstr ""
+msgstr "Eklenti etkinleştirilirken hata oluştu: %s"
 
 #. translators: %s: plugin name.
 #: views/page-extend-plugin.php:43
 msgid "Extend This Plugin: %s"
-msgstr ""
+msgstr "Bu Eklentiyi Genişlet: %s"
 
 #: views/page-extend-plugin.php:46
 msgid "Describe the changes you would like to make to the plugin. Include as much detail as possible:"
-msgstr ""
+msgstr "Eklentide yapmak istediğiniz değişiklikleri açıklayın. Mümkün olduğunca fazla ayrıntı ekleyin:"
 
 #: views/page-extend-plugin.php:54
 #: views/page-fix-plugin.php:62
 #: views/page-generate-plugin.php:31
 msgid "Generated Plan"
-msgstr ""
+msgstr "Oluşturulan Plan"
 
 #: views/page-extend-plugin.php:57
 #: views/page-fix-plugin.php:65
 #: views/page-generate-plugin.php:34
 msgid "Review or edit the generated plan:"
-msgstr ""
+msgstr "Oluşturulan planı inceleyin veya düzenleyin:"
 
 #: views/page-extend-plugin.php:60
 #: views/page-fix-plugin.php:68
 msgid "&laquo; Edit Issue"
-msgstr ""
+msgstr "&laquo; Sorunu Düzenle"
 
 #: views/page-extend-plugin.php:61
 #: views/page-fix-plugin.php:69
 #: views/page-generate-plugin.php:41
 msgid "Generate Plugin Code"
-msgstr ""
+msgstr "Eklenti Kodu Oluştur"
 
 #. translators: %s: plugin name.
 #: views/page-extend-plugin.php:68
 msgid "Extended Plugin: %s"
-msgstr ""
+msgstr "Genişletilen Eklenti: %s"
 
 #: views/page-extend-plugin.php:71
 msgid "The plugin has been extended successfully. You can review the changes before activating it:"
-msgstr ""
+msgstr "Eklenti başarıyla genişletildi. Etkinleştirmeden önce değişiklikleri inceleyebilirsiniz:"
 
 #: views/page-extend-plugin.php:76
 #: views/page-fix-plugin.php:84
 #: views/page-generate-plugin.php:54
 msgid "Warning:"
-msgstr ""
+msgstr "Uyarı:"
 
 #: views/page-extend-plugin.php:76
 #: views/page-fix-plugin.php:84
 msgid "This plugin is active, changes will take effect immediately."
-msgstr ""
+msgstr "Bu eklenti etkin, yapılan değişiklikler hemen geçerli olacaktır."
 
 #: views/page-extend-plugin.php:81
 #: views/page-fix-plugin.php:89
 #: views/page-generate-plugin.php:58
 msgid "&laquo; Edit Plan"
-msgstr ""
+msgstr "&laquo; Planı Düzenle"
 
 #: views/page-extend-plugin.php:82
 #: views/page-fix-plugin.php:90
 msgid "Save Changes"
-msgstr ""
+msgstr "Değişiklikleri Kaydet"
 
 #. translators: %s: plugin name.
 #: views/page-fix-plugin.php:43
 msgid "Fix This Plugin: %s"
-msgstr ""
+msgstr "Bu Eklentiyi Düzelt: %s"
 
 #: views/page-fix-plugin.php:46
 msgid "Describe the issue you are experiencing with the plugin. Include as much detail as possible and any error messages you are seeing:"
-msgstr ""
+msgstr "Eklentide yaşadığınız sorunu anlatın. Karşılaştığınız hata mesajları ve mümkün olduğunca fazla ayrıntı ekleyin:"
 
 #: views/page-fix-plugin.php:51
 msgid "Look for other issues in the plugin code as well"
-msgstr ""
+msgstr "Eklentinin kodunda başka sorunlar olup olmadığını da arayın"
 
 #: views/page-fix-plugin.php:53
 msgid "Focus on the issue at hand"
-msgstr ""
+msgstr "Sadece mevcut soruna odaklan"
 
 #. translators: %s: plugin name.
-#: views/page-fix-plugin.php:76
+#: views/page-fix-plugin.php:75
 msgid "Fixed Plugin: %s"
-msgstr ""
+msgstr "Düzeltilen Eklenti: %s"
 
-#: views/page-fix-plugin.php:79
+#: views/page-fix-plugin.php:78
 msgid "The plugin has been fixed successfully. You can review the changes before activating it:"
-msgstr ""
+msgstr "Eklenti başarıyla düzeltildi. Etkinleştirmeden önce değişiklikleri inceleyebilirsiniz:"
+
+#: views/page-generate-plugin.php:21
+msgid "Generate Plugin"
+msgstr "Eklenti Oluştur"
 
 #: views/page-generate-plugin.php:24
 msgid "Enter a description of the plugin you want to generate:"
-msgstr ""
+msgstr "Oluşturmak istediğiniz eklentinin bir açıklamasını girin:"
 
 #: views/page-generate-plugin.php:26
 msgid "Generate Plan"
-msgstr ""
+msgstr "Plan Oluştur"
 
 #: views/page-generate-plugin.php:40
 msgid "&laquo; Edit Description"
-msgstr ""
+msgstr "&laquo; Açıklamayı Düzenle"
 
 #: views/page-generate-plugin.php:47
 msgid "Generated Plugin Code"
-msgstr ""
+msgstr "Oluşturulan Eklenti Kodu"
 
 #: views/page-generate-plugin.php:50
 msgid "The plugin code has been generated successfully. You can review and edit the plugin file before activating it:"
-msgstr ""
+msgstr "Eklenti kodu başarıyla oluşturuldu. Etkinleştirmeden önce kodu inceleyebilir ve düzenleyebilirsiniz:"
 
 #: views/page-generate-plugin.php:54
 msgid "AI-generated code may be unstable or insecure; use only after careful review and testing."
-msgstr ""
+msgstr "Yapay zeka tarafından oluşturulan kod kararsız veya güvensiz olabilir; sadece dikkatli bir inceleme ve testten sonra kullanın."
 
 #: views/page-generate-plugin.php:59
 msgid "Install Plugin"
-msgstr ""
+msgstr "Eklentiyi Kur"
 
 #: views/page-list-plugins.php:29
 msgid "Autoplugins"
-msgstr ""
+msgstr "Autoplugins"
 
 #: views/page-list-plugins.php:37
 msgid "You don't have any autoplugins yet."
-msgstr ""
+msgstr "Henüz hiçbir autoplugin yok."
 
 #: views/page-list-plugins.php:38
 msgid "Autoplugins are regular plugins, but they are generated by AI. You can manage them just like any other plugin. They will be listed here for your convenience."
-msgstr ""
+msgstr "Autoplugins, normal eklentilerdir ancak yapay zeka tarafından oluşturulurlar. Diğer eklentiler gibi yönetebilirsiniz. Kolaylık sağlaması için burada listelenecekler."
 
 #: views/page-settings.php:21
 msgid "WP-Autoplugin Settings"
-msgstr ""
+msgstr "WP-Autoplugin Ayarları"
 
 #: views/page-settings.php:30
 msgid "OpenAI API Key"
-msgstr ""
+msgstr "OpenAI API Anahtarı"
 
 #: views/page-settings.php:34
 msgid "Anthropic API Key"
-msgstr ""
+msgstr "Anthropic API Anahtarı"
 
 #: views/page-settings.php:38
 msgid "Google Gemini API Key"
-msgstr ""
+msgstr "Google Gemini API Anahtarı"
 
 #: views/page-settings.php:42
 msgid "xAI API Key"
-msgstr ""
+msgstr "xAI API Anahtarı"
 
 #: views/page-settings.php:46
 msgid "Model"
-msgstr ""
+msgstr "Model"
 
 #: views/page-settings.php:59
 #: views/page-settings.php:71
 msgid "Custom Models"
-msgstr ""
+msgstr "Özel Modeller"
 
 #: views/page-settings.php:79
 msgid "Model Name (User-defined Label)"
-msgstr ""
+msgstr "Model Adı (Kullanıcı Tanımlı Etiket)"
 
 #: views/page-settings.php:80
 msgid "API Endpoint URL"
-msgstr ""
+msgstr "API Bitiş Noktası (Endpoint) URL'si"
 
 #: views/page-settings.php:81
 msgid "\"model\" Parameter Value"
-msgstr ""
+msgstr "\"model\" Parametresi Değeri"
 
 #: views/page-settings.php:82
 #: views/page-settings.php:107
 msgid "API Key"
-msgstr ""
+msgstr "API Anahtarı"
 
 #: views/page-settings.php:83
 msgid "Additional Headers (one per line, name=value)"
-msgstr ""
+msgstr "Ek Başlıklar (her satırda bir tane, ad=değer)"
 
 #: views/page-settings.php:84
 msgid "Add Custom Model"
-msgstr ""
+msgstr "Özel Model Ekle"
 
 #: views/page-settings.php:90
 msgid "Add any custom models you want to use with WP-Autoplugin. These models will be available in the model selection dropdown. The API must be compatible with the OpenAI API."
-msgstr ""
+msgstr "WP-Autoplugin ile kullanmak istediğiniz tüm özel modelleri ekleyin. Bu modeller, model seçimi açılır menüsünde mevcut olacak. API, OpenAI API ile uyumlu olmalıdır."
 
 #: views/page-settings.php:104
 msgid "Details"
-msgstr ""
+msgstr "Ayrıntılar"
 
 #: views/page-settings.php:105
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: views/page-settings.php:106
 msgid "Model Parameter"
-msgstr ""
+msgstr "Model Parametresi"
 
 #: views/page-settings.php:108
 msgid "Headers"
-msgstr ""
+msgstr "Başlıklar"
 
 #: views/page-settings.php:109
 msgid "Remove"
-msgstr ""
+msgstr "Kaldır"
 
 #: views/page-settings.php:110
 msgid "Please fill out all required fields."
-msgstr ""
+msgstr "Lütfen gerekli alanları doldurun."
 
 #: views/page-settings.php:111
 msgid "Are you sure you want to remove this model?"
-msgstr ""
+msgstr "Bu modeli kaldırmak istediğinizden emin misiniz?"
 
 #: views/page-settings.php:112
 msgid "Error saving model"
-msgstr ""
+msgstr "Model kaydedilirken hata oluştu"

@@ -323,7 +323,9 @@ class GitHub_Updater {
 		if ( 1 === $update ) {
 			$response              = new \stdClass();
 			$response->new_version = $this->config['new_version'];
+			$response->id          = $this->config['slug'];
 			$response->slug        = $this->config['proper_folder_name'];
+			$response->plugin      = $this->config['slug'];
 			$response->url         = $this->config['github_url'];
 			$response->package     = $this->config['zip_url'];
 

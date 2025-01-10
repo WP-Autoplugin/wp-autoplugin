@@ -1,17 +1,17 @@
-# Copyright (C) 2025 Balázs Piller
-# This file is distributed under the same license as the WP-Autoplugin plugin.
+# Italian translations for WP-Autoplugin
+# Created by ChatGPT
 msgid ""
 msgstr ""
 "Project-Id-Version: WP-Autoplugin 1.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-autoplugin\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Last-Translator: Nome Completo <EMAIL@ADDRESS>\n"
+"Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-01-10T03:01:31+00:00\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.11.0\n"
+"PO-Revision-Date: 2025-01-10 12:00+0000\n"
+"Language: it_IT\n"
+"X-Generator: ChatGPT\n"
 "X-Domain: wp-autoplugin\n"
 
 #. Plugin Name of the plugin
@@ -19,635 +19,639 @@ msgstr ""
 #: includes/admin/class-admin.php:212
 #: includes/admin/class-admin.php:213
 msgid "WP-Autoplugin"
-msgstr ""
+msgstr "WP-Autoplugin"
 
 #. Description of the plugin
 #: wp-autoplugin.php
 msgid "A plugin that generates other plugins on-demand using AI."
-msgstr ""
+msgstr "Un plugin che genera altri plugin su richiesta utilizzando l’intelligenza artificiale."
 
 #. Author of the plugin
 #: wp-autoplugin.php
 msgid "Balázs Piller"
-msgstr ""
+msgstr "Balázs Piller"
 
 #. Author URI of the plugin
 #: wp-autoplugin.php
 msgid "https://wp-autoplugin.com"
-msgstr ""
+msgstr "https://wp-autoplugin.com"
 
 #: includes/admin/class-admin.php:223
 #: includes/admin/class-admin.php:224
 #: views/page-list-plugins.php:30
 #: views/page-list-plugins.php:39
 msgid "Generate New Plugin"
-msgstr ""
+msgstr "Genera un nuovo plugin"
 
 #: includes/admin/class-admin.php:232
 #: includes/admin/class-admin.php:233
 #: includes/admin/class-admin.php:534
 msgid "Settings"
-msgstr ""
+msgstr "Impostazioni"
 
 #: includes/admin/class-admin.php:242
 #: includes/admin/class-admin.php:243
 #: views/page-extend-plugin.php:48
 msgid "Extend Plugin"
-msgstr ""
+msgstr "Estendi plugin"
 
 #: includes/admin/class-admin.php:251
 #: includes/admin/class-admin.php:252
 #: views/page-fix-plugin.php:56
 msgid "Fix Plugin"
-msgstr ""
+msgstr "Correggi plugin"
 
 #: includes/admin/class-admin.php:328
 msgid "No plugin specified."
-msgstr ""
+msgstr "Nessun plugin specificato."
 
 #: includes/admin/class-admin.php:332
 #: includes/admin/class-admin.php:924
 msgid "You do not have sufficient permissions to access this page."
-msgstr ""
+msgstr "Non hai i permessi necessari per accedere a questa pagina."
 
 #: includes/admin/class-admin.php:337
 #: includes/admin/class-admin.php:919
 msgid "Security check failed."
-msgstr ""
+msgstr "Verifica di sicurezza non riuscita."
 
 #: includes/admin/class-admin.php:342
 #: includes/admin/class-admin.php:348
 msgid "The specified plugin does not exist."
-msgstr ""
+msgstr "Il plugin specificato non esiste."
 
 #: includes/admin/class-admin.php:388
 #: includes/admin/class-admin.php:471
 msgid "Please enter a plugin description."
-msgstr ""
+msgstr "Inserisci una descrizione per il plugin."
 
 #: includes/admin/class-admin.php:389
 #: includes/admin/class-admin.php:472
 #: includes/admin/class-admin.php:512
 msgid "Generating a plan for your plugin"
-msgstr ""
+msgstr "Generazione di un piano per il tuo plugin"
 
 #: includes/admin/class-admin.php:390
 msgid "Error generating the plugin plan."
-msgstr ""
+msgstr "Errore durante la generazione del piano del plugin."
 
 #: includes/admin/class-admin.php:391
 msgid "Generating code"
-msgstr ""
+msgstr "Generazione del codice"
 
 #: includes/admin/class-admin.php:392
 msgid "Error generating the plugin code."
-msgstr ""
+msgstr "Errore durante la generazione del codice del plugin."
 
 #: includes/admin/class-admin.php:393
 msgid "Error creating the plugin."
-msgstr ""
+msgstr "Errore durante la creazione del plugin."
 
 #: includes/admin/class-admin.php:394
 msgid "Installing the plugin"
-msgstr ""
+msgstr "Installazione del plugin"
 
 #: includes/admin/class-admin.php:395
 msgid "Plugin successfully installed."
-msgstr ""
+msgstr "Plugin installato con successo."
 
 #: includes/admin/class-admin.php:396
 msgid "How to test it?"
-msgstr ""
+msgstr "Come testarlo?"
 
 #: includes/admin/class-admin.php:397
 msgid "If you notice any issues, use the Fix button in the Autoplugins list."
-msgstr ""
+msgstr "Se noti dei problemi, utilizza il pulsante Correggi nella lista degli Autoplugin."
 
 #: includes/admin/class-admin.php:398
 #: includes/admin/class-admin.php:478
 #: includes/admin/class-admin.php:518
 msgid "Activate Plugin"
-msgstr ""
+msgstr "Attiva plugin"
 
 #: includes/admin/class-admin.php:403
 msgid "A simple contact form with honeypot spam protection"
-msgstr ""
+msgstr "Un semplice modulo di contatto con protezione antispam di tipo honeypot"
 
 #: includes/admin/class-admin.php:404
 msgid "A custom post type for testimonials"
-msgstr ""
+msgstr "Un tipo di post personalizzato per le testimonianze"
 
 #: includes/admin/class-admin.php:405
 msgid "A widget that displays recent posts"
-msgstr ""
+msgstr "Un widget che mostra gli articoli recenti"
 
 #: includes/admin/class-admin.php:406
 msgid "A shortcode that shows a random quote"
-msgstr ""
+msgstr "Uno shortcode che mostra una citazione casuale"
 
 #: includes/admin/class-admin.php:407
 msgid "A user profile widget displaying avatar, bio, and website link"
-msgstr ""
+msgstr "Un widget di profilo utente che mostra avatar, biografia e link al sito"
 
 #: includes/admin/class-admin.php:408
 msgid "A custom post type for managing FAQs"
-msgstr ""
+msgstr "Un tipo di post personalizzato per gestire le FAQ"
 
 #: includes/admin/class-admin.php:409
 msgid "A post views counter that tracks and displays view counts"
-msgstr ""
+msgstr "Un contatore di visualizzazioni che traccia e mostra il numero di visite"
 
 #: includes/admin/class-admin.php:410
 msgid "Maintenance mode with a countdown timer to site return"
-msgstr ""
+msgstr "Modalità manutenzione con un timer per il ritorno online del sito"
 
 #: includes/admin/class-admin.php:411
 msgid "An admin quick links widget for the dashboard"
-msgstr ""
+msgstr "Un widget di collegamenti rapidi per la bacheca di amministrazione"
 
 #: includes/admin/class-admin.php:412
 msgid "Hide the admin bar for non-admin users"
-msgstr ""
+msgstr "Nascondi la barra di amministrazione per gli utenti non amministratori"
 
 #: includes/admin/class-admin.php:413
 msgid "Hide specific menu items in the admin area"
-msgstr ""
+msgstr "Nascondi voci di menu specifiche nell’area di amministrazione"
 
 #: includes/admin/class-admin.php:414
 msgid "A social media share buttons plugin for posts"
-msgstr ""
+msgstr "Un plugin di pulsanti di condivisione sui social media per gli articoli"
 
 #: includes/admin/class-admin.php:415
 msgid "A custom footer credit remover"
-msgstr ""
+msgstr "Un rimuovi-credito personalizzato per il footer"
 
 #: includes/admin/class-admin.php:416
 msgid "A plugin to add custom CSS to the WordPress login page"
-msgstr ""
+msgstr "Un plugin per aggiungere CSS personalizzati alla pagina di login di WordPress"
 
 #: includes/admin/class-admin.php:417
 msgid "A related posts display below single post content"
-msgstr ""
+msgstr "Una visualizzazione degli articoli correlati sotto il contenuto del singolo articolo"
 
 #: includes/admin/class-admin.php:418
 msgid "A custom excerpt length controller"
-msgstr ""
+msgstr "Un controller personalizzato per la lunghezza dell’estratto"
 
 #: includes/admin/class-admin.php:419
 msgid "A \"Back to Top\" button for long pages"
-msgstr ""
+msgstr "Un pulsante \"Torna su\" per pagine lunghe"
 
 #: includes/admin/class-admin.php:420
 msgid "A plugin to disable comments on specific post types"
-msgstr ""
+msgstr "Un plugin per disabilitare i commenti su tipi di post specifici"
 
 #: includes/admin/class-admin.php:421
 msgid "A simple Google Analytics integration"
-msgstr ""
+msgstr "Un’integrazione semplice con Google Analytics"
 
 #: includes/admin/class-admin.php:422
 msgid "An author box display below posts"
-msgstr ""
+msgstr "Una casella autore mostrata sotto gli articoli"
 
 #: includes/admin/class-admin.php:423
 msgid "A custom breadcrumb generator"
-msgstr ""
+msgstr "Un generatore personalizzato di breadcrumb"
 
 #: includes/admin/class-admin.php:424
 msgid "A plugin to add nofollow to external links"
-msgstr ""
+msgstr "Un plugin per aggiungere nofollow ai link esterni"
 
 #: includes/admin/class-admin.php:425
 msgid "A simple cookie consent banner"
-msgstr ""
+msgstr "Un semplice banner per il consenso ai cookie"
 
 #: includes/admin/class-admin.php:426
 msgid "A post expiration date setter"
-msgstr ""
+msgstr "Un impostatore di data di scadenza per gli articoli"
 
 #: includes/admin/class-admin.php:427
 msgid "A basic XML sitemap generator"
-msgstr ""
+msgstr "Un generatore base di sitemap XML"
 
 #: includes/admin/class-admin.php:428
 msgid "A custom login URL creator for added security"
-msgstr ""
+msgstr "Un creatore di URL di login personalizzato per maggiore sicurezza"
 
 #: includes/admin/class-admin.php:429
 msgid "A simple contact information display shortcode"
-msgstr ""
+msgstr "Uno shortcode semplice per mostrare le informazioni di contatto"
 
 #: includes/admin/class-admin.php:430
 msgid "A plugin to add estimated reading time to posts"
-msgstr ""
+msgstr "Un plugin per aggiungere il tempo di lettura stimato agli articoli"
 
 #: includes/admin/class-admin.php:431
 msgid "A custom RSS feed footer"
-msgstr ""
+msgstr "Un footer personalizzato per il feed RSS"
 
 #: includes/admin/class-admin.php:432
 msgid "A simple post duplication tool"
-msgstr ""
+msgstr "Uno strumento semplice per duplicare gli articoli"
 
 #: includes/admin/class-admin.php:433
 msgid "A basic schema markup generator"
-msgstr ""
+msgstr "Un generatore base di marcatura schema"
 
 #: includes/admin/class-admin.php:434
 msgid "A plugin to add custom admin footer text"
-msgstr ""
+msgstr "Un plugin per aggiungere testo personalizzato al footer di amministrazione"
 
 #: includes/admin/class-admin.php:435
 msgid "A plugin to add custom taxonomies easily"
-msgstr ""
+msgstr "Un plugin per aggiungere tassonomie personalizzate con facilità"
 
 #: includes/admin/class-admin.php:436
 msgid "A simple email obfuscator to prevent spam"
-msgstr ""
+msgstr "Un offuscatore di email semplice per prevenire lo spam"
 
 #: includes/admin/class-admin.php:437
 msgid "A basic redirection manager"
-msgstr ""
+msgstr "Un gestore di reindirizzamenti di base"
 
 #: includes/admin/class-admin.php:438
 msgid "A plugin to add custom fields to user profiles"
-msgstr ""
+msgstr "Un plugin per aggiungere campi personalizzati ai profili utente"
 
 #: includes/admin/class-admin.php:439
 msgid "A simple image compression tool"
-msgstr ""
+msgstr "Uno strumento semplice di compressione immagini"
 
 #: includes/admin/class-admin.php:473
 msgid "Error generating the plan."
-msgstr ""
+msgstr "Errore nella generazione del piano."
 
 #: includes/admin/class-admin.php:474
 msgid "Error creating the fixed plugin."
-msgstr ""
+msgstr "Errore nella creazione del plugin corretto."
 
 #: includes/admin/class-admin.php:475
 msgid "Generating the fixed plugin code"
-msgstr ""
+msgstr "Generazione del codice del plugin corretto"
 
 #: includes/admin/class-admin.php:476
 msgid "Error generating the fixed code."
-msgstr ""
+msgstr "Errore durante la generazione del codice corretto."
 
 #: includes/admin/class-admin.php:477
 #: includes/admin/class-admin.php:517
 msgid "The plugin code has been updated."
-msgstr ""
+msgstr "Il codice del plugin è stato aggiornato."
 
 #: includes/admin/class-admin.php:479
 msgid "Installing the fix"
-msgstr ""
+msgstr "Installazione della correzione"
 
 #: includes/admin/class-admin.php:511
 msgid "Please describe the changes you want to make to the plugin."
-msgstr ""
+msgstr "Per favore, descrivi le modifiche che desideri apportare al plugin."
 
 #: includes/admin/class-admin.php:513
 msgid "Error generating the development plan."
-msgstr ""
+msgstr "Errore durante la generazione del piano di sviluppo."
 
 #: includes/admin/class-admin.php:514
 msgid "Generating the extended plugin code"
-msgstr ""
+msgstr "Generazione del codice del plugin esteso"
 
 #: includes/admin/class-admin.php:515
 msgid "Error generating the extended code."
-msgstr ""
+msgstr "Errore durante la generazione del codice esteso."
 
 #: includes/admin/class-admin.php:516
 msgid "Error creating the extended plugin."
-msgstr ""
+msgstr "Errore durante la creazione del plugin esteso."
 
 #: includes/admin/class-admin.php:519
 msgid "Creating the plugin"
-msgstr ""
+msgstr "Creazione del plugin"
 
 #: includes/admin/class-admin.php:535
 #: views/page-generate-plugin.php:21
 msgid "Generate Plugin"
-msgstr ""
+msgstr "Genera plugin"
 
 #: includes/admin/class-admin.php:746
 #: includes/admin/class-admin.php:798
 msgid "Security check failed"
-msgstr ""
+msgstr "Verifica di sicurezza non riuscita"
 
 #: includes/admin/class-admin.php:754
 msgid "Invalid model data"
-msgstr ""
+msgstr "Dati del modello non validi"
 
 #: includes/admin/class-admin.php:785
 msgid "Model added successfully"
-msgstr ""
+msgstr "Modello aggiunto con successo"
 
 #: includes/admin/class-admin.php:812
 msgid "Invalid model index"
-msgstr ""
+msgstr "Indice del modello non valido"
 
 #: includes/admin/class-admin.php:827
 msgid "Model removed successfully"
-msgstr ""
+msgstr "Modello rimosso con successo"
 
 #: includes/admin/class-admin.php:848
 msgid "The <code>DISALLOW_FILE_MODS</code> constant is defined in your wp-config.php file, which prevents WP-Autoplugin from installing or updating plugins on your site."
-msgstr ""
+msgstr "La costante <code>DISALLOW_FILE_MODS</code> è definita nel tuo file wp-config.php, il che impedisce a WP-Autoplugin di installare o aggiornare plugin sul tuo sito."
 
 #: includes/admin/class-admin.php:863
 msgid "The plugin could not be activated due to a fatal error."
-msgstr ""
+msgstr "Il plugin non può essere attivato a causa di un errore fatale."
 
 #. translators: %s: fix URL
 #: includes/admin/class-admin.php:866
 msgid "You can <a href=\"%s\">fix the error automatically</a>."
-msgstr ""
+msgstr "Puoi <a href=\"%s\">correggere l’errore automaticamente</a>."
 
 #. translators: %s: plugin version
 #: includes/admin/class-admin.php:896
 msgid "WP-Autoplugin v%s"
-msgstr ""
+msgstr "WP-Autoplugin v%s"
 
 #. translators: %s: model name
 #: includes/admin/class-admin.php:901
 msgid "Model: %s"
-msgstr ""
+msgstr "Modello: %s"
 
 #: includes/admin/class-plugin-list-table.php:44
 msgid "Plugin"
-msgstr ""
+msgstr "Plugin"
 
 #: includes/admin/class-plugin-list-table.php:82
 msgid "Deactivate"
-msgstr ""
+msgstr "Disattiva"
 
 #: includes/admin/class-plugin-list-table.php:85
 msgid "Activate"
-msgstr ""
+msgstr "Attiva"
 
 #: includes/admin/class-plugin-list-table.php:88
 msgid "Fix"
-msgstr ""
+msgstr "Correggi"
 
 #: includes/admin/class-plugin-list-table.php:89
 msgid "Extend"
-msgstr ""
+msgstr "Estendi"
 
 #: includes/admin/class-plugin-list-table.php:90
 msgid "Delete"
-msgstr ""
+msgstr "Elimina"
 
 #: includes/admin/class-plugin-list-table.php:176
 msgid "No plugins found."
-msgstr ""
+msgstr "Nessun plugin trovato."
 
 #: includes/admin/class-plugin-list-table.php:216
 msgid "All"
-msgstr ""
+msgstr "Tutti"
 
 #: includes/admin/class-plugin-list-table.php:217
 msgid "Active"
-msgstr ""
+msgstr "Attivi"
 
 #: includes/admin/class-plugin-list-table.php:218
 msgid "Inactive"
-msgstr ""
+msgstr "Inattivi"
 
 #: includes/api/class-custom-api.php:110
 msgid "Error communicating with the API."
-msgstr ""
+msgstr "Errore di comunicazione con l’API."
 
 #: includes/class-github-updater.php:384
 msgid "The plugin has been updated, but could not be reactivated. Please reactivate it manually."
-msgstr ""
+msgstr "Il plugin è stato aggiornato ma non può essere riattivato. Per favore, riattivalo manualmente."
 
 #: includes/class-github-updater.php:385
 msgid "Plugin reactivated successfully."
-msgstr ""
+msgstr "Plugin riattivato con successo."
 
 #. translators: %s: error message.
 #: views/page-extend-plugin.php:28
 #: views/page-fix-plugin.php:28
 msgid "Error while activating the plugin: %s"
-msgstr ""
+msgstr "Errore durante l’attivazione del plugin: %s"
 
 #. translators: %s: plugin name.
 #: views/page-extend-plugin.php:43
 msgid "Extend This Plugin: %s"
-msgstr ""
+msgstr "Estendi questo plugin: %s"
 
 #: views/page-extend-plugin.php:46
 msgid "Describe the changes you would like to make to the plugin. Include as much detail as possible:"
-msgstr ""
+msgstr "Descrivi le modifiche che desideri apportare al plugin. Includi quanti più dettagli possibile:"
 
 #: views/page-extend-plugin.php:54
 #: views/page-fix-plugin.php:62
 #: views/page-generate-plugin.php:31
 msgid "Generated Plan"
-msgstr ""
+msgstr "Piano generato"
 
 #: views/page-extend-plugin.php:57
 #: views/page-fix-plugin.php:65
 #: views/page-generate-plugin.php:34
 msgid "Review or edit the generated plan:"
-msgstr ""
+msgstr "Rivedi o modifica il piano generato:"
 
 #: views/page-extend-plugin.php:60
 #: views/page-fix-plugin.php:68
 msgid "&laquo; Edit Issue"
-msgstr ""
+msgstr "&laquo; Modifica problema"
 
 #: views/page-extend-plugin.php:61
 #: views/page-fix-plugin.php:69
 #: views/page-generate-plugin.php:41
 msgid "Generate Plugin Code"
-msgstr ""
+msgstr "Genera codice del plugin"
 
 #. translators: %s: plugin name.
 #: views/page-extend-plugin.php:68
 msgid "Extended Plugin: %s"
-msgstr ""
+msgstr "Plugin esteso: %s"
 
 #: views/page-extend-plugin.php:71
 msgid "The plugin has been extended successfully. You can review the changes before activating it:"
-msgstr ""
+msgstr "Il plugin è stato esteso con successo. Puoi rivedere le modifiche prima di attivarlo:"
 
 #: views/page-extend-plugin.php:76
 #: views/page-fix-plugin.php:84
 #: views/page-generate-plugin.php:54
 msgid "Warning:"
-msgstr ""
+msgstr "Avvertenza:"
 
 #: views/page-extend-plugin.php:76
 #: views/page-fix-plugin.php:84
 msgid "This plugin is active, changes will take effect immediately."
-msgstr ""
+msgstr "Questo plugin è attivo, le modifiche avranno effetto immediato."
 
 #: views/page-extend-plugin.php:81
 #: views/page-fix-plugin.php:89
 #: views/page-generate-plugin.php:58
 msgid "&laquo; Edit Plan"
-msgstr ""
+msgstr "&laquo; Modifica piano"
 
 #: views/page-extend-plugin.php:82
 #: views/page-fix-plugin.php:90
 msgid "Save Changes"
-msgstr ""
+msgstr "Salva modifiche"
 
 #. translators: %s: plugin name.
 #: views/page-fix-plugin.php:43
 msgid "Fix This Plugin: %s"
-msgstr ""
+msgstr "Correggi questo plugin: %s"
 
 #: views/page-fix-plugin.php:46
 msgid "Describe the issue you are experiencing with the plugin. Include as much detail as possible and any error messages you are seeing:"
-msgstr ""
+msgstr "Descrivi il problema che stai riscontrando con il plugin. Includi quanti più dettagli possibile ed eventuali messaggi di errore che stai visualizzando:"
 
 #: views/page-fix-plugin.php:51
 msgid "Look for other issues in the plugin code as well"
-msgstr ""
+msgstr "Cerca anche altri problemi nel codice del plugin"
 
 #: views/page-fix-plugin.php:53
 msgid "Focus on the issue at hand"
-msgstr ""
+msgstr "Concentrati sul problema principale"
 
 #. translators: %s: plugin name.
-#: views/page-fix-plugin.php:76
+#: views/page-fix-plugin.php:75
 msgid "Fixed Plugin: %s"
-msgstr ""
+msgstr "Plugin corretto: %s"
 
-#: views/page-fix-plugin.php:79
+#: views/page-fix-plugin.php:78
 msgid "The plugin has been fixed successfully. You can review the changes before activating it:"
-msgstr ""
+msgstr "Il plugin è stato corretto con successo. Puoi rivedere le modifiche prima di attivarlo:"
+
+#: views/page-generate-plugin.php:21
+msgid "Generate Plugin"
+msgstr "Genera plugin"
 
 #: views/page-generate-plugin.php:24
 msgid "Enter a description of the plugin you want to generate:"
-msgstr ""
+msgstr "Inserisci una descrizione del plugin che desideri generare:"
 
 #: views/page-generate-plugin.php:26
 msgid "Generate Plan"
-msgstr ""
+msgstr "Genera piano"
 
 #: views/page-generate-plugin.php:40
 msgid "&laquo; Edit Description"
-msgstr ""
+msgstr "&laquo; Modifica descrizione"
 
 #: views/page-generate-plugin.php:47
 msgid "Generated Plugin Code"
-msgstr ""
+msgstr "Codice del plugin generato"
 
 #: views/page-generate-plugin.php:50
 msgid "The plugin code has been generated successfully. You can review and edit the plugin file before activating it:"
-msgstr ""
+msgstr "Il codice del plugin è stato generato con successo. Puoi rivedere e modificare il file prima di attivarlo:"
 
 #: views/page-generate-plugin.php:54
 msgid "AI-generated code may be unstable or insecure; use only after careful review and testing."
-msgstr ""
+msgstr "Il codice generato dall’IA potrebbe essere instabile o insicuro; utilizzalo solo dopo un’attenta revisione e verifica."
 
 #: views/page-generate-plugin.php:59
 msgid "Install Plugin"
-msgstr ""
+msgstr "Installa plugin"
 
 #: views/page-list-plugins.php:29
 msgid "Autoplugins"
-msgstr ""
+msgstr "Autoplugin"
 
 #: views/page-list-plugins.php:37
 msgid "You don't have any autoplugins yet."
-msgstr ""
+msgstr "Non hai ancora nessun autoplugin."
 
 #: views/page-list-plugins.php:38
 msgid "Autoplugins are regular plugins, but they are generated by AI. You can manage them just like any other plugin. They will be listed here for your convenience."
-msgstr ""
+msgstr "Gli Autoplugin sono plugin regolari, ma generati dall’IA. Puoi gestirli come qualsiasi altro plugin. Saranno elencati qui per tua comodità."
 
 #: views/page-settings.php:21
 msgid "WP-Autoplugin Settings"
-msgstr ""
+msgstr "Impostazioni di WP-Autoplugin"
 
 #: views/page-settings.php:30
 msgid "OpenAI API Key"
-msgstr ""
+msgstr "Chiave API OpenAI"
 
 #: views/page-settings.php:34
 msgid "Anthropic API Key"
-msgstr ""
+msgstr "Chiave API Anthropic"
 
 #: views/page-settings.php:38
 msgid "Google Gemini API Key"
-msgstr ""
+msgstr "Chiave API Google Gemini"
 
 #: views/page-settings.php:42
 msgid "xAI API Key"
-msgstr ""
+msgstr "Chiave API xAI"
 
 #: views/page-settings.php:46
 msgid "Model"
-msgstr ""
+msgstr "Modello"
 
 #: views/page-settings.php:59
 #: views/page-settings.php:71
 msgid "Custom Models"
-msgstr ""
+msgstr "Modelli personalizzati"
 
 #: views/page-settings.php:79
 msgid "Model Name (User-defined Label)"
-msgstr ""
+msgstr "Nome del modello (etichetta definita dall’utente)"
 
 #: views/page-settings.php:80
 msgid "API Endpoint URL"
-msgstr ""
+msgstr "URL dell’endpoint API"
 
 #: views/page-settings.php:81
 msgid "\"model\" Parameter Value"
-msgstr ""
+msgstr "Valore del parametro \"model\""
 
 #: views/page-settings.php:82
 #: views/page-settings.php:107
 msgid "API Key"
-msgstr ""
+msgstr "Chiave API"
 
 #: views/page-settings.php:83
 msgid "Additional Headers (one per line, name=value)"
-msgstr ""
+msgstr "Header aggiuntivi (uno per riga, nome=valore)"
 
 #: views/page-settings.php:84
 msgid "Add Custom Model"
-msgstr ""
+msgstr "Aggiungi modello personalizzato"
 
 #: views/page-settings.php:90
 msgid "Add any custom models you want to use with WP-Autoplugin. These models will be available in the model selection dropdown. The API must be compatible with the OpenAI API."
-msgstr ""
+msgstr "Aggiungi qualsiasi modello personalizzato che desideri utilizzare con WP-Autoplugin. Questi modelli saranno disponibili nel menu a discesa per la selezione dei modelli. L’API deve essere compatibile con l’API di OpenAI."
 
 #: views/page-settings.php:104
 msgid "Details"
-msgstr ""
+msgstr "Dettagli"
 
 #: views/page-settings.php:105
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: views/page-settings.php:106
 msgid "Model Parameter"
-msgstr ""
+msgstr "Parametro del modello"
 
 #: views/page-settings.php:108
 msgid "Headers"
-msgstr ""
+msgstr "Header"
 
 #: views/page-settings.php:109
 msgid "Remove"
-msgstr ""
+msgstr "Rimuovi"
 
 #: views/page-settings.php:110
 msgid "Please fill out all required fields."
-msgstr ""
+msgstr "Compila tutti i campi richiesti."
 
 #: views/page-settings.php:111
 msgid "Are you sure you want to remove this model?"
-msgstr ""
+msgstr "Sei sicuro di voler rimuovere questo modello?"
 
 #: views/page-settings.php:112
 msgid "Error saving model"
-msgstr ""
+msgstr "Errore durante il salvataggio del modello"

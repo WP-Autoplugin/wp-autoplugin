@@ -9,7 +9,7 @@ WP-Autoplugin is a free WordPress plugin that uses AI to assist in generating, f
 - Generate plugins using AI
 - Fix and extend existing plugins
 - Full control over the generation process
-- Support for multiple AI models (OpenAI, Anthropic, Google Gemini, xAI Grok)
+- Support for multiple AI models, and any OpenAI-compatible custom API
 - View the list of generated plugins for easy management
 
 ---
@@ -25,7 +25,9 @@ WP-Autoplugin offers practical solutions for various WordPress development scena
 - **Completely Free**: No premium version, no ads, no account required.
 - **Open Source**: Contributions are welcome.
 - **Privacy-Focused**: No data collection or external communication (except for the AI API you choose).
-- **BYOK (Bring Your Own Key)**: Use your own OpenAI, Anthropic, Google AI Studio, or xAI API key.
+- **BYOK (Bring Your Own Key)**: Use your own API key from the AI provider of your choice.
+- **Flexible AI Models**: Choose from a variety of AI models to suit your needs, or set up custom models.
+- **Use in Your Language**: The plugin is fully translatable and has built-in support for 10+ languages.
 
 ## How It Works
 
@@ -60,6 +62,10 @@ WP-Autoplugin supports various models:
 - xAI Grok-2-1212
 
 We recommend using the **Claude 3.5 Sonnet** model for optimal results. While WP-Autoplugin is free to use, you may need to pay for API usage based on your chosen model.
+
+## Custom Models
+
+WP-Autoplugin also supports custom models: you can plug in any OpenAI-compatible API by providing the endpoint URL, model name, and API key. This feature allows you to use any model you have access to, including locally hosted models, or custom models you've trained yourself.
 
 ## BYOK (Bring Your Own Key)
 
@@ -123,11 +129,31 @@ WP-Autoplugin has some limitations to be aware of:
 
 Or watch the [WP-Autoplugin demo video on Youtube](https://www.youtube.com/watch?v=b36elwTLfa4) that shows how it generates a plugin and fixes a bug.
 
+## Translations
+
+WP-Autoplugin is fully translatable. If you would like to contribute a translation, please create a pull request with the translation files. Currently, the plugin includes translations for the following languages:
+- English - `en_US`
+- Français (French) - `fr_FR`
+- Español (Spanish) - `es_ES`
+- Deutsch (German) - `de_DE`
+- Português (Portuguese) - `pt_PT`
+- Italiano (Italian) - `it_IT`
+- Magyar (Hungarian) - `hu_HU`
+- Nederlands (Dutch) - `nl_NL`
+- Polski (Polish) - `pl_PL`
+- Türkçe (Turkish) - `tr_TR`
+- Русский (Russian) - `ru_RU`
+
 ## Licensing
 
 WP-Autoplugin is licensed under the GPLv3 or later.
 
 ## Changelog
+
+### 1.2
+- Added support for any OpenAI-compatible API with the custom models option
+- Added translations for 10 more languages
+- Fixed PHP notice on "Add New Plugin" screen.
 
 ### 1.1.2
 - Added support for Google Gemini Flash 2.0 Thinking model
