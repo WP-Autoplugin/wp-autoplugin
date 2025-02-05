@@ -238,7 +238,7 @@ class Admin {
 
 		// Add "Extend" and "Fix" submenu pages without a menu link.
 		add_submenu_page(
-			null,
+			'',
 			__( 'Extend Plugin', 'wp-autoplugin' ),
 			__( 'Extend Plugin', 'wp-autoplugin' ),
 			'manage_options',
@@ -247,7 +247,7 @@ class Admin {
 		);
 
 		add_submenu_page(
-			null,
+			'',
 			__( 'Fix Plugin', 'wp-autoplugin' ),
 			__( 'Fix Plugin', 'wp-autoplugin' ),
 			'manage_options',
