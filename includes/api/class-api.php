@@ -46,9 +46,9 @@ class API {
 	 * @return string The trimmed prompt.
 	 */
 	public function trim_prompt( $prompt ) {
-		$indent = 0;
+		$indent        = 0;
 		$in_code_block = false;
-		$lines = explode( "\n", $prompt );
+		$lines         = explode( "\n", $prompt );
 
 		// Find the indentation level of the first non-empty line.
 		$first_line = trim( $lines[0] );
@@ -58,12 +58,12 @@ class API {
 		$indent = strspn( $first_line, "\t" );
 
 		// Trim exactly that number of tabs in every line, except in code blocks starting from line 2.
-		$trimmed_lines = array();
+		$trimmed_lines = [];
 		$first_line    = true;
 		foreach ( $lines as $line ) {
 			if ( $first_line ) {
 				$trimmed_lines[] = preg_replace( '/^\t{' . $indent . '}/', '', $line );
-				$first_line = false;
+				$first_line      = false;
 				continue;
 			}
 
@@ -76,7 +76,7 @@ class API {
 				$trimmed_lines[] = preg_replace( '/^\t{' . $indent . '}/', '', $line );
 				if ( strpos( $line, '```' ) !== false ) {
 					$in_code_block = true;
-					$first_line = true;
+					$first_line    = true;
 				}
 			}
 		}

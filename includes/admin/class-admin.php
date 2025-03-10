@@ -40,7 +40,7 @@ class Admin {
 	 *
 	 * @var array
 	 */
-	public static $models = array(
+	public static $models = [
 		'OpenAI'    => [
 			'gpt-4.5-preview'   => 'GPT-4.5 Preview',
 			'gpt-4o'            => 'GPT-4o',
@@ -79,11 +79,11 @@ class Admin {
 			'gemini-1.0-pro'                      => 'Gemini 1.0 Pro',
 		],
 		'xAI'       => [
-			'grok-2'                => 'Grok 2',
-			'grok-beta'             => 'Grok Beta',
-			'grok-2-1212'           => 'Grok 2-1212',
+			'grok-2'      => 'Grok 2',
+			'grok-beta'   => 'Grok Beta',
+			'grok-2-1212' => 'Grok 2-1212',
 		],
-	);
+	];
 
 	/**
 	 * Constructor: set up API, add actions and filters.
@@ -95,15 +95,15 @@ class Admin {
 
 		$this->ai_api = $this->get_api( $model );
 
-		add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
-		add_action( 'admin_init', array( $this, 'register_settings' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+		add_action( 'admin_menu', [ $this, 'add_admin_menu' ] );
+		add_action( 'admin_init', [ $this, 'register_settings' ] );
+		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
 
 		// Add settings link on the plugins page.
-		add_filter( 'plugin_action_links_' . plugin_basename( WP_AUTOPLUGIN_DIR . 'wp-autoplugin.php' ), array( $this, 'add_settings_link' ) );
+		add_filter( 'plugin_action_links_' . plugin_basename( WP_AUTOPLUGIN_DIR . 'wp-autoplugin.php' ), [ $this, 'add_settings_link' ] );
 
 		// AJAX actions.
-		$actions = array(
+		$actions = [
 			// Generate plugin.
 			'generate_plan',
 			'generate_code',
@@ -118,23 +118,23 @@ class Admin {
 			'generate_extend_plan',
 			'generate_extend_code',
 			'extend_plugin',
-		);
+		];
 		foreach ( $actions as $action ) {
-			add_action( 'wp_ajax_wp_autoplugin_' . $action, array( $this, 'ajax_actions' ) );
+			add_action( 'wp_ajax_wp_autoplugin_' . $action, [ $this, 'ajax_actions' ] );
 		}
 
 		// Add or delete custom model AJAX action.
-		add_action( 'wp_ajax_wp_autoplugin_add_model', array( $this, 'ajax_add_model' ) );
-		add_action( 'wp_ajax_wp_autoplugin_remove_model', array( $this, 'ajax_remove_model' ) );
+		add_action( 'wp_ajax_wp_autoplugin_add_model', [ $this, 'ajax_add_model' ] );
+		add_action( 'wp_ajax_wp_autoplugin_remove_model', [ $this, 'ajax_remove_model' ] );
 
 		// Show notices.
-		add_action( 'admin_notices', array( $this, 'show_notices' ) );
+		add_action( 'admin_notices', [ $this, 'show_notices' ] );
 
 		// Process bulk actions.
-		add_action( 'admin_init', array( $this, 'process_bulk_action' ) );
+		add_action( 'admin_init', [ $this, 'process_bulk_action' ] );
 
 		// Github updater.
-		add_action( 'init', array( $this, 'github_updater_init' ) );
+		add_action( 'init', [ $this, 'github_updater_init' ] );
 	}
 
 	/**
@@ -149,7 +149,7 @@ class Admin {
 		$anthropic_api_key = get_option( 'wp_autoplugin_anthropic_api_key' );
 		$google_api_key    = get_option( 'wp_autoplugin_google_api_key' );
 		$xai_api_key       = get_option( 'wp_autoplugin_xai_api_key' );
-		$custom_models     = get_option( 'wp_autoplugin_custom_models', array() );
+		$custom_models     = get_option( 'wp_autoplugin_custom_models', [] );
 
 		$api = null;
 
@@ -225,7 +225,7 @@ class Admin {
 			__( 'WP-Autoplugin', 'wp-autoplugin' ),
 			'manage_options',
 			'wp-autoplugin',
-			array( $this, 'render_list_plugins_page' ),
+			[ $this, 'render_list_plugins_page' ],
 			'dashicons-admin-plugins',
 			100
 		);
@@ -236,7 +236,7 @@ class Admin {
 			__( 'Generate New Plugin', 'wp-autoplugin' ),
 			'manage_options',
 			'wp-autoplugin-generate',
-			array( $this, 'render_generate_plugin_page' )
+			[ $this, 'render_generate_plugin_page' ]
 		);
 
 		add_submenu_page(
@@ -245,7 +245,7 @@ class Admin {
 			__( 'Settings', 'wp-autoplugin' ),
 			'manage_options',
 			'wp-autoplugin-settings',
-			array( $this, 'render_settings_page' )
+			[ $this, 'render_settings_page' ]
 		);
 
 		// Add "Extend" and "Fix" submenu pages without a menu link.
@@ -255,7 +255,7 @@ class Admin {
 			__( 'Extend Plugin', 'wp-autoplugin' ),
 			'manage_options',
 			'wp-autoplugin-extend',
-			array( $this, 'render_extend_plugin_page' )
+			[ $this, 'render_extend_plugin_page' ]
 		);
 
 		add_submenu_page(
@@ -264,7 +264,7 @@ class Admin {
 			__( 'Fix Plugin', 'wp-autoplugin' ),
 			'manage_options',
 			'wp-autoplugin-fix',
-			array( $this, 'render_fix_plugin_page' )
+			[ $this, 'render_fix_plugin_page' ]
 		);
 	}
 
@@ -355,7 +355,7 @@ class Admin {
 		}
 
 		// Check if it's a WP-Autoplugin generated plugin.
-		$plugins = get_option( 'wp_autoplugins', array() );
+		$plugins = get_option( 'wp_autoplugins', [] );
 		if ( ! in_array( $_GET['plugin'], $plugins, true ) ) {
 			wp_die( __( 'The specified plugin does not exist.', 'wp-autoplugin' ) );
 		}
@@ -371,15 +371,17 @@ class Admin {
 	public function enqueue_scripts() {
 		// Enqueue generator.js and generator.css only on the plugin generation page.
 		$screen = get_current_screen();
-		wp_register_script( 'wp-autoplugin-utils', WP_AUTOPLUGIN_URL . 'assets/admin/js/utils.js', array(), WP_AUTOPLUGIN_VERSION, true );
+		wp_register_script( 'wp-autoplugin-utils', WP_AUTOPLUGIN_URL . 'assets/admin/js/utils.js', [], WP_AUTOPLUGIN_VERSION, true );
 		if ( $screen->id === 'toplevel_page_wp-autoplugin' ) {
-			wp_enqueue_script( 'wp-autoplugin', WP_AUTOPLUGIN_URL . 'assets/admin/js/list-plugins.js', array(), WP_AUTOPLUGIN_VERSION, true );
-			wp_enqueue_style( 'wp-autoplugin', WP_AUTOPLUGIN_URL . 'assets/admin/css/list-plugins.css', array(), WP_AUTOPLUGIN_VERSION );
+			wp_enqueue_script( 'wp-autoplugin', WP_AUTOPLUGIN_URL . 'assets/admin/js/list-plugins.js', [], WP_AUTOPLUGIN_VERSION, true );
+			wp_enqueue_style( 'wp-autoplugin', WP_AUTOPLUGIN_URL . 'assets/admin/css/list-plugins.css', [], WP_AUTOPLUGIN_VERSION );
 		} elseif ( $screen->id === 'wp-autoplugin_page_wp-autoplugin-generate' ) {
 			// Settings for the CodeMirror editor for PHP code
-			$settings = wp_enqueue_code_editor( array(
-				'type' => 'application/x-httpd-php',
-			));
+			$settings = wp_enqueue_code_editor(
+				[
+					'type' => 'application/x-httpd-php',
+				]
+			);
 
 			// Enqueue the code editor if the current user's browser supports it
 			if ( false !== $settings ) {
@@ -387,151 +389,167 @@ class Admin {
 				wp_enqueue_style( 'wp-codemirror' );
 			}
 
-			wp_enqueue_script( 'wp-autoplugin-generator', WP_AUTOPLUGIN_URL . 'assets/admin/js/generator.js', array( 'wp-autoplugin-utils' ), WP_AUTOPLUGIN_VERSION, true );
-			wp_localize_script( 'wp-autoplugin-generator', 'wp_autoplugin', array(
-				'ajax_url'        => admin_url( 'admin-ajax.php' ),
-				'nonce'           => wp_create_nonce( 'wp_autoplugin_generate' ),
-				'fix_url'         => admin_url( 'admin.php?page=wp-autoplugin-fix&nonce=' . wp_create_nonce( 'wp-autoplugin-fix-plugin' ) ),
-				'activate_url'    => admin_url( 'admin.php?page=wp-autoplugin&action=activate&nonce=' . wp_create_nonce( 'wp-autoplugin-activate-plugin' ) ),
-				'testing_plan'    => '',
+			wp_enqueue_script( 'wp-autoplugin-generator', WP_AUTOPLUGIN_URL . 'assets/admin/js/generator.js', [ 'wp-autoplugin-utils' ], WP_AUTOPLUGIN_VERSION, true );
+			wp_localize_script(
+				'wp-autoplugin-generator',
+				'wp_autoplugin',
+				[
+					'ajax_url'        => admin_url( 'admin-ajax.php' ),
+					'nonce'           => wp_create_nonce( 'wp_autoplugin_generate' ),
+					'fix_url'         => admin_url( 'admin.php?page=wp-autoplugin-fix&nonce=' . wp_create_nonce( 'wp-autoplugin-fix-plugin' ) ),
+					'activate_url'    => admin_url( 'admin.php?page=wp-autoplugin&action=activate&nonce=' . wp_create_nonce( 'wp-autoplugin-activate-plugin' ) ),
+					'testing_plan'    => '',
 
-				// i18n strings.
-				'messages'        => [
-					'empty_description'     => __( 'Please enter a plugin description.', 'wp-autoplugin' ),
-					'generating_plan'       => __( 'Generating a plan for your plugin', 'wp-autoplugin' ),
-					'plan_generation_error' => __( 'Error generating the plugin plan.', 'wp-autoplugin' ),
-					'generating_code'       => __( 'Generating code', 'wp-autoplugin' ),
-					'code_generation_error' => __( 'Error generating the plugin code.', 'wp-autoplugin' ),
-					'plugin_creation_error' => __( 'Error creating the plugin.', 'wp-autoplugin' ),
-					'creating_plugin'       => __( 'Installing the plugin', 'wp-autoplugin' ),
-					'plugin_created'        => __( 'Plugin successfully installed.', 'wp-autoplugin' ),
-					'how_to_test'           => __( 'How to test it?', 'wp-autoplugin' ),
-					'use_fixer'             => __( 'If you notice any issues, use the Fix button in the Autoplugins list.', 'wp-autoplugin' ),
-					'activate'              => __( 'Activate Plugin', 'wp-autoplugin' ),
-				],
+					// i18n strings.
+					'messages'        => [
+						'empty_description'     => __( 'Please enter a plugin description.', 'wp-autoplugin' ),
+						'generating_plan'       => __( 'Generating a plan for your plugin', 'wp-autoplugin' ),
+						'plan_generation_error' => __( 'Error generating the plugin plan.', 'wp-autoplugin' ),
+						'generating_code'       => __( 'Generating code', 'wp-autoplugin' ),
+						'code_generation_error' => __( 'Error generating the plugin code.', 'wp-autoplugin' ),
+						'plugin_creation_error' => __( 'Error creating the plugin.', 'wp-autoplugin' ),
+						'creating_plugin'       => __( 'Installing the plugin', 'wp-autoplugin' ),
+						'plugin_created'        => __( 'Plugin successfully installed.', 'wp-autoplugin' ),
+						'how_to_test'           => __( 'How to test it?', 'wp-autoplugin' ),
+						'use_fixer'             => __( 'If you notice any issues, use the Fix button in the Autoplugins list.', 'wp-autoplugin' ),
+						'activate'              => __( 'Activate Plugin', 'wp-autoplugin' ),
+					],
 
-				// Plugin ideas.
-				'plugin_examples' => [
-					__( 'A simple contact form with honeypot spam protection', 'wp-autoplugin' ),
-					__( 'A custom post type for testimonials', 'wp-autoplugin' ),
-					__( 'A widget that displays recent posts', 'wp-autoplugin' ),
-					__( 'A shortcode that shows a random quote', 'wp-autoplugin' ),
-					__( 'A user profile widget displaying avatar, bio, and website link', 'wp-autoplugin' ),
-					__( 'A custom post type for managing FAQs', 'wp-autoplugin' ),
-					__( 'A post views counter that tracks and displays view counts', 'wp-autoplugin' ),
-					__( 'Maintenance mode with a countdown timer to site return', 'wp-autoplugin' ),
-					__( 'An admin quick links widget for the dashboard', 'wp-autoplugin' ),
-					__( 'Hide the admin bar for non-admin users', 'wp-autoplugin' ),
-					__( 'Hide specific menu items in the admin area', 'wp-autoplugin' ),
-					__( 'A social media share buttons plugin for posts', 'wp-autoplugin' ),
-					__( 'A custom footer credit remover', 'wp-autoplugin' ),
-					__( 'A plugin to add custom CSS to the WordPress login page', 'wp-autoplugin' ),
-					__( 'A related posts display below single post content', 'wp-autoplugin' ),
-					__( 'A custom excerpt length controller', 'wp-autoplugin' ),
-					__( 'A "Back to Top" button for long pages', 'wp-autoplugin' ),
-					__( 'A plugin to disable comments on specific post types', 'wp-autoplugin' ),
-					__( 'A simple Google Analytics integration', 'wp-autoplugin' ),
-					__( 'An author box display below posts', 'wp-autoplugin' ),
-					__( 'A custom breadcrumb generator', 'wp-autoplugin' ),
-					__( 'A plugin to add nofollow to external links', 'wp-autoplugin' ),
-					__( 'A simple cookie consent banner', 'wp-autoplugin' ),
-					__( 'A post expiration date setter', 'wp-autoplugin' ),
-					__( 'A basic XML sitemap generator', 'wp-autoplugin' ),
-					__( 'A custom login URL creator for added security', 'wp-autoplugin' ),
-					__( 'A simple contact information display shortcode', 'wp-autoplugin' ),
-					__( 'A plugin to add estimated reading time to posts', 'wp-autoplugin' ),
-					__( 'A custom RSS feed footer', 'wp-autoplugin' ),
-					__( 'A simple post duplication tool', 'wp-autoplugin' ),
-					__( 'A basic schema markup generator', 'wp-autoplugin' ),
-					__( 'A plugin to add custom admin footer text', 'wp-autoplugin' ),
-					__( 'A plugin to add custom taxonomies easily', 'wp-autoplugin' ),
-					__( 'A simple email obfuscator to prevent spam', 'wp-autoplugin' ),
-					__( 'A basic redirection manager', 'wp-autoplugin' ),
-					__( 'A plugin to add custom fields to user profiles', 'wp-autoplugin' ),
-					__( 'A simple image compression tool', 'wp-autoplugin' ),
-				],
-			) );
-			wp_enqueue_style( 'wp-autoplugin-generator', WP_AUTOPLUGIN_URL . 'assets/admin/css/generator.css', array(), WP_AUTOPLUGIN_VERSION );
+					// Plugin ideas.
+					'plugin_examples' => [
+						__( 'A simple contact form with honeypot spam protection', 'wp-autoplugin' ),
+						__( 'A custom post type for testimonials', 'wp-autoplugin' ),
+						__( 'A widget that displays recent posts', 'wp-autoplugin' ),
+						__( 'A shortcode that shows a random quote', 'wp-autoplugin' ),
+						__( 'A user profile widget displaying avatar, bio, and website link', 'wp-autoplugin' ),
+						__( 'A custom post type for managing FAQs', 'wp-autoplugin' ),
+						__( 'A post views counter that tracks and displays view counts', 'wp-autoplugin' ),
+						__( 'Maintenance mode with a countdown timer to site return', 'wp-autoplugin' ),
+						__( 'An admin quick links widget for the dashboard', 'wp-autoplugin' ),
+						__( 'Hide the admin bar for non-admin users', 'wp-autoplugin' ),
+						__( 'Hide specific menu items in the admin area', 'wp-autoplugin' ),
+						__( 'A social media share buttons plugin for posts', 'wp-autoplugin' ),
+						__( 'A custom footer credit remover', 'wp-autoplugin' ),
+						__( 'A plugin to add custom CSS to the WordPress login page', 'wp-autoplugin' ),
+						__( 'A related posts display below single post content', 'wp-autoplugin' ),
+						__( 'A custom excerpt length controller', 'wp-autoplugin' ),
+						__( 'A "Back to Top" button for long pages', 'wp-autoplugin' ),
+						__( 'A plugin to disable comments on specific post types', 'wp-autoplugin' ),
+						__( 'A simple Google Analytics integration', 'wp-autoplugin' ),
+						__( 'An author box display below posts', 'wp-autoplugin' ),
+						__( 'A custom breadcrumb generator', 'wp-autoplugin' ),
+						__( 'A plugin to add nofollow to external links', 'wp-autoplugin' ),
+						__( 'A simple cookie consent banner', 'wp-autoplugin' ),
+						__( 'A post expiration date setter', 'wp-autoplugin' ),
+						__( 'A basic XML sitemap generator', 'wp-autoplugin' ),
+						__( 'A custom login URL creator for added security', 'wp-autoplugin' ),
+						__( 'A simple contact information display shortcode', 'wp-autoplugin' ),
+						__( 'A plugin to add estimated reading time to posts', 'wp-autoplugin' ),
+						__( 'A custom RSS feed footer', 'wp-autoplugin' ),
+						__( 'A simple post duplication tool', 'wp-autoplugin' ),
+						__( 'A basic schema markup generator', 'wp-autoplugin' ),
+						__( 'A plugin to add custom admin footer text', 'wp-autoplugin' ),
+						__( 'A plugin to add custom taxonomies easily', 'wp-autoplugin' ),
+						__( 'A simple email obfuscator to prevent spam', 'wp-autoplugin' ),
+						__( 'A basic redirection manager', 'wp-autoplugin' ),
+						__( 'A plugin to add custom fields to user profiles', 'wp-autoplugin' ),
+						__( 'A simple image compression tool', 'wp-autoplugin' ),
+					],
+				]
+			);
+			wp_enqueue_style( 'wp-autoplugin-generator', WP_AUTOPLUGIN_URL . 'assets/admin/css/generator.css', [], WP_AUTOPLUGIN_VERSION );
 		} elseif ( $screen->id === 'admin_page_wp-autoplugin-fix' ) {
 			// Settings for the CodeMirror editor for PHP code
-			$settings = wp_enqueue_code_editor(array(
-				'type' => 'application/x-httpd-php',
-			));
+			$settings = wp_enqueue_code_editor(
+				[
+					'type' => 'application/x-httpd-php',
+				]
+			);
 
 			// Enqueue the code editor if the current user's browser supports it
-			if (false !== $settings) {
-				wp_enqueue_script('wp-theme-plugin-editor');
-				wp_enqueue_style('wp-codemirror');
+			if ( false !== $settings ) {
+				wp_enqueue_script( 'wp-theme-plugin-editor' );
+				wp_enqueue_style( 'wp-codemirror' );
 			}
 
 			$is_plugin_active = false;
 			if ( isset( $_GET['plugin'] ) ) {
-				$plugin_file = sanitize_text_field( wp_unslash( $_GET['plugin'] ) );
-				$plugin_file = str_replace( '../', '', $plugin_file );
+				$plugin_file      = sanitize_text_field( wp_unslash( $_GET['plugin'] ) );
+				$plugin_file      = str_replace( '../', '', $plugin_file );
 				$is_plugin_active = is_plugin_active( $plugin_file );
 			}
 
-			wp_enqueue_script( 'wp-autoplugin-fix', WP_AUTOPLUGIN_URL . 'assets/admin/js/fixer.js', array( 'wp-autoplugin-utils' ), WP_AUTOPLUGIN_VERSION, true );
-			wp_localize_script( 'wp-autoplugin-fix', 'wp_autoplugin', array(
-				'ajax_url'         => admin_url( 'admin-ajax.php' ),
-				'nonce'            => wp_create_nonce( 'wp_autoplugin_generate' ),
-				'activate_url'     => admin_url( 'admin.php?page=wp-autoplugin&action=activate&nonce=' . wp_create_nonce( 'wp-autoplugin-activate-plugin' ) ),
-				'is_plugin_active' => $is_plugin_active,
+			wp_enqueue_script( 'wp-autoplugin-fix', WP_AUTOPLUGIN_URL . 'assets/admin/js/fixer.js', [ 'wp-autoplugin-utils' ], WP_AUTOPLUGIN_VERSION, true );
+			wp_localize_script(
+				'wp-autoplugin-fix',
+				'wp_autoplugin',
+				[
+					'ajax_url'         => admin_url( 'admin-ajax.php' ),
+					'nonce'            => wp_create_nonce( 'wp_autoplugin_generate' ),
+					'activate_url'     => admin_url( 'admin.php?page=wp-autoplugin&action=activate&nonce=' . wp_create_nonce( 'wp-autoplugin-activate-plugin' ) ),
+					'is_plugin_active' => $is_plugin_active,
 
-				// i18n strings.
-				'messages'        => [
-					'empty_description'     => __( 'Please enter a plugin description.', 'wp-autoplugin' ),
-					'generating_plan'       => __( 'Generating a plan for your plugin', 'wp-autoplugin' ),
-					'plan_generation_error' => __( 'Error generating the plan.', 'wp-autoplugin' ),
-					'plugin_creation_error' => __( 'Error creating the fixed plugin.', 'wp-autoplugin' ),
-					'generating_code'       => __( 'Generating the fixed plugin code', 'wp-autoplugin' ),
-					'code_generation_error' => __( 'Error generating the fixed code.', 'wp-autoplugin' ),
-					'code_updated'          => __( 'The plugin code has been updated.', 'wp-autoplugin' ),
-					'activate'              => __( 'Activate Plugin', 'wp-autoplugin' ),
-					'creating_plugin'       => __( 'Installing the fix', 'wp-autoplugin' ),
-				],
-			) );
-			wp_enqueue_style( 'wp-autoplugin-fix', WP_AUTOPLUGIN_URL . 'assets/admin/css/fixer.css', array(), WP_AUTOPLUGIN_VERSION );
+					// i18n strings.
+					'messages'         => [
+						'empty_description'     => __( 'Please enter a plugin description.', 'wp-autoplugin' ),
+						'generating_plan'       => __( 'Generating a plan for your plugin', 'wp-autoplugin' ),
+						'plan_generation_error' => __( 'Error generating the plan.', 'wp-autoplugin' ),
+						'plugin_creation_error' => __( 'Error creating the fixed plugin.', 'wp-autoplugin' ),
+						'generating_code'       => __( 'Generating the fixed plugin code', 'wp-autoplugin' ),
+						'code_generation_error' => __( 'Error generating the fixed code.', 'wp-autoplugin' ),
+						'code_updated'          => __( 'The plugin code has been updated.', 'wp-autoplugin' ),
+						'activate'              => __( 'Activate Plugin', 'wp-autoplugin' ),
+						'creating_plugin'       => __( 'Installing the fix', 'wp-autoplugin' ),
+					],
+				]
+			);
+			wp_enqueue_style( 'wp-autoplugin-fix', WP_AUTOPLUGIN_URL . 'assets/admin/css/fixer.css', [], WP_AUTOPLUGIN_VERSION );
 		} elseif ( $screen->id === 'admin_page_wp-autoplugin-extend' ) {
 			// Settings for the CodeMirror editor for PHP code
-			$settings = wp_enqueue_code_editor(array(
-				'type' => 'application/x-httpd-php',
-			));
+			$settings = wp_enqueue_code_editor(
+				[
+					'type' => 'application/x-httpd-php',
+				]
+			);
 
 			// Enqueue the code editor if the current user's browser supports it
-			if (false !== $settings) {
-				wp_enqueue_script('wp-theme-plugin-editor');
-				wp_enqueue_style('wp-codemirror');
+			if ( false !== $settings ) {
+				wp_enqueue_script( 'wp-theme-plugin-editor' );
+				wp_enqueue_style( 'wp-codemirror' );
 			}
 
 			$is_plugin_active = false;
 			if ( isset( $_GET['plugin'] ) ) {
-				$plugin_file = sanitize_text_field( wp_unslash( $_GET['plugin'] ) );
-				$plugin_file = str_replace( '../', '', $plugin_file );
+				$plugin_file      = sanitize_text_field( wp_unslash( $_GET['plugin'] ) );
+				$plugin_file      = str_replace( '../', '', $plugin_file );
 				$is_plugin_active = is_plugin_active( $plugin_file );
 			}
 
-			wp_enqueue_script( 'wp-autoplugin-extend', WP_AUTOPLUGIN_URL . 'assets/admin/js/extender.js', array( 'wp-autoplugin-utils' ), WP_AUTOPLUGIN_VERSION, true );
-			wp_localize_script( 'wp-autoplugin-extend', 'wp_autoplugin', array(
-				'ajax_url' => admin_url( 'admin-ajax.php' ),
-				'nonce'    => wp_create_nonce( 'wp_autoplugin_generate' ),
-				'activate_url' => admin_url( 'admin.php?page=wp-autoplugin&action=activate&nonce=' . wp_create_nonce( 'wp-autoplugin-activate-plugin' ) ),
-				'is_plugin_active' => $is_plugin_active,
+			wp_enqueue_script( 'wp-autoplugin-extend', WP_AUTOPLUGIN_URL . 'assets/admin/js/extender.js', [ 'wp-autoplugin-utils' ], WP_AUTOPLUGIN_VERSION, true );
+			wp_localize_script(
+				'wp-autoplugin-extend',
+				'wp_autoplugin',
+				[
+					'ajax_url'         => admin_url( 'admin-ajax.php' ),
+					'nonce'            => wp_create_nonce( 'wp_autoplugin_generate' ),
+					'activate_url'     => admin_url( 'admin.php?page=wp-autoplugin&action=activate&nonce=' . wp_create_nonce( 'wp-autoplugin-activate-plugin' ) ),
+					'is_plugin_active' => $is_plugin_active,
 
-				// i18n strings.
-				'messages'        => [
-					'empty_description'     => __( 'Please describe the changes you want to make to the plugin.', 'wp-autoplugin' ),
-					'generating_plan'       => __( 'Generating a plan for your plugin', 'wp-autoplugin' ),
-					'plan_generation_error' => __( 'Error generating the development plan.', 'wp-autoplugin' ),
-					'generating_code'       => __( 'Generating the extended plugin code', 'wp-autoplugin' ),
-					'code_generation_error' => __( 'Error generating the extended code.', 'wp-autoplugin' ),
-					'plugin_creation_error' => __( 'Error creating the extended plugin.', 'wp-autoplugin' ),
-					'code_updated'          => __( 'The plugin code has been updated.', 'wp-autoplugin' ),
-					'activate'              => __( 'Activate Plugin', 'wp-autoplugin' ),
-					'creating_plugin'       => __( 'Creating the plugin', 'wp-autoplugin' ),
-				],
-			) );
-			wp_enqueue_style( 'wp-autoplugin-extend', WP_AUTOPLUGIN_URL . 'assets/admin/css/extender.css', array(), WP_AUTOPLUGIN_VERSION );
+					// i18n strings.
+					'messages'         => [
+						'empty_description'     => __( 'Please describe the changes you want to make to the plugin.', 'wp-autoplugin' ),
+						'generating_plan'       => __( 'Generating a plan for your plugin', 'wp-autoplugin' ),
+						'plan_generation_error' => __( 'Error generating the development plan.', 'wp-autoplugin' ),
+						'generating_code'       => __( 'Generating the extended plugin code', 'wp-autoplugin' ),
+						'code_generation_error' => __( 'Error generating the extended code.', 'wp-autoplugin' ),
+						'plugin_creation_error' => __( 'Error creating the extended plugin.', 'wp-autoplugin' ),
+						'code_updated'          => __( 'The plugin code has been updated.', 'wp-autoplugin' ),
+						'activate'              => __( 'Activate Plugin', 'wp-autoplugin' ),
+						'creating_plugin'       => __( 'Creating the plugin', 'wp-autoplugin' ),
+					],
+				]
+			);
+			wp_enqueue_style( 'wp-autoplugin-extend', WP_AUTOPLUGIN_URL . 'assets/admin/css/extender.css', [], WP_AUTOPLUGIN_VERSION );
 		}
 	}
 
@@ -555,14 +573,14 @@ class Admin {
 	 * @return void
 	 */
 	public function ajax_generate_plan() {
-		$plan = sanitize_text_field( wp_unslash( $_POST['plugin_description'] ) );
+		$plan      = sanitize_text_field( wp_unslash( $_POST['plugin_description'] ) );
 		$generator = new Plugin_Generator( $this->ai_api );
 		$plan_data = $generator->generate_plugin_plan( $plan );
 		if ( is_wp_error( $plan_data ) ) {
 			wp_send_json_error( $plan_data->get_error_message() );
 		}
 		// let's strip out any wrapping markup, for example ```json\n{ "key": "value" }\n```
-		$plan_data = preg_replace( '/^```(json)\n(.*)\n```$/s', '$2', $plan_data );
+		$plan_data  = preg_replace( '/^```(json)\n(.*)\n```$/s', '$2', $plan_data );
 		$plan_array = json_decode( $plan_data, true );
 		if ( ! $plan_array ) {
 			wp_send_json_error( 'Failed to decode the generated plan: ' . $plan_data );
@@ -577,8 +595,8 @@ class Admin {
 	 */
 	public function ajax_generate_code() {
 		$description = sanitize_text_field( $_POST['plugin_plan'] );
-		$generator = new Plugin_Generator( $this->ai_api );
-		$code = $generator->generate_plugin_code( $description );
+		$generator   = new Plugin_Generator( $this->ai_api );
+		$code        = $generator->generate_plugin_code( $description );
 		if ( is_wp_error( $code ) ) {
 			wp_send_json_error( $code->get_error_message() );
 		}
@@ -594,16 +612,18 @@ class Admin {
 	 * @return void
 	 */
 	public function ajax_create_plugin() {
-		$code = wp_unslash( $_POST['plugin_code'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- We cannot and should not sanitize this.
+		$code        = wp_unslash( $_POST['plugin_code'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- We cannot and should not sanitize this.
 		$plugin_name = sanitize_text_field( $_POST['plugin_name'] );
-		$installer = Plugin_Installer::get_instance();
-		$result = $installer->install_plugin( $code, $plugin_name );
+		$installer   = Plugin_Installer::get_instance();
+		$result      = $installer->install_plugin( $code, $plugin_name );
 		if ( is_wp_error( $result ) ) {
-			wp_send_json( array(
-				'success'    => false,
-				'data'       => $result->get_error_message(),
-				'error_type' => 'install_error',
-			) );
+			wp_send_json(
+				[
+					'success'    => false,
+					'data'       => $result->get_error_message(),
+					'error_type' => 'install_error',
+				]
+			);
 		}
 
 		wp_send_json_success( $result );
@@ -623,10 +643,10 @@ class Admin {
 			wp_send_json_error( 'Failed to read the plugin file.' );
 		}
 
-		$problem = sanitize_text_field( $_POST['plugin_issue'] );
+		$problem            = sanitize_text_field( $_POST['plugin_issue'] );
 		$check_other_issues = isset( $_POST['check_other_issues'] ) ? (bool) $_POST['check_other_issues'] : true;
-		$fixer = new Plugin_Fixer( $this->ai_api );
-		$plan_data = $fixer->identify_issue( $plugin_code, $problem, $check_other_issues );
+		$fixer              = new Plugin_Fixer( $this->ai_api );
+		$plan_data          = $fixer->identify_issue( $plugin_code, $problem, $check_other_issues );
 		if ( is_wp_error( $plan_data ) ) {
 			wp_send_json_error( $plan_data->get_error_message() );
 		}
@@ -649,10 +669,10 @@ class Admin {
 			wp_send_json_error( 'Failed to read the plugin file.' );
 		}
 
-		$problem = sanitize_text_field( $_POST['plugin_issue'] );
+		$problem        = sanitize_text_field( $_POST['plugin_issue'] );
 		$ai_description = sanitize_text_field( $_POST['plugin_plan'] );
-		$fixer = new Plugin_Fixer( $this->ai_api );
-		$code = $fixer->fix_plugin( $plugin_code, $problem, $ai_description );
+		$fixer          = new Plugin_Fixer( $this->ai_api );
+		$code           = $fixer->fix_plugin( $plugin_code, $problem, $ai_description );
 
 		wp_send_json_success( $code );
 	}
@@ -663,16 +683,18 @@ class Admin {
 	 * @return void
 	 */
 	public function ajax_fix_plugin() {
-		$code = wp_unslash( $_POST['plugin_code'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- We cannot and should not sanitize this.
+		$code        = wp_unslash( $_POST['plugin_code'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- We cannot and should not sanitize this.
 		$plugin_file = sanitize_text_field( $_POST['plugin_file'] );
-		$installer = Plugin_Installer::get_instance();
-		$result = $installer->install_plugin( $code, $plugin_file );
+		$installer   = Plugin_Installer::get_instance();
+		$result      = $installer->install_plugin( $code, $plugin_file );
 		if ( is_wp_error( $result ) ) {
-			wp_send_json( array(
-				'success'    => false,
-				'data'       => $result->get_error_message(),
-				'error_type' => 'install_error',
-			) );
+			wp_send_json(
+				[
+					'success'    => false,
+					'data'       => $result->get_error_message(),
+					'error_type' => 'install_error',
+				]
+			);
 		}
 
 		wp_send_json_success( $result );
@@ -692,8 +714,8 @@ class Admin {
 			wp_send_json_error( 'Failed to read the plugin file.' );
 		}
 
-		$problem = sanitize_text_field( $_POST['plugin_issue'] );
-		$extender = new Plugin_Extender( $this->ai_api );
+		$problem   = sanitize_text_field( $_POST['plugin_issue'] );
+		$extender  = new Plugin_Extender( $this->ai_api );
 		$plan_data = $extender->plan_plugin_extension( $plugin_code, $problem );
 		if ( is_wp_error( $plan_data ) ) {
 			wp_send_json_error( $plan_data->get_error_message() );
@@ -717,10 +739,10 @@ class Admin {
 			wp_send_json_error( 'Failed to read the plugin file.' );
 		}
 
-		$problem = sanitize_text_field( $_POST['plugin_issue'] );
+		$problem        = sanitize_text_field( $_POST['plugin_issue'] );
 		$ai_description = sanitize_text_field( $_POST['plugin_plan'] );
-		$extender = new Plugin_Extender( $this->ai_api );
-		$code = $extender->extend_plugin( $plugin_code, $problem, $ai_description );
+		$extender       = new Plugin_Extender( $this->ai_api );
+		$code           = $extender->extend_plugin( $plugin_code, $problem, $ai_description );
 
 		wp_send_json_success( $code );
 	}
@@ -731,16 +753,18 @@ class Admin {
 	 * @return void
 	 */
 	public function ajax_extend_plugin() {
-		$code = wp_unslash( $_POST['plugin_code'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- We cannot and should not sanitize this.
+		$code        = wp_unslash( $_POST['plugin_code'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- We cannot and should not sanitize this.
 		$plugin_file = sanitize_text_field( $_POST['plugin_file'] );
-		$installer = Plugin_Installer::get_instance();
-		$result = $installer->install_plugin( $code, $plugin_file );
+		$installer   = Plugin_Installer::get_instance();
+		$result      = $installer->install_plugin( $code, $plugin_file );
 		if ( is_wp_error( $result ) ) {
-			wp_send_json( array(
-				'success'    => false,
-				'data'       => $result->get_error_message(),
-				'error_type' => 'install_error',
-			) );
+			wp_send_json(
+				[
+					'success'    => false,
+					'data'       => $result->get_error_message(),
+					'error_type' => 'install_error',
+				]
+			);
 		}
 
 		wp_send_json_success( $result );
@@ -752,37 +776,41 @@ class Admin {
 	 * @return void
 	 */
 	public function ajax_add_model() {
-		// Verify nonce  
+		// Verify nonce
 		if ( ! check_ajax_referer( 'wp_autoplugin_nonce', 'nonce', false ) ) {
-			wp_send_json_error( array(
-				'message' => __( 'Security check failed', 'wp-autoplugin' ),
-			) );
+			wp_send_json_error(
+				[
+					'message' => __( 'Security check failed', 'wp-autoplugin' ),
+				]
+			);
 		}
 
 		// Get and validate model data
 		$model = isset( $_POST['model'] ) ? $_POST['model'] : null;
 		if ( ! $model || ! isset( $model['name'] ) || ! isset( $model['url'] ) || ! isset( $model['apiKey'] ) ) {
-			wp_send_json_error( array(
-				'message' => __( 'Invalid model data', 'wp-autoplugin' ),
-			) );
+			wp_send_json_error(
+				[
+					'message' => __( 'Invalid model data', 'wp-autoplugin' ),
+				]
+			);
 		}
 
 		// Sanitize input
-		$new_model = array(
+		$new_model = [
 			'name'           => sanitize_text_field( $model['name'] ),
 			'url'            => esc_url_raw( $model['url'] ),
 			'modelParameter' => sanitize_text_field( $model['modelParameter'] ),
 			'apiKey'         => sanitize_text_field( $model['apiKey'] ),
 			'headers'        => array_map(
 				'sanitize_text_field',
-				isset( $model['headers'] ) ? (array) $model['headers'] : array()
+				isset( $model['headers'] ) ? (array) $model['headers'] : []
 			),
-		);
+		];
 
 		// Get existing models
-		$models = get_option( 'wp_autoplugin_custom_models', array() );
+		$models = get_option( 'wp_autoplugin_custom_models', [] );
 		if ( ! is_array( $models ) ) {
-			$models = array();
+			$models = [];
 		}
 
 		// Add new model
@@ -792,10 +820,12 @@ class Admin {
 		update_option( 'wp_autoplugin_custom_models', $models );
 
 		// Send success response
-		wp_send_json_success( array(
-			'models'  => $models,
-			'message' => __( 'Model added successfully', 'wp-autoplugin' ),
-		) );
+		wp_send_json_success(
+			[
+				'models'  => $models,
+				'message' => __( 'Model added successfully', 'wp-autoplugin' ),
+			]
+		);
 	}
 
 	/**
@@ -806,23 +836,27 @@ class Admin {
 	public function ajax_remove_model() {
 		// Verify nonce
 		if ( ! check_ajax_referer( 'wp_autoplugin_nonce', 'nonce', false ) ) {
-			wp_send_json_error( array(
-				'message' => __( 'Security check failed', 'wp-autoplugin' ),
-			) );
+			wp_send_json_error(
+				[
+					'message' => __( 'Security check failed', 'wp-autoplugin' ),
+				]
+			);
 		}
 
 		// Get existing models
-		$models = get_option( 'wp_autoplugin_custom_models', array() );
+		$models = get_option( 'wp_autoplugin_custom_models', [] );
 		if ( ! is_array( $models ) ) {
-			$models = array();
+			$models = [];
 		}
 
 		// Get and validate model index
 		$index = isset( $_POST['index'] ) ? intval( $_POST['index'] ) : null;
 		if ( ! is_int( $index ) || $index >= count( $models ) ) {
-			wp_send_json_error( array(
-				'message' => __( 'Invalid model index', 'wp-autoplugin' ),
-			) );
+			wp_send_json_error(
+				[
+					'message' => __( 'Invalid model index', 'wp-autoplugin' ),
+				]
+			);
 		}
 
 		// Remove model
@@ -834,10 +868,12 @@ class Admin {
 		update_option( 'wp_autoplugin_custom_models', $models );
 
 		// Send success response
-		wp_send_json_success( array(
-			'models'  => $models,
-			'message' => __( 'Model removed successfully', 'wp-autoplugin' ),
-		) );
+		wp_send_json_success(
+			[
+				'models'  => $models,
+				'message' => __( 'Model removed successfully', 'wp-autoplugin' ),
+			]
+		);
 	}
 
 	/**
@@ -865,11 +901,14 @@ class Admin {
 		// Show a notice if there was a fatal error while activating a plugin.
 		$error = get_option( 'wp_autoplugin_fatal_error' );
 		if ( $error && is_array( $error ) ) {
-			$fix_url = add_query_arg( array(
-				'nonce'         => wp_create_nonce( 'wp-autoplugin-fix-plugin' ),
-				'plugin'        => urlencode( $error['plugin'] ),
-				'error_message' => urlencode( $error['error'] ),
-			), admin_url( 'admin.php?page=wp-autoplugin-fix' ) );
+			$fix_url = add_query_arg(
+				[
+					'nonce'         => wp_create_nonce( 'wp-autoplugin-fix-plugin' ),
+					'plugin'        => urlencode( $error['plugin'] ),
+					'error_message' => urlencode( $error['error'] ),
+				],
+				admin_url( 'admin.php?page=wp-autoplugin-fix' )
+			);
 			?>
 			<div class="notice notice-error">
 				<p><?php _e( 'The plugin could not be activated due to a fatal error.', 'wp-autoplugin' ); ?></p>
@@ -882,7 +921,7 @@ class Admin {
 		}
 
 		// Show any other notices.
-		$notices = get_option( 'wp_autoplugin_notices', array() );
+		$notices = get_option( 'wp_autoplugin_notices', [] );
 		foreach ( $notices as $notice ) {
 			?>
 			<div class="notice notice-<?php echo esc_attr( $notice['type'] ); ?> is-dismissible">
@@ -975,7 +1014,7 @@ class Admin {
 	 * @return array
 	 */
 	public function get_bulk_actions_input() {
-		$plugins = array();
+		$plugins = [];
 		if ( isset( $_REQUEST['plugin'] ) ) {
 			$plugins = (array) $_REQUEST['plugin'];
 		}
@@ -992,11 +1031,11 @@ class Admin {
 	 * @return void
 	 */
 	public static function add_notice( $message, $type = 'error' ) {
-		$notices = get_option( 'wp_autoplugin_notices', array() );
-		$notices[] = array(
+		$notices   = get_option( 'wp_autoplugin_notices', [] );
+		$notices[] = [
 			'message' => $message,
 			'type'    => $type,
-		);
+		];
 		update_option( 'wp_autoplugin_notices', $notices );
 	}
 
@@ -1010,7 +1049,7 @@ class Admin {
 			return;
 		}
 
-		$config = array(
+		$config = [
 			'slug'               => plugin_basename( WP_AUTOPLUGIN_DIR . 'wp-autoplugin.php' ),
 			'proper_folder_name' => dirname( plugin_basename( WP_AUTOPLUGIN_DIR . 'wp-autoplugin.php' ) ),
 			'api_url'            => 'https://api.github.com/repos/WP-Autoplugin/wp-autoplugin',
@@ -1022,7 +1061,7 @@ class Admin {
 			'description'        => 'A plugin that generates other plugins on-demand using AI.',
 			'homepage'           => 'https://github.com/WP-Autoplugin/wp-autoplugin',
 			'version'            => WP_AUTOPLUGIN_VERSION,
-		);
+		];
 
 		// Instantiate the updater class.
 		new GitHub_Updater( $config );

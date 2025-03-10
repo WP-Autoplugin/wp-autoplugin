@@ -49,11 +49,11 @@ class XAI_API extends OpenAI_API {
 	}
 
 	protected function get_allowed_parameters() {
-		return array(
+		return [
 			'model',
 			'temperature',
 			'max_tokens',
 			'messages',
-		);
+		];
 	}
 }

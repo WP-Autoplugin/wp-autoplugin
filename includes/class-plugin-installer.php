@@ -65,7 +65,7 @@ class Plugin_Installer {
 			}
 		} else {
 			$plugin_name = sanitize_title( $plugin_name, 'wp-autoplugin-' . md5( $code ) );
-			$plugin_dir = WP_PLUGIN_DIR . '/' . $plugin_name . '/';
+			$plugin_dir  = WP_PLUGIN_DIR . '/' . $plugin_name . '/';
 			if ( ! file_exists( $plugin_dir ) ) {
 				mkdir( $plugin_dir, 0755, true );
 			}
@@ -80,9 +80,9 @@ class Plugin_Installer {
 		}
 
 		// Add the plugin to the list of autoplugins.
-		$autoplugins = get_option( 'wp_autoplugins', array() );
+		$autoplugins   = get_option( 'wp_autoplugins', [] );
 		$autoplugins[] = $plugin_name . '/index.php';
-		$autoplugins = array_values( array_unique( $autoplugins ) );
+		$autoplugins   = array_values( array_unique( $autoplugins ) );
 		update_option( 'wp_autoplugins', $autoplugins );
 
 		return $plugin_name . '/index.php';
@@ -96,7 +96,7 @@ class Plugin_Installer {
 	 */
 	public function activate_plugin( $plugin ) {
 		// Check if the plugin is in the list of autoplugins
-		$autoplugins = get_option( 'wp_autoplugins', array() );
+		$autoplugins = get_option( 'wp_autoplugins', [] );
 		if ( ! in_array( $plugin, $autoplugins ) ) {
 			wp_send_json_error( 'Plugin not found.' );
 		}
@@ -110,23 +110,33 @@ class Plugin_Installer {
 		ob_start();
 
 		// Register shutdown function to catch fatal errors
-		register_shutdown_function( function() use ( $plugin ) {
-			$error = error_get_last();
-			if ( $error && in_array( $error['type'], [ E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR ] ) ) {
-				// Capture the fatal error message
-				$error_message = $error['message'];
-				// Put the error message in an option and redirect with meta (because we can't use headers after output)
-				update_option( 'wp_autoplugin_fatal_error', array( 'plugin' => $plugin, 'error' => $error_message ) );
-				echo '<meta http-equiv="refresh" content="0;url=' . admin_url( 'admin.php?page=wp-autoplugin' ) . '">';
-				exit;
+		register_shutdown_function(
+			function () use ( $plugin ) {
+				$error = error_get_last();
+				if ( $error && in_array( $error['type'], [ E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR ] ) ) {
+						// Capture the fatal error message
+						$error_message = $error['message'];
+						// Put the error message in an option and redirect with meta (because we can't use headers after output)
+						update_option(
+							'wp_autoplugin_fatal_error',
+							[
+								'plugin' => $plugin,
+								'error'  => $error_message,
+							]
+						);
+						echo '<meta http-equiv="refresh" content="0;url=' . admin_url( 'admin.php?page=wp-autoplugin' ) . '">';
+						exit;
+				}
 			}
-		});
+		);
 
 		try {
 			// Set a custom error handler
-			set_error_handler( function( $errno, $errstr, $errfile, $errline ) {
-				throw new \ErrorException( $errstr, 0, $errno, $errfile, $errline );
-			});
+			set_error_handler(
+				function ( $errno, $errstr, $errfile, $errline ) {
+					throw new \ErrorException( $errstr, 0, $errno, $errfile, $errline );
+				}
+			);
 
 			// Attempt to activate the plugin
 			include_once ABSPATH . 'wp-admin/includes/plugin.php';
@@ -173,7 +183,7 @@ class Plugin_Installer {
 	 */
 	public function deactivate_plugin( $plugin ) {
 		// Check if the plugin is in the list of autoplugins
-		$autoplugins = get_option( 'wp_autoplugins', array() );
+		$autoplugins = get_option( 'wp_autoplugins', [] );
 		if ( ! in_array( $plugin, $autoplugins ) ) {
 			wp_send_json_error( 'Plugin not found.' );
 		}
@@ -196,7 +206,7 @@ class Plugin_Installer {
 	 */
 	public function delete_plugin( $plugin ) {
 		// Check if the plugin is in the list of autoplugins
-		$autoplugins = get_option( 'wp_autoplugins', array() );
+		$autoplugins = get_option( 'wp_autoplugins', [] );
 		if ( ! in_array( $plugin, $autoplugins ) ) {
 			wp_send_json_error( 'Plugin not found.' );
 		}

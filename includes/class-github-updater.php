@@ -58,25 +58,25 @@ class GitHub_Updater {
 	 *
 	 * @param array $config Configuration parameters.
 	 */
-	public function __construct( $config = array() ) {
+	public function __construct( $config = [] ) {
 
-		$defaults = array(
+		$defaults = [
 			'slug'               => plugin_basename( __FILE__ ),
 			'proper_folder_name' => dirname( plugin_basename( __FILE__ ) ),
 			'sslverify'          => true,
-		);
+		];
 
 		$this->config = wp_parse_args( $config, $defaults );
 
 		// Sanitize inputs
-		$this->config['slug'] = sanitize_text_field( $this->config['slug'] );
+		$this->config['slug']               = sanitize_text_field( $this->config['slug'] );
 		$this->config['proper_folder_name'] = sanitize_text_field( $this->config['proper_folder_name'] );
-		$this->config['github_url'] = esc_url_raw( $this->config['github_url'] );
-		$this->config['raw_url'] = esc_url_raw( $this->config['raw_url'] );
-		$this->config['zip_url'] = esc_url_raw( $this->config['zip_url'] );
+		$this->config['github_url']         = esc_url_raw( $this->config['github_url'] );
+		$this->config['raw_url']            = esc_url_raw( $this->config['raw_url'] );
+		$this->config['zip_url']            = esc_url_raw( $this->config['zip_url'] );
 
 		if ( ! $this->has_minimum_config() ) {
-			$message = 'The GitHub Updater was initialized without the minimum required configuration, please check the config in your plugin. The following params are missing: ';
+			$message  = 'The GitHub Updater was initialized without the minimum required configuration, please check the config in your plugin. The following params are missing: ';
 			$message .= implode( ',', $this->missing_config );
 			_doing_it_wrong( __CLASS__, $message, self::VERSION );
 			return;
@@ -84,11 +84,11 @@ class GitHub_Updater {
 
 		$this->set_defaults();
 
-		add_filter( 'pre_set_site_transient_update_plugins', array( $this, 'api_check' ) );
-		add_filter( 'plugins_api', array( $this, 'get_plugin_info' ), 10, 3 );
-		add_filter( 'upgrader_post_install', array( $this, 'upgrader_post_install' ), 10, 3 );
-		add_filter( 'http_request_timeout', array( $this, 'http_request_timeout' ) );
-		add_filter( 'http_request_args', array( $this, 'http_request_sslverify' ), 10, 2 );
+		add_filter( 'pre_set_site_transient_update_plugins', [ $this, 'api_check' ] );
+		add_filter( 'plugins_api', [ $this, 'get_plugin_info' ], 10, 3 );
+		add_filter( 'upgrader_post_install', [ $this, 'upgrader_post_install' ], 10, 3 );
+		add_filter( 'http_request_timeout', [ $this, 'http_request_timeout' ] );
+		add_filter( 'http_request_args', [ $this, 'http_request_sslverify' ], 10, 2 );
 	}
 
 	/**
@@ -97,16 +97,16 @@ class GitHub_Updater {
 	 * @return bool
 	 */
 	public function has_minimum_config() {
-		$this->missing_config = array();
+		$this->missing_config = [];
 
-		$required_config_params = array(
+		$required_config_params = [
 			'api_url',
 			'raw_url',
 			'github_url',
 			'zip_url',
 			'requires',
 			'tested',
-		);
+		];
 
 		foreach ( $required_config_params as $required_param ) {
 			if ( empty( $this->config[ $required_param ] ) ) {
@@ -237,9 +237,12 @@ class GitHub_Updater {
 	 * @return bool|array
 	 */
 	public function remote_get( $query ) {
-		$raw_response = wp_remote_get( $query, array(
-			'sslverify' => $this->config['sslverify'],
-		));
+		$raw_response = wp_remote_get(
+			$query,
+			[
+				'sslverify' => $this->config['sslverify'],
+			]
+		);
 
 		if ( is_wp_error( $raw_response ) || wp_remote_retrieve_response_code( $raw_response ) != 200 ) {
 			error_log( 'GitHub Updater Error: ' . wp_remote_retrieve_response_message( $raw_response ) );
@@ -359,7 +362,7 @@ class GitHub_Updater {
 		$response->requires      = $this->config['requires'];
 		$response->tested        = $this->config['tested'];
 		$response->download_link = $this->config['zip_url'];
-		$response->sections      = array( 'description' => $this->config['description'] );
+		$response->sections      = [ 'description' => $this->config['description'] ];
 
 		return $response;
 	}
@@ -379,9 +382,9 @@ class GitHub_Updater {
 		$proper_destination = WP_PLUGIN_DIR . '/' . $this->config['proper_folder_name'];
 		$wp_filesystem->move( $result['destination'], $proper_destination );
 		$result['destination'] = $proper_destination;
-		$activate = activate_plugin( WP_PLUGIN_DIR . '/' . $this->config['slug'] );
+		$activate              = activate_plugin( WP_PLUGIN_DIR . '/' . $this->config['slug'] );
 
-		$fail_message = __( 'The plugin has been updated, but could not be reactivated. Please reactivate it manually.', 'wp-autoplugin' );
+		$fail_message    = __( 'The plugin has been updated, but could not be reactivated. Please reactivate it manually.', 'wp-autoplugin' );
 		$success_message = __( 'Plugin reactivated successfully.', 'wp-autoplugin' );
 
 		echo is_wp_error( $activate ) ? esc_html( $fail_message ) : esc_html( $success_message );

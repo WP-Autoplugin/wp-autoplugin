@@ -32,8 +32,8 @@ if ( ! empty( $_GET['error_message'] ) ) {
 
 $is_plugin_active = false;
 if ( isset( $_GET['plugin'] ) ) {
-	$plugin_file = sanitize_text_field( wp_unslash( $_GET['plugin'] ) );
-	$plugin_file = str_replace( '../', '', $plugin_file );
+	$plugin_file      = sanitize_text_field( wp_unslash( $_GET['plugin'] ) );
+	$plugin_file      = str_replace( '../', '', $plugin_file );
 	$is_plugin_active = is_plugin_active( $plugin_file );
 }
 ?>

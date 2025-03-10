@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<ruleset name="WP-Autoplugin">
+    <description>Coding standards for WP-Autoplugin plugin</description>
+
+	<arg value="sp"/><!-- Show sniff and progress -->
+	<arg name="colors"/><!-- Show results with colors -->
+	<arg name="parallel" value="50"/><!-- Enables parallel processing when available for faster results. -->
+
+    <rule ref="WordPress-Extra">
+	</rule>
+
+    <rule ref="WordPress">
+        <exclude name="Generic.Arrays.DisallowShortArraySyntax"/>
+        <exclude name="Universal.Arrays.DisallowShortArraySyntax"/>
+		<exclude name="WordPress.PHP.YodaConditions"/>
+        <exclude name="Squiz.Commenting.FunctionComment.ParamCommentFullStop"/>
+    </rule>
+    <rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
+
+    <rule ref="WordPress-Docs"/>
+
+    <rule ref="Generic.CodeAnalysis.UnusedFunctionParameter"/>
+	<rule ref="Generic.Commenting.Todo"/>
+
+    <rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="superdraft"/>
+			</property>
+		</properties>
+	</rule>
+
+    <!-- Files and directories to check -->
+    <file>.</file>
+    <exclude-pattern>/vendor/</exclude-pattern>
+    <exclude-pattern>/node_modules/</exclude-pattern>
+    <exclude-pattern>/tests/</exclude-pattern>
+
+    <!-- PHP version compatibility -->
+    <config name="testVersion" value="7.4-"/>
+</ruleset>

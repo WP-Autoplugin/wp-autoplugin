@@ -64,7 +64,7 @@ class Plugin_Generator {
 			Do not add any additional commentary. Make sure your response only contains a valid JSON object with the specified sections. Do not use Markdown formatting in your answer.
 			PROMPT;
 
-		return $this->ai_api->send_prompt( $prompt, '', array( 'response_format' => array( 'type' => 'json_object' ) ) );
+		return $this->ai_api->send_prompt( $prompt, '', [ 'response_format' => [ 'type' => 'json_object' ] ] );
 	}
 
 	/**

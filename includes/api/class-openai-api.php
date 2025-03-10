@@ -44,7 +44,7 @@ class OpenAI_API extends API {
 	 *
 	 * @var int
 	 */
-	protected $max_tokens  = 4096;
+	protected $max_tokens = 4096;
 
 	/**
 	 * Reasoning effort for o3-mini models.
@@ -69,64 +69,64 @@ class OpenAI_API extends API {
 		$this->original_model = sanitize_text_field( $model );
 
 		// Handle o3-mini model variants
-		if ( in_array( $model, array( 'o3-mini-low', 'o3-mini-medium', 'o3-mini-high' ) ) ) {
+		if ( in_array( $model, [ 'o3-mini-low', 'o3-mini-medium', 'o3-mini-high' ] ) ) {
 			$this->model = 'o3-mini';
 
 			// Extract reasoning effort from model name
-			$parts = explode( '-', $model );
+			$parts                  = explode( '-', $model );
 			$this->reasoning_effort = end( $parts );
 		} else {
 			$this->model = $this->original_model;
 		}
 
 		// Set the temperature and max tokens based on the model.
-		$model_params = array(
-			'o3-mini-low' => array(
-				'max_tokens' => 100000,
+		$model_params = [
+			'o3-mini-low'       => [
+				'max_tokens'       => 100000,
 				'reasoning_effort' => 'low',
-			),
-			'o3-mini-medium' => array(
-				'max_tokens' => 100000,
+			],
+			'o3-mini-medium'    => [
+				'max_tokens'       => 100000,
 				'reasoning_effort' => 'medium',
-			),
-			'o3-mini-high' => array(
-				'max_tokens' => 100000,
+			],
+			'o3-mini-high'      => [
+				'max_tokens'       => 100000,
 				'reasoning_effort' => 'high',
-			),
-			'o1' => array(
+			],
+			'o1'                => [
 				'max_tokens' => 32000,
-			),
-			'o1-preview' => array(
+			],
+			'o1-preview'        => [
 				'max_tokens' => 32000,
-			),
-			'gpt-4o' => array(
+			],
+			'gpt-4o'            => [
 				'temperature' => 0.2,
 				'max_tokens'  => 4096,
-			),
-			'chatgpt-4o-latest' => array(
+			],
+			'chatgpt-4o-latest' => [
 				'temperature' => 0.2,
 				'max_tokens'  => 16384,
-			),
-			'gpt-4o-mini' => array(
+			],
+			'gpt-4o-mini'       => [
 				'temperature' => 0.2,
 				'max_tokens'  => 4096,
-			),
-			'gpt-4-turbo' => array(
+			],
+			'gpt-4-turbo'       => [
 				'temperature' => 0.2,
 				'max_tokens'  => 4096,
-			),
-			'gpt-3.5-turbo' => array(
+			],
+			'gpt-3.5-turbo'     => [
 				'temperature' => 0.2,
 				'max_tokens'  => 4096,
-			),
-		);
+			],
+		];
 
 		if ( isset( $model_params[ $this->original_model ] ) ) {
 			if ( isset( $model_params[ $this->original_model ]['temperature'] ) ) {
 				$this->temperature = $model_params[ $this->original_model ]['temperature'];
 			}
 			$this->max_tokens = $model_params[ $this->original_model ]['max_tokens'];
-			
+
 			if ( isset( $model_params[ $this->original_model ]['reasoning_effort'] ) ) {
 				$this->reasoning_effort = $model_params[ $this->original_model ]['reasoning_effort'];
 			}
@@ -140,25 +140,25 @@ class OpenAI_API extends API {
 	 * @param string $system_message The system message.
 	 * @param array  $override_body The override body.
 	 */
-	public function send_prompt( $prompt, $system_message = '', $override_body = array() ) {
-		$prompt = $this->trim_prompt( $prompt );
-		$messages = array();
+	public function send_prompt( $prompt, $system_message = '', $override_body = [] ) {
+		$prompt   = $this->trim_prompt( $prompt );
+		$messages = [];
 		if ( ! empty( $system_message ) ) {
-			$messages[] = array(
-				'role' => 'system',
+			$messages[] = [
+				'role'    => 'system',
 				'content' => $system_message,
-			);
+			];
 		}
 
-		$messages[] = array(
-			'role' => 'user',
+		$messages[] = [
+			'role'    => 'user',
 			'content' => $prompt,
-		);
+		];
 
-		$body = array(
+		$body = [
 			'model'    => $this->model,
 			'messages' => $messages,
-		);
+		];
 
 		// Handle special case for o3-mini-* models
 		if ( strpos( $this->original_model, 'o3-mini' ) === 0 ) {
@@ -172,18 +172,21 @@ class OpenAI_API extends API {
 		}
 
 		// Keep only allowed keys in the override body.
-		$allowed_keys = $this->get_allowed_parameters();
+		$allowed_keys  = $this->get_allowed_parameters();
 		$override_body = array_intersect_key( $override_body, array_flip( $allowed_keys ) );
-		$body = array_merge( $body, $override_body );
+		$body          = array_merge( $body, $override_body );
 
-		$response = wp_remote_post( $this->api_url, array(
-			'timeout' => 60,
-			'headers' => array(
-				'Authorization' => 'Bearer ' . $this->api_key,
-				'Content-Type'  => 'application/json',
-			),
-			'body' => wp_json_encode( $body ),
-		) );
+		$response = wp_remote_post(
+			$this->api_url,
+			[
+				'timeout' => 60,
+				'headers' => [
+					'Authorization' => 'Bearer ' . $this->api_key,
+					'Content-Type'  => 'application/json',
+				],
+				'body'    => wp_json_encode( $body ),
+			]
+		);
 
 		if ( is_wp_error( $response ) ) {
 			return $response;
@@ -197,26 +200,29 @@ class OpenAI_API extends API {
 		// If finish_reason is "length", the response is too long.
 		// We need to send a new request with the whole conversation so far, so the AI can continue from where it left off.
 		if ( isset( $data['choices'][0]['finish_reason'] ) && 'length' === $data['choices'][0]['finish_reason'] ) {
-			$messages[] = array(
-				'role' => 'assistant',
+			$messages[] = [
+				'role'    => 'assistant',
 				'content' => $data['choices'][0]['message']['content'],
-			);
+			];
 
-			$body = array(
+			$body = [
 				'model'       => $this->model,
 				'temperature' => $this->temperature,
 				'max_tokens'  => $this->max_tokens,
 				'messages'    => $messages,
-			);
+			];
 
-			$response = wp_remote_post( $this->api_url, array(
-				'timeout' => 60,
-				'headers' => array(
-					'Authorization' => 'Bearer ' . $this->api_key,
-					'Content-Type'  => 'application/json',
-				),
-				'body' => wp_json_encode( $body ),
-			) );
+			$response = wp_remote_post(
+				$this->api_url,
+				[
+					'timeout' => 60,
+					'headers' => [
+						'Authorization' => 'Bearer ' . $this->api_key,
+						'Content-Type'  => 'application/json',
+					],
+					'body'    => wp_json_encode( $body ),
+				]
+			);
 
 			if ( is_wp_error( $response ) ) {
 				return $response;
@@ -247,7 +253,7 @@ class OpenAI_API extends API {
 	 * @return array The allowed parameters.
 	 */
 	protected function get_allowed_parameters() {
-		return array(
+		return [
 			'model',
 			'temperature',
 			'max_tokens',
@@ -255,6 +261,6 @@ class OpenAI_API extends API {
 			'reasoning_effort',
 			'messages',
 			'response_format',
-		);
+		];
 	}
 }
