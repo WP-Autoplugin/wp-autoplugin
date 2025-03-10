@@ -41,14 +41,23 @@ class Admin {
 	 * @var array
 	 */
 	public static $models = array(
-		'OpenAI'    => array(
+		'OpenAI'    => [
+			'gpt-4.5-preview'   => 'GPT-4.5 Preview',
 			'gpt-4o'            => 'GPT-4o',
-			'chatgpt-4o-latest' => 'ChatGPT-4o-latest',
 			'gpt-4o-mini'       => 'GPT-4o mini',
+			'chatgpt-4o-latest' => 'ChatGPT-4o-latest',
+			'o1'                => 'o1',
+			'o1-preview'        => 'o1-preview',
+			'o3-mini-low'       => 'o3-mini-low',
+			'o3-mini-medium'    => 'o3-mini-medium',
+			'o3-mini-high'      => 'o3-mini-high',
 			'gpt-4-turbo'       => 'GPT-4 Turbo',
 			'gpt-3.5-turbo'     => 'GPT-3.5 Turbo',
-		),
-		'Anthropic' => array(
+		],
+		'Anthropic' => [
+			'claude-3-7-sonnet-latest'   => 'Claude 3.7 Sonnet-latest',
+			'claude-3-7-sonnet-20250219' => 'Claude 3.7 Sonnet-20250219',
+			'claude-3-7-sonnet-thinking' => 'Claude 3.7 Sonnet Thinking',
 			'claude-3-5-sonnet-latest'   => 'Claude 3.5 Sonnet-latest',
 			'claude-3-5-sonnet-20241022' => 'Claude 3.5 Sonnet-20241022',
 			'claude-3-5-sonnet-20240620' => 'Claude 3.5 Sonnet-20240620',
@@ -57,20 +66,23 @@ class Admin {
 			'claude-3-opus-20240229'     => 'Claude 3 Opus-20240229',
 			'claude-3-sonnet-20240229'   => 'Claude 3 Sonnet-20240229',
 			'claude-3-haiku-20240307'    => 'Claude 3 Haiku-20240307',
-		),
-		'Google'    => array(
-			'gemini-2.0-flash-thinking-exp' => 'Gemini 2.0 Flash Thinking Experimental',
-			'gemini-2.0-flash-exp' => 'Gemini 2.0 Flash Experimental',
-			'gemini-exp-1206'	  => 'Gemini Experimental 1206',
-			'gemini-exp-1121'	  => 'Gemini Experimental 1121',
-			'gemini-1.5-pro'   => 'Gemini 1.5 Pro',
-			'gemini-1.5-flash' => 'Gemini 1.5 Flash',
-			'gemini-1.0-pro'   => 'Gemini 1.0 Pro',
-		),
-		'xAI'       => array(
-			'grok-beta'   => 'Grok Beta',
-			'grok-2-1212' => 'Grok 2 1212',
-		),
+		],
+		'Google'    => [
+			'gemini-2.0-pro-exp-02-05'            => 'Gemini 2.0 Pro Experimental 02-05',
+			'gemini-2.0-flash-thinking-exp'       => 'Gemini 2.0 Flash Thinking Experimental',
+			'gemini-2.0-flash-exp'                => 'Gemini 2.0 Flash Experimental',
+			'gemini-2.0-flash-thinking-exp-01-21' => 'Gemini 2.0 Flash Thinking Experimental 01-21',
+			'gemini-exp-1206'                     => 'Gemini Experimental 1206',
+			'gemini-exp-1121'                     => 'Gemini Experimental 1121',
+			'gemini-1.5-pro'                      => 'Gemini 1.5 Pro',
+			'gemini-1.5-flash'                    => 'Gemini 1.5 Flash',
+			'gemini-1.0-pro'                      => 'Gemini 1.0 Pro',
+		],
+		'xAI'       => [
+			'grok-2'                => 'Grok 2',
+			'grok-beta'             => 'Grok Beta',
+			'grok-2-1212'           => 'Grok 2-1212',
+		],
 	);
 
 	/**

@@ -52,6 +52,18 @@ class Anthropic_API extends API {
 
 		// Set the temperature and max tokens based on the model.
 		$model_params = array(
+			'claude-3-7-sonnet-20250219' => array(
+				'temperature' => 0.2,
+				'max_tokens'  => 8192,
+			),
+			'claude-3-7-sonnet-latest' => array(
+				'temperature' => 0.2,
+				'max_tokens'  => 8192,
+			),
+			'claude-3-7-sonnet-thinking' => array(
+				'temperature' => 1,      // Must be omitted or 1.0 for thinking mode.
+				'max_tokens'  => 128000, // Requires a special header (see below).
+			),
 			'claude-3-5-sonnet-20240620' => array(
 				'temperature' => 0.2,
 				'max_tokens'  => 8192,
@@ -102,13 +114,13 @@ class Anthropic_API extends API {
 		$messages = array();
 		if ( ! empty( $system_message ) ) {
 			$messages[] = array(
-				'role' => 'system',
+				'role'    => 'system',
 				'content' => $system_message,
 			);
 		}
 
 		$messages[] = array(
-			'role' => 'user',
+			'role'    => 'user',
 			'content' => $prompt,
 		);
 
@@ -130,9 +142,18 @@ class Anthropic_API extends API {
 			'content-type' => 'application/json',
 		);
 
-		// If the model is claude-3-5-sonnet-20240620, we should send this header: "anthropic-beta: max-tokens-3-5-sonnet-2024-07-15"
+		// If the model is claude-3-5-sonnet-20240620, we should send this header: "anthropic-beta: max-tokens-3-5-sonnet-2024-07-15".
 		if ( 'claude-3-5-sonnet-20240620' === $this->model ) {
 			$headers['anthropic-beta'] = 'max-tokens-3-5-sonnet-2024-07-15';
+		} elseif ( 'claude-3-7-sonnet-thinking' === $this->model ) {
+			// And if it's claude-3-7-sonnet-thinking, we should send a header to enable longer output: "anthropic-beta: output-128k-2025-02-19".
+			$headers['anthropic-beta'] = 'output-128k-2025-02-19';
+
+			// ... along with this additional body parameter: "thinking": { "type": "enabled", "budget_tokens": 16000 }
+			$body['thinking'] = array(
+				'type'          => 'enabled',
+				'budget_tokens' => 4096,
+			);
 		}
 
 		$response = wp_remote_post( 'https://api.anthropic.com/v1/messages', array(

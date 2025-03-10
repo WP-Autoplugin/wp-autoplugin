@@ -43,35 +43,30 @@ When you activate an AI-generated plugin, WP-Autoplugin will automatically detec
 
 ## Supported Models
 
-WP-Autoplugin supports various models:
+WP-Autoplugin supports 30+ AI models, including:
 
-- GPT-3.5 Turbo
-- GPT-4
-- GPT-4o
-- GPT-4o mini
+- Claude 3.7 Sonnet
 - Claude 3.5 Sonnet
 - Claude 3.5 Haiku
-- Claude 3 Haiku
-- Claude 3 Sonnet
-- Claude 3 Opus
-- Google Gemini Flash 2.0
-- Google Gemini Flash 1.5
-- Google Gemini Pro 1.5
-- Google Gemini Pro 1.0
-- xAI Grok-beta
-- xAI Grok-2-1212
+- o3-mini
+- GPT-4.5
+- GPT-4o
+- GPT-4o mini
+- Google Gemini 2.0 Pro
+- Google Gemini 2.0 Flash
+- xAI Grok 2
 
-We recommend using the **Claude 3.5 Sonnet** model for optimal results. While WP-Autoplugin is free to use, you may need to pay for API usage based on your chosen model.
+While WP-Autoplugin is free to use, you may need to pay for API usage based on your chosen model.
 
 ## Custom Models
 
-WP-Autoplugin also supports custom models: you can plug in any OpenAI-compatible API by providing the endpoint URL, model name, and API key. This feature allows you to use any model you have access to, including locally hosted models, or custom models you've trained yourself.
+WP-Autoplugin supports custom models: you can plug in any OpenAI-compatible API by providing the endpoint URL, model name, and API key. This feature allows you to use any model you have access to, including locally hosted models, or custom models you've trained yourself.
 
 ## BYOK (Bring Your Own Key)
 
-To use WP-Autoplugin, you'll need an API key from OpenAI, Anthropic, Google AI Studio, or xAi. Insert your key in the plugin settings to get started. Your API key remains on your server and is not shared with anyone.
+To use WP-Autoplugin, you'll need an API key from an AI provider. Insert your key in the plugin settings to get started. Your API key remains on your server and is not shared with anyone.
 
-Google AI Studio and xAI currently offer free plans, while OpenAI and Anthropic API keys require payment. Refer to the respective websites for pricing information.
+Some AI platforms currently offer free plans and include SOTA models, like **Gemini 2.0 Pro** through [Google AI Studio](https://aistudio.google.com/). Refer to the respective websites for pricing information.
 
 ## AI-Generated Plugins
 

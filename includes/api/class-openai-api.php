@@ -26,6 +26,13 @@ class OpenAI_API extends API {
 	protected $model;
 
 	/**
+	 * Original model name for special cases like o3-mini variants.
+	 *
+	 * @var string
+	 */
+	protected $original_model;
+
+	/**
 	 * Temperature parameter.
 	 *
 	 * @var float
@@ -40,6 +47,13 @@ class OpenAI_API extends API {
 	protected $max_tokens  = 4096;
 
 	/**
+	 * Reasoning effort for o3-mini models.
+	 *
+	 * @var string
+	 */
+	protected $reasoning_effort = '';
+
+	/**
 	 * API URL.
 	 *
 	 * @var string
@@ -52,10 +66,39 @@ class OpenAI_API extends API {
 	 * @param string $model The model.
 	 */
 	public function set_model( $model ) {
-		$this->model = sanitize_text_field( $model );
+		$this->original_model = sanitize_text_field( $model );
+
+		// Handle o3-mini model variants
+		if ( in_array( $model, array( 'o3-mini-low', 'o3-mini-medium', 'o3-mini-high' ) ) ) {
+			$this->model = 'o3-mini';
+
+			// Extract reasoning effort from model name
+			$parts = explode( '-', $model );
+			$this->reasoning_effort = end( $parts );
+		} else {
+			$this->model = $this->original_model;
+		}
 
 		// Set the temperature and max tokens based on the model.
 		$model_params = array(
+			'o3-mini-low' => array(
+				'max_tokens' => 100000,
+				'reasoning_effort' => 'low',
+			),
+			'o3-mini-medium' => array(
+				'max_tokens' => 100000,
+				'reasoning_effort' => 'medium',
+			),
+			'o3-mini-high' => array(
+				'max_tokens' => 100000,
+				'reasoning_effort' => 'high',
+			),
+			'o1' => array(
+				'max_tokens' => 32000,
+			),
+			'o1-preview' => array(
+				'max_tokens' => 32000,
+			),
 			'gpt-4o' => array(
 				'temperature' => 0.2,
 				'max_tokens'  => 4096,
@@ -78,9 +121,15 @@ class OpenAI_API extends API {
 			),
 		);
 
-		if ( isset( $model_params[ $model ] ) ) {
-			$this->temperature = $model_params[ $model ]['temperature'];
-			$this->max_tokens  = $model_params[ $model ]['max_tokens'];
+		if ( isset( $model_params[ $this->original_model ] ) ) {
+			if ( isset( $model_params[ $this->original_model ]['temperature'] ) ) {
+				$this->temperature = $model_params[ $this->original_model ]['temperature'];
+			}
+			$this->max_tokens = $model_params[ $this->original_model ]['max_tokens'];
+			
+			if ( isset( $model_params[ $this->original_model ]['reasoning_effort'] ) ) {
+				$this->reasoning_effort = $model_params[ $this->original_model ]['reasoning_effort'];
+			}
 		}
 	}
 
@@ -107,11 +156,20 @@ class OpenAI_API extends API {
 		);
 
 		$body = array(
-			'model'       => $this->model,
-			'temperature' => $this->temperature,
-			'max_tokens'  => $this->max_tokens,
-			'messages'    => $messages,
+			'model'    => $this->model,
+			'messages' => $messages,
 		);
+
+		// Handle special case for o3-mini-* models
+		if ( strpos( $this->original_model, 'o3-mini' ) === 0 ) {
+			$body['max_completion_tokens'] = $this->max_tokens;
+			$body['reasoning_effort']      = $this->reasoning_effort;
+		} elseif ( 'o1' === $this->model || 'o1-preview' === $this->model ) {
+			$body['max_completion_tokens'] = $this->max_tokens;
+		} else {
+			$body['temperature'] = $this->temperature;
+			$body['max_tokens']  = $this->max_tokens;
+		}
 
 		// Keep only allowed keys in the override body.
 		$allowed_keys = $this->get_allowed_parameters();
@@ -193,6 +251,8 @@ class OpenAI_API extends API {
 			'model',
 			'temperature',
 			'max_tokens',
+			'max_completion_tokens',
+			'reasoning_effort',
 			'messages',
 			'response_format',
 		);
