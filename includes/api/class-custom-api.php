@@ -107,7 +107,7 @@ class Custom_API extends OpenAI_API {
 		if ( empty( $data['choices'][0]['message']['content'] ) ) {
 			return new \WP_Error(
 				'api_error',
-				__( 'Error communicating with the API.', 'wp-autoplugin' ) . "\n" . print_r( $data, true )
+				__( 'Error communicating with the API.', 'wp-autoplugin' ) . "\n" . print_r( $data, true ) // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r
 			);
 		}
 

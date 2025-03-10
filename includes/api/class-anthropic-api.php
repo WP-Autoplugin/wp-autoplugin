@@ -212,7 +212,7 @@ class Anthropic_API extends API {
 			$new_data = json_decode( $body, true );
 
 			if ( ! isset( $new_data['content'][0]['text'] ) ) {
-				return new \WP_Error( 'api_error', 'Error communicating with the Anthropic API.' . "\n" . print_r( $new_data, true ) );
+				return new \WP_Error( 'api_error', 'Error communicating with the Anthropic API.' . "\n" . print_r( $new_data, true ) ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r
 			}
 
 			// Merge the new response with the old one.
@@ -222,7 +222,7 @@ class Anthropic_API extends API {
 		if ( isset( $data['content'][0]['text'] ) ) {
 			return $data['content'][0]['text'];
 		} else {
-			return new \WP_Error( 'api_error', 'Error communicating with the Anthropic API.' . "\n" . print_r( $data, true ) );
+			return new \WP_Error( 'api_error', 'Error communicating with the Anthropic API.' . "\n" . print_r( $data, true ) ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r
 		}
 	}
 }

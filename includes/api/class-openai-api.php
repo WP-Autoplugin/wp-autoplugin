@@ -2,6 +2,8 @@
 /**
  * OpenAI API class.
  *
+ * Handles communication with the OpenAI API.
+ *
  * @package WP-Autoplugin
  * @since 1.0.0
  * @version 1.0.5
@@ -16,6 +18,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * OpenAI API class.
+ */
 class OpenAI_API extends API {
 
 	/**
@@ -68,11 +73,11 @@ class OpenAI_API extends API {
 	public function set_model( $model ) {
 		$this->original_model = sanitize_text_field( $model );
 
-		// Handle o3-mini model variants
-		if ( in_array( $model, [ 'o3-mini-low', 'o3-mini-medium', 'o3-mini-high' ] ) ) {
+		// Handle o3-mini model variants.
+		if ( in_array( $model, [ 'o3-mini-low', 'o3-mini-medium', 'o3-mini-high' ], true ) ) {
 			$this->model = 'o3-mini';
 
-			// Extract reasoning effort from model name
+			// Extract reasoning effort from model name.
 			$parts                  = explode( '-', $model );
 			$this->reasoning_effort = end( $parts );
 		} else {
@@ -160,7 +165,7 @@ class OpenAI_API extends API {
 			'messages' => $messages,
 		];
 
-		// Handle special case for o3-mini-* models
+		// Handle special case for o3-mini-* models.
 		if ( strpos( $this->original_model, 'o3-mini' ) === 0 ) {
 			$body['max_completion_tokens'] = $this->max_tokens;
 			$body['reasoning_effort']      = $this->reasoning_effort;
@@ -233,7 +238,7 @@ class OpenAI_API extends API {
 			$new_data = json_decode( $body, true );
 
 			if ( ! isset( $new_data['choices'][0]['message']['content'] ) ) {
-				return new \WP_Error( 'api_error', 'Error communicating with the API.' . "\n" . print_r( $new_data, true ) );
+				return new \WP_Error( 'api_error', 'Error communicating with the API.' . "\n" . print_r( $new_data, true ) ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r
 			}
 
 			// Merge the new response with the old one.
@@ -243,7 +248,7 @@ class OpenAI_API extends API {
 		if ( isset( $data['choices'][0]['message']['content'] ) ) {
 			return $data['choices'][0]['message']['content'];
 		} else {
-			return new \WP_Error( 'api_error', 'Error communicating with the API.' . "\n" . print_r( $data, true ) );
+			return new \WP_Error( 'api_error', 'Error communicating with the API.' . "\n" . print_r( $data, true ) ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r
 		}
 	}
 

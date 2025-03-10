@@ -7,6 +7,7 @@
  * @version 1.0.1
  * @author WP-Autoplugin
  * @link https://wp-autoplugin.com
+ * @package WP-Autoplugin
  *
  * Based on WP_GitHub_Updater by Joachim Kudish
  * @link https://github.com/jkudish/WP-GitHub-Plugin-Updater
@@ -68,7 +69,7 @@ class GitHub_Updater {
 
 		$this->config = wp_parse_args( $config, $defaults );
 
-		// Sanitize inputs
+		// Sanitize inputs.
 		$this->config['slug']               = sanitize_text_field( $this->config['slug'] );
 		$this->config['proper_folder_name'] = sanitize_text_field( $this->config['proper_folder_name'] );
 		$this->config['github_url']         = esc_url_raw( $this->config['github_url'] );
@@ -78,7 +79,7 @@ class GitHub_Updater {
 		if ( ! $this->has_minimum_config() ) {
 			$message  = 'The GitHub Updater was initialized without the minimum required configuration, please check the config in your plugin. The following params are missing: ';
 			$message .= implode( ',', $this->missing_config );
-			_doing_it_wrong( __CLASS__, $message, self::VERSION );
+			_doing_it_wrong( __CLASS__, esc_html( $message ), esc_html( self::VERSION ) );
 			return;
 		}
 
@@ -180,7 +181,7 @@ class GitHub_Updater {
 	 * @return array
 	 */
 	public function http_request_sslverify( $args, $url ) {
-		if ( $this->config['zip_url'] == $url ) {
+		if ( $this->config['zip_url'] === $url ) {
 			$args['sslverify'] = $this->config['sslverify'];
 		}
 		return $args;
@@ -194,11 +195,10 @@ class GitHub_Updater {
 	public function get_new_version() {
 		$version = get_site_transient( md5( $this->config['slug'] ) . '_new_version' );
 
-		if ( $this->overrule_transients() || ( ! isset( $version ) || ! $version || '' == $version ) ) {
+		if ( $this->overrule_transients() || ( ! isset( $version ) || ! $version || '' === $version ) ) {
 			$raw_response = $this->remote_get( trailingslashit( $this->config['raw_url'] ) . basename( $this->config['slug'] ) );
 
 			if ( is_wp_error( $raw_response ) ) {
-				error_log( 'GitHub Updater Error: ' . $raw_response->get_error_message() );
 				$version = false;
 			}
 
@@ -208,13 +208,13 @@ class GitHub_Updater {
 
 			$version = ! empty( $matches[1] ) ? $matches[1] : false;
 
-			// Backward compatibility for README version checking
+			// Backward compatibility for README version checking.
 			if ( false === $version ) {
 				$raw_response = $this->remote_get( trailingslashit( $this->config['raw_url'] ) . $this->config['readme'] );
 
 				if ( ! is_wp_error( $raw_response ) && ! empty( $raw_response['body'] ) ) {
 					preg_match( '#^\s*`*~Current Version\:\s*([^~]*)~#im', $raw_response['body'], $__version );
-					if ( isset( $__version[1] ) && -1 == version_compare( $version, $__version[1] ) ) {
+					if ( isset( $__version[1] ) && -1 === version_compare( $version, $__version[1] ) ) {
 						$version = $__version[1];
 					}
 				}
@@ -244,8 +244,7 @@ class GitHub_Updater {
 			]
 		);
 
-		if ( is_wp_error( $raw_response ) || wp_remote_retrieve_response_code( $raw_response ) != 200 ) {
-			error_log( 'GitHub Updater Error: ' . wp_remote_retrieve_response_message( $raw_response ) );
+		if ( is_wp_error( $raw_response ) || wp_remote_retrieve_response_code( $raw_response ) !== 200 ) {
 			return false;
 		}
 
@@ -264,7 +263,7 @@ class GitHub_Updater {
 
 		$github_data = get_site_transient( md5( $this->config['slug'] ) . '_github_data' );
 
-		if ( $this->overrule_transients() || ! isset( $github_data ) || ! $github_data || '' == $github_data ) {
+		if ( $this->overrule_transients() || ! isset( $github_data ) || ! $github_data || '' === $github_data ) {
 			$github_data = $this->remote_get( $this->config['api_url'] );
 
 			if ( is_wp_error( $github_data ) ) {
@@ -286,7 +285,7 @@ class GitHub_Updater {
 	 */
 	public function get_date() {
 		$_date = $this->get_github_data();
-		return ( ! empty( $_date->updated_at ) ) ? date( 'Y-m-d', strtotime( $_date->updated_at ) ) : false;
+		return ( ! empty( $_date->updated_at ) ) ? gmdate( 'Y-m-d', strtotime( $_date->updated_at ) ) : false;
 	}
 
 	/**
@@ -349,8 +348,8 @@ class GitHub_Updater {
 	 *
 	 * @return object
 	 */
-	public function get_plugin_info( $false, $action, $response ) {
-		if ( ! isset( $response->slug ) || $response->slug != $this->config['slug'] ) {
+	public function get_plugin_info( $false, $action, $response ) { // phpcs:ignore
+		if ( ! isset( $response->slug ) || $response->slug !== $this->config['slug'] ) {
 			return false;
 		}
 
@@ -376,7 +375,7 @@ class GitHub_Updater {
 	 *
 	 * @return object
 	 */
-	public function upgrader_post_install( $true, $hook_extra, $result ) {
+	public function upgrader_post_install( $true, $hook_extra, $result ) { // phpcs:ignore
 		global $wp_filesystem;
 
 		$proper_destination = WP_PLUGIN_DIR . '/' . $this->config['proper_folder_name'];

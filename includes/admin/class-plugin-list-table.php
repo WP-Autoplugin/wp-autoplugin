@@ -81,18 +81,18 @@ class Plugin_List_Table extends \WP_List_Table {
 		$actions = [];
 		if ( $item['is_active'] ) {
 			$url                   = wp_nonce_url( admin_url( 'admin.php?page=wp-autoplugin&action=deactivate&plugin=' . $item['plugin_path'] ), 'wp-autoplugin-activate-plugin', 'nonce' );
-			$actions['deactivate'] = sprintf( '<a href="%s">%s</a>', $url, __( 'Deactivate', 'wp-autoplugin' ) );
+			$actions['deactivate'] = sprintf( '<a href="%s">%s</a>', esc_url( $url ), esc_html__( 'Deactivate', 'wp-autoplugin' ) );
 		} else {
 			$url                 = wp_nonce_url( admin_url( 'admin.php?page=wp-autoplugin&action=activate&plugin=' . $item['plugin_path'] ), 'wp-autoplugin-activate-plugin', 'nonce' );
-			$actions['activate'] = sprintf( '<a href="%s">%s</a>', $url, __( 'Activate', 'wp-autoplugin' ) );
+			$actions['activate'] = sprintf( '<a href="%s">%s</a>', esc_url( $url ), esc_html__( 'Activate', 'wp-autoplugin' ) );
 		}
 
-		$actions['fix']    = sprintf( '<a href="%s">%s</a>', wp_nonce_url( admin_url( 'admin.php?page=wp-autoplugin-fix&plugin=' . $item['plugin_path'] ), 'wp-autoplugin-fix-plugin', 'nonce' ), __( 'Fix', 'wp-autoplugin' ) );
-		$actions['extend'] = sprintf( '<a href="%s">%s</a>', wp_nonce_url( admin_url( 'admin.php?page=wp-autoplugin-extend&plugin=' . $item['plugin_path'] ), 'wp-autoplugin-extend-plugin', 'nonce' ), __( 'Extend', 'wp-autoplugin' ) );
-		$actions['delete'] = sprintf( '<a href="%s">%s</a>', wp_nonce_url( admin_url( 'admin.php?page=wp-autoplugin&action=delete&plugin=' . $item['plugin_path'] ), 'wp-autoplugin-activate-plugin', 'nonce' ), __( 'Delete', 'wp-autoplugin' ) );
+		$actions['fix']    = sprintf( '<a href="%s">%s</a>', esc_url( wp_nonce_url( admin_url( 'admin.php?page=wp-autoplugin-fix&plugin=' . $item['plugin_path'] ), 'wp-autoplugin-fix-plugin', 'nonce' ) ), esc_html__( 'Fix', 'wp-autoplugin' ) );
+		$actions['extend'] = sprintf( '<a href="%s">%s</a>', esc_url( wp_nonce_url( admin_url( 'admin.php?page=wp-autoplugin-extend&plugin=' . $item['plugin_path'] ), 'wp-autoplugin-extend-plugin', 'nonce' ) ), esc_html__( 'Extend', 'wp-autoplugin' ) );
+		$actions['delete'] = sprintf( '<a href="%s">%s</a>', esc_url( wp_nonce_url( admin_url( 'admin.php?page=wp-autoplugin&action=delete&plugin=' . $item['plugin_path'] ), 'wp-autoplugin-activate-plugin', 'nonce' ) ), esc_html__( 'Delete', 'wp-autoplugin' ) );
 
 		// Replicate the default Plugin List Table column rendering.
-		return sprintf( '<strong>%1$s</strong> v%2$s %3$s %4$s', $item['Name'], $item['Version'], '<p>' . $item['Description'] . '</p>', $this->row_actions( $actions ) );
+		return sprintf( '<strong>%1$s</strong> v%2$s %3$s %4$s', esc_html( $item['Name'] ), esc_html( $item['Version'] ), '<p>' . wp_kses_post( $item['Description'] ) . '</p>', $this->row_actions( $actions ) );
 	}
 
 	/**
@@ -102,7 +102,7 @@ class Plugin_List_Table extends \WP_List_Table {
 	 */
 	public function prepare_items() {
 
-		// Set the columns
+		// Set the columns.
 		$columns               = $this->get_columns();
 		$hidden                = [];
 		$sortable              = [];
@@ -137,9 +137,10 @@ class Plugin_List_Table extends \WP_List_Table {
 			$autoplugins_clean[]        = $plugin_path;
 
 			if ( ! $all ) {
-				if ( isset( $_REQUEST['status'] ) && 'active' === $_REQUEST['status'] && ! $plugin_data['is_active'] ) {
+				$status = isset( $_REQUEST['status'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['status'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verification is not needed here.
+				if ( 'active' === $status && ! $plugin_data['is_active'] ) {
 					continue;
-				} elseif ( isset( $_REQUEST['status'] ) && 'inactive' === $_REQUEST['status'] && $plugin_data['is_active'] ) {
+				} elseif ( 'inactive' === $status && $plugin_data['is_active'] ) {
 					continue;
 				}
 			}
@@ -147,7 +148,7 @@ class Plugin_List_Table extends \WP_List_Table {
 			$plugins[] = $plugin_data;
 		}
 
-		// Update the option with the clean list of plugins
+		// Update the option with the clean list of plugins.
 		if ( $autoplugins_clean !== $autoplugins ) {
 			update_option( 'wp_autoplugins', $autoplugins_clean );
 		}
@@ -164,7 +165,7 @@ class Plugin_List_Table extends \WP_List_Table {
 	 */
 	public function single_row( $item ) {
 		$class = $item['is_active'] ? 'active-plugin' : '';
-		echo '<tr class="' . $class . '">';
+		echo '<tr class="' . esc_attr( $class ) . '">';
 		$this->single_row_columns( $item );
 		echo '</tr>';
 	}
@@ -197,7 +198,7 @@ class Plugin_List_Table extends \WP_List_Table {
 	 * @return void
 	 */
 	public function display_tablenav( $which ) {
-		// Display the filter links above the table (Active/Inactive)
+		// Display the filter links above the table (Active/Inactive).
 		if ( 'top' === $which ) {
 			echo '<ul class="subsubsub">';
 			$plugins        = $this->get_plugins();
@@ -215,9 +216,11 @@ class Plugin_List_Table extends \WP_List_Table {
 			$inactive_url = add_query_arg( 'status', 'inactive' );
 			$all_url      = remove_query_arg( 'status' );
 
-			echo '<li class="all"><a href="' . esc_url( $all_url ) . '" class="' . ( empty( $_REQUEST['status'] ) ? 'current' : '' ) . '">' . __( 'All', 'wp-autoplugin' ) . ' <span class="count">(' . count( $plugins ) . ')</span></a> |</li>';
-			echo '<li class="active"><a href="' . esc_url( $active_url ) . '" class="' . ( isset( $_REQUEST['status'] ) && 'active' === $_REQUEST['status'] ? 'current' : '' ) . '">' . __( 'Active', 'wp-autoplugin' ) . ' <span class="count">(' . $active_count . ')</span></a> |</li>';
-			echo '<li class="inactive"><a href="' . esc_url( $inactive_url ) . '" class="' . ( isset( $_REQUEST['status'] ) && 'inactive' === $_REQUEST['status'] ? 'current' : '' ) . '">' . __( 'Inactive', 'wp-autoplugin' ) . ' <span class="count">(' . $inactive_count . ')</span></a></li>';
+			$status = isset( $_REQUEST['status'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['status'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verification is not needed here.
+
+			echo '<li class="all"><a href="' . esc_url( $all_url ) . '" class="' . ( empty( $status ) ? 'current' : '' ) . '">' . esc_html__( 'All', 'wp-autoplugin' ) . ' <span class="count">(' . esc_html( count( $plugins ) ) . ')</span></a> |</li>';
+			echo '<li class="active"><a href="' . esc_url( $active_url ) . '" class="' . ( 'active' === $status ? 'current' : '' ) . '">' . esc_html__( 'Active', 'wp-autoplugin' ) . ' <span class="count">(' . esc_html( $active_count ) . ')</span></a> |</li>';
+			echo '<li class="inactive"><a href="' . esc_url( $inactive_url ) . '" class="' . ( 'inactive' === $status ? 'current' : '' ) . '">' . esc_html__( 'Inactive', 'wp-autoplugin' ) . ' <span class="count">(' . esc_html( $inactive_count ) . ')</span></a></li>';
 			echo '</ul>';
 		}
 	}
