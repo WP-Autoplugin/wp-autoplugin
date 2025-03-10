@@ -60,6 +60,10 @@ While WP-Autoplugin aims to generate high-quality code adhering to WordPress sta
 
 == Changelog ==
 
+= 1.2.1 =
+* Added support for reasoning models (o1, o3-mini, Claude 3.5 Sonnet Thinking)
+* Fixed PHPCS issues throughout the codebase
+
 = 1.2 =
 * Added support for any OpenAI-compatible API with the custom models option
 * Added translations for 10 more languages
