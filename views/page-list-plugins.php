@@ -17,11 +17,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// Initialize the WP_List_Table class
+// Initialize the WP_List_Table class.
 $plugin_list_table = new Plugin_List_Table();
 $plugin_list_table->prepare_items();
 $autoplugins = $plugin_list_table->get_plugins();
-$no_plugins = empty( $autoplugins );
+$no_plugins  = empty( $autoplugins );
 
 ?>
 <div class="wrap">

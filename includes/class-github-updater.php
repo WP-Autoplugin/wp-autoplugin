@@ -7,6 +7,7 @@
  * @version 1.0.1
  * @author WP-Autoplugin
  * @link https://wp-autoplugin.com
+ * @package WP-Autoplugin
  *
  * Based on WP_GitHub_Updater by Joachim Kudish
  * @link https://github.com/jkudish/WP-GitHub-Plugin-Updater
@@ -58,37 +59,37 @@ class GitHub_Updater {
 	 *
 	 * @param array $config Configuration parameters.
 	 */
-	public function __construct( $config = array() ) {
+	public function __construct( $config = [] ) {
 
-		$defaults = array(
+		$defaults = [
 			'slug'               => plugin_basename( __FILE__ ),
 			'proper_folder_name' => dirname( plugin_basename( __FILE__ ) ),
 			'sslverify'          => true,
-		);
+		];
 
 		$this->config = wp_parse_args( $config, $defaults );
 
-		// Sanitize inputs
-		$this->config['slug'] = sanitize_text_field( $this->config['slug'] );
+		// Sanitize inputs.
+		$this->config['slug']               = sanitize_text_field( $this->config['slug'] );
 		$this->config['proper_folder_name'] = sanitize_text_field( $this->config['proper_folder_name'] );
-		$this->config['github_url'] = esc_url_raw( $this->config['github_url'] );
-		$this->config['raw_url'] = esc_url_raw( $this->config['raw_url'] );
-		$this->config['zip_url'] = esc_url_raw( $this->config['zip_url'] );
+		$this->config['github_url']         = esc_url_raw( $this->config['github_url'] );
+		$this->config['raw_url']            = esc_url_raw( $this->config['raw_url'] );
+		$this->config['zip_url']            = esc_url_raw( $this->config['zip_url'] );
 
 		if ( ! $this->has_minimum_config() ) {
-			$message = 'The GitHub Updater was initialized without the minimum required configuration, please check the config in your plugin. The following params are missing: ';
+			$message  = 'The GitHub Updater was initialized without the minimum required configuration, please check the config in your plugin. The following params are missing: ';
 			$message .= implode( ',', $this->missing_config );
-			_doing_it_wrong( __CLASS__, $message, self::VERSION );
+			_doing_it_wrong( __CLASS__, esc_html( $message ), esc_html( self::VERSION ) );
 			return;
 		}
 
 		$this->set_defaults();
 
-		add_filter( 'pre_set_site_transient_update_plugins', array( $this, 'api_check' ) );
-		add_filter( 'plugins_api', array( $this, 'get_plugin_info' ), 10, 3 );
-		add_filter( 'upgrader_post_install', array( $this, 'upgrader_post_install' ), 10, 3 );
-		add_filter( 'http_request_timeout', array( $this, 'http_request_timeout' ) );
-		add_filter( 'http_request_args', array( $this, 'http_request_sslverify' ), 10, 2 );
+		add_filter( 'pre_set_site_transient_update_plugins', [ $this, 'api_check' ] );
+		add_filter( 'plugins_api', [ $this, 'get_plugin_info' ], 10, 3 );
+		add_filter( 'upgrader_post_install', [ $this, 'upgrader_post_install' ], 10, 3 );
+		add_filter( 'http_request_timeout', [ $this, 'http_request_timeout' ] );
+		add_filter( 'http_request_args', [ $this, 'http_request_sslverify' ], 10, 2 );
 	}
 
 	/**
@@ -97,16 +98,16 @@ class GitHub_Updater {
 	 * @return bool
 	 */
 	public function has_minimum_config() {
-		$this->missing_config = array();
+		$this->missing_config = [];
 
-		$required_config_params = array(
+		$required_config_params = [
 			'api_url',
 			'raw_url',
 			'github_url',
 			'zip_url',
 			'requires',
 			'tested',
-		);
+		];
 
 		foreach ( $required_config_params as $required_param ) {
 			if ( empty( $this->config[ $required_param ] ) ) {
@@ -180,7 +181,7 @@ class GitHub_Updater {
 	 * @return array
 	 */
 	public function http_request_sslverify( $args, $url ) {
-		if ( $this->config['zip_url'] == $url ) {
+		if ( $this->config['zip_url'] === $url ) {
 			$args['sslverify'] = $this->config['sslverify'];
 		}
 		return $args;
@@ -194,11 +195,10 @@ class GitHub_Updater {
 	public function get_new_version() {
 		$version = get_site_transient( md5( $this->config['slug'] ) . '_new_version' );
 
-		if ( $this->overrule_transients() || ( ! isset( $version ) || ! $version || '' == $version ) ) {
+		if ( $this->overrule_transients() || ( ! isset( $version ) || ! $version || '' === $version ) ) {
 			$raw_response = $this->remote_get( trailingslashit( $this->config['raw_url'] ) . basename( $this->config['slug'] ) );
 
 			if ( is_wp_error( $raw_response ) ) {
-				error_log( 'GitHub Updater Error: ' . $raw_response->get_error_message() );
 				$version = false;
 			}
 
@@ -208,13 +208,13 @@ class GitHub_Updater {
 
 			$version = ! empty( $matches[1] ) ? $matches[1] : false;
 
-			// Backward compatibility for README version checking
+			// Backward compatibility for README version checking.
 			if ( false === $version ) {
 				$raw_response = $this->remote_get( trailingslashit( $this->config['raw_url'] ) . $this->config['readme'] );
 
 				if ( ! is_wp_error( $raw_response ) && ! empty( $raw_response['body'] ) ) {
 					preg_match( '#^\s*`*~Current Version\:\s*([^~]*)~#im', $raw_response['body'], $__version );
-					if ( isset( $__version[1] ) && -1 == version_compare( $version, $__version[1] ) ) {
+					if ( isset( $__version[1] ) && -1 === version_compare( $version, $__version[1] ) ) {
 						$version = $__version[1];
 					}
 				}
@@ -237,12 +237,14 @@ class GitHub_Updater {
 	 * @return bool|array
 	 */
 	public function remote_get( $query ) {
-		$raw_response = wp_remote_get( $query, array(
-			'sslverify' => $this->config['sslverify'],
-		));
+		$raw_response = wp_remote_get(
+			$query,
+			[
+				'sslverify' => $this->config['sslverify'],
+			]
+		);
 
-		if ( is_wp_error( $raw_response ) || wp_remote_retrieve_response_code( $raw_response ) != 200 ) {
-			error_log( 'GitHub Updater Error: ' . wp_remote_retrieve_response_message( $raw_response ) );
+		if ( is_wp_error( $raw_response ) || wp_remote_retrieve_response_code( $raw_response ) !== 200 ) {
 			return false;
 		}
 
@@ -261,7 +263,7 @@ class GitHub_Updater {
 
 		$github_data = get_site_transient( md5( $this->config['slug'] ) . '_github_data' );
 
-		if ( $this->overrule_transients() || ! isset( $github_data ) || ! $github_data || '' == $github_data ) {
+		if ( $this->overrule_transients() || ! isset( $github_data ) || ! $github_data || '' === $github_data ) {
 			$github_data = $this->remote_get( $this->config['api_url'] );
 
 			if ( is_wp_error( $github_data ) ) {
@@ -283,7 +285,7 @@ class GitHub_Updater {
 	 */
 	public function get_date() {
 		$_date = $this->get_github_data();
-		return ( ! empty( $_date->updated_at ) ) ? date( 'Y-m-d', strtotime( $_date->updated_at ) ) : false;
+		return ( ! empty( $_date->updated_at ) ) ? gmdate( 'Y-m-d', strtotime( $_date->updated_at ) ) : false;
 	}
 
 	/**
@@ -346,8 +348,8 @@ class GitHub_Updater {
 	 *
 	 * @return object
 	 */
-	public function get_plugin_info( $false, $action, $response ) {
-		if ( ! isset( $response->slug ) || $response->slug != $this->config['slug'] ) {
+	public function get_plugin_info( $false, $action, $response ) { // phpcs:ignore
+		if ( ! isset( $response->slug ) || $response->slug !== $this->config['slug'] ) {
 			return false;
 		}
 
@@ -359,7 +361,7 @@ class GitHub_Updater {
 		$response->requires      = $this->config['requires'];
 		$response->tested        = $this->config['tested'];
 		$response->download_link = $this->config['zip_url'];
-		$response->sections      = array( 'description' => $this->config['description'] );
+		$response->sections      = [ 'description' => $this->config['description'] ];
 
 		return $response;
 	}
@@ -373,15 +375,15 @@ class GitHub_Updater {
 	 *
 	 * @return object
 	 */
-	public function upgrader_post_install( $true, $hook_extra, $result ) {
+	public function upgrader_post_install( $true, $hook_extra, $result ) { // phpcs:ignore
 		global $wp_filesystem;
 
 		$proper_destination = WP_PLUGIN_DIR . '/' . $this->config['proper_folder_name'];
 		$wp_filesystem->move( $result['destination'], $proper_destination );
 		$result['destination'] = $proper_destination;
-		$activate = activate_plugin( WP_PLUGIN_DIR . '/' . $this->config['slug'] );
+		$activate              = activate_plugin( WP_PLUGIN_DIR . '/' . $this->config['slug'] );
 
-		$fail_message = __( 'The plugin has been updated, but could not be reactivated. Please reactivate it manually.', 'wp-autoplugin' );
+		$fail_message    = __( 'The plugin has been updated, but could not be reactivated. Please reactivate it manually.', 'wp-autoplugin' );
 		$success_message = __( 'Plugin reactivated successfully.', 'wp-autoplugin' );
 
 		echo is_wp_error( $activate ) ? esc_html( $fail_message ) : esc_html( $success_message );

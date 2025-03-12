@@ -1,6 +1,6 @@
 <?php
 /**
- * xAI API class. Their API is compatible with OpenAI's, so this class extends OpenAI_API.
+ * The xAI API class. Their API is compatible with OpenAI's, so this class extends OpenAI_API.
  *
  * @package WP-Autoplugin
  * @since 1.1
@@ -16,6 +16,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * The xAI API class.
+ */
 class XAI_API extends OpenAI_API {
 
 	/**
@@ -48,12 +51,17 @@ class XAI_API extends OpenAI_API {
 		$this->model = sanitize_text_field( $model );
 	}
 
+	/**
+	 * Get the allowed parameters.
+	 *
+	 * @return array
+	 */
 	protected function get_allowed_parameters() {
-		return array(
+		return [
 			'model',
 			'temperature',
 			'max_tokens',
 			'messages',
-		);
+		];
 	}
 }

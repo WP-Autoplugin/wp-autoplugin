@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 ?>
 <div class="wrap">
-	<h1><?php _e( 'WP-Autoplugin Settings', 'wp-autoplugin' ); ?></h1>
+	<h1><?php esc_html_e( 'WP-Autoplugin Settings', 'wp-autoplugin' ); ?></h1>
 	<?php settings_errors(); ?>
 	<form method="post" action="options.php">
 		<?php
@@ -58,7 +58,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						?>
 						<optgroup label="<?php esc_attr_e( 'Custom Models', 'wp-autoplugin' ); ?>" id="custom-models">
 							<?php
-							$custom_models = get_option( 'wp_autoplugin_custom_models', array() );
+							$custom_models = get_option( 'wp_autoplugin_custom_models', [] );
 							foreach ( $custom_models as $model ) {
 								echo '<option value="' . esc_attr( $model['name'] ) . '" ' . selected( get_option( 'wp_autoplugin_model' ), $model['name'] ) . '>' . esc_html( $model['name'] ) . '</option>';
 							}
@@ -84,7 +84,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<button type="button" id="add-custom-model" class="button"><?php esc_html_e( 'Add Custom Model', 'wp-autoplugin' ); ?></button>
 					</div>
 
-					<input type="hidden" name="wp_autoplugin_custom_models" id="wp_autoplugin_custom_models" value="<?php echo esc_attr( json_encode( get_option( 'wp_autoplugin_custom_models', array() ) ) ); ?>">
+					<input type="hidden" name="wp_autoplugin_custom_models" id="wp_autoplugin_custom_models" value="<?php echo esc_attr( wp_json_encode( get_option( 'wp_autoplugin_custom_models', [] ) ) ); ?>">
 					<input type="hidden" id="wp_autoplugin_settings_nonce" value="<?php echo esc_attr( wp_create_nonce( 'wp_autoplugin_nonce' ) ); ?>">
 
 					<p class="description"><?php esc_html_e( 'Add any custom models you want to use with WP-Autoplugin. These models will be available in the model selection dropdown. The API must be compatible with the OpenAI API.', 'wp-autoplugin' ); ?></p>

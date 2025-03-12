@@ -26,7 +26,7 @@ class Custom_API extends OpenAI_API {
 	 *
 	 * @var array
 	 */
-	protected $extra_headers = array();
+	protected $extra_headers = [];
 
 	/**
 	 * Configure the custom API with the user-defined settings.
@@ -36,7 +36,7 @@ class Custom_API extends OpenAI_API {
 	 * @param string $model      The model parameter sent to the API.
 	 * @param array  $headers    Additional headers (key/value pairs).
 	 */
-	public function set_custom_config( $endpoint, $api_key, $model, $headers = array() ) {
+	public function set_custom_config( $endpoint, $api_key, $model, $headers = [] ) {
 		$this->api_url       = $endpoint;
 		$this->api_key       = $api_key;
 		$this->model         = $model;
@@ -52,50 +52,50 @@ class Custom_API extends OpenAI_API {
 	 *
 	 * @return string|\WP_Error The response or a WP_Error object on failure.
 	 */
-	public function send_prompt( $prompt, $system_message = '', $override_body = array() ) {
+	public function send_prompt( $prompt, $system_message = '', $override_body = [] ) {
 		$prompt = $this->trim_prompt( $prompt );
 
-		$messages = array();
+		$messages = [];
 		if ( $system_message ) {
-			$messages[] = array(
+			$messages[] = [
 				'role'    => 'system',
 				'content' => $system_message,
-			);
+			];
 		}
 
-		$messages[] = array(
+		$messages[] = [
 			'role'    => 'user',
 			'content' => $prompt,
-		);
+		];
 
-		$body = array(
+		$body = [
 			'model'       => $this->model,
 			'temperature' => $this->temperature,
 			'max_tokens'  => $this->max_tokens,
 			'messages'    => $messages,
-		);
+		];
 
 		// Only keep valid keys from $override_body.
-		$allowed_keys = $this->get_allowed_parameters();
+		$allowed_keys  = $this->get_allowed_parameters();
 		$override_body = array_intersect_key( $override_body, array_flip( $allowed_keys ) );
-		$body = array_merge( $body, $override_body );
+		$body          = array_merge( $body, $override_body );
 
 		// Merge default auth header with any extra headers.
 		$headers = array_merge(
-			array(
+			[
 				'Authorization' => 'Bearer ' . $this->api_key,
 				'Content-Type'  => 'application/json',
-			),
+			],
 			$this->extra_headers
 		);
 
 		$response = wp_remote_post(
 			$this->api_url,
-			array(
+			[
 				'timeout' => 60,
 				'headers' => $headers,
 				'body'    => wp_json_encode( $body ),
-			)
+			]
 		);
 
 		if ( is_wp_error( $response ) ) {
@@ -107,7 +107,7 @@ class Custom_API extends OpenAI_API {
 		if ( empty( $data['choices'][0]['message']['content'] ) ) {
 			return new \WP_Error(
 				'api_error',
-				__( 'Error communicating with the API.', 'wp-autoplugin' ) . "\n" . print_r( $data, true )
+				__( 'Error communicating with the API.', 'wp-autoplugin' ) . "\n" . print_r( $data, true ) // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r
 			);
 		}
 
@@ -121,12 +121,12 @@ class Custom_API extends OpenAI_API {
 	 * @return array Key-value pairs for use in wp_remote_post header.
 	 */
 	protected function parse_extra_headers( $headers ) {
-		$parsed = array();
+		$parsed = [];
 		foreach ( $headers as $header_line ) {
 			if ( strpos( $header_line, '=' ) !== false ) {
 				list( $key, $value ) = explode( '=', $header_line, 2 );
-				$key   = trim( $key );
-				$value = trim( $value );
+				$key                 = trim( $key );
+				$value               = trim( $value );
 				if ( $key && $value ) {
 					$parsed[ $key ] = $value;
 				}

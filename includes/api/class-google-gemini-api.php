@@ -40,7 +40,7 @@ class Google_Gemini_API extends API {
 	 *
 	 * @var int
 	 */
-	private $max_tokens  = 8192;
+	private $max_tokens = 8192;
 
 	/**
 	 * Set the model.
@@ -59,24 +59,24 @@ class Google_Gemini_API extends API {
 	 * @param array  $override_body  The override body.
 	 * @return mixed
 	 */
-	public function send_prompt( $prompt, $system_message = '', $override_body = array() ) {
+	public function send_prompt( $prompt, $system_message = '', $override_body = [] ) {
 		$prompt = $this->trim_prompt( $prompt );
 
 		$url = 'https://generativelanguage.googleapis.com/v1beta/models/' . $this->model . ':generateContent?key=' . $this->api_key;
 
 		// Default safetySettings.
-		$safety_settings = array(
-			array(
+		$safety_settings = [
+			[
 				'category'  => 'HARM_CATEGORY_DANGEROUS_CONTENT',
 				'threshold' => 'BLOCK_ONLY_HIGH',
-			),
-		);
+			],
+		];
 
 		// Default generationConfig.
-		$generation_config = array(
+		$generation_config = [
 			'temperature'     => $this->temperature,
 			'maxOutputTokens' => $this->max_tokens,
-		);
+		];
 
 		// Merge override_body['generationConfig'] into $generation_config.
 		if ( isset( $override_body['generationConfig'] ) && is_array( $override_body['generationConfig'] ) ) {
@@ -91,27 +91,30 @@ class Google_Gemini_API extends API {
 		}
 
 		// Build the request body.
-		$body = array(
-			'contents' => array(
-				array(
-					'parts' => array(
-						array( 'text' => $prompt ),
-					),
-				),
-			),
+		$body = [
+			'contents'         => [
+				[
+					'parts' => [
+						[ 'text' => $prompt ],
+					],
+				],
+			],
 			'safetySettings'   => $safety_settings,
 			'generationConfig' => $generation_config,
-		);
+		];
 
-		$headers = array(
+		$headers = [
 			'Content-Type' => 'application/json',
-		);
+		];
 
-		$response = wp_remote_post( $url, array(
-			'timeout' => 60,
-			'headers' => $headers,
-			'body' => wp_json_encode( $body ),
-		) );
+		$response = wp_remote_post(
+			$url,
+			[
+				'timeout' => 60,
+				'headers' => $headers,
+				'body'    => wp_json_encode( $body ),
+			]
+		);
 
 		if ( is_wp_error( $response ) ) {
 			return $response;
@@ -122,10 +125,10 @@ class Google_Gemini_API extends API {
 		$data = json_decode( $body, true );
 
 		if ( ! is_array( $data ) || ! isset( $data['candidates'][0]['content']['parts'] ) ) {
-			return new \WP_Error( 'api_error', 'Error communicating with the Google Gemini API.' . "\n" . print_r( $data, true ) );
+			return new \WP_Error( 'api_error', 'Error communicating with the Google Gemini API.' . "\n" . print_r( $data, true ) ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r
 		}
 
-		$parts = $data['candidates'][0]['content']['parts'];
+		$parts     = $data['candidates'][0]['content']['parts'];
 		$last_part = end( $parts );
 		return $last_part['text'];
 	}
