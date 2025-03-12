@@ -99,6 +99,9 @@ class Admin {
 		add_action( 'admin_init', [ $this, 'register_settings' ] );
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
 
+		// Inline admin CSS for all pages to fix the menu icon.
+		add_action( 'admin_head', [ $this, 'admin_css' ] );
+
 		// Add settings link on the plugins page.
 		add_filter( 'plugin_action_links_' . plugin_basename( WP_AUTOPLUGIN_DIR . 'wp-autoplugin.php' ), [ $this, 'add_settings_link' ] );
 
@@ -549,6 +552,33 @@ class Admin {
 			);
 			wp_enqueue_style( 'wp-autoplugin-extend', WP_AUTOPLUGIN_URL . 'assets/admin/css/extender.css', [], WP_AUTOPLUGIN_VERSION );
 		}
+	}
+
+	/**
+	 * Add inline CSS to fix the menu icon.
+	 *
+	 * @return void
+	 */
+	public function admin_css() {
+		?>
+		<style>
+			li.toplevel_page_wp-autoplugin .wp-menu-image::after {
+				content: "";
+				display: block;
+				width: 20px;
+				height: 20px;
+				border: 2px solid;
+				border-radius: 100px;
+				position: absolute;
+				top: 5px;
+				left: 6px;
+			}
+			li.toplevel_page_wp-autoplugin:not(.wp-menu-open) a:not(:hover) .wp-menu-image::after {
+				color: #a7aaad;
+				color: rgba(240, 246, 252, 0.6);
+			}
+		</style>
+		<?php
 	}
 
 	/**
