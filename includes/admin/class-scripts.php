@@ -241,6 +241,49 @@ class Scripts {
 				[],
 				WP_AUTOPLUGIN_VERSION
 			);
+		} elseif ( $screen->id === 'admin_page_wp-autoplugin-explain' ) {
+			// Enqueue marked.js for markdown parsing.
+			wp_enqueue_script(
+				'wp-autoplugin-marked',
+				WP_AUTOPLUGIN_URL . 'assets/admin/js/marked.min.js',
+				[],
+				WP_AUTOPLUGIN_VERSION,
+				true
+			);
+
+			// Enqueue scripts and styles for the Explain Plugin page.
+			wp_enqueue_script(
+				'wp-autoplugin-explainer',
+				WP_AUTOPLUGIN_URL . 'assets/admin/js/explainer.js',
+				[ 'wp-autoplugin-utils' ],
+				WP_AUTOPLUGIN_VERSION,
+				true
+			);
+			wp_localize_script(
+				'wp-autoplugin-explainer',
+				'wp_autoplugin',
+				[
+					'ajax_url' => esc_url( admin_url( 'admin-ajax.php' ) ),
+					'nonce'    => wp_create_nonce( 'wp_autoplugin_generate' ),
+					'messages' => [
+						'generating_explanation' => esc_html__( 'Generating explanation...', 'wp-autoplugin' ),
+						'explanation_error'      => esc_html__( 'Error generating explanation.', 'wp-autoplugin' ),
+						'security_focus'         => esc_html__( 'Security Analysis', 'wp-autoplugin' ),
+						'performance_focus'      => esc_html__( 'Performance Review', 'wp-autoplugin' ),
+						'code_quality_focus'     => esc_html__( 'Code Quality Analysis', 'wp-autoplugin' ),
+						'usage_focus'            => esc_html__( 'Usage Instructions', 'wp-autoplugin' ),
+						'general_explanation'    => esc_html__( 'General Explanation', 'wp-autoplugin' ),
+						'copied'                 => esc_html__( 'Explanation copied to clipboard!', 'wp-autoplugin' ),
+						'copy_failed'            => esc_html__( 'Failed to copy explanation.', 'wp-autoplugin' ),
+					],
+				]
+			);
+			wp_enqueue_style(
+				'wp-autoplugin-explainer',
+				WP_AUTOPLUGIN_URL . 'assets/admin/css/explainer.css',
+				[],
+				WP_AUTOPLUGIN_VERSION
+			);
 		}
 	}
 

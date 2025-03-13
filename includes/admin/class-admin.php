@@ -63,6 +63,8 @@ class Admin {
 		'Google'    => [
 			'gemini-2.0-pro-exp-02-05'            => 'Gemini 2.0 Pro Experimental 02-05',
 			'gemini-2.0-flash-thinking-exp'       => 'Gemini 2.0 Flash Thinking Experimental',
+			'gemini-2.0-flash'                    => 'Gemini 2.0 Flash',
+			'gemini-2.0-flash-lite'               => 'Gemini 2.0 Flash Lite',
 			'gemini-2.0-flash-exp'                => 'Gemini 2.0 Flash Experimental',
 			'gemini-2.0-flash-thinking-exp-01-21' => 'Gemini 2.0 Flash Thinking Experimental 01-21',
 			'gemini-exp-1206'                     => 'Gemini Experimental 1206',
@@ -70,6 +72,7 @@ class Admin {
 			'gemini-1.5-pro'                      => 'Gemini 1.5 Pro',
 			'gemini-1.5-flash'                    => 'Gemini 1.5 Flash',
 			'gemini-1.0-pro'                      => 'Gemini 1.0 Pro',
+			'gemma-3-27b-it'                      => 'Gemma 3 27B',
 		],
 		'xAI'       => [
 			'grok-2'      => 'Grok 2',
@@ -206,6 +209,15 @@ class Admin {
 			'wp-autoplugin-fix',
 			[ $this, 'render_fix_plugin_page' ]
 		);
+
+		add_submenu_page(
+			'',
+			esc_html__( 'Explain Plugin', 'wp-autoplugin' ),
+			esc_html__( 'Explain Plugin', 'wp-autoplugin' ),
+			'manage_options',
+			'wp-autoplugin-explain',
+			[ $this, 'render_explain_plugin_page' ]
+		);
 	}
 
 	/**
@@ -253,6 +265,16 @@ class Admin {
 	public function render_fix_plugin_page() {
 		$this->validate_plugin( 'wp-autoplugin-fix-plugin' );
 		include WP_AUTOPLUGIN_DIR . 'views/page-fix-plugin.php';
+	}
+
+	/**
+	 * Display the explain plugin page.
+	 *
+	 * @return void
+	 */
+	public function render_explain_plugin_page() {
+		$this->validate_plugin( 'wp-autoplugin-explain-plugin' );
+		include WP_AUTOPLUGIN_DIR . 'views/page-explain-plugin.php';
 	}
 
 	/**

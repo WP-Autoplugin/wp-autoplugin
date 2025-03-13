@@ -50,6 +50,8 @@ class Ajax {
 			'generate_extend_plan',
 			'generate_extend_code',
 			'extend_plugin',
+
+			'explain_plugin',
 		];
 		foreach ( $actions as $action ) {
 			add_action( 'wp_ajax_wp_autoplugin_' . $action, [ $this, 'ajax_actions' ] );
@@ -320,6 +322,46 @@ class Ajax {
 		}
 
 		wp_send_json_success( $result );
+	}
+
+	/**
+	 * AJAX handler for explaining a plugin.
+	 *
+	 * @return void
+	 */
+	public function ajax_explain_plugin() {
+		$plugin_file = isset( $_POST['plugin_file'] )
+			? sanitize_text_field( wp_unslash( $_POST['plugin_file'] ) )
+			: '';
+
+		$plugin_path = WP_CONTENT_DIR . '/plugins/' . $plugin_file;
+		$plugin_code = file_get_contents( $plugin_path );
+		if ( false === $plugin_code ) {
+			wp_send_json_error( esc_html__( 'Failed to read the plugin file.', 'wp-autoplugin' ) );
+		}
+
+		$question = isset( $_POST['plugin_question'] )
+			? sanitize_text_field( wp_unslash( $_POST['plugin_question'] ) )
+			: '';
+
+		$focus = isset( $_POST['explain_focus'] )
+			? sanitize_text_field( wp_unslash( $_POST['explain_focus'] ) )
+			: 'general';
+
+		$explainer = new \WP_Autoplugin\Plugin_Explainer( $this->ai_api );
+		if ( ! empty( $question ) ) {
+			$explanation = $explainer->answer_plugin_question( $plugin_code, $question );
+		} elseif ( $focus !== 'general' ) {
+			$explanation = $explainer->analyze_plugin_aspect( $plugin_code, $focus );
+		} else {
+			$explanation = $explainer->explain_plugin( $plugin_code );
+		}
+
+		if ( is_wp_error( $explanation ) ) {
+			wp_send_json_error( $explanation->get_error_message() );
+		}
+
+		wp_send_json_success( $explanation );
 	}
 
 	/**

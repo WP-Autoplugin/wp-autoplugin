@@ -1,0 +1,205 @@
+.wp-autoplugin-admin-container {
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: #fff;
+    padding: 25px 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.wrap.wp-autoplugin {
+    margin: 0;
+}
+
+.wrap.wp-autoplugin h1 {
+    color: #23282d;
+    font-size: 24px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    padding-top: 0;
+}
+
+.autoplugin-message pre {
+    text-wrap: wrap;
+}
+
+.wrap.wp-autoplugin.loading form {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* Align buttons inside .autoplugin-actions */
+.autoplugin-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.autoplugin-message {
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 4px;
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+}
+
+.wp-autoplugin textarea {
+    width: 100%;
+}
+.wp-autoplugin input[type="text"] {
+    width: 100%;
+}
+
+.wp-autoplugin h1 {
+    margin-bottom: 20px;
+}
+.wp-autoplugin p {
+    margin-bottom: 10px;
+}
+.wp-autoplugin .wrap {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+.autoplugin-message {
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 4px;
+}
+.autoplugin-message.success {
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+    color: #155724;
+}
+.autoplugin-message.error {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    color: #721c24;
+}
+.autoplugin-message.hidden {
+    display: none;
+}
+.wp-autoplugin .button-primary.button-hero {
+    margin-top: 20px;
+}
+
+/* Accordions */
+.wp-autoplugin * {
+    box-sizing: border-box;
+}
+.wp-autoplugin .autoplugin-accordion {
+	border: 1px solid #c3c4c7;
+    border-bottom-width: 0px;
+}
+.wp-autoplugin .autoplugin-accordion:last-child {
+    border-bottom-width: 1px;
+}
+.wp-autoplugin .autoplugin-accordion-heading {
+	margin: 0;
+	border-top: 1px solid #c3c4c7;
+	font-size: inherit;
+	line-height: inherit;
+	font-weight: normal;
+	color: inherit;
+}
+.wp-autoplugin .autoplugin-accordion-heading:first-child {
+	border-top: none;
+}
+.wp-autoplugin .autoplugin-accordion-trigger {
+	background: #fff;
+	border: 0;
+	color: #2c3338;
+	cursor: pointer;
+	display: flex;
+	font-weight: 400;
+	margin: 0;
+	padding: 1em 3.5em 1em 1.5em;
+	min-height: 46px;
+	position: relative;
+	text-align: left;
+	width: 100%;
+	align-items: center;
+	justify-content: space-between;
+	-webkit-user-select: auto;
+	user-select: auto;
+}
+.wp-autoplugin .autoplugin-accordion-trigger:hover,
+.wp-autoplugin .autoplugin-accordion-trigger:active {
+	background: #f6f7f7;
+}
+.wp-autoplugin .autoplugin-accordion-trigger:focus {
+	color: #1d2327;
+	border: none;
+	box-shadow: none;
+	outline-offset: -1px;
+	outline: 2px solid #2271b1;
+	background-color: #f6f7f7;
+}
+.wp-autoplugin .autoplugin-accordion-trigger .title {
+	pointer-events: none;
+	font-weight: 600;
+	flex-grow: 1;
+}
+.wp-autoplugin .autoplugin-accordion-trigger .icon {
+	border: solid #50575e;
+	border-width: 0 2px 2px 0;
+	height: 0.5rem;
+	pointer-events: none;
+	position: absolute;
+	right: 1.5em;
+	top: 50%;
+	transform: translateY(-70%) rotate(45deg);
+	width: 0.5rem;
+}
+.wp-autoplugin .autoplugin-accordion.active .icon {
+    transform: translateY(-50%) rotate(-135deg);
+}
+
+.wp-autoplugin .autoplugin-accordion-content {
+    display: none;
+    padding: 1em 1.5em;
+    background-color: #fff;
+    border-top: 1px solid #c3c4c7;
+}
+.wp-autoplugin .autoplugin-accordion.active .autoplugin-accordion-content {
+    display: block;
+}
+
+.autoplugin-message:empty {
+    display: none;
+}
+
+.wp-autoplugin .CodeMirror.CodeMirror-wrap {
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+
+.autoplugin-code-warning {
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+    color: #856404;
+    padding: 10px;
+    border-radius: 4px;
+    margin-top: 20px;
+}
+
+#wp-autoplugin-footer p {
+    margin: 2em 0 -1em;
+    text-align: center;
+}
+
+textarea#plugin_plan_container {
+    font-family: monospace;
+    font-size: 14px;
+    height: 300px;
+    width: 100%;
+}
+
+.explain-options label {
+    display: inline-block;
+    margin-right: 10px;
+}
