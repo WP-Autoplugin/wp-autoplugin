@@ -3,234 +3,223 @@
 
     // ----- DOM References -----
     const stepGeneratePlan = document.querySelector('.step-1-generation');
-    const stepReviewPlan = document.querySelector('.step-2-plan');
-    const stepReviewCode = document.querySelector('.step-3-code');
+    const stepReviewPlan   = document.querySelector('.step-2-plan');
+    const stepReviewCode   = document.querySelector('.step-3-code');
 
     const generatePlanForm = document.getElementById('generate-plan-form');
     const generateCodeForm = document.getElementById('generate-code-form');
     const createPluginForm = document.getElementById('create-plugin-form');
 
     const pluginPlanContainer = document.getElementById('plugin_plan_container');
-    const pluginCodeTextarea = document.getElementById('plugin_code');
+    const pluginCodeTextarea  = document.getElementById('plugin_code');
 
     // ----- State Variables -----
-    let currentState = 'generatePlan';
-    let pluginDescription = '';
-    let pluginPlan = {};
-	let pluginCode = '';
-	let editorInstance;
-  
-	function showStep(step) {
-	  stepGeneratePlan.style.display = 'none';
-	  stepReviewPlan.style.display = 'none';
-	  stepReviewCode.style.display = 'none';
-  
-	  switch (step) {
-		case 'generatePlan':
-		  stepGeneratePlan.style.display = 'block';
-		  document.getElementById('plugin_description').value = pluginDescription;
-		  break;
-		case 'reviewPlan':
-		  stepReviewPlan.style.display = 'block';
-		  var accordion = buildAccordion(pluginPlan);
-		  pluginPlanContainer.innerHTML = accordion;
-		  attachAccordionListeners();
-		  break;
-		case 'reviewCode':
-		  stepReviewCode.style.display = 'block';
-		  pluginCodeTextarea.value = pluginCode;
-		  updateCodeEditor();
-		  break;
-	  }
-  
-	  updateHistory(step);
-	}
-  
-	function updateHistory(state) {
-	  history.pushState({ state: state }, null, null);
-	}
+    let currentState       = 'generatePlan';
+    let pluginDescription  = '';
+    let pluginPlan         = {};
+    let pluginCode         = '';
+    let editorInstance     = null;
 
-	function updateCodeEditor() {
-		if (typeof editorInstance === 'undefined') {
-			editorInstance = wp.codeEditor.initialize(pluginCodeTextarea, {
-				lineNumbers: true,
-				matchBrackets: true,
-				indentUnit: 4,
-				indentWithTabs: true,
-				tabSize: 4,
-				mode: 'application/x-httpd-php'
-			});
-		  } else {
-			console.log('Setting value: ' + pluginCode);
-			editorInstance.codemirror.setValue(pluginCode);
-			editorInstance.codemirror.refresh();
-		  }
-	}
-  
-	function handleGeneratePlanSubmit(event) {
-		event.preventDefault();
+    // Step mapping
+    const steps = {
+        generatePlan: stepGeneratePlan,
+        reviewPlan:   stepReviewPlan,
+        reviewCode:   stepReviewCode
+    };
 
-		// If the field is empty, show an error message.
-		if (document.getElementById('plugin_description').value.trim() === '') {
-			document.getElementById('generate-plan-message').innerHTML = wp_autoplugin.messages.empty_description;
-			return;
-		}
+    // Logic to run on step show
+    const onShowStep = {
+        generatePlan: () => {
+            document.getElementById('plugin_description').value = pluginDescription;
+        },
+        reviewPlan: () => {
+            const accordion = buildAccordion(pluginPlan);
+            pluginPlanContainer.innerHTML = accordion;
+            attachAccordionListeners();
+        },
+        reviewCode: () => {
+            pluginCodeTextarea.value = pluginCode;
+            editorInstance = wpAutoPluginCommon.updateCodeEditor(editorInstance, pluginCodeTextarea, pluginCode);
+        }
+    };
 
-		// Add loading class for form parent container.
-		generatePlanForm.parentElement.classList.add('loading');
+    // ----- Event Handlers -----
 
-		pluginDescription = document.getElementById('plugin_description').value;
-		var loader = loadingIndicator(document.getElementById('generate-plan-message'), wp_autoplugin.messages.generating_plan);
-		loader.start();
-	
-		var formData = new FormData();
-		formData.append('action', 'wp_autoplugin_generate_plan');
-		formData.append('plugin_description', pluginDescription);
-		formData.append('security', wp_autoplugin.nonce);
-	
-		var xhr = new XMLHttpRequest();
-		xhr.open('POST', wp_autoplugin.ajax_url, true);
-		xhr.onreadystatechange = function() {
-			if (xhr.readyState === 4 && xhr.status === 200) {
-			loader.stop();
-			var response = JSON.parse(xhr.responseText);
+    async function handleGeneratePlanSubmit(event) {
+        event.preventDefault();
 
-			// Check if success=false
-			if ( ! response.success ) {
-				document.getElementById('generate-plan-message').innerHTML = wp_autoplugin.messages.plan_generation_error + ' <pre>' + response.data + '</pre>';
-				return;
-			}
+        const descField = document.getElementById('plugin_description');
+        if (descField.value.trim() === '') {
+            document.getElementById('generate-plan-message').innerHTML = wp_autoplugin.messages.empty_description;
+            return;
+        }
 
-			pluginPlan = response.data;
-			currentState = 'reviewPlan';
-			showStep('reviewPlan');
-			}
+        generatePlanForm.parentElement.classList.add('loading');
+        pluginDescription = descField.value;
 
-			// Remove loading class for form parent container.
-			generatePlanForm.parentElement.classList.remove('loading');
-		};
-		xhr.send(formData);
-	}
-  
-	function handleGenerateCodeSubmit(event) {
-	  event.preventDefault();
+        const loader = loadingIndicator(document.getElementById('generate-plan-message'), wp_autoplugin.messages.generating_plan);
+        loader.start();
 
-	  // Add loading class for form parent container.
-	  generateCodeForm.parentElement.classList.add('loading');
+        const formData = new FormData();
+        formData.append('action', 'wp_autoplugin_generate_plan');
+        formData.append('plugin_description', pluginDescription);
+        formData.append('security', wp_autoplugin.nonce);
 
-	  var loader = loadingIndicator(document.getElementById('generate-code-message'), wp_autoplugin.messages.generating_code);
-	  loader.start();
-  
-	  var formData = new FormData();
-	  formData.append('action', 'wp_autoplugin_generate_code');
-	  formData.append('plugin_description', pluginDescription);
-	  // Rebuild the plugin plan from the accordion textareas & inputs.
-	  var plan = {};
-	  var accordions = document.querySelectorAll('.autoplugin-accordion');
-	  accordions.forEach(function(accordion) {
-		var heading = accordion.querySelector('.autoplugin-accordion-heading');
-		var part = heading.querySelector('.title').textContent;
-		var textarea = accordion.querySelector('.autoplugin-accordion-content textarea');
-		var content = textarea ? textarea.value : accordion.querySelector('.autoplugin-accordion-content input').value;
-		plan[part.toLowerCase().replace(/ /g, '_')] = content;
-	  });
-	  formData.append('plugin_plan', JSON.stringify(plan));
-	  formData.append('security', wp_autoplugin.nonce);
+        try {
+            const response = await wpAutoPluginCommon.sendRequest(formData);
+            loader.stop();
+            generatePlanForm.parentElement.classList.remove('loading');
 
-	  // Let's also update the plugin plan in the UI
-	  pluginPlan = plan;
-  
-	  var xhr = new XMLHttpRequest();
-	  xhr.open('POST', wp_autoplugin.ajax_url, true);
-	  xhr.onreadystatechange = function() {
-		if (xhr.readyState === 4 && xhr.status === 200) {
-		  loader.stop();
-		  var response = JSON.parse(xhr.responseText);
-		  if ( ! response.success ) {
-			document.getElementById('generate-code-message').innerHTML = wp_autoplugin.code_generation_error + ' <pre>' + response.data + '</pre>';
-			return;
-		  }
+            if (!response.success) {
+                document.getElementById('generate-plan-message').innerHTML =
+                    wp_autoplugin.messages.plan_generation_error + ' <pre>' + response.data + '</pre>';
+                return;
+            }
 
-		  pluginCode = response.data;
-		
-		  currentState = 'reviewCode';
-		  showStep('reviewCode');
-		}
+            pluginPlan = response.data;
+            currentState = 'reviewPlan';
+            wpAutoPluginCommon.handleStepChange(steps, 'reviewPlan', onShowStep);
+        } catch (error) {
+            loader.stop();
+            generatePlanForm.parentElement.classList.remove('loading');
+            document.getElementById('generate-plan-message').innerHTML =
+                wp_autoplugin.messages.plan_generation_error + ' <pre>' + error.message + '</pre>';
+        }
+    }
 
-		// Remove loading class for form parent container.
-		generateCodeForm.parentElement.classList.remove('loading');
-	  };
-	  xhr.send(formData);
-	}
-  
-	function handleCreatePluginSubmit(event) {
-	  event.preventDefault();
+    async function handleGenerateCodeSubmit(event) {
+        event.preventDefault();
 
-	  // Add loading class for form parent container.
-	  createPluginForm.parentElement.classList.add('loading');
+        generateCodeForm.parentElement.classList.add('loading');
+        const loader = loadingIndicator(document.getElementById('generate-code-message'), wp_autoplugin.messages.generating_code);
+        loader.start();
 
-	  var pluginName = document.getElementById('plugin_name').value;
-  
-	  var loader = loadingIndicator(document.getElementById('create-plugin-message'), wp_autoplugin.messages.creating_plugin);
-	  loader.start();
-  
-	  var formData = new FormData();
-	  formData.append('action', 'wp_autoplugin_create_plugin');
-	  formData.append('plugin_code', editorInstance.codemirror.getValue());
-	  formData.append('plugin_name', pluginName);
-	  formData.append('security', wp_autoplugin.nonce);
-  
-	  var xhr = new XMLHttpRequest();
-	  xhr.open('POST', wp_autoplugin.ajax_url, true);
-	  xhr.onreadystatechange = function() {
-		if (xhr.readyState === 4 && xhr.status === 200) {
-		  loader.stop();
-		  var response = JSON.parse(xhr.responseText);
-		  if (response.success) {
-			document.getElementById('create-plugin-message').innerHTML = wp_autoplugin.messages.plugin_created;
-			document.getElementById('create-plugin-message').insertAdjacentHTML('beforeend', '<h2>' + wp_autoplugin.messages.how_to_test + '</h2><pre class="autoplugin-testing-plan">' + nl2br(wp_autoplugin.testing_plan) + '</pre><p>' + wp_autoplugin.messages.use_fixer + '</p>');
-			document.getElementById('create-plugin-message').insertAdjacentHTML('beforeend', '<a href="' + wp_autoplugin.activate_url + '&plugin=' + response.data + '" class="button button-primary">' + wp_autoplugin.messages.activate + '</a>');
-			
-			// Hide #create-plugin-form.
-			createPluginForm.style.display = 'none';
-			
-		  } else {
-			document.getElementById('create-plugin-message').innerHTML = wp_autoplugin.messages.plugin_creation_error + ' <pre>' + response.data + '</pre>';
-		  }
-		}
+        // Rebuild plugin plan from the accordion textareas/inputs
+        const plan = {};
+        const accordions = document.querySelectorAll('.autoplugin-accordion');
+        accordions.forEach((accordion) => {
+            const heading    = accordion.querySelector('.autoplugin-accordion-heading .title');
+            const part       = heading.textContent;
+            const contentEl  = accordion.querySelector('.autoplugin-accordion-content textarea')
+                               || accordion.querySelector('.autoplugin-accordion-content input');
+            const content    = contentEl ? contentEl.value : '';
+            plan[part.toLowerCase().replace(/ /g, '_')] = content;
+        });
+        pluginPlan = plan;
 
-		// Remove loading class for form parent container.
-		createPluginForm.parentElement.classList.remove('loading');
-	  };
-	  xhr.send(formData);
-	}
-  
-	generatePlanForm.addEventListener('submit', handleGeneratePlanSubmit);
-	generateCodeForm.addEventListener('submit', handleGenerateCodeSubmit);
-	createPluginForm.addEventListener('submit', handleCreatePluginSubmit);
-  
-	document.getElementById('edit-description').addEventListener('click', function() {
-	  currentState = 'generatePlan';
-	  showStep('generatePlan');
-	});
-  
-	document.getElementById('edit-plan').addEventListener('click', function() {
-	  currentState = 'reviewPlan';
-	  showStep('reviewPlan');
-	});
-  
-	window.addEventListener('popstate', function(event) {
-	  if (event.state && event.state.state) {
-		showStep(event.state.state);
-	  } else {
-		showStep('generatePlan');
-	  }
-	});
-  
-	showStep('generatePlan');
+        const formData = new FormData();
+        formData.append('action', 'wp_autoplugin_generate_code');
+        formData.append('plugin_description', pluginDescription);
+        formData.append('plugin_plan', JSON.stringify(plan));
+        formData.append('security', wp_autoplugin.nonce);
 
-	// Typing placeholder for #plugin_description
-	let messages = wp_autoplugin.plugin_examples;
-	messages.sort(() => Math.random() - 0.5);
-	typingPlaceholder(document.getElementById('plugin_description'), messages);
-  })();
+        try {
+            const response = await wpAutoPluginCommon.sendRequest(formData);
+            loader.stop();
+            generateCodeForm.parentElement.classList.remove('loading');
+
+            if (!response.success) {
+                document.getElementById('generate-code-message').innerHTML =
+                    wp_autoplugin.messages.code_generation_error + ' <pre>' + response.data + '</pre>';
+                return;
+            }
+
+            pluginCode = response.data;
+            currentState = 'reviewCode';
+            wpAutoPluginCommon.handleStepChange(steps, 'reviewCode', onShowStep);
+        } catch (error) {
+            loader.stop();
+            generateCodeForm.parentElement.classList.remove('loading');
+            document.getElementById('generate-code-message').innerHTML =
+                wp_autoplugin.messages.code_generation_error + ' <pre>' + error.message + '</pre>';
+        }
+    }
+
+    async function handleCreatePluginSubmit(event) {
+        event.preventDefault();
+
+        createPluginForm.parentElement.classList.add('loading');
+        const loader = loadingIndicator(document.getElementById('create-plugin-message'), wp_autoplugin.messages.creating_plugin);
+        loader.start();
+
+        const pluginName = document.getElementById('plugin_name').value;
+
+        const formData = new FormData();
+        formData.append('action', 'wp_autoplugin_create_plugin');
+        formData.append('plugin_code', editorInstance.codemirror.getValue());
+        formData.append('plugin_name', pluginName);
+        formData.append('security', wp_autoplugin.nonce);
+
+        try {
+            const response = await wpAutoPluginCommon.sendRequest(formData);
+            loader.stop();
+            createPluginForm.parentElement.classList.remove('loading');
+
+            if (response.success) {
+                // Show success message
+                document.getElementById('create-plugin-message').innerHTML = wp_autoplugin.messages.plugin_created;
+                document
+                    .getElementById('create-plugin-message')
+                    .insertAdjacentHTML(
+                        'beforeend',
+                        `<h2>${wp_autoplugin.messages.how_to_test}</h2>
+                         <pre class="autoplugin-testing-plan">${nl2br(wp_autoplugin.testing_plan)}</pre>
+                         <p>${wp_autoplugin.messages.use_fixer}</p>`
+                    );
+
+                document
+                    .getElementById('create-plugin-message')
+                    .insertAdjacentHTML(
+                        'beforeend',
+                        `<a href="${wp_autoplugin.activate_url}&plugin=${response.data}"
+                           class="button button-primary">
+                           ${wp_autoplugin.messages.activate}
+                         </a>`
+                    );
+
+                // Hide form
+                createPluginForm.style.display = 'none';
+            } else {
+                document.getElementById('create-plugin-message').innerHTML =
+                    wp_autoplugin.messages.plugin_creation_error + ' <pre>' + response.data + '</pre>';
+            }
+        } catch (error) {
+            loader.stop();
+            createPluginForm.parentElement.classList.remove('loading');
+            document.getElementById('create-plugin-message').innerHTML =
+                wp_autoplugin.messages.plugin_creation_error + ' <pre>' + error.message + '</pre>';
+        }
+    }
+
+    // ----- Attach Event Listeners -----
+    generatePlanForm.addEventListener('submit', handleGeneratePlanSubmit);
+    generateCodeForm.addEventListener('submit', handleGenerateCodeSubmit);
+    createPluginForm.addEventListener('submit', handleCreatePluginSubmit);
+
+    document.getElementById('edit-description').addEventListener('click', () => {
+        currentState = 'generatePlan';
+        wpAutoPluginCommon.handleStepChange(steps, 'generatePlan', onShowStep);
+    });
+
+    document.getElementById('edit-plan').addEventListener('click', () => {
+        currentState = 'reviewPlan';
+        wpAutoPluginCommon.handleStepChange(steps, 'reviewPlan', onShowStep);
+    });
+
+    // Handle back button
+    window.addEventListener('popstate', (event) => {
+        if (event.state && event.state.state) {
+            wpAutoPluginCommon.handleStepChange(steps, event.state.state, onShowStep);
+        } else {
+            wpAutoPluginCommon.handleStepChange(steps, 'generatePlan', onShowStep);
+        }
+    });
+
+    // Initialize step
+    wpAutoPluginCommon.handleStepChange(steps, 'generatePlan', onShowStep);
+
+    // Placeholder typing effect for plugin_description
+    let messages = wp_autoplugin.plugin_examples;
+    messages.sort(() => Math.random() - 0.5);
+    typingPlaceholder(document.getElementById('plugin_description'), messages);
+})();

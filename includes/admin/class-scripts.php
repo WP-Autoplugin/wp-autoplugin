@@ -41,6 +41,15 @@ class Scripts {
 			true
 		);
 
+		// Common scripts.
+		wp_enqueue_script(
+			'wp-autoplugin-common',
+			WP_AUTOPLUGIN_URL . 'assets/admin/js/common.js',
+			[ 'wp-autoplugin-utils' ],
+			WP_AUTOPLUGIN_VERSION,
+			true
+		);
+
 		// The main list page.
 		if ( $screen->id === 'toplevel_page_wp-autoplugin' ) {
 			wp_enqueue_script(
@@ -57,7 +66,7 @@ class Scripts {
 				WP_AUTOPLUGIN_VERSION
 			);
 		} elseif ( $screen->id === 'wp-autoplugin_page_wp-autoplugin-generate' ) {
-			// Code editor (CodeMirror) for generating plugin code.
+			// Code editor (CodeMirror) for displaying plugin code.
 			$settings = wp_enqueue_code_editor( [ 'type' => 'application/x-httpd-php' ] );
 			if ( false !== $settings ) {
 				wp_enqueue_script( 'wp-theme-plugin-editor' );

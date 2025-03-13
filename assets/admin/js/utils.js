@@ -1,6 +1,9 @@
 // ----- Utility Functions -----
 const nl2br = (str) => str.replace(/\n/g, '<br>');
 
+/**
+ * Recursively build a string for nested plan sections.
+ */
 const buildSubSections = (data, indentLevel = 0) => {
     let content = '';
     const indent = '  ';
@@ -16,51 +19,50 @@ const buildSubSections = (data, indentLevel = 0) => {
     return content;
 };
 
-function buildAccordion( plan ) {
-    var accordion = '';
-    if ( typeof plan === 'string' ) {
-        plan = JSON.parse( plan );
+/**
+ * Builds an accordion UI from the plugin plan object.
+ */
+function buildAccordion(plan) {
+    if (typeof plan === 'string') {
+        plan = JSON.parse(plan);
     }
-    if ( typeof plan !== 'object' ) {
+    if (typeof plan !== 'object') {
         return 'Error: Invalid plan data.';
     }
 
-    for ( var part in plan ) {
-        // Hide testing_plan for now, we'll show it later.
-        if ( part === 'testing_plan' ) {
-            // If it's an object, let's turn it into a string.
-            if ( typeof plan[part] === 'object' ) {
-                wp_autoplugin.testing_plan = buildSubSections( plan[part] );
+    let accordion = '';
+    for (const part in plan) {
+        // Hide testing_plan for now; store it globally for later display.
+        if (part === 'testing_plan') {
+            if (typeof plan[part] === 'object') {
+                wp_autoplugin.testing_plan = buildSubSections(plan[part]);
             } else {
                 wp_autoplugin.testing_plan = plan[part];
             }
             continue;
         }
-        var content = plan[part];
-        var className = 'autoplugin-accordion';
-        if ( part === 'plugin_name' ) {
+        let content = plan[part];
+        let className = 'autoplugin-accordion';
+        if (part === 'plugin_name') {
             className += ' active';
         }
-        accordion += '<div class="'+className+'">';
+        accordion += `<div class="${className}">`;
         accordion += '<h3 class="autoplugin-accordion-heading">';
         accordion += '<div class="autoplugin-accordion-trigger">';
-        var partTitle = part.replace( /_/g, ' ' ).replace( /\b\w/g, function( letter ) {
-            return letter.toUpperCase();
-        } );
-        accordion += '<span class="title">' + partTitle + '</span>';
+        const partTitle = part.replace(/_/g, ' ').replace(/\b\w/g, letter => letter.toUpperCase());
+        accordion += `<span class="title">${partTitle}</span>`;
         accordion += '<span class="icon"></span>';
         accordion += '</div>';
         accordion += '</h3>';
         accordion += '<div class="autoplugin-accordion-content">';
-        if ( typeof content === 'object' ) {
-            content = buildSubSections( content );
+        if (typeof content === 'object') {
+            content = buildSubSections(content);
         }
-        // Put the content inside a textarea for editing
-        // Except for plugin_name, which should be a text input
-        if ( part === 'plugin_name' ) {
-            accordion += '<input type="text" value="' + content + '" id="plugin_name" />';
+        // Put content in a textarea for editing (except plugin_name → text input)
+        if (part === 'plugin_name') {
+            accordion += `<input type="text" value="${content}" id="plugin_name" />`;
         } else {
-            accordion += '<textarea rows="10">' + content.trim() + '</textarea>';
+            accordion += `<textarea rows="10">${content.trim()}</textarea>`;
         }
         accordion += '</div>';
         accordion += '</div>';
@@ -69,10 +71,13 @@ function buildAccordion( plan ) {
     return accordion;
 }
 
+/**
+ * Shows a dynamic loader indicator using emojis and text updates.
+ */
 function loadingIndicator(element, message) {
     const emojis = ['🤔', '🧐', '💭', '🤖', '🧠', '🛠️', '🔍', '👨‍💻', '🌀', '⏳'];
     let intervalId;
-    let timeoutId; // Add this to track the timeout
+    let timeoutId;
 
     function getRandomInt(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -88,14 +93,14 @@ function loadingIndicator(element, message) {
                 element.textContent = message + '.'.repeat(dotCount + 1);
                 dotCount++;
             } else {
-                clearInterval(intervalId); // Clear the interval when done
+                clearInterval(intervalId);
                 element.textContent += emoji;
-                timeoutId = setTimeout(() => { // Assign timeout to a variable
+                timeoutId = setTimeout(() => {
                     element.textContent = message;
                     updateMessage();
-                }, 1500); // Show emoji for 1.5s
+                }, 1500);
             }
-        }, 100); // Add dot every 100ms
+        }, 100);
     }
 
     function start() {
@@ -110,15 +115,18 @@ function loadingIndicator(element, message) {
             intervalId = null;
         }
         if (timeoutId) {
-            clearTimeout(timeoutId); // Clear the timeout as well
+            clearTimeout(timeoutId);
             timeoutId = null;
         }
-        element.textContent = ''; // clear the element's text content
+        element.textContent = '';
     }
 
-    return { start, stop }; // return these to call them outside
+    return { start, stop };
 }
 
+/**
+ * Types/deletes placeholders in an input field for a "typing" effect.
+ */
 function typingPlaceholder(inputElement, placeholders) {
     let placeholderIndex = 0;
     let charIndex = 0;
@@ -128,35 +136,35 @@ function typingPlaceholder(inputElement, placeholders) {
     let typingInterval;
     
     function type() {
-        if (inputElement.value !== '') return;  // Stop if there's user input
-    
+        if (inputElement.value !== '') return;  // If user has typed, stop.
+
         const currentPlaceholder = placeholders[placeholderIndex];
         
         if (isDeleting) {
-        inputElement.setAttribute('placeholder', currentPlaceholder.substring(0, charIndex - 1));
-        charIndex--;
+            inputElement.setAttribute('placeholder', currentPlaceholder.substring(0, charIndex - 1));
+            charIndex--;
         } else {
-        inputElement.setAttribute('placeholder', currentPlaceholder.substring(0, charIndex + 1));
-        charIndex++;
+            inputElement.setAttribute('placeholder', currentPlaceholder.substring(0, charIndex + 1));
+            charIndex++;
         }
-    
+
         if (!isDeleting && charIndex === currentPlaceholder.length) {
-        isDeleting = true;
-        typingSpeed = 20;
-        typingInterval = setTimeout(type, pauseDuration);
+            isDeleting = true;
+            typingSpeed = 20;
+            typingInterval = setTimeout(type, pauseDuration);
         } else if (isDeleting && charIndex === 0) {
-        isDeleting = false;
-        placeholderIndex = (placeholderIndex + 1) % placeholders.length;
-        typingSpeed = 70;
-        typingInterval = setTimeout(type, pauseDuration);
+            isDeleting = false;
+            placeholderIndex = (placeholderIndex + 1) % placeholders.length;
+            typingSpeed = 70;
+            typingInterval = setTimeout(type, pauseDuration);
         } else {
-        typingInterval = setTimeout(type, typingSpeed);
+            typingInterval = setTimeout(type, typingSpeed);
         }
     }
     
     function startTyping() {
         if (inputElement.value === '') {
-        type();
+            type();
         }
     }
     
@@ -169,21 +177,24 @@ function typingPlaceholder(inputElement, placeholders) {
     inputElement.addEventListener('blur', startTyping);
     inputElement.addEventListener('input', function() {
         if (this.value === '') {
-        startTyping();
+            startTyping();
         } else {
-        stopTyping();
+            stopTyping();
         }
     });
     
     startTyping();
 }
 
+/**
+ * Simple function to toggle .active on accordion triggers.
+ */
 function attachAccordionListeners() {
-    var accordionTriggers = document.querySelectorAll('.autoplugin-accordion-trigger');
-    accordionTriggers.forEach(function(trigger) {
-        trigger.addEventListener('click', function() {
-            var accordion = this.parentElement.parentElement;
+    const accordionTriggers = document.querySelectorAll('.autoplugin-accordion-trigger');
+    accordionTriggers.forEach(trigger => {
+        trigger.addEventListener('click', function () {
+            const accordion = this.parentElement.parentElement;
             accordion.classList.toggle('active');
         });
-    } );
+    });
 }
