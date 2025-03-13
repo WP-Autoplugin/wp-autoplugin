@@ -35,7 +35,7 @@ class Notices {
 		}
 
 		// DISALLOW_FILE_MODS notice.
-		if ( defined( 'DISALLOW_FILE_MODS' ) && DISALLOW_FILE_MODS ) {
+		if ( defined( 'DISALLOW_FILE_MODS' ) && \DISALLOW_FILE_MODS ) {
 			?>
 			<div class="notice notice-error">
 				<p>
@@ -70,6 +70,7 @@ class Notices {
 				<p>
 					<?php
 					printf(
+						/* translators: 1: fix link start tag, 2: fix link end tag */
 						esc_html__( 'You can %1$sfix the error automatically%2$s.', 'wp-autoplugin' ),
 						'<a href="' . esc_url( $fix_url ) . '">',
 						'</a>'

@@ -4,7 +4,7 @@ Donate link: https://wp-autoplugin.com
 Tags: ai, plugin generator, development, wordpress, automation
 Requires at least: 6.0
 Tested up to: 6.7.1
-Stable tag: 1.2.1
+Stable tag: 1.3
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -60,8 +60,13 @@ While WP-Autoplugin aims to generate high-quality code adhering to WordPress sta
 
 == Changelog ==
 
+= 1.3 =
+* Added new Explain Plugin feature
+* Refactored admin-side PHP & JS codes
+* Added new Google models
+
 = 1.2.1 =
-* Added support for reasoning models (o1, o3-mini, Claude 3.5 Sonnet Thinking)
+* Added support for reasoning models (o1, o3-mini, Claude 3.7 Sonnet Thinking)
 * Fixed PHPCS issues throughout the codebase
 
 = 1.2 =

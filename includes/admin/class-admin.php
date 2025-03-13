@@ -4,7 +4,7 @@
  *
  * @package WP-Autoplugin
  * @since 1.0.0
- * @version 1.0.5
+ * @version 1.3
  * @link https://wp-autoplugin.com
  * @license GPL-2.0+
  * @license https://www.gnu.org/licenses/gpl-2.0.html

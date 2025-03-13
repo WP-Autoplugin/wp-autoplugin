@@ -145,8 +145,13 @@ WP-Autoplugin is licensed under the GPLv3 or later.
 
 ## Changelog
 
+### 1.3
+- Added new Explain Plugin feature
+- Refactored admin-side PHP & JS codes
+- Added new Google models
+
 ### 1.2.1
-- Added support for reasoning models (o1, o3-mini, Claude 3.5 Sonnet Thinking)
+- Added support for reasoning models (o1, o3-mini, Claude 3.7 Sonnet Thinking)
 - Fixed PHPCS issues throughout the codebase
 
 ### 1.2
