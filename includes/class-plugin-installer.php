@@ -159,7 +159,7 @@ class Plugin_Installer {
 		ob_end_clean();
 		restore_error_handler();
 
-		Admin::add_notice( 'Plugin activated successfully.', 'success' );
+		Admin\Notices::add_notice( 'Plugin activated successfully.', 'success' );
 		wp_safe_redirect( esc_url( admin_url( 'admin.php?page=wp-autoplugin' ) ) );
 		exit;
 	}
@@ -180,7 +180,7 @@ class Plugin_Installer {
 		include_once ABSPATH . 'wp-admin/includes/plugin.php';
 		deactivate_plugins( $plugin );
 
-		Admin::add_notice( 'Plugin deactivated successfully.', 'success' );
+		Admin\Notices::add_notice( 'Plugin deactivated successfully.', 'success' );
 		wp_safe_redirect( esc_url( admin_url( 'admin.php?page=wp-autoplugin' ) ) );
 		exit;
 	}
@@ -203,11 +203,11 @@ class Plugin_Installer {
 
 		$deleted = delete_plugins( [ $plugin ] );
 		if ( is_wp_error( $deleted ) ) {
-			Admin::add_notice( 'Error deleting plugin: ' . $deleted->get_error_message(), 'error' );
+			Admin\Notices::add_notice( 'Error deleting plugin: ' . $deleted->get_error_message(), 'error' );
 		} else {
 			$autoplugins = array_diff( $autoplugins, [ $plugin ] );
 			update_option( 'wp_autoplugins', $autoplugins );
-			Admin::add_notice( 'Plugin deleted successfully.', 'success' );
+			Admin\Notices::add_notice( 'Plugin deleted successfully.', 'success' );
 		}
 		wp_safe_redirect( esc_url( admin_url( 'admin.php?page=wp-autoplugin' ) ) );
 		exit;

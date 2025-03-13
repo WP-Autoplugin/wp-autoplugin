@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Initialize the WP_List_Table class.
-$plugin_list_table = new Plugin_List_Table();
+$plugin_list_table = new Admin\Plugin_List_Table();
 $plugin_list_table->prepare_items();
 $autoplugins = $plugin_list_table->get_plugins();
 $no_plugins  = empty( $autoplugins );
