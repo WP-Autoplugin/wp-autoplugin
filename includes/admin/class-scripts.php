@@ -242,10 +242,17 @@ class Scripts {
 				WP_AUTOPLUGIN_VERSION
 			);
 		} elseif ( $screen->id === 'admin_page_wp-autoplugin-explain' ) {
-			// Enqueue marked.js for markdown parsing.
+			// Enqueue marked.js, purify.min.js for markdown rendering.
 			wp_enqueue_script(
 				'wp-autoplugin-marked',
 				WP_AUTOPLUGIN_URL . 'assets/admin/js/marked.min.js',
+				[],
+				WP_AUTOPLUGIN_VERSION,
+				true
+			);
+			wp_enqueue_script(
+				'wp-autoplugin-purify',
+				WP_AUTOPLUGIN_URL . 'assets/admin/js/purify.min.js',
 				[],
 				WP_AUTOPLUGIN_VERSION,
 				true

@@ -134,40 +134,16 @@
      * @return {string} - HTML formatted explanation.
      */
     function formatExplanation(text) {
-        // Check if marked is available
-        if (typeof marked === 'undefined') {
-            console.warn('Marked.js not found, falling back to basic formatting');
-            return '<div class="explanation-text">' + 
-                text.replace(/```([a-z]*)\n([\s\S]*?)\n```/gm, function(match, language, code) {
-                    const languageClass = language ? `language-${language}` : 'language-none';
-                    const highlighted = Prism ? Prism.highlight(code, Prism.languages[language] || Prism.languages.markup, language) : code;
-                    return `<pre class="${languageClass}"><code>${highlighted}</code></pre>`;
-                }).replace(/\n\n/g, '<br><br>').replace(/\n/g, '<br>') + 
-                '</div>';
-        }
-
         // Configure marked.js
         marked.setOptions({
-            highlight: function(code, lang) {
-                if (Prism && lang) {
-                    try {
-                        return Prism.highlight(code, Prism.languages[lang], lang);
-                    } catch (e) {
-                        return code;
-                    }
-                }
-                return code;
-            },
             breaks: true,
-            headerIds: false,
-            mangle: false,
-            sanitize: false, // We trust the AI output
-            smartLists: true
+            gfm: true,
+            silent: true
         });
 
-        // Convert markdown to HTML
+        // Convert markdown to HTML.
         try {
-            return marked.parse(text);  // Use marked.parse() instead of marked()
+            return DOMPurify.sanitize(marked.parse(text));
         } catch (e) {
             console.error('Markdown parsing failed:', e);
             return '<p>Error parsing explanation. Please try again.</p>';

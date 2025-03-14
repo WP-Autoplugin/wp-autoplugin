@@ -55,12 +55,8 @@ class Plugin_Explainer {
 			Please provide a comprehensive explanation of this plugin's functionality, including:
 			1. Overview and main purpose
 			2. Key features and functionality
-			3. Technical implementation details
-			4. Hooks (actions and filters) used
-			5. Database interactions if any
-			6. Dependencies and requirements
-			7. How to use the plugin (from a user's perspective)
-			8. Any security considerations or best practices
+			3. Basic technical implementation
+			4. How to use the plugin (from a user's perspective)
 
 			Format your response in clear sections with headings. Be thorough but concise. Use Markdown.
 			PROMPT;
@@ -113,7 +109,7 @@ class Plugin_Explainer {
 			'usage'        => 'how end-users would interact with this plugin, including admin settings and frontend features',
 		];
 
-		$aspect_prompt = isset( $aspect_prompts[ $aspect ] ) ? $aspect_prompts[ $aspect ] : 'Provide a general analysis.';
+		$aspect_prompt = isset( $aspect_prompts[ $aspect ] ) ? 'Please analyze this plugin with a focus on ' . $aspect_prompts[ $aspect ] . '.' : 'Provide a general analysis.';
 
 		$prompt = <<<PROMPT
 			I have a WordPress plugin file I would like you to analyze. Here is the code:
@@ -122,7 +118,7 @@ class Plugin_Explainer {
 			$plugin_code
 			```
 
-			Please analyze this plugin with a focus on $aspect_prompt.
+			$aspect_prompt
 
 			Format your response in clear sections with meaningful headings. Be thorough but concise. Use Markdown.
 			PROMPT;
