@@ -203,3 +203,13 @@ textarea#plugin_plan_container {
     display: inline-block;
     margin-right: 10px;
 }
+
+
+.explain-options {
+    display: none;
+    margin-top: 10px;
+}
+
+textarea#plugin_question:placeholder-shown + .explain-options {
+    display: block;
+}
