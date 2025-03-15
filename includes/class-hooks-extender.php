@@ -52,14 +52,14 @@ class Hooks_Extender {
 	public function plan_plugin_hooks_extension( $hooks, $plugin_changes ) {
 		$hooks_list = '';
 		foreach ( $hooks as $hook ) {
-			$hooks_list .= "- {$hook['type']} '{$hook['name']}': {$hook['context']}\n";
+			$hooks_list .= "```\n{$hook['type']}: '{$hook['name']}'\n\nContext:\n{$hook['context']}\n```\n\n";
 		}
 
 		$prompt = <<<PROMPT
 			I want to extend a WordPress plugin using its hooks. Here are the available hooks in the plugin:
-			```
+
 			$hooks_list
-			```
+			
 			I want to make the following changes to the plugin's functionality:
 
 			$plugin_changes
@@ -68,16 +68,26 @@ class Hooks_Extender {
 
 			Also, determine if the requested extension is technically feasible with the available hooks. If it is not feasible, explain why.
 
-			Your response should be in JSON format with the following structure:
+			Do not write the actual plugin code. Your response should be a valid JSON object, with clear and concise text in each of the following sections:
 			{
-				"technically_feasible": true/false,
+				"technically_feasible": true,
 				"explanation": "If not feasible, explain why. If feasible, you can skip this.",
-				"plan": "The development plan if feasible."
-				"plugin_name": "Name of the new plugin",
+				"hooks": [ "hook_name_1", "hook_name_2" ],
+				"plan": "The development plan if feasible.",
+				"plugin_name": "Name of the new plugin"
 			}
+
+			Do not add any additional commentary. Make sure your response only contains a valid JSON object with the specified sections. Do not use Markdown formatting in your answer.
 		PROMPT;
 
-		return $this->ai_api->send_prompt( $prompt );
+		error_log( '------------------- PROMPT -------------------' );
+		error_log( print_r( $prompt, true ) );
+
+		$plan_data = $this->ai_api->send_prompt( $prompt );
+		error_log( '------------------- AI RESPONSE -------------------' );
+		error_log( print_r( $plan_data, true ) );
+
+		return $plan_data;
 	}
 
 	/**
@@ -265,14 +275,14 @@ class Hooks_Extender {
 		$line_count = count( $lines );
 
 		for ( $i = $start; $i < $line_count; $i++ ) {
-			$line = $lines[$i];
+			$line = $lines[ $i ];
 
 			// Go character by character.
 			for ( $j = 0, $len = strlen( $line ); $j < $len; $j++ ) {
-				$char = $line[$j];
+				$char = $line[ $j ];
 
-				// If we haven't encountered the opening '(' yet, detect it:
-				if ( !$found_first_paren && $char === '(' ) {
+				// If we haven't encountered the opening '(' yet, detect it.
+				if ( ! $found_first_paren && $char === '(' ) {
 					$found_first_paren = true;
 					$open_parentheses = 1;
 					continue;
@@ -310,12 +320,12 @@ class Hooks_Extender {
 	/**
 	 * Find a docblock that ends on or directly above $line_index. If we detect
 	 * `/ ** ... * /` right above, return the top line of that docblock. Otherwise,
-	* just return the $line_index itself (meaning no docblock).
-	*
-	* @param string[] $lines
-	* @param int      $line_index
-	* @return int
-	*/
+	 * just return the $line_index itself (meaning no docblock).
+	 *
+	 * @param string[] $lines      Array of file lines.
+	 * @param int      $line_index Line index where the hook call begins.
+	 * @return int
+	 */
 	private static function find_docblock_start_line( array $lines, int $line_index ) {
 		// Step up from $line_index − 1 to see if there's a `* /`.
 		// If there's a docblock, we want all lines from `/ **` to `* /`.
@@ -326,15 +336,15 @@ class Hooks_Extender {
 		// a line that doesn't look like part of a docblock.
 		$within_docblock = false;
 		for ( ; $line_index >= 0; $line_index-- ) {
-			$trimmed = trim( $lines[$line_index] );
-			if ( !$within_docblock && preg_match( '/\*\/$/', $trimmed ) ) {
+			$trimmed = trim( $lines[ $line_index ] );
+			if ( ! $within_docblock && preg_match( '/\*\/$/', $trimmed ) ) {
 				$within_docblock = true;
 				continue;
 			}
 
 			if ( $within_docblock ) {
 				// If we've reached the opening of a docblock, return that line index.
-				if ( strpos( $trimmed, '/'.'**' ) === 0 ) {
+				if ( strpos( $trimmed, '/**' ) === 0 ) {
 					return $line_index;
 				}
 				// If it's just a middle line of the docblock, keep going up.
@@ -350,7 +360,7 @@ class Hooks_Extender {
 				// Not within a docblock, so if we see something that isn't empty or comment,
 				// it means there's no docblock contiguous to this line.
 				if ( $trimmed !== '' && strpos( $trimmed, '//' ) !== 0 ) {
-					// Not a docblock. Return original line+1
+					// Not a docblock. Return original line + 1.
 					return $line_index + 1;
 				}
 			}

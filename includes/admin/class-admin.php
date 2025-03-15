@@ -101,7 +101,7 @@ class Admin {
 		add_action( 'admin_menu', [ $this, 'add_admin_menu' ] );
 
 		// Initialize the GitHub updater.
-		$this->github_updater_init();
+		add_action( 'init', [ $this, 'github_updater_init' ] );
 
 		// Add "Extend Plugin" links to the plugin list table.
 		add_filter( 'plugin_action_links', [ $this, 'add_extend_plugin_link' ], 10, 2 );
