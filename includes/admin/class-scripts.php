@@ -291,6 +291,61 @@ class Scripts {
 				[],
 				WP_AUTOPLUGIN_VERSION
 			);
+		} elseif ( $screen->id === 'admin_page_wp-autoplugin-extend-hooks' ) {
+			$settings = wp_enqueue_code_editor( [ 'type' => 'application/x-httpd-php' ] );
+			if ( false !== $settings ) {
+				wp_enqueue_script( 'wp-theme-plugin-editor' );
+				wp_enqueue_style( 'wp-codemirror' );
+			}
+
+			$is_plugin_active = false;
+			if ( isset( $_GET['plugin'] ) ) {
+				$plugin_file = sanitize_text_field( wp_unslash( $_GET['plugin'] ) );
+				$plugin_file = str_replace( '../', '', $plugin_file );
+				$is_plugin_active = is_plugin_active( $plugin_file );
+			}
+
+			wp_enqueue_script(
+				'wp-autoplugin-extend-hooks',
+				WP_AUTOPLUGIN_URL . 'assets/admin/js/hooks-extender.js',
+				[ 'wp-autoplugin-utils' ],
+				WP_AUTOPLUGIN_VERSION,
+				true
+			);
+
+			wp_localize_script(
+				'wp-autoplugin-extend-hooks',
+				'wp_autoplugin',
+				[
+					'ajax_url'         => esc_url( admin_url( 'admin-ajax.php' ) ),
+					'nonce'            => wp_create_nonce( 'wp_autoplugin_generate' ),
+					'activate_url'     => esc_url(
+						admin_url(
+							'admin.php?page=wp-autoplugin&action=activate&nonce=' .
+							wp_create_nonce( 'wp-autoplugin-activate-plugin' )
+						)
+					),
+					'is_plugin_active' => $is_plugin_active,
+					'messages'         => [
+						'empty_description'     => esc_html__( 'Please describe the changes you want to make to the plugin.', 'wp-autoplugin' ),
+						'generating_plan'       => esc_html__( 'Generating a plan for your plugin.', 'wp-autoplugin' ),
+						'plan_generation_error' => esc_html__( 'Error generating the development plan.', 'wp-autoplugin' ),
+						'generating_code'       => esc_html__( 'Generating the extension plugin code.', 'wp-autoplugin' ),
+						'code_generation_error' => esc_html__( 'Error generating the extension code.', 'wp-autoplugin' ),
+						'plugin_creation_error' => esc_html__( 'Error creating the extension plugin.', 'wp-autoplugin' ),
+						'code_updated'          => esc_html__( 'The extension plugin has been created.', 'wp-autoplugin' ),
+						'activate'              => esc_html__( 'Activate Plugin', 'wp-autoplugin' ),
+						'creating_plugin'       => esc_html__( 'Creating the extension plugin.', 'wp-autoplugin' ),
+					],
+				]
+			);
+
+			wp_enqueue_style(
+				'wp-autoplugin-extend-hooks',
+				WP_AUTOPLUGIN_URL . 'assets/admin/css/extender.css', // Reuse existing CSS
+				[],
+				WP_AUTOPLUGIN_VERSION
+			);
 		}
 	}
 

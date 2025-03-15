@@ -52,6 +52,9 @@ class Ajax {
 			'extend_plugin',
 
 			'explain_plugin',
+
+			'generate_extend_hooks_plan',
+			'generate_extend_hooks_code',
 		];
 		foreach ( $actions as $action ) {
 			add_action( 'wp_ajax_wp_autoplugin_' . $action, [ $this, 'ajax_actions' ] );
@@ -438,4 +441,58 @@ class Ajax {
 			]
 		);
 	}
+
+	/**
+	 * AJAX handler for generating a plan to extend plugin hooks.
+	 *
+	 * @return void
+	 */
+	public function ajax_generate_extend_hooks_plan() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( esc_html__( 'You are not allowed to access this page.', 'wp-autoplugin' ) );
+		}
+		check_ajax_referer( 'wp_autoplugin_generate', 'security' );
+
+		$plugin_file = sanitize_text_field( wp_unslash( $_POST['plugin_file'] ) );
+		$hooks = \WP_Autoplugin\Hooks_Extender::get_plugin_hooks( $plugin_file );
+		if ( empty( $hooks ) ) {
+			wp_send_json_error( esc_html__( 'No hooks found in the plugin.', 'wp-autoplugin' ) );
+		}
+		$plugin_changes = sanitize_text_field( wp_unslash( $_POST['plugin_issue'] ) );
+		$extender = new \WP_Autoplugin\Hooks_Extender( $this->ai_api );
+		$plan_data = $extender->plan_plugin_hooks_extension( $hooks, $plugin_changes );
+		if ( is_wp_error( $plan_data ) ) {
+			wp_send_json_error( $plan_data->get_error_message() );
+		}
+		$plan_array = json_decode( $plan_data, true );
+		if ( ! $plan_array ) {
+			wp_send_json_error( esc_html__( 'Failed to decode the generated plan.', 'wp-autoplugin' ) );
+		}
+		if ( ! $plan_array['technically_feasible'] ) {
+			wp_send_json_error( $plan_array['explanation'] );
+		}
+		wp_send_json_success( $plan_array['plan'] );
+	}
+
+	/**
+	 * AJAX handler for generating code to extend plugin hooks.
+	 *
+	 * @return void
+	 */
+	public function ajax_generate_extend_hooks_code() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( esc_html__( 'You are not allowed to access this page.', 'wp-autoplugin' ) );
+		}
+		check_ajax_referer( 'wp_autoplugin_generate', 'security' );
+
+		$plugin_file = sanitize_text_field( wp_unslash( $_POST['plugin_file'] ) );
+		$ai_plan = sanitize_text_field( wp_unslash( $_POST['plugin_plan'] ) );
+		$hooks = \WP_Autoplugin\Hooks_Extender::get_plugin_hooks( $plugin_file );
+		$code = $extender->generate_hooks_extension_code( $hooks, $ai_plan );
+		if ( is_wp_error( $code ) ) {
+			wp_send_json_error( $code->get_error_message() );
+		}
+		wp_send_json_success( $code );
+	}
+
 }

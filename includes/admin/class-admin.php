@@ -102,6 +102,30 @@ class Admin {
 
 		// Initialize the GitHub updater.
 		$this->github_updater_init();
+
+		// Add "Extend Plugin" links to the plugin list table.
+		add_filter( 'plugin_action_links', [ $this, 'add_extend_plugin_link' ], 10, 2 );
+	}
+
+	/**
+	 * Add an "Extend Plugin" link to the plugin list table.
+	 *
+	 * @param array  $actions The plugin action links.
+	 * @param string $plugin_file The plugin file.
+	 *
+	 * @return array
+	 */
+	public function add_extend_plugin_link( $actions, $plugin_file ) {
+		$autoplugins = get_option( 'wp_autoplugins', [] );
+		if ( in_array( $plugin_file, $autoplugins, true ) ) {
+			$extend_url = admin_url( 'admin.php?page=wp-autoplugin-extend&plugin=' . rawurlencode( $plugin_file ) );
+			$extend_url = wp_nonce_url( $extend_url, 'wp-autoplugin-extend-plugin', 'nonce' );
+		} else {
+			$extend_url = admin_url( 'admin.php?page=wp-autoplugin-extend-hooks&plugin=' . rawurlencode( $plugin_file ) );
+			$extend_url = wp_nonce_url( $extend_url, 'wp-autoplugin-extend-hooks', 'nonce' );
+		}
+		$actions['extend_plugin'] = '<a href="' . esc_url( $extend_url ) . '">' . esc_html__( 'Extend Plugin', 'wp-autoplugin' ) . '</a>';
+		return $actions;
 	}
 
 	/**
@@ -218,6 +242,15 @@ class Admin {
 			'wp-autoplugin-explain',
 			[ $this, 'render_explain_plugin_page' ]
 		);
+
+		add_submenu_page(
+			'',
+			esc_html__( 'Extend Plugin with Hooks', 'wp-autoplugin' ),
+			esc_html__( 'Extend Plugin with Hooks', 'wp-autoplugin' ),
+			'manage_options',
+			'wp-autoplugin-extend-hooks',
+			[ $this, 'render_extend_hooks_page' ]
+		);
 	}
 
 	/**
@@ -275,6 +308,26 @@ class Admin {
 	public function render_explain_plugin_page() {
 		$this->validate_plugin( 'wp-autoplugin-explain-plugin' );
 		include WP_AUTOPLUGIN_DIR . 'views/page-explain-plugin.php';
+	}
+
+	/**
+	 * Display the extend plugin with hooks page.
+	 *
+	 * @return void
+	 */
+	public function render_extend_hooks_page() {
+		if ( ! isset( $_GET['plugin'] ) ) {
+			wp_die( esc_html__( 'No plugin specified.', 'wp-autoplugin' ) );
+		}
+		$plugin_file = sanitize_text_field( wp_unslash( $_GET['plugin'] ) );
+		$plugin_file = str_replace( '../', '', $plugin_file );
+		$plugin_path = WP_CONTENT_DIR . '/plugins/' . $plugin_file;
+		if ( ! file_exists( $plugin_path ) ) {
+			wp_die( esc_html__( 'The specified plugin does not exist.', 'wp-autoplugin' ) );
+		}
+		$plugin_data = get_plugin_data( $plugin_path );
+		$hooks = \WP_Autoplugin\Hooks_Extender::get_plugin_hooks( $plugin_file );
+		include WP_AUTOPLUGIN_DIR . 'views/page-extend-hooks.php';
 	}
 
 	/**
