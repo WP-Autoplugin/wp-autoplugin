@@ -105,6 +105,33 @@ class Admin {
 
 		// Add "Extend Plugin" links to the plugin list table.
 		add_filter( 'plugin_action_links', [ $this, 'add_extend_plugin_link' ], 10, 2 );
+
+		// Add custom hook extraction config for Rank Math.
+		add_filter( 'wp_autoplugin_hook_extraction_config', [ $this, 'add_rank_math_hook_extraction_config' ] );
+	}
+
+	/**
+	 * Add custom hook extraction configuration for the Rank Math plugin, which uses a custom hook format.
+	 *
+	 * @param array $configs Array of custom hook extraction configurations.
+	 * @return array
+	 */
+	public function add_rank_math_hook_extraction_config( $configs ) {
+		$rank_math_config = [
+			'regex_pattern'         => '/->(do_filter|do_action)\s*\(\s*([\'"]([^\'"]+)[\'"]|\$[^,]+|\w+)\s*,/m',
+			'method_to_type'        => [
+				'do_filter' => 'filter',
+				'do_action' => 'action',
+			],
+			'hook_name_transformer' => function ( $name ) {
+				return 'rank_math/' . $name;
+			},
+		];
+
+		$configs['seo-by-rank-math']     = $rank_math_config;
+		$configs['seo-by-rank-math-pro'] = $rank_math_config;
+
+		return $configs;
 	}
 
 	/**

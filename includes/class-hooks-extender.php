@@ -120,7 +120,6 @@ class Hooks_Extender {
 		return $this->ai_api->send_prompt( $prompt );
 	}
 
-
 	/**
 	 * Collect all action and filter hooks from a plugin's PHP files.
 	 *
@@ -139,85 +138,119 @@ class Hooks_Extender {
 			'dist',
 		);
 
+		// Determine plugin slug
+		$plugin_slug = strpos( $plugin_file, '/' ) !== false ? dirname( $plugin_file ) : $plugin_file;
+
+		// Get custom extraction config for the plugin, if any
+		$config = self::get_extraction_config( $plugin_slug );
+
+		if ( $config ) {
+			$regex_pattern = $config['regex_pattern'];
+			$method_to_type = $config['method_to_type'];
+			$hook_name_transformer = $config['hook_name_transformer'] ?? null;
+		} else {
+			// Default configuration for standard WordPress hooks
+			$regex_pattern = '/(apply_filters|do_action|do_action_ref_array)\s*\(\s*([\'"]([^\'"]+)[\'"]|\$[^,]+|\w+)\s*,/m';
+			$method_to_type = [
+				'apply_filters' => 'filter',
+				'do_action' => 'action',
+				'do_action_ref_array' => 'action',
+			];
+			$hook_name_transformer = null;
+		}
+
+		// Single-file plugin
 		if ( strpos( $plugin_file, '/' ) === false ) {
-			// Single-file plugin.
 			$plugin_path = WP_CONTENT_DIR . '/plugins/' . $plugin_file;
-			return self::process_file_hooks( $plugin_path );
-		}
+			$hooks = self::process_file_hooks( $plugin_path, $regex_pattern, $method_to_type, $hook_name_transformer );
+		} else {
+			// Multi-file plugin
+			$plugin_dir = dirname( $plugin_file );
+			$plugin_path = WP_CONTENT_DIR . '/plugins/' . $plugin_dir;
 
-		// Multi-file plugin.
-		$plugin_dir = dirname( $plugin_file );
-		$plugin_path = WP_CONTENT_DIR . '/plugins/' . $plugin_dir;
+			$iterator = new \RecursiveIteratorIterator(
+				new \RecursiveDirectoryIterator( $plugin_path, \RecursiveDirectoryIterator::SKIP_DOTS )
+			);
 
-		$iterator = new \RecursiveIteratorIterator(
-			new \RecursiveDirectoryIterator( $plugin_path, \RecursiveDirectoryIterator::SKIP_DOTS )
-		);
-
-		foreach ( $iterator as $file ) {
-			if ( ! $file->isFile() || $file->getExtension() !== 'php' ) {
-				continue;
-			}
-
-			// Check if file is in an excluded directory
-			$relative_path = str_replace( $plugin_path, '', $file->getPath() );
-			$skip_file = false;
-			foreach ( $excluded_dirs as $excluded_dir ) {
-				if ( strpos( $relative_path, '/' . $excluded_dir . '/' ) !== false ) {
-					$skip_file = true;
-					break;
+			foreach ( $iterator as $file ) {
+				if ( ! $file->isFile() || $file->getExtension() !== 'php' ) {
+					continue;
 				}
-			}
-			if ( $skip_file ) {
-				continue;
-			}
 
-			$hooks = array_merge( $hooks, self::process_file_hooks( $file->getPathname() ) );
+				// Check if file is in an excluded directory
+				$relative_path = str_replace( $plugin_path, '', $file->getPath() );
+				$skip_file = false;
+				foreach ( $excluded_dirs as $excluded_dir ) {
+					if ( strpos( $relative_path, '/' . $excluded_dir . '/' ) !== false ) {
+						$skip_file = true;
+						break;
+					}
+				}
+				if ( $skip_file ) {
+					continue;
+				}
+
+				$hooks = array_merge( $hooks, self::process_file_hooks( $file->getPathname(), $regex_pattern, $method_to_type, $hook_name_transformer ) );
+			}
 		}
 
-		// Remove duplicates by `name` key.
+		// Remove duplicates by `name` key
 		$unique_hooks = [];
 		foreach ( $hooks as $hook ) {
 			if ( ! isset( $unique_hooks[ $hook['name'] ] ) ) {
 				$unique_hooks[ $hook['name'] ] = $hook;
 			}
 		}
-		$hooks = array_values( $unique_hooks );
+		return array_values( $unique_hooks );
+	}
 
-		return $hooks;
+	/**
+	 * Get custom hook extraction configuration for a plugin.
+	 *
+	 * @param string $plugin_slug The plugin slug (e.g., 'seo-by-rank-math').
+	 * @return array|null Custom config array or null if none exists.
+	 */
+	private static function get_extraction_config( $plugin_slug ) {
+		$configs = apply_filters( 'wp_autoplugin_hook_extraction_config', [] );
+		return isset( $configs[ $plugin_slug ] ) ? $configs[ $plugin_slug ] : null;
 	}
 
 	/**
 	 * Process a single PHP file to extract hooks.
 	 *
-	 * @param string $file_path Path to the PHP file.
+	 * @param string   $file_path            Path to the PHP file.
+	 * @param string   $regex_pattern        Regex pattern to match hook calls.
+	 * @param array    $method_to_type       Mapping of method names to hook types.
+	 * @param callable $hook_name_transformer Optional function to transform hook names.
 	 * @return array Array of hooks found in the file.
 	 */
-	private static function process_file_hooks( $file_path ) {
+	private static function process_file_hooks( $file_path, $regex_pattern, $method_to_type, $hook_name_transformer = null ) {
+		if ( $hook_name_transformer === null ) {
+			$hook_name_transformer = function( $name ) { return $name; };
+		}
+
 		$hooks = [];
 		$content = file_get_contents( $file_path );
 		$lines = explode( "\n", $content );
 
-		// Regex to find the start of do_action/apply_filters/do_action_ref_array calls.
-		preg_match_all(
-			'/(apply_filters|do_action|do_action_ref_array)\s*\(\s*([\'"]([^\'"]+)[\'"]|\$[^,]+|\w+)\s*,/m',
-			$content,
-			$matches,
-			PREG_OFFSET_CAPTURE | PREG_SET_ORDER
-		);
+		preg_match_all( $regex_pattern, $content, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER );
 
 		foreach ( $matches as $match ) {
-			$hook_type = $match[1][0];
-			$hook_name_raw = $match[2][0];
-			$offset = $match[0][1];
-
-			// Try extracting the actual hook name if it's a quoted string.
-			if ( ! preg_match( '/[\'"]([^\'"]+)[\'"]/', $hook_name_raw, $name_match ) ) {
-				// Hook name might be a variable or something else; skip or handle differently if you prefer.
+			$method_name = $match[1][0];
+			if ( ! isset( $method_to_type[ $method_name ] ) ) {
 				continue;
 			}
-			$hook_name = $name_match[1];
+			$hook_type = $method_to_type[ $method_name ];
 
-			// ---- Find the line number where this call begins ----
+			// Extract hook name (assuming it's a quoted string)
+			if ( ! isset( $match[3] ) ) {
+				continue; // Skip if not a quoted string
+			}
+			$hook_name = $match[3][0];
+			$hook_name = call_user_func( $hook_name_transformer, $hook_name );
+
+			// Find the line number where this call begins
+			$offset = $match[0][1];
 			$current_offset = 0;
 			$hook_line = 0;
 			foreach ( $lines as $i => $line ) {
@@ -228,23 +261,20 @@ class Hooks_Extender {
 				}
 			}
 
-			// ---- Find statement end line (so we get the entire call, including arrays) ----
+			// Find statement end line
 			$statement_end_line = self::find_statement_end_line( $lines, $hook_line );
 
-			// ---- Find docblock start line if any directly above this call ----
+			// Find docblock start line if any
 			$docblock_start_line = self::find_docblock_start_line( $lines, $hook_line );
 
-			 // Filter the number of context lines
+			// Filter the number of context lines
 			$context_lines_count = apply_filters(
 				'wp_autoplugin_hook_context_lines',
 				self::DEFAULT_CONTEXT_LINES
 			);
 
-			// The actual top we want is either (docblock_start_line) or (hook_line),
-			// whichever is smaller, minus filtered number of context lines.
+			// Determine context boundaries
 			$context_start = max( 0, min( $docblock_start_line, $hook_line ) - $context_lines_count );
-
-			// And then filtered number of lines after the statement end line, if possible.
 			$context_end = min( count( $lines ) - 1, $statement_end_line + $context_lines_count );
 
 			$context_lines = array_slice( $lines, $context_start, $context_end - $context_start + 1 );
@@ -252,7 +282,7 @@ class Hooks_Extender {
 
 			$hooks[] = [
 				'name' => $hook_name,
-				'type' => ( $hook_type === 'apply_filters' ? 'filter' : 'action' ),
+				'type' => $hook_type,
 				'context' => $context,
 			];
 		}
@@ -262,12 +292,11 @@ class Hooks_Extender {
 
 	/**
 	 * Attempt to find the last line of the current statement by tracking parentheses
-	 * or scanning until a semicolon outside parentheses. The simpler approach is
-	 * to just keep scanning forward while the parentheses aren't balanced.
+	 * or scanning until a semicolon outside parentheses.
 	 *
-	 * @param string[] $lines   Array of file lines.
-	 * @param int      $start   Line index where the hook call begins.
-	 * @return int              Line index where the statement is deemed to end.
+	 * @param string[] $lines Array of file lines.
+	 * @param int      $start Line index where the hook call begins.
+	 * @return int Line index where the statement is deemed to end.
 	 */
 	private static function find_statement_end_line( array $lines, int $start ) {
 		$open_parentheses = 0;
@@ -277,11 +306,9 @@ class Hooks_Extender {
 		for ( $i = $start; $i < $line_count; $i++ ) {
 			$line = $lines[ $i ];
 
-			// Go character by character.
 			for ( $j = 0, $len = strlen( $line ); $j < $len; $j++ ) {
 				$char = $line[ $j ];
 
-				// If we haven't encountered the opening '(' yet, detect it.
 				if ( ! $found_first_paren && $char === '(' ) {
 					$found_first_paren = true;
 					$open_parentheses = 1;
@@ -293,47 +320,30 @@ class Hooks_Extender {
 						$open_parentheses++;
 					} elseif ( $char === ')' ) {
 						$open_parentheses--;
-						// If parentheses are balanced and the next significant
-						// character might be a semicolon, we can check for that.
 					}
 				}
 			}
 
-			// If parentheses are balanced (0) and we did find an opening one,
-			// check if this line ends with a semicolon or the next line has
-			// something else. For many WP calls, once parentheses close, that's it.
 			if ( $found_first_paren && $open_parentheses <= 0 ) {
-				// If there's a semicolon on this line or nothing that suggests continuation,
-				// consider that the end. This is not bulletproof for all cases, but it works
-				// for typical WP calls.
 				if ( preg_match( '/;\s*$/', trim( $line ) ) ) {
 					return $i;
 				}
-				// Keep scanning in case the semicolon is on the next line (rare multi-line).
 			}
 		}
 
-		// If we never found a closing semicolon, we just return the last line we checked.
 		return $line_count - 1;
 	}
 
 	/**
-	 * Find a docblock that ends on or directly above $line_index. If we detect
-	 * `/ ** ... * /` right above, return the top line of that docblock. Otherwise,
-	 * just return the $line_index itself (meaning no docblock).
+	 * Find a docblock that ends on or directly above $line_index.
 	 *
 	 * @param string[] $lines      Array of file lines.
 	 * @param int      $line_index Line index where the hook call begins.
 	 * @return int
 	 */
 	private static function find_docblock_start_line( array $lines, int $line_index ) {
-		// Step up from $line_index − 1 to see if there's a `* /`.
-		// If there's a docblock, we want all lines from `/ **` to `* /`.
 		$line_index = max( 0, $line_index - 1 );
-		// If there's any blank line or code before `/ **`, we stop.
 
-		// Move up until we find `* /` or the start of the docblock or stop if we see
-		// a line that doesn't look like part of a docblock.
 		$within_docblock = false;
 		for ( ; $line_index >= 0; $line_index-- ) {
 			$trimmed = trim( $lines[ $line_index ] );
@@ -343,32 +353,21 @@ class Hooks_Extender {
 			}
 
 			if ( $within_docblock ) {
-				// If we've reached the opening of a docblock, return that line index.
 				if ( strpos( $trimmed, '/**' ) === 0 ) {
 					return $line_index;
 				}
-				// If it's just a middle line of the docblock, keep going up.
-				// If we find a line that doesn't match docblock syntax at all,
-				// we break out. But typically we keep going until we see `/ **`.
 				if ( strpos( $trimmed, '*' ) === 0 || $trimmed === '' ) {
 					continue;
 				} else {
-					// We encountered something that isn't part of a docblock; break.
 					break;
 				}
 			} else {
-				// Not within a docblock, so if we see something that isn't empty or comment,
-				// it means there's no docblock contiguous to this line.
 				if ( $trimmed !== '' && strpos( $trimmed, '//' ) !== 0 ) {
-					// Not a docblock. Return original line + 1.
 					return $line_index + 1;
 				}
 			}
 		}
 
-		// If we come out of the loop, it means we never found a docblock or we started from 0.
-		// If we found a docblock and `line_index` is at `/**`, it has returned by now,
-		// otherwise, no docblock found contiguous.
 		return $line_index + 1;
 	}
 }
