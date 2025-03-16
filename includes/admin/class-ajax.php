@@ -464,6 +464,9 @@ class Ajax {
 		if ( is_wp_error( $plan_data ) ) {
 			wp_send_json_error( $plan_data->get_error_message() );
 		}
+
+		// Strip out any code block fences like ```json ... ```
+		$plan_data  = preg_replace( '/^```(json)\n(.*)\n```$/s', '$2', $plan_data );
 		$plan_array = json_decode( $plan_data, true );
 		if ( ! $plan_array ) {
 			wp_send_json_error( esc_html__( 'Failed to decode the generated plan.', 'wp-autoplugin' ) );
@@ -471,7 +474,7 @@ class Ajax {
 		if ( ! $plan_array['technically_feasible'] ) {
 			wp_send_json_error( $plan_array['explanation'] );
 		}
-		wp_send_json_success( $plan_array['plan'] );
+		wp_send_json_success( $plan_array );
 	}
 
 	/**
@@ -488,7 +491,17 @@ class Ajax {
 		$plugin_file = sanitize_text_field( wp_unslash( $_POST['plugin_file'] ) );
 		$ai_plan = sanitize_text_field( wp_unslash( $_POST['plugin_plan'] ) );
 		$hooks = \WP_Autoplugin\Hooks_Extender::get_plugin_hooks( $plugin_file );
-		$code = $extender->generate_hooks_extension_code( $hooks, $ai_plan );
+		$hooks_param = isset( $_POST['hooks'] ) ? json_decode( wp_unslash( $_POST['hooks'] ), true ) : [];
+
+		// The $hooks_param is an array of hook names. Keep only the hooks that are in the plan.
+		$hooks = array_filter( $hooks, function( $hook ) use ( $hooks_param ) {
+			return in_array( $hook['name'], $hooks_param, true );
+		} );
+
+		$plugin_name = isset( $_POST['plugin_name'] ) ? sanitize_text_field( wp_unslash( $_POST['plugin_name'] ) ) : '';
+
+		$extender = new \WP_Autoplugin\Hooks_Extender( $this->ai_api );
+		$code = $extender->generate_hooks_extension_code( $hooks, $ai_plan, $plugin_name );
 		if ( is_wp_error( $code ) ) {
 			wp_send_json_error( $code->get_error_message() );
 		}

@@ -104,7 +104,7 @@ class Admin {
 		add_action( 'init', [ $this, 'github_updater_init' ] );
 
 		// Add "Extend Plugin" links to the plugin list table.
-		add_filter( 'plugin_action_links', [ $this, 'add_extend_plugin_link' ], 10, 2 );
+		add_filter( 'plugin_action_links', [ $this, 'add_extend_plugin_link' ], 20, 2 );
 
 		// Add custom hook extraction config for Rank Math.
 		add_filter( 'wp_autoplugin_hook_extraction_config', [ $this, 'add_rank_math_hook_extraction_config' ] );
@@ -118,13 +118,16 @@ class Admin {
 	 */
 	public function add_rank_math_hook_extraction_config( $configs ) {
 		$rank_math_config = [
-			'regex_pattern'         => '/->(do_filter|do_action)\s*\(\s*([\'"]([^\'"]+)[\'"]|\$[^,]+|\w+)\s*,/m',
+			'regex_pattern'         => '/(?:->)?(do_filter|do_action|apply_filters)\s*\(\s*([\'"]([^\'"]+)[\'"]|\$[^,]+|\w+)\s*,/m',
 			'method_to_type'        => [
 				'do_filter' => 'filter',
 				'do_action' => 'action',
 			],
-			'hook_name_transformer' => function ( $name ) {
-				return 'rank_math/' . $name;
+			'hook_name_transformer' => function ( $name, $regex_match ) {
+				if ( strpos( $regex_match[0][0], '->' ) === 0 ) {
+					return 'rank_math/' . $name;
+				}
+				return $name;
 			},
 		];
 

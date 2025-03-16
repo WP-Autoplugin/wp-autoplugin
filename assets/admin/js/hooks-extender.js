@@ -23,6 +23,7 @@
     let pluginCode        = '';
     let issueDescription  = '';
     let pluginPlan        = {};
+    let pluginName        = '';
 
     // Step mapping
     const steps = {
@@ -39,7 +40,15 @@
             }
         },
         reviewPlan: () => {
-            pluginPlanContainer.value = pluginPlan;
+            // Attempt to parse the plan JSON and fill plugin_name if present
+            try {
+                pluginPlanContainer.value = pluginPlan.plan;
+                if (pluginPlan.plugin_name) {
+                    document.getElementById('plugin_name').value = pluginPlan.plugin_name;
+                }
+            } catch (err) {
+                console.error('Failed to parse plugin plan:', err);
+            }
         },
         reviewCode: () => {
             pluginCodeTextarea.value = pluginCode;
@@ -76,7 +85,7 @@
             generatePlanForm.parentElement.classList.remove('loading');
 
             if (!response.success) {
-                messageGeneratePlan.innerHTML = wp_autoplugin.messages.plan_generation_error + ' <pre>' + response.data + '</pre>';
+                messageGeneratePlan.innerHTML = wp_autoplugin.messages.plan_generation_error + ' <pre>' + response.data.plan + '</pre>';
                 return;
             }
 
@@ -100,7 +109,25 @@
         const formData = new FormData();
         formData.append('action', 'wp_autoplugin_generate_extend_hooks_code');
         formData.append('plugin_file', document.getElementById('plugin_file').value);
-        formData.append('plugin_plan', pluginPlanContainer.value);
+        const planText = pluginPlanContainer.value;
+        let planHooks = [];
+        let planPluginName = document.getElementById('plugin_name').value.trim();
+        try {
+            const planObj = JSON.parse(planText);
+            if (Array.isArray(planObj.hooks)) {
+                planHooks = planObj.hooks; // Only the hooks used in the plan
+            }
+            // If user didn't override the plugin_name input, set from plan:
+            if (!planPluginName && planObj.plugin_name) {
+                planPluginName = planObj.plugin_name;
+            }
+        } catch (e) {
+            // ignore parse error
+        }
+
+        formData.append('plugin_plan', planText);
+        formData.append('plugin_name', planPluginName);
+        formData.append('hooks', JSON.stringify(planHooks));
         formData.append('security', wp_autoplugin.nonce);
 
         try {
@@ -131,9 +158,10 @@
         loader.start();
 
         const formData = new FormData();
-        formData.append('action', 'wp_autoplugin_extend_plugin'); // Reuse existing action
+        formData.append('action', 'wp_autoplugin_create_plugin'); // Reuse existing action
         formData.append('plugin_file', document.getElementById('plugin_file').value);
         formData.append('plugin_code', editorInstance.codemirror.getValue());
+        formData.append('plugin_name', document.getElementById('plugin_name').value.trim());
         formData.append('security', wp_autoplugin.nonce);
 
         try {
@@ -141,19 +169,27 @@
             loader.stop();
             createPluginForm.parentElement.classList.remove('loading');
 
-            if (!response.success) {
-                messageReviewCode.innerHTML = wp_autoplugin.messages.plugin_creation_error + ' <pre>' + response.data + '</pre>';
-                return;
-            }
+            if (response.success) {
+                // Show success message
+                messageReviewCode.innerHTML = wp_autoplugin.messages.plugin_created;
 
-            let activateBtnHtml = `<div style="margin-top: 10px;"><a href="${wp_autoplugin.activate_url}&plugin=${response.data}" class="button button-primary">${wp_autoplugin.messages.activate}</a></div>`;
-            if (wp_autoplugin.is_plugin_active) {
-                activateBtnHtml = '';
-            }
-            messageReviewCode.innerHTML = wp_autoplugin.messages.code_updated + activateBtnHtml;
+                messageReviewCode
+                    .insertAdjacentHTML(
+                        'beforeend',
+                        `<a href="${wp_autoplugin.activate_url}&plugin=${response.data}"
+                           class="button button-primary">
+                           ${wp_autoplugin.messages.activate}
+                         </a>`
+                    );
 
-            createPluginForm.style.display = 'none';
+                // Hide form
+                createPluginForm.style.display = 'none';
+            } else {
+                document.getElementById('create-plugin-message').innerHTML =
+                    wp_autoplugin.messages.plugin_creation_error + ' <pre>' + response.data + '</pre>';
+            }
         } catch (error) {
+            console.error(error);
             loader.stop();
             createPluginForm.parentElement.classList.remove('loading');
             messageReviewCode.innerHTML = wp_autoplugin.messages.plugin_creation_error + ' <pre>' + error.message + '</pre>';

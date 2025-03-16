@@ -172,9 +172,9 @@ class Scripts {
 						'plugin_creation_error' => esc_html__( 'Error creating the fixed plugin.', 'wp-autoplugin' ),
 						'generating_code'       => esc_html__( 'Generating the fixed plugin code.', 'wp-autoplugin' ),
 						'code_generation_error' => esc_html__( 'Error generating the fixed code.', 'wp-autoplugin' ),
-						'code_updated'          => esc_html__( 'The plugin code has been updated.', 'wp-autoplugin' ),
 						'activate'              => esc_html__( 'Activate Plugin', 'wp-autoplugin' ),
-						'creating_plugin'       => esc_html__( 'Installing the fix.', 'wp-autoplugin' ),
+						'creating_plugin'       => esc_html__( 'Installing the plugin.', 'wp-autoplugin' ),
+						'plugin_created'        => esc_html__( 'Plugin successfully installed.', 'wp-autoplugin' ),
 					],
 				]
 			);

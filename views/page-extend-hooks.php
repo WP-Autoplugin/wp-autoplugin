@@ -24,9 +24,6 @@ $is_plugin_active = is_plugin_active( $plugin_file );
 		<?php if ( empty( $hooks ) ) : ?>
 			<p><?php esc_html_e( 'No hooks found in the plugin code. Cannot proceed with extension.', 'wp-autoplugin' ); ?></p>
 		<?php else : ?>
-			<script>
-				console.log( <?php echo wp_json_encode( $hooks ); ?> );
-			</script>
 			<details>
 				<summary><?php printf( esc_html__( '%d hooks found in the plugin code', 'wp-autoplugin' ), count( $hooks ) ); ?></summary>
 				<ul>
@@ -49,6 +46,10 @@ $is_plugin_active = is_plugin_active( $plugin_file );
 		<form method="post" action="" id="extend-hooks-code-form">
 			<p><?php esc_html_e( 'Review or edit the generated plan for the extension plugin:', 'wp-autoplugin' ); ?></p>
 			<textarea name="plugin_plan_container" id="plugin_plan_container" rows="20" cols="100"></textarea>
+			<p>
+				<label for="plugin_name"><?php esc_html_e( 'Plugin Name:', 'wp-autoplugin' ); ?></label><br />
+				<input type="text" name="plugin_name" id="plugin_name" value="" style="width: 50%;" />
+			</p>
 			<div class="autoplugin-actions">
 				<button type="button" id="edit-issue" class="button"><?php esc_html_e( '« Edit Description', 'wp-autoplugin' ); ?></button>
 				<?php submit_button( esc_html__( 'Generate Extension Code', 'wp-autoplugin' ), 'primary', 'extend_code' ); ?>

@@ -31,7 +31,7 @@ class Hooks_Extender {
 	/**
 	 * Default number of context lines to include before and after hook.
 	 */
-	const DEFAULT_CONTEXT_LINES = 5;
+	const DEFAULT_CONTEXT_LINES = 3;
 
 	/**
 	 * Constructor.
@@ -95,26 +95,31 @@ class Hooks_Extender {
 	 *
 	 * @param array  $hooks Array of hooks with name, type, and context.
 	 * @param string $ai_plan The AI-generated plan.
+	 * @param string $plugin_name The name of the new plugin.
 	 * @return string|WP_Error The generated plugin code.
 	 */
-	public function generate_hooks_extension_code( $hooks, $ai_plan ) {
+	public function generate_hooks_extension_code( $hooks, $ai_plan, $plugin_name ) {
 		$hooks_list = '';
 		foreach ( $hooks as $hook ) {
-			$hooks_list .= "- {$hook['type']} '{$hook['name']}': {$hook['context']}\n";
+			$hooks_list .= "```\n{$hook['type']}: '{$hook['name']}'\n\nContext:\n{$hook['context']}\n```\n\n";
 		}
 
 		$prompt = <<<PROMPT
 			I need to create a new WordPress plugin that extends the functionality of an existing plugin using its hooks. Here are the available hooks in the original plugin:
-			```
+
 			$hooks_list
-			```
+
 			Here is the plan for the extension:
 
 			$ai_plan
 
+			The name of the new plugin is: "$plugin_name".
+
 			Please write the complete code for the new plugin. The plugin should be contained within a single PHP file. Include the necessary plugin header, and ensure that it uses the specified hooks correctly to achieve the desired extension.
 
-			Do not write any additional code or commentary. Make sure your response only contains the whole, updated code. Do not use Markdown formatting in your answer.
+			Do not use Markdown formatting in your answer. Ensure the response does not contain any explanation or commentary, ONLY the complete, working code without any placeholders. "Add X here" comments are not allowed in the code, you need to write out the full, working code.
+
+			Important: all code should be self-contained within one PHP file and follow WordPress coding standards. Use inline Javascript and CSS, inside the main PHP file. Additional CSS or JS files cannot be included. Use appropriate WP hooks, actions, and filters as necessary. Always use "WP-Autoplugin" for the Author of the plugin, with Author URI: https://wp-autoplugin.com. Do not add the final closing "?>" tag in the PHP file.
 		PROMPT;
 
 		return $this->ai_api->send_prompt( $prompt );
@@ -247,7 +252,7 @@ class Hooks_Extender {
 				continue; // Skip if not a quoted string
 			}
 			$hook_name = $match[3][0];
-			$hook_name = call_user_func( $hook_name_transformer, $hook_name );
+			$hook_name = call_user_func( $hook_name_transformer, $hook_name, $match );
 
 			// Find the line number where this call begins
 			$offset = $match[0][1];
