@@ -42,6 +42,7 @@ class Ajax {
 			'generate_plan',
 			'generate_code',
 			'create_plugin',
+			'extract_hooks',
 
 			'generate_fix_plan',
 			'generate_fix_code',
@@ -508,4 +509,23 @@ class Ajax {
 		wp_send_json_success( $code );
 	}
 
+	/**
+	 * AJAX handler for extracting plugin hooks.
+	 *
+	 * @return void
+	 */
+	public function ajax_extract_hooks() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( esc_html__( 'You are not allowed to access this page.', 'wp-autoplugin' ) );
+		}
+		check_ajax_referer( 'wp_autoplugin_generate', 'security' );
+
+		$plugin_file = isset( $_POST['plugin_file'] ) ? sanitize_text_field( wp_unslash( $_POST['plugin_file'] ) ) : '';
+		if ( empty( $plugin_file ) ) {
+			wp_send_json_error( esc_html__( 'No plugin file specified.', 'wp-autoplugin' ) );
+		}
+
+		$hooks = \WP_Autoplugin\Hooks_Extender::get_plugin_hooks( $plugin_file );
+		wp_send_json_success( $hooks ); // Returns empty array if no hooks found
+	}
 }

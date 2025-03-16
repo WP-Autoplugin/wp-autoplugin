@@ -17,6 +17,12 @@
     const pluginPlanContainer = document.getElementById('plugin_plan_container');
     const pluginCodeTextarea  = document.getElementById('extended_plugin_code');
 
+    const hooksLoading = document.getElementById('hooks-loading');
+    const hooksContent = document.getElementById('hooks-content');
+    const hooksSummary = document.getElementById('hooks-summary');
+    const hooksUl = document.getElementById('hooks-ul');
+    const pluginFileInput = document.getElementById('plugin_file');
+
     // ----- State Variables -----
     let editorInstance    = null;
     let currentState      = 'generatePlan';
@@ -55,6 +61,46 @@
             editorInstance = wpAutoPluginCommon.updateCodeEditor(editorInstance, pluginCodeTextarea, pluginCode);
         }
     };
+
+    // ----- Extract Hooks on Page Load -----
+
+    const pluginFile = pluginFileInput.value;
+    if (pluginFile) {
+        const loader = loadingIndicator(hooksLoading, wp_autoplugin.messages.extracting_hooks || 'Extracting plugin hooks, please wait...');
+        loader.start();
+
+        const formData = new FormData();
+        formData.append('action', 'wp_autoplugin_extract_hooks');
+        formData.append('plugin_file', pluginFile);
+        formData.append('security', wp_autoplugin.nonce);
+
+        fetch(ajaxurl, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            loader.stop();
+            hooksLoading.style.display = 'none';
+            if (data.success) {
+                const hooks = data.data;
+                if (hooks.length > 0) {
+                    hooksSummary.textContent = `${hooks.length} hooks found in the plugin code`;
+                    hooksUl.innerHTML = hooks.map(hook => `<li>${hook.name} (${hook.type})</li>`).join('');
+                    hooksContent.style.display = 'block';
+                } else {
+                    messageGeneratePlan.innerHTML = wp_autoplugin.messages.no_hooks_found || 'No hooks found in the plugin code. Cannot proceed with extension.';
+                }
+            } else {
+                messageGeneratePlan.innerHTML = 'Error extracting hooks: ' + (data.data || 'Unknown error');
+            }
+        })
+        .catch(error => {
+            loader.stop();
+            hooksLoading.style.display = 'none';
+            messageGeneratePlan.innerHTML = 'Error extracting hooks: ' + error.message;
+        });
+    }
 
     // ----- Event Handlers -----
 

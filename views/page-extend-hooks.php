@@ -21,16 +21,15 @@ $is_plugin_active = is_plugin_active( $plugin_file );
 <div class="wp-autoplugin-admin-container">
 	<div class="wrap wp-autoplugin step-1-extend">
 		<h1><?php printf( esc_html__( 'Extend This Plugin with Hooks: %s', 'wp-autoplugin' ), esc_html( $plugin_data['Name'] ) ); ?></h1>
-		<?php if ( empty( $hooks ) ) : ?>
-			<p><?php esc_html_e( 'No hooks found in the plugin code. Cannot proceed with extension.', 'wp-autoplugin' ); ?></p>
-		<?php else : ?>
-			<details>
-				<summary><?php printf( esc_html__( '%d hooks found in the plugin code', 'wp-autoplugin' ), count( $hooks ) ); ?></summary>
-				<ul>
-					<?php foreach ( $hooks as $hook ) : ?>
-						<li><?php echo esc_html( $hook['name'] ) . ' (' . esc_html( $hook['type'] ) . ')'; ?></li>
-					<?php endforeach; ?>
-				</ul>
+		<!-- Loading message, visible by default -->
+		<div id="hooks-loading" style="display: block;">
+			<p><?php esc_html_e( 'Extracting plugin hooks, please wait...', 'wp-autoplugin' ); ?></p>
+		</div>
+		<!-- Hooks list and form, hidden by default -->
+		<div id="hooks-content" style="display: none;">
+			<details id="hooks-list">
+				<summary id="hooks-summary"></summary>
+				<ul id="hooks-ul"></ul>
 			</details>
 			<form method="post" action="" id="extend-hooks-form">
 				<p><?php esc_html_e( 'Describe the extension you would like to make to the plugin using its hooks:', 'wp-autoplugin' ); ?></p>
@@ -38,7 +37,7 @@ $is_plugin_active = is_plugin_active( $plugin_file );
 				<?php submit_button( esc_html__( 'Generate Extension Plan', 'wp-autoplugin' ), 'primary', 'generate_plan' ); ?>
 				<input type="hidden" name="plugin_file" value="<?php echo esc_attr( $plugin_file ); ?>" id="plugin_file" />
 			</form>
-		<?php endif; ?>
+		</div>
 		<div id="extend-hooks-message" class="autoplugin-message"></div>
 	</div>
 	<div class="wrap wp-autoplugin step-2-plan" style="display: none;">

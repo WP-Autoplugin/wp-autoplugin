@@ -245,9 +245,9 @@ class Admin {
 			[ $this, 'render_settings_page' ]
 		);
 
-		// Extend and Fix pages (they don't appear in the menu since the parent slug is an empty string).
+		// Extend and Fix pages (they don't appear in the menu).
 		add_submenu_page(
-			'',
+			'options.php',
 			esc_html__( 'Extend Plugin', 'wp-autoplugin' ),
 			esc_html__( 'Extend Plugin', 'wp-autoplugin' ),
 			'manage_options',
@@ -256,7 +256,7 @@ class Admin {
 		);
 
 		add_submenu_page(
-			'',
+			'options.php',
 			esc_html__( 'Fix Plugin', 'wp-autoplugin' ),
 			esc_html__( 'Fix Plugin', 'wp-autoplugin' ),
 			'manage_options',
@@ -265,7 +265,7 @@ class Admin {
 		);
 
 		add_submenu_page(
-			'',
+			'options.php',
 			esc_html__( 'Explain Plugin', 'wp-autoplugin' ),
 			esc_html__( 'Explain Plugin', 'wp-autoplugin' ),
 			'manage_options',
@@ -274,7 +274,7 @@ class Admin {
 		);
 
 		add_submenu_page(
-			'',
+			'options.php',
 			esc_html__( 'Extend Plugin with Hooks', 'wp-autoplugin' ),
 			esc_html__( 'Extend Plugin with Hooks', 'wp-autoplugin' ),
 			'manage_options',
@@ -356,7 +356,6 @@ class Admin {
 			wp_die( esc_html__( 'The specified plugin does not exist.', 'wp-autoplugin' ) );
 		}
 		$plugin_data = get_plugin_data( $plugin_path );
-		$hooks = \WP_Autoplugin\Hooks_Extender::get_plugin_hooks( $plugin_file );
 		include WP_AUTOPLUGIN_DIR . 'views/page-extend-hooks.php';
 	}
 
