@@ -39,18 +39,18 @@ You can also use WP-Autoplugin to **fix bugs**, **add new features**, or **expla
 
 ## Extend Third-Party Plugins with Hooks
 
-WP-Autoplugin allows you to easily extend **any** plugin directly from the WordPress Plugins page:
+WP-Autoplugin allows you to easily extend **any plugin** directly from the WordPress Plugins page:
 
 - Click on the "**Extend Plugin**" action link for the plugin you'd like to enhance.
 - WP-Autoplugin will analyze the selected plugin, extracting available action and filter hooks along with relevant contextual details.
 - Provide a description of the desired extension; WP-Autoplugin assesses the technical feasibility using available hooks.
 - A new extension plugin will be generated based on your description, allowing seamless integration with the existing plugin functionality.
 
-This powerful feature streamlines the customization of third-party plugins, leveraging existing hooks to safely and effectively achieve your development goals.
+This feature is useful for developers who want to add custom features to third-party plugins without modifying the original codebase.
 
 ## Auto-detect Fatal Errors
 
-When you activate an AI-generated plugin, WP-Autoplugin will automatically detect fatal errors and deactivate the plugin to prevent site crashes. WP-Autoplugin will display a message with the error details and provide a link to fix the issue automatically.
+When you activate an AI-generated plugin, WP-Autoplugin will automatically detect fatal errors and deactivate the plugin to prevent site crashes. A message with the error details will be displayed, along with a link to fix the issue automatically with AI.
 
 ## Supported Models
 
