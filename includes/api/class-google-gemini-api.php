@@ -60,8 +60,6 @@ class Google_Gemini_API extends API {
 	 * @return mixed
 	 */
 	public function send_prompt( $prompt, $system_message = '', $override_body = [] ) {
-		$prompt = $this->trim_prompt( $prompt );
-
 		$url = 'https://generativelanguage.googleapis.com/v1beta/models/' . $this->model . ':generateContent?key=' . $this->api_key;
 
 		// Default safetySettings.

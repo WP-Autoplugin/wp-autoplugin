@@ -85,22 +85,22 @@ class Scripts {
 				'wp-autoplugin-generator',
 				'wp_autoplugin',
 				[
-					'ajax_url'     => esc_url( admin_url( 'admin-ajax.php' ) ),
-					'nonce'        => wp_create_nonce( 'wp_autoplugin_generate' ),
-					'fix_url'      => esc_url(
+					'ajax_url'        => esc_url( admin_url( 'admin-ajax.php' ) ),
+					'nonce'           => wp_create_nonce( 'wp_autoplugin_generate' ),
+					'fix_url'         => esc_url(
 						admin_url(
 							'admin.php?page=wp-autoplugin-fix&nonce=' .
 							wp_create_nonce( 'wp-autoplugin-fix-plugin' )
 						)
 					),
-					'activate_url' => esc_url(
+					'activate_url'    => esc_url(
 						admin_url(
 							'admin.php?page=wp-autoplugin&action=activate&nonce=' .
 							wp_create_nonce( 'wp-autoplugin-activate-plugin' )
 						)
 					),
-					'testing_plan' => '',
-					'messages'     => [
+					'testing_plan'    => '',
+					'messages'        => [
 						'empty_description'     => esc_html__( 'Please enter a plugin description.', 'wp-autoplugin' ),
 						'generating_plan'       => esc_html__( 'Generating a plan for your plugin.', 'wp-autoplugin' ),
 						'plan_generation_error' => esc_html__( 'Error generating the plugin plan.', 'wp-autoplugin' ),
@@ -138,8 +138,8 @@ class Scripts {
 			}
 
 			$is_plugin_active = false;
-			if ( isset( $_GET['plugin'] ) ) {
-				$plugin_file      = sanitize_text_field( wp_unslash( $_GET['plugin'] ) );
+			if ( isset( $_GET['plugin'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification -- Nonce verification is not needed here.
+				$plugin_file      = sanitize_text_field( wp_unslash( $_GET['plugin'] ) ); // phpcs:ignore WordPress.Security.NonceVerification -- Nonce verification is not needed here.
 				$plugin_file      = str_replace( '../', '', $plugin_file );
 				$is_plugin_active = is_plugin_active( $plugin_file );
 			}
@@ -194,8 +194,8 @@ class Scripts {
 			}
 
 			$is_plugin_active = false;
-			if ( isset( $_GET['plugin'] ) ) {
-				$plugin_file      = sanitize_text_field( wp_unslash( $_GET['plugin'] ) );
+			if ( isset( $_GET['plugin'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification -- Nonce verification is not needed here.
+				$plugin_file      = sanitize_text_field( wp_unslash( $_GET['plugin'] ) ); // phpcs:ignore WordPress.Security.NonceVerification -- Nonce verification is not needed here.
 				$plugin_file      = str_replace( '../', '', $plugin_file );
 				$is_plugin_active = is_plugin_active( $plugin_file );
 			}
@@ -299,9 +299,9 @@ class Scripts {
 			}
 
 			$is_plugin_active = false;
-			if ( isset( $_GET['plugin'] ) ) {
-				$plugin_file = sanitize_text_field( wp_unslash( $_GET['plugin'] ) );
-				$plugin_file = str_replace( '../', '', $plugin_file );
+			if ( isset( $_GET['plugin'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification -- Nonce verification is not needed here.
+				$plugin_file      = sanitize_text_field( wp_unslash( $_GET['plugin'] ) ); // phpcs:ignore WordPress.Security.NonceVerification -- Nonce verification is not needed here.
+				$plugin_file      = str_replace( '../', '', $plugin_file );
 				$is_plugin_active = is_plugin_active( $plugin_file );
 			}
 
@@ -342,7 +342,7 @@ class Scripts {
 
 			wp_enqueue_style(
 				'wp-autoplugin-extend-hooks',
-				WP_AUTOPLUGIN_URL . 'assets/admin/css/extender.css', // Reuse existing CSS
+				WP_AUTOPLUGIN_URL . 'assets/admin/css/extender.css',
 				[],
 				WP_AUTOPLUGIN_VERSION
 			);

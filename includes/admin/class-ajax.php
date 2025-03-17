@@ -103,7 +103,7 @@ class Ajax {
 			wp_send_json_error( $plan_data->get_error_message() );
 		}
 
-		// Strip out any code block fences like ```json ... ```
+		// Strip out any code block fences like ```json ... ```.
 		$plan_data  = preg_replace( '/^```(json)\n(.*)\n```$/s', '$2', $plan_data );
 		$plan_array = json_decode( $plan_data, true );
 		if ( ! $plan_array ) {
@@ -129,7 +129,7 @@ class Ajax {
 			wp_send_json_error( $code->get_error_message() );
 		}
 
-		// Strip out code fences like ```php ... ```
+		// Strip out code fences like ```php ... ```.
 		$code = preg_replace( '/^```(php)\n(.*)\n```$/s', '$2', $code );
 
 		wp_send_json_success( $code );
@@ -141,7 +141,7 @@ class Ajax {
 	 * @return void
 	 */
 	public function ajax_create_plugin() {
-		$code        = isset( $_POST['plugin_code'] ) ? wp_unslash( $_POST['plugin_code'] ) : '';
+		$code        = isset( $_POST['plugin_code'] ) ? wp_unslash( $_POST['plugin_code'] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- This cannot be sanitized, as it's the plugin code.
 		$plugin_name = isset( $_POST['plugin_name'] ) ? sanitize_text_field( wp_unslash( $_POST['plugin_name'] ) ) : '';
 
 		$installer = Plugin_Installer::get_instance();
@@ -170,7 +170,7 @@ class Ajax {
 			: '';
 
 		$plugin_path = WP_CONTENT_DIR . '/plugins/' . $plugin_file;
-		$plugin_code = file_get_contents( $plugin_path ); // local file read
+		$plugin_code = file_get_contents( $plugin_path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Local file read.
 		if ( false === $plugin_code ) {
 			wp_send_json_error( esc_html__( 'Failed to read the plugin file.', 'wp-autoplugin' ) );
 		}
@@ -200,7 +200,7 @@ class Ajax {
 			: '';
 
 		$plugin_path = WP_CONTENT_DIR . '/plugins/' . $plugin_file;
-		$plugin_code = file_get_contents( $plugin_path );
+		$plugin_code = file_get_contents( $plugin_path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Local file read.
 		if ( false === $plugin_code ) {
 			wp_send_json_error( esc_html__( 'Failed to read the plugin file.', 'wp-autoplugin' ) );
 		}
@@ -224,7 +224,7 @@ class Ajax {
 	 * @return void
 	 */
 	public function ajax_fix_plugin() {
-		$code        = isset( $_POST['plugin_code'] ) ? wp_unslash( $_POST['plugin_code'] ) : '';
+		$code        = isset( $_POST['plugin_code'] ) ? wp_unslash( $_POST['plugin_code'] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- This cannot be sanitized, as it's the plugin code.
 		$plugin_file = isset( $_POST['plugin_file'] )
 			? sanitize_text_field( wp_unslash( $_POST['plugin_file'] ) )
 			: '';
@@ -255,12 +255,12 @@ class Ajax {
 			: '';
 
 		$plugin_path = WP_CONTENT_DIR . '/plugins/' . $plugin_file;
-		$plugin_code = file_get_contents( $plugin_path );
+		$plugin_code = file_get_contents( $plugin_path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Local file read.
 		if ( false === $plugin_code ) {
 			wp_send_json_error( esc_html__( 'Failed to read the plugin file.', 'wp-autoplugin' ) );
 		}
 
-		$problem   = isset( $_POST['plugin_issue'] )
+		$problem = isset( $_POST['plugin_issue'] )
 			? sanitize_text_field( wp_unslash( $_POST['plugin_issue'] ) )
 			: '';
 
@@ -284,7 +284,7 @@ class Ajax {
 			: '';
 
 		$plugin_path = WP_CONTENT_DIR . '/plugins/' . $plugin_file;
-		$plugin_code = file_get_contents( $plugin_path );
+		$plugin_code = file_get_contents( $plugin_path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Local file read.
 		if ( false === $plugin_code ) {
 			wp_send_json_error( esc_html__( 'Failed to read the plugin file.', 'wp-autoplugin' ) );
 		}
@@ -308,7 +308,7 @@ class Ajax {
 	 * @return void
 	 */
 	public function ajax_extend_plugin() {
-		$code        = isset( $_POST['plugin_code'] ) ? wp_unslash( $_POST['plugin_code'] ) : '';
+		$code        = isset( $_POST['plugin_code'] ) ? wp_unslash( $_POST['plugin_code'] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- This cannot be sanitized, as it's the plugin code.
 		$plugin_file = isset( $_POST['plugin_file'] )
 			? sanitize_text_field( wp_unslash( $_POST['plugin_file'] ) )
 			: '';
@@ -339,7 +339,7 @@ class Ajax {
 			: '';
 
 		$plugin_path = WP_CONTENT_DIR . '/plugins/' . $plugin_file;
-		$plugin_code = file_get_contents( $plugin_path );
+		$plugin_code = file_get_contents( $plugin_path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Local file read.
 		if ( false === $plugin_code ) {
 			wp_send_json_error( esc_html__( 'Failed to read the plugin file.', 'wp-autoplugin' ) );
 		}
@@ -378,7 +378,7 @@ class Ajax {
 			wp_send_json_error( [ 'message' => esc_html__( 'Security check failed.', 'wp-autoplugin' ) ] );
 		}
 
-		$model = isset( $_POST['model'] ) && is_array( $_POST['model'] ) ? wp_unslash( $_POST['model'] ) : null;
+		$model = isset( $_POST['model'] ) && is_array( $_POST['model'] ) ? wp_unslash( $_POST['model'] ) : null; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitization is done later, see below.
 		if ( ! $model || ! isset( $model['name'] ) || ! isset( $model['url'] ) || ! isset( $model['apiKey'] ) ) {
 			wp_send_json_error( [ 'message' => esc_html__( 'Invalid model data.', 'wp-autoplugin' ) ] );
 		}
@@ -454,19 +454,28 @@ class Ajax {
 		}
 		check_ajax_referer( 'wp_autoplugin_generate', 'security' );
 
+		if ( ! isset( $_POST['plugin_file'] ) || ! isset( $_POST['plugin_issue'] ) ) {
+			wp_send_json_error( esc_html__( 'Missing required parameters.', 'wp-autoplugin' ) );
+		}
+
 		$plugin_file = sanitize_text_field( wp_unslash( $_POST['plugin_file'] ) );
-		$hooks = \WP_Autoplugin\Hooks_Extender::get_plugin_hooks( $plugin_file );
+		$hooks       = \WP_Autoplugin\Hooks_Extender::get_plugin_hooks( $plugin_file );
 		if ( empty( $hooks ) ) {
 			wp_send_json_error( esc_html__( 'No hooks found in the plugin.', 'wp-autoplugin' ) );
 		}
+
+		// Get original plugin name from the plugin file.
+		$plugin_data          = get_plugin_data( WP_CONTENT_DIR . '/plugins/' . $plugin_file );
+		$original_plugin_name = $plugin_data['Name'];
+
 		$plugin_changes = sanitize_text_field( wp_unslash( $_POST['plugin_issue'] ) );
-		$extender = new \WP_Autoplugin\Hooks_Extender( $this->ai_api );
-		$plan_data = $extender->plan_plugin_hooks_extension( $hooks, $plugin_changes );
+		$extender       = new \WP_Autoplugin\Hooks_Extender( $this->ai_api );
+		$plan_data      = $extender->plan_plugin_hooks_extension( $original_plugin_name, $hooks, $plugin_changes );
 		if ( is_wp_error( $plan_data ) ) {
 			wp_send_json_error( $plan_data->get_error_message() );
 		}
 
-		// Strip out any code block fences like ```json ... ```
+		// Strip out any code block fences like ```json ... ```.
 		$plan_data  = preg_replace( '/^```(json)\n(.*)\n```$/s', '$2', $plan_data );
 		$plan_array = json_decode( $plan_data, true );
 		if ( ! $plan_array ) {
@@ -487,20 +496,31 @@ class Ajax {
 		}
 		check_ajax_referer( 'wp_autoplugin_generate', 'security' );
 
+		if ( ! isset( $_POST['plugin_file'] ) || ! isset( $_POST['plugin_plan'] ) || ! isset( $_POST['hooks'] ) ) {
+			wp_send_json_error( esc_html__( 'Missing required parameters.', 'wp-autoplugin' ) );
+		}
+
 		$plugin_file = sanitize_text_field( wp_unslash( $_POST['plugin_file'] ) );
-		$ai_plan = sanitize_text_field( wp_unslash( $_POST['plugin_plan'] ) );
-		$hooks = \WP_Autoplugin\Hooks_Extender::get_plugin_hooks( $plugin_file );
-		$hooks_param = isset( $_POST['hooks'] ) ? json_decode( wp_unslash( $_POST['hooks'] ), true ) : [];
+		$ai_plan     = sanitize_text_field( wp_unslash( $_POST['plugin_plan'] ) );
+		$hooks       = \WP_Autoplugin\Hooks_Extender::get_plugin_hooks( $plugin_file );
+		$hooks_param = json_decode( sanitize_text_field( wp_unslash( $_POST['hooks'] ) ), true );
 
 		// The $hooks_param is an array of hook names. Keep only the hooks that are in the plan.
-		$hooks = array_filter( $hooks, function( $hook ) use ( $hooks_param ) {
-			return in_array( $hook['name'], $hooks_param, true );
-		} );
+		$hooks = array_filter(
+			$hooks,
+			function ( $hook ) use ( $hooks_param ) {
+				return in_array( $hook['name'], $hooks_param, true );
+			}
+		);
 
 		$plugin_name = isset( $_POST['plugin_name'] ) ? sanitize_text_field( wp_unslash( $_POST['plugin_name'] ) ) : '';
 
+		// Get original plugin name from the plugin file.
+		$plugin_data          = get_plugin_data( WP_CONTENT_DIR . '/plugins/' . $plugin_file );
+		$original_plugin_name = $plugin_data['Name'];
+
 		$extender = new \WP_Autoplugin\Hooks_Extender( $this->ai_api );
-		$code = $extender->generate_hooks_extension_code( $hooks, $ai_plan, $plugin_name );
+		$code     = $extender->generate_hooks_extension_code( $original_plugin_name, $hooks, $ai_plan, $plugin_name );
 
 		if ( is_wp_error( $code ) ) {
 			wp_send_json_error( $code->get_error_message() );
@@ -529,6 +549,6 @@ class Ajax {
 		}
 
 		$hooks = \WP_Autoplugin\Hooks_Extender::get_plugin_hooks( $plugin_file );
-		wp_send_json_success( $hooks ); // Returns empty array if no hooks found
+		wp_send_json_success( $hooks ); // Returns empty array if no hooks found.
 	}
 }

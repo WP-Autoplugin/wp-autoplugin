@@ -110,7 +110,6 @@ class Anthropic_API extends API {
 	 * @return mixed The response from the API.
 	 */
 	public function send_prompt( $prompt, $system_message = '', $override_body = [] ) {
-		$prompt   = $this->trim_prompt( $prompt );
 		$messages = [];
 		if ( ! empty( $system_message ) ) {
 			$messages[] = [

@@ -20,6 +20,7 @@ $is_plugin_active = is_plugin_active( $plugin_file );
 ?>
 <div class="wp-autoplugin-admin-container">
 	<div class="wrap wp-autoplugin step-1-extend">
+		<?php /* translators: %s: plugin name. */ ?>
 		<h1><?php printf( esc_html__( 'Extend This Plugin with Hooks: %s', 'wp-autoplugin' ), esc_html( $plugin_data['Name'] ) ); ?></h1>
 		<!-- Loading message, visible by default -->
 		<div id="hooks-loading" style="display: block;">
@@ -57,6 +58,7 @@ $is_plugin_active = is_plugin_active( $plugin_file );
 		<div id="extend-hooks-code-message" class="autoplugin-message"></div>
 	</div>
 	<div class="wrap wp-autoplugin step-3-done" style="display: none;">
+		<?php /* translators: %s: plugin name. */ ?>
 		<h1><?php printf( esc_html__( 'Extension Plugin for: %s', 'wp-autoplugin' ), esc_html( $plugin_data['Name'] ) ); ?></h1>
 		<form method="post" action="" id="extended-hooks-plugin-form">
 			<p><?php esc_html_e( 'The extension plugin code has been generated. Review it before saving:', 'wp-autoplugin' ); ?></p>

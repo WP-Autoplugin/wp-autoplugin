@@ -80,8 +80,8 @@ class Bulk_Actions {
 			return $this->action;
 		}
 
-		$this->action = isset( $_REQUEST['action'] )
-			? sanitize_text_field( wp_unslash( $_REQUEST['action'] ) )
+		$this->action = isset( $_REQUEST['action'] ) // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verification is not needed here.
+			? sanitize_text_field( wp_unslash( $_REQUEST['action'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verification is not needed here.
 			: '';
 
 		return $this->action;
@@ -94,8 +94,8 @@ class Bulk_Actions {
 	 */
 	public function get_bulk_actions_input() {
 		$plugins = [];
-		if ( isset( $_REQUEST['plugin'] ) ) {
-			$plugins = array_map( 'sanitize_text_field', wp_unslash( (array) $_REQUEST['plugin'] ) );
+		if ( isset( $_REQUEST['plugin'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verification is not needed here.
+			$plugins = array_map( 'sanitize_text_field', wp_unslash( (array) $_REQUEST['plugin'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verification is not needed here.
 		}
 		return $plugins;
 	}

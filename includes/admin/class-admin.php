@@ -346,10 +346,10 @@ class Admin {
 	 * @return void
 	 */
 	public function render_extend_hooks_page() {
-		if ( ! isset( $_GET['plugin'] ) ) {
+		if ( ! isset( $_GET['plugin'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
 			wp_die( esc_html__( 'No plugin specified.', 'wp-autoplugin' ) );
 		}
-		$plugin_file = sanitize_text_field( wp_unslash( $_GET['plugin'] ) );
+		$plugin_file = sanitize_text_field( wp_unslash( $_GET['plugin'] ) ); // phpcs:ignore WordPress.Security.NonceVerification
 		$plugin_file = str_replace( '../', '', $plugin_file );
 		$plugin_path = WP_CONTENT_DIR . '/plugins/' . $plugin_file;
 		if ( ! file_exists( $plugin_path ) ) {
@@ -408,6 +408,7 @@ class Admin {
 				<span class="credits">
 					<?php
 					printf(
+						// translators: %s: version number.
 						esc_html__( 'WP-Autoplugin v%s', 'wp-autoplugin' ),
 						esc_html( WP_AUTOPLUGIN_VERSION )
 					);
@@ -416,13 +417,13 @@ class Admin {
 				<span class="separator">|</span>
 				<span class="model">
 					<?php
-					// translators: %s: model name
 					$translated_model_string = wp_kses(
+						// translators: %s: model name.
 						__( 'Model: %s', 'wp-autoplugin' ),
 						[ 'code' => [] ]
 					);
 					printf(
-						$translated_model_string,
+						$translated_model_string, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- It's escaped just above.
 						'<code>' . esc_html( get_option( 'wp_autoplugin_model' ) ) . '</code>'
 					);
 					?>
