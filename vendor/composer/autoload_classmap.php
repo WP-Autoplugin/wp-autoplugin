@@ -19,6 +19,7 @@ return array(
     'WP_Autoplugin\\Custom_API' => $baseDir . '/includes/api/class-custom-api.php',
     'WP_Autoplugin\\GitHub_Updater' => $baseDir . '/includes/class-github-updater.php',
     'WP_Autoplugin\\Google_Gemini_API' => $baseDir . '/includes/api/class-google-gemini-api.php',
+    'WP_Autoplugin\\Hooks_Extender' => $baseDir . '/includes/class-hooks-extender.php',
     'WP_Autoplugin\\OpenAI_API' => $baseDir . '/includes/api/class-openai-api.php',
     'WP_Autoplugin\\Plugin_Explainer' => $baseDir . '/includes/class-plugin-explainer.php',
     'WP_Autoplugin\\Plugin_Extender' => $baseDir . '/includes/class-plugin-extender.php',

@@ -53,8 +53,6 @@ class Custom_API extends OpenAI_API {
 	 * @return string|\WP_Error The response or a WP_Error object on failure.
 	 */
 	public function send_prompt( $prompt, $system_message = '', $override_body = [] ) {
-		$prompt = $this->trim_prompt( $prompt );
-
 		$messages = [];
 		if ( $system_message ) {
 			$messages[] = [

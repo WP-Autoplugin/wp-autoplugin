@@ -20,11 +20,11 @@ if ( ! isset( $_GET['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_uns
 	wp_die( esc_html__( 'Nonce verification failed. Please try again.', 'wp-autoplugin' ) );
 }
 
-$plugin_file = '';
+$plugin_file      = '';
 $is_plugin_active = false;
 if ( isset( $_GET['plugin'] ) ) {
-	$plugin_file = sanitize_text_field( wp_unslash( $_GET['plugin'] ) );
-	$plugin_file = str_replace( '../', '', $plugin_file );
+	$plugin_file      = sanitize_text_field( wp_unslash( $_GET['plugin'] ) );
+	$plugin_file      = str_replace( '../', '', $plugin_file );
 	$is_plugin_active = is_plugin_active( $plugin_file );
 }
 $plugin_path = WP_CONTENT_DIR . '/plugins/' . $plugin_file;

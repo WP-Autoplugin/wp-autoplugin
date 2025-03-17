@@ -146,7 +146,6 @@ class OpenAI_API extends API {
 	 * @param array  $override_body The override body.
 	 */
 	public function send_prompt( $prompt, $system_message = '', $override_body = [] ) {
-		$prompt   = $this->trim_prompt( $prompt );
 		$messages = [];
 		if ( ! empty( $system_message ) ) {
 			$messages[] = [

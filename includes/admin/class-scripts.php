@@ -85,22 +85,22 @@ class Scripts {
 				'wp-autoplugin-generator',
 				'wp_autoplugin',
 				[
-					'ajax_url'     => esc_url( admin_url( 'admin-ajax.php' ) ),
-					'nonce'        => wp_create_nonce( 'wp_autoplugin_generate' ),
-					'fix_url'      => esc_url(
+					'ajax_url'        => esc_url( admin_url( 'admin-ajax.php' ) ),
+					'nonce'           => wp_create_nonce( 'wp_autoplugin_generate' ),
+					'fix_url'         => esc_url(
 						admin_url(
 							'admin.php?page=wp-autoplugin-fix&nonce=' .
 							wp_create_nonce( 'wp-autoplugin-fix-plugin' )
 						)
 					),
-					'activate_url' => esc_url(
+					'activate_url'    => esc_url(
 						admin_url(
 							'admin.php?page=wp-autoplugin&action=activate&nonce=' .
 							wp_create_nonce( 'wp-autoplugin-activate-plugin' )
 						)
 					),
-					'testing_plan' => '',
-					'messages'     => [
+					'testing_plan'    => '',
+					'messages'        => [
 						'empty_description'     => esc_html__( 'Please enter a plugin description.', 'wp-autoplugin' ),
 						'generating_plan'       => esc_html__( 'Generating a plan for your plugin.', 'wp-autoplugin' ),
 						'plan_generation_error' => esc_html__( 'Error generating the plugin plan.', 'wp-autoplugin' ),
@@ -138,8 +138,8 @@ class Scripts {
 			}
 
 			$is_plugin_active = false;
-			if ( isset( $_GET['plugin'] ) ) {
-				$plugin_file      = sanitize_text_field( wp_unslash( $_GET['plugin'] ) );
+			if ( isset( $_GET['plugin'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification -- Nonce verification is not needed here.
+				$plugin_file      = sanitize_text_field( wp_unslash( $_GET['plugin'] ) ); // phpcs:ignore WordPress.Security.NonceVerification -- Nonce verification is not needed here.
 				$plugin_file      = str_replace( '../', '', $plugin_file );
 				$is_plugin_active = is_plugin_active( $plugin_file );
 			}
@@ -172,9 +172,9 @@ class Scripts {
 						'plugin_creation_error' => esc_html__( 'Error creating the fixed plugin.', 'wp-autoplugin' ),
 						'generating_code'       => esc_html__( 'Generating the fixed plugin code.', 'wp-autoplugin' ),
 						'code_generation_error' => esc_html__( 'Error generating the fixed code.', 'wp-autoplugin' ),
-						'code_updated'          => esc_html__( 'The plugin code has been updated.', 'wp-autoplugin' ),
 						'activate'              => esc_html__( 'Activate Plugin', 'wp-autoplugin' ),
-						'creating_plugin'       => esc_html__( 'Installing the fix.', 'wp-autoplugin' ),
+						'creating_plugin'       => esc_html__( 'Installing the plugin.', 'wp-autoplugin' ),
+						'plugin_created'        => esc_html__( 'Plugin successfully installed.', 'wp-autoplugin' ),
 					],
 				]
 			);
@@ -194,8 +194,8 @@ class Scripts {
 			}
 
 			$is_plugin_active = false;
-			if ( isset( $_GET['plugin'] ) ) {
-				$plugin_file      = sanitize_text_field( wp_unslash( $_GET['plugin'] ) );
+			if ( isset( $_GET['plugin'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification -- Nonce verification is not needed here.
+				$plugin_file      = sanitize_text_field( wp_unslash( $_GET['plugin'] ) ); // phpcs:ignore WordPress.Security.NonceVerification -- Nonce verification is not needed here.
 				$plugin_file      = str_replace( '../', '', $plugin_file );
 				$is_plugin_active = is_plugin_active( $plugin_file );
 			}
@@ -288,6 +288,61 @@ class Scripts {
 			wp_enqueue_style(
 				'wp-autoplugin-explainer',
 				WP_AUTOPLUGIN_URL . 'assets/admin/css/explainer.css',
+				[],
+				WP_AUTOPLUGIN_VERSION
+			);
+		} elseif ( $screen->id === 'admin_page_wp-autoplugin-extend-hooks' ) {
+			$settings = wp_enqueue_code_editor( [ 'type' => 'application/x-httpd-php' ] );
+			if ( false !== $settings ) {
+				wp_enqueue_script( 'wp-theme-plugin-editor' );
+				wp_enqueue_style( 'wp-codemirror' );
+			}
+
+			$is_plugin_active = false;
+			if ( isset( $_GET['plugin'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification -- Nonce verification is not needed here.
+				$plugin_file      = sanitize_text_field( wp_unslash( $_GET['plugin'] ) ); // phpcs:ignore WordPress.Security.NonceVerification -- Nonce verification is not needed here.
+				$plugin_file      = str_replace( '../', '', $plugin_file );
+				$is_plugin_active = is_plugin_active( $plugin_file );
+			}
+
+			wp_enqueue_script(
+				'wp-autoplugin-extend-hooks',
+				WP_AUTOPLUGIN_URL . 'assets/admin/js/hooks-extender.js',
+				[ 'wp-autoplugin-utils' ],
+				WP_AUTOPLUGIN_VERSION,
+				true
+			);
+
+			wp_localize_script(
+				'wp-autoplugin-extend-hooks',
+				'wp_autoplugin',
+				[
+					'ajax_url'         => esc_url( admin_url( 'admin-ajax.php' ) ),
+					'nonce'            => wp_create_nonce( 'wp_autoplugin_generate' ),
+					'activate_url'     => esc_url(
+						admin_url(
+							'admin.php?page=wp-autoplugin&action=activate&nonce=' .
+							wp_create_nonce( 'wp-autoplugin-activate-plugin' )
+						)
+					),
+					'is_plugin_active' => $is_plugin_active,
+					'messages'         => [
+						'empty_description'     => esc_html__( 'Please describe the changes you want to make to the plugin.', 'wp-autoplugin' ),
+						'generating_plan'       => esc_html__( 'Generating a plan for your plugin.', 'wp-autoplugin' ),
+						'plan_generation_error' => esc_html__( 'Error generating the development plan.', 'wp-autoplugin' ),
+						'generating_code'       => esc_html__( 'Generating the extension plugin code.', 'wp-autoplugin' ),
+						'code_generation_error' => esc_html__( 'Error generating the extension code.', 'wp-autoplugin' ),
+						'plugin_creation_error' => esc_html__( 'Error creating the extension plugin.', 'wp-autoplugin' ),
+						'code_updated'          => esc_html__( 'The extension plugin has been created.', 'wp-autoplugin' ),
+						'activate'              => esc_html__( 'Activate Plugin', 'wp-autoplugin' ),
+						'creating_plugin'       => esc_html__( 'Creating the extension plugin.', 'wp-autoplugin' ),
+					],
+				]
+			);
+
+			wp_enqueue_style(
+				'wp-autoplugin-extend-hooks',
+				WP_AUTOPLUGIN_URL . 'assets/admin/css/extender.css',
 				[],
 				WP_AUTOPLUGIN_VERSION
 			);

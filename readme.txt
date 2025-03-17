@@ -4,7 +4,7 @@ Donate link: https://wp-autoplugin.com
 Tags: ai, plugin generator, development, wordpress, automation
 Requires at least: 6.0
 Tested up to: 6.7.1
-Stable tag: 1.3
+Stable tag: 1.4
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -59,6 +59,9 @@ Yes, the plugin is completely free with no ads or account requirements. However,
 While WP-Autoplugin aims to generate high-quality code adhering to WordPress standards, we recommend testing the code thoroughly before using it on a production site.
 
 == Changelog ==
+
+= 1.4 =
+* Analyze and extend any third-party plugin
 
 = 1.3 =
 * Added new Explain Plugin feature

@@ -51,7 +51,7 @@ class Plugin_Installer {
 	public function install_plugin( $code, $plugin_name ) {
 		// If DISALLOW_FILE_MODS is set, we can't install plugins.
 		if ( defined( 'DISALLOW_FILE_MODS' ) && DISALLOW_FILE_MODS ) {
-			return \WP_Error( 'file_mods_disabled', 'Plugin installation is disabled.' ); // Plugin installation is disabled.
+			return \WP_Error( 'file_mods_disabled', 'Plugin installation is disabled.' );
 		}
 
 		// Initialize WP_Filesystem.
@@ -69,7 +69,7 @@ class Plugin_Installer {
 				// File exists, proceed without additional operations.
 				$dummy = true;
 			} else {
-				return \WP_Error( 'file_creation_error', 'Error updating plugin file.' ); // Error updating plugin file.
+				return \WP_Error( 'file_creation_error', 'Error updating plugin file.' );
 			}
 		} else {
 			$plugin_name = sanitize_title( $plugin_name, 'wp-autoplugin-' . md5( $code ) );
@@ -82,7 +82,7 @@ class Plugin_Installer {
 
 		$result = $wp_filesystem->put_contents( $plugin_file, $code, FS_CHMOD_FILE );
 		if ( false === $result ) {
-			return \WP_Error( 'file_creation_error', 'Error creating plugin file.' ); // Error creating plugin file.
+			return \WP_Error( 'file_creation_error', 'Error creating plugin file.' );
 		}
 
 		// Add the plugin to the list of autoplugins.
@@ -104,7 +104,7 @@ class Plugin_Installer {
 		$autoplugins = get_option( 'wp_autoplugins', [] );
 		// Use strict in_array check.
 		if ( ! in_array( $plugin, $autoplugins, true ) ) {
-			wp_send_json_error( 'Plugin not found.' ); // Plugin not found.
+			wp_send_json_error( 'Plugin not found.' );
 		}
 
 		// Hide PHP errors without silencing.

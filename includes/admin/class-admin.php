@@ -101,7 +101,61 @@ class Admin {
 		add_action( 'admin_menu', [ $this, 'add_admin_menu' ] );
 
 		// Initialize the GitHub updater.
-		$this->github_updater_init();
+		add_action( 'init', [ $this, 'github_updater_init' ] );
+
+		// Add "Extend Plugin" links to the plugin list table.
+		add_filter( 'plugin_action_links', [ $this, 'add_extend_plugin_link' ], 20, 2 );
+
+		// Add custom hook extraction config for Rank Math.
+		add_filter( 'wp_autoplugin_hook_extraction_config', [ $this, 'add_rank_math_hook_extraction_config' ] );
+	}
+
+	/**
+	 * Add custom hook extraction configuration for the Rank Math plugin, which uses a custom hook format.
+	 *
+	 * @param array $configs Array of custom hook extraction configurations.
+	 * @return array
+	 */
+	public function add_rank_math_hook_extraction_config( $configs ) {
+		$rank_math_config = [
+			'regex_pattern'         => '/(?:->)?(do_filter|do_action|apply_filters)\s*\(\s*([\'"]([^\'"]+)[\'"]|\$[^,]+|\w+)\s*,/m',
+			'method_to_type'        => [
+				'do_filter' => 'filter',
+				'do_action' => 'action',
+			],
+			'hook_name_transformer' => function ( $name, $regex_match ) {
+				if ( strpos( $regex_match[0][0], '->' ) === 0 ) {
+					return 'rank_math/' . $name;
+				}
+				return $name;
+			},
+		];
+
+		$configs['seo-by-rank-math']     = $rank_math_config;
+		$configs['seo-by-rank-math-pro'] = $rank_math_config;
+
+		return $configs;
+	}
+
+	/**
+	 * Add an "Extend Plugin" link to the plugin list table.
+	 *
+	 * @param array  $actions The plugin action links.
+	 * @param string $plugin_file The plugin file.
+	 *
+	 * @return array
+	 */
+	public function add_extend_plugin_link( $actions, $plugin_file ) {
+		$autoplugins = get_option( 'wp_autoplugins', [] );
+		if ( in_array( $plugin_file, $autoplugins, true ) ) {
+			$extend_url = admin_url( 'admin.php?page=wp-autoplugin-extend&plugin=' . rawurlencode( $plugin_file ) );
+			$extend_url = wp_nonce_url( $extend_url, 'wp-autoplugin-extend-plugin', 'nonce' );
+		} else {
+			$extend_url = admin_url( 'admin.php?page=wp-autoplugin-extend-hooks&plugin=' . rawurlencode( $plugin_file ) );
+			$extend_url = wp_nonce_url( $extend_url, 'wp-autoplugin-extend-hooks', 'nonce' );
+		}
+		$actions['extend_plugin'] = '<a href="' . esc_url( $extend_url ) . '">' . esc_html__( 'Extend Plugin', 'wp-autoplugin' ) . '</a>';
+		return $actions;
 	}
 
 	/**
@@ -191,9 +245,9 @@ class Admin {
 			[ $this, 'render_settings_page' ]
 		);
 
-		// Extend and Fix pages (they don't appear in the menu since the parent slug is an empty string).
+		// Extend and Fix pages (they don't appear in the menu).
 		add_submenu_page(
-			'',
+			'options.php',
 			esc_html__( 'Extend Plugin', 'wp-autoplugin' ),
 			esc_html__( 'Extend Plugin', 'wp-autoplugin' ),
 			'manage_options',
@@ -202,7 +256,7 @@ class Admin {
 		);
 
 		add_submenu_page(
-			'',
+			'options.php',
 			esc_html__( 'Fix Plugin', 'wp-autoplugin' ),
 			esc_html__( 'Fix Plugin', 'wp-autoplugin' ),
 			'manage_options',
@@ -211,12 +265,21 @@ class Admin {
 		);
 
 		add_submenu_page(
-			'',
+			'options.php',
 			esc_html__( 'Explain Plugin', 'wp-autoplugin' ),
 			esc_html__( 'Explain Plugin', 'wp-autoplugin' ),
 			'manage_options',
 			'wp-autoplugin-explain',
 			[ $this, 'render_explain_plugin_page' ]
+		);
+
+		add_submenu_page(
+			'options.php',
+			esc_html__( 'Extend Plugin with Hooks', 'wp-autoplugin' ),
+			esc_html__( 'Extend Plugin with Hooks', 'wp-autoplugin' ),
+			'manage_options',
+			'wp-autoplugin-extend-hooks',
+			[ $this, 'render_extend_hooks_page' ]
 		);
 	}
 
@@ -278,6 +341,25 @@ class Admin {
 	}
 
 	/**
+	 * Display the extend plugin with hooks page.
+	 *
+	 * @return void
+	 */
+	public function render_extend_hooks_page() {
+		if ( ! isset( $_GET['plugin'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+			wp_die( esc_html__( 'No plugin specified.', 'wp-autoplugin' ) );
+		}
+		$plugin_file = sanitize_text_field( wp_unslash( $_GET['plugin'] ) ); // phpcs:ignore WordPress.Security.NonceVerification
+		$plugin_file = str_replace( '../', '', $plugin_file );
+		$plugin_path = WP_CONTENT_DIR . '/plugins/' . $plugin_file;
+		if ( ! file_exists( $plugin_path ) ) {
+			wp_die( esc_html__( 'The specified plugin does not exist.', 'wp-autoplugin' ) );
+		}
+		$plugin_data = get_plugin_data( $plugin_path );
+		include WP_AUTOPLUGIN_DIR . 'views/page-extend-hooks.php';
+	}
+
+	/**
 	 * Check if the plugin in the query string is valid and the user has permission.
 	 *
 	 * @param string $nonce The nonce action name.
@@ -326,6 +408,7 @@ class Admin {
 				<span class="credits">
 					<?php
 					printf(
+						// translators: %s: version number.
 						esc_html__( 'WP-Autoplugin v%s', 'wp-autoplugin' ),
 						esc_html( WP_AUTOPLUGIN_VERSION )
 					);
@@ -334,13 +417,13 @@ class Admin {
 				<span class="separator">|</span>
 				<span class="model">
 					<?php
-					// translators: %s: model name
 					$translated_model_string = wp_kses(
+						// translators: %s: model name.
 						__( 'Model: %s', 'wp-autoplugin' ),
 						[ 'code' => [] ]
 					);
 					printf(
-						$translated_model_string,
+						$translated_model_string, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- It's escaped just above.
 						'<code>' . esc_html( get_option( 'wp_autoplugin_model' ) ) . '</code>'
 					);
 					?>
