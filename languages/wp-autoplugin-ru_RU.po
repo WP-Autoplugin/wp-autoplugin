@@ -4,27 +4,28 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WP-Autoplugin 1.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-autoplugin\n"
+"POT-Creation-Date: 2025-03-17T02:01:54+00:00\n"
+"PO-Revision-Date: 2025-01-10 12:00+0000\n"
 "Last-Translator: Полное Имя <EMAIL@ADDRESS>\n"
 "Language-Team: Russian <ru@li.org>\n"
+"Language: ru_RU\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2025-01-10 12:00+0000\n"
-"Language: ru_RU\n"
 "X-Generator: ChatGPT\n"
 "X-Domain: wp-autoplugin\n"
 
 #. Plugin Name of the plugin
-#: wp-autoplugin.php
-#: includes/admin/class-admin.php:212
-#: includes/admin/class-admin.php:213
+#: wp-autoplugin.php includes/admin/class-admin.php:221
+#: includes/admin/class-admin.php:222
 msgid "WP-Autoplugin"
 msgstr "WP-Autoplugin"
 
 #. Description of the plugin
-#: wp-autoplugin.php
+#: wp-autoplugin.php includes/admin/class-admin.php:455
 msgid "A plugin that generates other plugins on-demand using AI."
-msgstr "Плагин, который генерирует другие плагины по требованию с использованием ИИ."
+msgstr ""
+"Плагин, который генерирует другие плагины по требованию с использованием ИИ."
 
 #. Author of the plugin
 #: wp-autoplugin.php
@@ -36,495 +37,633 @@ msgstr "Balázs Piller"
 msgid "https://wp-autoplugin.com"
 msgstr "https://wp-autoplugin.com"
 
-#: includes/admin/class-admin.php:223
-#: includes/admin/class-admin.php:224
-#: views/page-list-plugins.php:30
-#: views/page-list-plugins.php:39
-msgid "Generate New Plugin"
-msgstr "Создать новый плагин"
-
-#: includes/admin/class-admin.php:232
-#: includes/admin/class-admin.php:233
-#: includes/admin/class-admin.php:534
-msgid "Settings"
-msgstr "Настройки"
-
-#: includes/admin/class-admin.php:242
-#: includes/admin/class-admin.php:243
-#: views/page-extend-plugin.php:48
+#: includes/admin/class-admin.php:157 includes/admin/class-admin.php:251
+#: includes/admin/class-admin.php:252 views/page-extend-plugin.php:51
 msgid "Extend Plugin"
 msgstr "Расширить плагин"
 
-#: includes/admin/class-admin.php:251
-#: includes/admin/class-admin.php:252
-#: views/page-fix-plugin.php:56
+#: includes/admin/class-admin.php:232 includes/admin/class-admin.php:233
+#: views/page-list-plugins.php:30 views/page-list-plugins.php:39
+msgid "Generate New Plugin"
+msgstr "Создать новый плагин"
+
+#: includes/admin/class-admin.php:241 includes/admin/class-admin.php:242
+msgid "Settings"
+msgstr "Настройки"
+
+#: includes/admin/class-admin.php:260 includes/admin/class-admin.php:261
+#: views/page-fix-plugin.php:61
 msgid "Fix Plugin"
 msgstr "Исправить плагин"
 
-#: includes/admin/class-admin.php:328
+#: includes/admin/class-admin.php:269 includes/admin/class-admin.php:270
+#: views/page-explain-plugin.php:67
+#, fuzzy
+msgid "Explain Plugin"
+msgstr "Расширить плагин"
+
+#: includes/admin/class-admin.php:278 includes/admin/class-admin.php:279
+#, fuzzy
+msgid "Extend Plugin with Hooks"
+msgstr "Расширить плагин"
+
+#: includes/admin/class-admin.php:350 includes/admin/class-admin.php:371
 msgid "No plugin specified."
 msgstr "Плагин не указан."
 
-#: includes/admin/class-admin.php:332
-#: includes/admin/class-admin.php:924
-msgid "You do not have sufficient permissions to access this page."
-msgstr "У вас недостаточно прав для доступа к этой странице."
-
-#: includes/admin/class-admin.php:337
-#: includes/admin/class-admin.php:919
-msgid "Security check failed."
-msgstr "Проверка безопасности не пройдена."
-
-#: includes/admin/class-admin.php:342
-#: includes/admin/class-admin.php:348
+#: includes/admin/class-admin.php:356 includes/admin/class-admin.php:386
+#: includes/admin/class-admin.php:392
 msgid "The specified plugin does not exist."
 msgstr "Указанный плагин не существует."
 
-#: includes/admin/class-admin.php:388
-#: includes/admin/class-admin.php:471
-msgid "Please enter a plugin description."
-msgstr "Пожалуйста, введите описание плагина."
+#: includes/admin/class-admin.php:375 includes/admin/class-bulk-actions.php:51
+msgid "You do not have sufficient permissions to access this page."
+msgstr "У вас недостаточно прав для доступа к этой странице."
 
-#: includes/admin/class-admin.php:389
-#: includes/admin/class-admin.php:472
-#: includes/admin/class-admin.php:512
-msgid "Generating a plan for your plugin"
-msgstr "Генерация плана для вашего плагина"
+#: includes/admin/class-admin.php:380 includes/admin/class-ajax.php:378
+#: includes/admin/class-ajax.php:419 includes/admin/class-bulk-actions.php:47
+msgid "Security check failed."
+msgstr "Проверка безопасности не пройдена."
 
-#: includes/admin/class-admin.php:390
-msgid "Error generating the plugin plan."
-msgstr "Ошибка при генерации плана плагина."
-
-#: includes/admin/class-admin.php:391
-msgid "Generating code"
-msgstr "Генерация кода"
-
-#: includes/admin/class-admin.php:392
-msgid "Error generating the plugin code."
-msgstr "Ошибка при генерации кода плагина."
-
-#: includes/admin/class-admin.php:393
-msgid "Error creating the plugin."
-msgstr "Ошибка при создании плагина."
-
-#: includes/admin/class-admin.php:394
-msgid "Installing the plugin"
-msgstr "Установка плагина"
-
-#: includes/admin/class-admin.php:395
-msgid "Plugin successfully installed."
-msgstr "Плагин успешно установлен."
-
-#: includes/admin/class-admin.php:396
-msgid "How to test it?"
-msgstr "Как его протестировать?"
-
-#: includes/admin/class-admin.php:397
-msgid "If you notice any issues, use the Fix button in the Autoplugins list."
-msgstr "Если вы заметили какие-либо проблемы, используйте кнопку Исправить в списке Autoplugins."
-
-#: includes/admin/class-admin.php:398
-#: includes/admin/class-admin.php:478
-#: includes/admin/class-admin.php:518
-msgid "Activate Plugin"
-msgstr "Активировать плагин"
-
-#: includes/admin/class-admin.php:403
-msgid "A simple contact form with honeypot spam protection"
-msgstr "Простая контактная форма с защитой от спама типа honeypot"
-
-#: includes/admin/class-admin.php:404
-msgid "A custom post type for testimonials"
-msgstr "Пользовательский тип записи для отзывов"
-
-#: includes/admin/class-admin.php:405
-msgid "A widget that displays recent posts"
-msgstr "Виджет, отображающий последние записи"
-
-#: includes/admin/class-admin.php:406
-msgid "A shortcode that shows a random quote"
-msgstr "Шорткод, показывающий случайную цитату"
-
-#: includes/admin/class-admin.php:407
-msgid "A user profile widget displaying avatar, bio, and website link"
-msgstr "Виджет профиля пользователя, отображающий аватар, биографию и ссылку на сайт"
-
-#: includes/admin/class-admin.php:408
-msgid "A custom post type for managing FAQs"
-msgstr "Пользовательский тип записи для управления FAQ"
-
-#: includes/admin/class-admin.php:409
-msgid "A post views counter that tracks and displays view counts"
-msgstr "Счётчик просмотров записей, отслеживающий и отображающий количество просмотров"
-
-#: includes/admin/class-admin.php:410
-msgid "Maintenance mode with a countdown timer to site return"
-msgstr "Режим обслуживания с таймером обратного отсчёта до возвращения сайта"
-
-#: includes/admin/class-admin.php:411
-msgid "An admin quick links widget for the dashboard"
-msgstr "Виджет быстрых ссылок администратора для панели управления"
-
+#. translators: %s: version number.
 #: includes/admin/class-admin.php:412
-msgid "Hide the admin bar for non-admin users"
-msgstr "Скрыть панель администратора для пользователей без прав администратора"
-
-#: includes/admin/class-admin.php:413
-msgid "Hide specific menu items in the admin area"
-msgstr "Скрыть определённые элементы меню в административной области"
-
-#: includes/admin/class-admin.php:414
-msgid "A social media share buttons plugin for posts"
-msgstr "Плагин кнопок для поделиться в социальных сетях для записей"
-
-#: includes/admin/class-admin.php:415
-msgid "A custom footer credit remover"
-msgstr "Удалитель пользовательских кредитов в подвале"
-
-#: includes/admin/class-admin.php:416
-msgid "A plugin to add custom CSS to the WordPress login page"
-msgstr "Плагин для добавления пользовательского CSS на страницу входа в WordPress"
-
-#: includes/admin/class-admin.php:417
-msgid "A related posts display below single post content"
-msgstr "Отображение связанных записей под содержимым отдельной записи"
-
-#: includes/admin/class-admin.php:418
-msgid "A custom excerpt length controller"
-msgstr "Пользовательский контроллер длины отрывка"
-
-#: includes/admin/class-admin.php:419
-msgid "A \"Back to Top\" button for long pages"
-msgstr "Кнопка \"Вернуться к началу\" для длинных страниц"
-
-#: includes/admin/class-admin.php:420
-msgid "A plugin to disable comments on specific post types"
-msgstr "Плагин для отключения комментариев на определённых типах записей"
-
-#: includes/admin/class-admin.php:421
-msgid "A simple Google Analytics integration"
-msgstr "Простая интеграция с Google Analytics"
-
-#: includes/admin/class-admin.php:422
-msgid "An author box display below posts"
-msgstr "Отображение блока автора под записями"
-
-#: includes/admin/class-admin.php:423
-msgid "A custom breadcrumb generator"
-msgstr "Пользовательский генератор навигационных цепочек"
-
-#: includes/admin/class-admin.php:424
-msgid "A plugin to add nofollow to external links"
-msgstr "Плагин для добавления атрибута nofollow к внешним ссылкам"
-
-#: includes/admin/class-admin.php:425
-msgid "A simple cookie consent banner"
-msgstr "Простой баннер согласия на использование cookies"
-
-#: includes/admin/class-admin.php:426
-msgid "A post expiration date setter"
-msgstr "Установщик даты истечения срока действия записи"
-
-#: includes/admin/class-admin.php:427
-msgid "A basic XML sitemap generator"
-msgstr "Простой генератор XML-карты сайта"
-
-#: includes/admin/class-admin.php:428
-msgid "A custom login URL creator for added security"
-msgstr "Пользовательский генератор URL для входа для дополнительной безопасности"
-
-#: includes/admin/class-admin.php:429
-msgid "A simple contact information display shortcode"
-msgstr "Простой шорткод для отображения контактной информации"
-
-#: includes/admin/class-admin.php:430
-msgid "A plugin to add estimated reading time to posts"
-msgstr "Плагин для добавления оценочного времени чтения к записям"
-
-#: includes/admin/class-admin.php:431
-msgid "A custom RSS feed footer"
-msgstr "Пользовательский подвал RSS-ленты"
-
-#: includes/admin/class-admin.php:432
-msgid "A simple post duplication tool"
-msgstr "Простая утилита для дублирования записей"
-
-#: includes/admin/class-admin.php:433
-msgid "A basic schema markup generator"
-msgstr "Простой генератор разметки schema"
-
-#: includes/admin/class-admin.php:434
-msgid "A plugin to add custom admin footer text"
-msgstr "Плагин для добавления пользовательского текста в подвал администратора"
-
-#: includes/admin/class-admin.php:435
-msgid "A plugin to add custom taxonomies easily"
-msgstr "Плагин для лёгкого добавления пользовательских таксономий"
-
-#: includes/admin/class-admin.php:436
-msgid "A simple email obfuscator to prevent spam"
-msgstr "Простой обфускатор электронной почты для предотвращения спама"
-
-#: includes/admin/class-admin.php:437
-msgid "A basic redirection manager"
-msgstr "Простой менеджер перенаправлений"
-
-#: includes/admin/class-admin.php:438
-msgid "A plugin to add custom fields to user profiles"
-msgstr "Плагин для добавления пользовательских полей в профили пользователей"
-
-#: includes/admin/class-admin.php:439
-msgid "A simple image compression tool"
-msgstr "Простое средство сжатия изображений"
-
-#: includes/admin/class-admin.php:473
-msgid "Error generating the plan."
-msgstr "Ошибка при генерации плана."
-
-#: includes/admin/class-admin.php:474
-msgid "Error creating the fixed plugin."
-msgstr "Ошибка при создании исправленного плагина."
-
-#: includes/admin/class-admin.php:475
-msgid "Generating the fixed plugin code"
-msgstr "Генерация кода исправленного плагина"
-
-#: includes/admin/class-admin.php:476
-msgid "Error generating the fixed code."
-msgstr "Ошибка при генерации исправленного кода."
-
-#: includes/admin/class-admin.php:477
-#: includes/admin/class-admin.php:517
-msgid "The plugin code has been updated."
-msgstr "Код плагина был обновлён."
-
-#: includes/admin/class-admin.php:479
-msgid "Installing the fix"
-msgstr "Установка исправления"
-
-#: includes/admin/class-admin.php:511
-msgid "Please describe the changes you want to make to the plugin."
-msgstr "Пожалуйста, опишите изменения, которые вы хотите внести в плагин."
-
-#: includes/admin/class-admin.php:513
-msgid "Error generating the development plan."
-msgstr "Ошибка при генерации плана разработки."
-
-#: includes/admin/class-admin.php:514
-msgid "Generating the extended plugin code"
-msgstr "Генерация кода расширенного плагина"
-
-#: includes/admin/class-admin.php:515
-msgid "Error generating the extended code."
-msgstr "Ошибка при генерации расширенного кода."
-
-#: includes/admin/class-admin.php:516
-msgid "Error creating the extended plugin."
-msgstr "Ошибка при создании расширенного плагина."
-
-#: includes/admin/class-admin.php:519
-msgid "Creating the plugin"
-msgstr "Создание плагина"
-
-#: includes/admin/class-admin.php:535
-#: views/page-generate-plugin.php:21
-msgid "Generate Plugin"
-msgstr "Создать плагин"
-
-#: includes/admin/class-admin.php:746
-#: includes/admin/class-admin.php:798
-msgid "Security check failed"
-msgstr "Проверка безопасности не пройдена"
-
-#: includes/admin/class-admin.php:754
-msgid "Invalid model data"
-msgstr "Недействительные данные модели"
-
-#: includes/admin/class-admin.php:785
-msgid "Model added successfully"
-msgstr "Модель успешно добавлена"
-
-#: includes/admin/class-admin.php:812
-msgid "Invalid model index"
-msgstr "Недействительный индекс модели"
-
-#: includes/admin/class-admin.php:827
-msgid "Model removed successfully"
-msgstr "Модель успешно удалена"
-
-#: includes/admin/class-admin.php:848
-msgid "The <code>DISALLOW_FILE_MODS</code> constant is defined in your wp-config.php file, which prevents WP-Autoplugin from installing or updating plugins on your site."
-msgstr "Константа <code>DISALLOW_FILE_MODS</code> определена в вашем файле wp-config.php, что предотвращает установку или обновление плагинов WP-Autoplugin на вашем сайте."
-
-#: includes/admin/class-admin.php:863
-msgid "The plugin could not be activated due to a fatal error."
-msgstr "Плагин не может быть активирован из-за фатальной ошибки."
-
-#. translators: %s: fix URL
-#: includes/admin/class-admin.php:866
-msgid "You can <a href=\"%s\">fix the error automatically</a>."
-msgstr "Вы можете <a href=\"%s\">автоматически исправить ошибку</a>."
-
-#. translators: %s: plugin version
-#: includes/admin/class-admin.php:896
 msgid "WP-Autoplugin v%s"
 msgstr "WP-Autoplugin v%s"
 
-#. translators: %s: model name
-#: includes/admin/class-admin.php:901
+#. translators: %s: model name.
+#: includes/admin/class-admin.php:422
 msgid "Model: %s"
 msgstr "Модель: %s"
 
-#: includes/admin/class-plugin-list-table.php:44
+#: includes/admin/class-ajax.php:76 includes/admin/class-ajax.php:453
+#: includes/admin/class-ajax.php:495 includes/admin/class-ajax.php:542
+#, fuzzy
+msgid "You are not allowed to access this page."
+msgstr "У вас недостаточно прав для доступа к этой странице."
+
+#: includes/admin/class-ajax.php:86
+msgid "Invalid AJAX action."
+msgstr ""
+
+#: includes/admin/class-ajax.php:110
+#, fuzzy
+msgid "Failed to decode the generated plan: "
+msgstr "Просмотрите или отредактируйте сгенерированный план:"
+
+#: includes/admin/class-ajax.php:175 includes/admin/class-ajax.php:205
+#: includes/admin/class-ajax.php:260 includes/admin/class-ajax.php:289
+#: includes/admin/class-ajax.php:344
+msgid "Failed to read the plugin file."
+msgstr ""
+
+#: includes/admin/class-ajax.php:383
+#, fuzzy
+msgid "Invalid model data."
+msgstr "Недействительные данные модели"
+
+#: includes/admin/class-ajax.php:407
+#, fuzzy
+msgid "Model added successfully."
+msgstr "Модель успешно добавлена"
+
+#: includes/admin/class-ajax.php:429
+#, fuzzy
+msgid "Invalid model index."
+msgstr "Недействительный индекс модели"
+
+#: includes/admin/class-ajax.php:441
+#, fuzzy
+msgid "Model removed successfully."
+msgstr "Модель успешно удалена"
+
+#: includes/admin/class-ajax.php:458 includes/admin/class-ajax.php:500
+msgid "Missing required parameters."
+msgstr ""
+
+#: includes/admin/class-ajax.php:464
+msgid "No hooks found in the plugin."
+msgstr ""
+
+#: includes/admin/class-ajax.php:482
+#, fuzzy
+msgid "Failed to decode the generated plan."
+msgstr "Просмотрите или отредактируйте сгенерированный план:"
+
+#: includes/admin/class-ajax.php:548
+#, fuzzy
+msgid "No plugin file specified."
+msgstr "Плагин не указан."
+
+#: includes/admin/class-notices.php:44
+msgid ""
+"The <code>DISALLOW_FILE_MODS</code> constant is defined in your wp-config."
+"php file, which prevents WP-Autoplugin from installing or updating plugins "
+"on your site."
+msgstr ""
+"Константа <code>DISALLOW_FILE_MODS</code> определена в вашем файле wp-config."
+"php, что предотвращает установку или обновление плагинов WP-Autoplugin на "
+"вашем сайте."
+
+#: includes/admin/class-notices.php:68
+msgid "The plugin could not be activated due to a fatal error."
+msgstr "Плагин не может быть активирован из-за фатальной ошибки."
+
+#. translators: 1: fix link start tag, 2: fix link end tag
+#: includes/admin/class-notices.php:74
+#, fuzzy
+msgid "You can %1$sfix the error automatically%2$s."
+msgstr "Вы можете <a href=\"%s\">автоматически исправить ошибку</a>."
+
+#: includes/admin/class-plugin-list-table.php:46
 msgid "Plugin"
 msgstr "Плагин"
 
-#: includes/admin/class-plugin-list-table.php:82
+#: includes/admin/class-plugin-list-table.php:84
 msgid "Deactivate"
 msgstr "Деактивировать"
 
-#: includes/admin/class-plugin-list-table.php:85
+#: includes/admin/class-plugin-list-table.php:87
 msgid "Activate"
 msgstr "Активировать"
 
-#: includes/admin/class-plugin-list-table.php:88
+#: includes/admin/class-plugin-list-table.php:90
 msgid "Fix"
 msgstr "Исправить"
 
-#: includes/admin/class-plugin-list-table.php:89
+#: includes/admin/class-plugin-list-table.php:91
 msgid "Extend"
 msgstr "Расширить"
 
-#: includes/admin/class-plugin-list-table.php:90
+#: includes/admin/class-plugin-list-table.php:92
+msgid "Explain"
+msgstr ""
+
+#: includes/admin/class-plugin-list-table.php:93
 msgid "Delete"
 msgstr "Удалить"
 
-#: includes/admin/class-plugin-list-table.php:176
+#: includes/admin/class-plugin-list-table.php:180
 msgid "No plugins found."
 msgstr "Плагины не найдены."
 
-#: includes/admin/class-plugin-list-table.php:216
+#: includes/admin/class-plugin-list-table.php:222
 msgid "All"
 msgstr "Все"
 
-#: includes/admin/class-plugin-list-table.php:217
+#: includes/admin/class-plugin-list-table.php:223
 msgid "Active"
 msgstr "Активные"
 
-#: includes/admin/class-plugin-list-table.php:218
+#: includes/admin/class-plugin-list-table.php:224
 msgid "Inactive"
 msgstr "Неактивные"
 
-#: includes/api/class-custom-api.php:110
+#: includes/admin/class-scripts.php:104 includes/admin/class-scripts.php:169
+msgid "Please enter a plugin description."
+msgstr "Пожалуйста, введите описание плагина."
+
+#: includes/admin/class-scripts.php:105 includes/admin/class-scripts.php:170
+#: includes/admin/class-scripts.php:226 includes/admin/class-scripts.php:331
+#, fuzzy
+msgid "Generating a plan for your plugin."
+msgstr "Генерация плана для вашего плагина"
+
+#: includes/admin/class-scripts.php:106
+msgid "Error generating the plugin plan."
+msgstr "Ошибка при генерации плана плагина."
+
+#: includes/admin/class-scripts.php:107
+#, fuzzy
+msgid "Generating code."
+msgstr "Генерация кода"
+
+#: includes/admin/class-scripts.php:108
+msgid "Error generating the plugin code."
+msgstr "Ошибка при генерации кода плагина."
+
+#: includes/admin/class-scripts.php:109
+msgid "Error creating the plugin."
+msgstr "Ошибка при создании плагина."
+
+#: includes/admin/class-scripts.php:110 includes/admin/class-scripts.php:176
+#, fuzzy
+msgid "Installing the plugin."
+msgstr "Установка плагина"
+
+#: includes/admin/class-scripts.php:111 includes/admin/class-scripts.php:177
+msgid "Plugin successfully installed."
+msgstr "Плагин успешно установлен."
+
+#: includes/admin/class-scripts.php:112
+msgid "How to test it?"
+msgstr "Как его протестировать?"
+
+#: includes/admin/class-scripts.php:113
+msgid "If you notice any issues, use the Fix button in the Autoplugins list."
+msgstr ""
+"Если вы заметили какие-либо проблемы, используйте кнопку Исправить в списке "
+"Autoplugins."
+
+#: includes/admin/class-scripts.php:114 includes/admin/class-scripts.php:175
+#: includes/admin/class-scripts.php:232 includes/admin/class-scripts.php:337
+msgid "Activate Plugin"
+msgstr "Активировать плагин"
+
+#: includes/admin/class-scripts.php:117
+#, fuzzy
+msgid "A simple contact form with honeypot spam protection."
+msgstr "Простая контактная форма с защитой от спама типа honeypot"
+
+#: includes/admin/class-scripts.php:118
+#, fuzzy
+msgid "A custom post type for testimonials."
+msgstr "Пользовательский тип записи для отзывов"
+
+#: includes/admin/class-scripts.php:119
+#, fuzzy
+msgid "A widget that displays recent posts."
+msgstr "Виджет, отображающий последние записи"
+
+#: includes/admin/class-scripts.php:121
+#, fuzzy
+msgid "A simple image compression tool."
+msgstr "Простое средство сжатия изображений"
+
+#: includes/admin/class-scripts.php:171
+msgid "Error generating the plan."
+msgstr "Ошибка при генерации плана."
+
+#: includes/admin/class-scripts.php:172
+msgid "Error creating the fixed plugin."
+msgstr "Ошибка при создании исправленного плагина."
+
+#: includes/admin/class-scripts.php:173
+#, fuzzy
+msgid "Generating the fixed plugin code."
+msgstr "Генерация кода исправленного плагина"
+
+#: includes/admin/class-scripts.php:174
+msgid "Error generating the fixed code."
+msgstr "Ошибка при генерации исправленного кода."
+
+#: includes/admin/class-scripts.php:225 includes/admin/class-scripts.php:330
+msgid "Please describe the changes you want to make to the plugin."
+msgstr "Пожалуйста, опишите изменения, которые вы хотите внести в плагин."
+
+#: includes/admin/class-scripts.php:227 includes/admin/class-scripts.php:332
+msgid "Error generating the development plan."
+msgstr "Ошибка при генерации плана разработки."
+
+#: includes/admin/class-scripts.php:228
+#, fuzzy
+msgid "Generating the extended plugin code."
+msgstr "Генерация кода расширенного плагина"
+
+#: includes/admin/class-scripts.php:229
+msgid "Error generating the extended code."
+msgstr "Ошибка при генерации расширенного кода."
+
+#: includes/admin/class-scripts.php:230
+msgid "Error creating the extended plugin."
+msgstr "Ошибка при создании расширенного плагина."
+
+#: includes/admin/class-scripts.php:231
+msgid "The plugin code has been updated."
+msgstr "Код плагина был обновлён."
+
+#: includes/admin/class-scripts.php:233
+#, fuzzy
+msgid "Creating the plugin."
+msgstr "Создание плагина"
+
+#: includes/admin/class-scripts.php:276
+#, fuzzy
+msgid "Generating explanation..."
+msgstr "Ошибка при генерации плана."
+
+#: includes/admin/class-scripts.php:277
+#, fuzzy
+msgid "Error generating explanation."
+msgstr "Ошибка при генерации плана."
+
+#: includes/admin/class-scripts.php:278 views/page-explain-plugin.php:51
+msgid "Security Analysis"
+msgstr ""
+
+#: includes/admin/class-scripts.php:279 views/page-explain-plugin.php:55
+msgid "Performance Review"
+msgstr ""
+
+#: includes/admin/class-scripts.php:280
+msgid "Code Quality Analysis"
+msgstr ""
+
+#: includes/admin/class-scripts.php:281 views/page-explain-plugin.php:63
+msgid "Usage Instructions"
+msgstr ""
+
+#: includes/admin/class-scripts.php:282
+#, fuzzy
+msgid "General Explanation"
+msgstr "Сгенерировать план"
+
+#: includes/admin/class-scripts.php:283
+msgid "Explanation copied to clipboard!"
+msgstr ""
+
+#: includes/admin/class-scripts.php:284
+msgid "Failed to copy explanation."
+msgstr ""
+
+#: includes/admin/class-scripts.php:333
+#, fuzzy
+msgid "Generating the extension plugin code."
+msgstr "Генерация кода расширенного плагина"
+
+#: includes/admin/class-scripts.php:334
+#, fuzzy
+msgid "Error generating the extension code."
+msgstr "Ошибка при генерации расширенного кода."
+
+#: includes/admin/class-scripts.php:335
+#, fuzzy
+msgid "Error creating the extension plugin."
+msgstr "Ошибка при создании расширенного плагина."
+
+#: includes/admin/class-scripts.php:336
+#, fuzzy
+msgid "The extension plugin has been created."
+msgstr "Код плагина был обновлён."
+
+#: includes/admin/class-scripts.php:338
+#, fuzzy
+msgid "Creating the extension plugin."
+msgstr "Создание плагина"
+
+#: includes/api/class-custom-api.php:108
 msgid "Error communicating with the API."
 msgstr "Ошибка при общении с API."
 
-#: includes/class-github-updater.php:384
-msgid "The plugin has been updated, but could not be reactivated. Please reactivate it manually."
-msgstr "Плагин был обновлен, но не может быть повторно активирован. Пожалуйста, активируйте его вручную."
+#: includes/class-github-updater.php:386
+msgid ""
+"The plugin has been updated, but could not be reactivated. Please reactivate "
+"it manually."
+msgstr ""
+"Плагин был обновлен, но не может быть повторно активирован. Пожалуйста, "
+"активируйте его вручную."
 
-#: includes/class-github-updater.php:385
+#: includes/class-github-updater.php:387
 msgid "Plugin reactivated successfully."
 msgstr "Плагин успешно повторно активирован."
 
+#: views/page-explain-plugin.php:20 views/page-extend-hooks.php:15
+#: views/page-extend-plugin.php:20 views/page-fix-plugin.php:20
+msgid "Nonce verification failed. Please try again."
+msgstr ""
+
+#. translators: %s: plugin name.
+#: views/page-explain-plugin.php:37
+#, fuzzy
+msgid "Explain This Plugin: %s"
+msgstr "Расширить этот плагин: %s"
+
+#: views/page-explain-plugin.php:40
+#, fuzzy
+msgid ""
+"Enter a specific question about this plugin or leave blank for a general "
+"explanation:"
+msgstr "Введите описание плагина, который вы хотите сгенерировать:"
+
+#: views/page-explain-plugin.php:41
+msgid ""
+"E.g., How does this plugin store its data? | Leave empty for a complete "
+"explanation."
+msgstr ""
+
+#: views/page-explain-plugin.php:44
+msgid "Explanation Focus (Optional):"
+msgstr ""
+
+#: views/page-explain-plugin.php:47
+msgid "General Overview"
+msgstr ""
+
+#: views/page-explain-plugin.php:59
+msgid "Code Quality"
+msgstr ""
+
+#: views/page-explain-plugin.php:73
+msgid "Plugin Explanation"
+msgstr ""
+
+#. translators: %s: plugin name.
+#: views/page-explain-plugin.php:77
+msgid "Explanation for: %s"
+msgstr ""
+
+#: views/page-explain-plugin.php:79
+msgid "Question/Focus:"
+msgstr ""
+
+#: views/page-explain-plugin.php:80
+#, fuzzy
+msgid "General explanation"
+msgstr "Сгенерировать план"
+
+#: views/page-explain-plugin.php:86
+msgid "Ask Another Question"
+msgstr ""
+
+#: views/page-explain-plugin.php:87
+msgid "Copy to Clipboard"
+msgstr ""
+
+#: views/page-explain-plugin.php:88
+msgid "Download as Text"
+msgstr ""
+
+#. translators: %s: plugin name.
+#: views/page-extend-hooks.php:24
+#, fuzzy
+msgid "Extend This Plugin with Hooks: %s"
+msgstr "Расширить этот плагин: %s"
+
+#: views/page-extend-hooks.php:27
+msgid "Extracting plugin hooks, please wait..."
+msgstr ""
+
+#: views/page-extend-hooks.php:36
+#, fuzzy
+msgid ""
+"Describe the extension you would like to make to the plugin using its hooks:"
+msgstr ""
+"Опишите изменения, которые вы хотели бы внести в плагин. Включите как можно "
+"больше деталей:"
+
+#: views/page-extend-hooks.php:38
+#, fuzzy
+msgid "Generate Extension Plan"
+msgstr "Сгенерировать план"
+
+#: views/page-extend-hooks.php:45
+#, fuzzy
+msgid "Generated Extension Plan"
+msgstr "Сгенерированный План"
+
+#: views/page-extend-hooks.php:47
+#, fuzzy
+msgid "Review or edit the generated plan for the extension plugin:"
+msgstr "Просмотрите или отредактируйте сгенерированный план:"
+
+#: views/page-extend-hooks.php:50
+#, fuzzy
+msgid "Plugin Name:"
+msgstr "Плагин"
+
+#: views/page-extend-hooks.php:54
+#, fuzzy
+msgid "« Edit Description"
+msgstr "&laquo; Редактировать описание"
+
+#: views/page-extend-hooks.php:55
+#, fuzzy
+msgid "Generate Extension Code"
+msgstr "Сгенерировать код плагина"
+
+#. translators: %s: plugin name.
+#: views/page-extend-hooks.php:62
+#, fuzzy
+msgid "Extension Plugin for: %s"
+msgstr "Расширенный плагин: %s"
+
+#: views/page-extend-hooks.php:64
+#, fuzzy
+msgid "The extension plugin code has been generated. Review it before saving:"
+msgstr ""
+"Код плагина был успешно сгенерирован. Вы можете просмотреть и "
+"отредактировать файл плагина перед его активацией:"
+
+#: views/page-extend-hooks.php:67
+#, fuzzy
+msgid "« Edit Plan"
+msgstr "&laquo; Редактировать план"
+
+#: views/page-extend-hooks.php:68
+#, fuzzy
+msgid "Save Extension Plugin"
+msgstr "Расширить плагин"
+
 #. translators: %s: error message.
-#: views/page-extend-plugin.php:28
-#: views/page-fix-plugin.php:28
+#: views/page-extend-plugin.php:37 views/page-fix-plugin.php:39
 msgid "Error while activating the plugin: %s"
 msgstr "Ошибка при активации плагина: %s"
 
 #. translators: %s: plugin name.
-#: views/page-extend-plugin.php:43
+#: views/page-extend-plugin.php:46
 msgid "Extend This Plugin: %s"
 msgstr "Расширить этот плагин: %s"
 
-#: views/page-extend-plugin.php:46
-msgid "Describe the changes you would like to make to the plugin. Include as much detail as possible:"
-msgstr "Опишите изменения, которые вы хотели бы внести в плагин. Включите как можно больше деталей:"
+#: views/page-extend-plugin.php:49
+msgid ""
+"Describe the changes you would like to make to the plugin. Include as much "
+"detail as possible:"
+msgstr ""
+"Опишите изменения, которые вы хотели бы внести в плагин. Включите как можно "
+"больше деталей:"
 
-#: views/page-extend-plugin.php:54
-#: views/page-fix-plugin.php:62
+#: views/page-extend-plugin.php:57 views/page-fix-plugin.php:67
 #: views/page-generate-plugin.php:31
 msgid "Generated Plan"
 msgstr "Сгенерированный План"
 
-#: views/page-extend-plugin.php:57
-#: views/page-fix-plugin.php:65
+#: views/page-extend-plugin.php:60 views/page-fix-plugin.php:70
 #: views/page-generate-plugin.php:34
 msgid "Review or edit the generated plan:"
 msgstr "Просмотрите или отредактируйте сгенерированный план:"
 
-#: views/page-extend-plugin.php:60
-#: views/page-fix-plugin.php:68
+#: views/page-extend-plugin.php:63 views/page-fix-plugin.php:73
 msgid "&laquo; Edit Issue"
 msgstr "&laquo; Редактировать проблему"
 
-#: views/page-extend-plugin.php:61
-#: views/page-fix-plugin.php:69
+#: views/page-extend-plugin.php:64 views/page-fix-plugin.php:74
 #: views/page-generate-plugin.php:41
 msgid "Generate Plugin Code"
 msgstr "Сгенерировать код плагина"
 
 #. translators: %s: plugin name.
-#: views/page-extend-plugin.php:68
+#: views/page-extend-plugin.php:71
 msgid "Extended Plugin: %s"
 msgstr "Расширенный плагин: %s"
 
-#: views/page-extend-plugin.php:71
-msgid "The plugin has been extended successfully. You can review the changes before activating it:"
-msgstr "Плагин был успешно расширен. Вы можете просмотреть изменения перед его активацией:"
+#: views/page-extend-plugin.php:74
+msgid ""
+"The plugin has been extended successfully. You can review the changes before "
+"activating it:"
+msgstr ""
+"Плагин был успешно расширен. Вы можете просмотреть изменения перед его "
+"активацией:"
 
-#: views/page-extend-plugin.php:76
-#: views/page-fix-plugin.php:84
+#: views/page-extend-plugin.php:79 views/page-fix-plugin.php:89
 #: views/page-generate-plugin.php:54
 msgid "Warning:"
 msgstr "Предупреждение:"
 
-#: views/page-extend-plugin.php:76
-#: views/page-fix-plugin.php:84
+#: views/page-extend-plugin.php:79 views/page-fix-plugin.php:89
 msgid "This plugin is active, changes will take effect immediately."
 msgstr "Этот плагин активен, изменения вступят в силу немедленно."
 
-#: views/page-extend-plugin.php:81
-#: views/page-fix-plugin.php:89
+#: views/page-extend-plugin.php:84 views/page-fix-plugin.php:94
 #: views/page-generate-plugin.php:58
 msgid "&laquo; Edit Plan"
 msgstr "&laquo; Редактировать план"
 
-#: views/page-extend-plugin.php:82
-#: views/page-fix-plugin.php:90
+#: views/page-extend-plugin.php:85 views/page-fix-plugin.php:95
 msgid "Save Changes"
 msgstr "Сохранить изменения"
 
+#: views/page-fix-plugin.php:32
+#, fuzzy
+msgid "Unknown Plugin"
+msgstr "Плагин"
+
 #. translators: %s: plugin name.
-#: views/page-fix-plugin.php:43
+#: views/page-fix-plugin.php:48
 msgid "Fix This Plugin: %s"
 msgstr "Исправить этот плагин: %s"
 
-#: views/page-fix-plugin.php:46
-msgid "Describe the issue you are experiencing with the plugin. Include as much detail as possible and any error messages you are seeing:"
-msgstr "Опишите проблему, с которой вы сталкиваетесь при использовании плагина. Включите как можно больше деталей и любые сообщения об ошибках, которые вы видите:"
-
 #: views/page-fix-plugin.php:51
+msgid ""
+"Describe the issue you are experiencing with the plugin. Include as much "
+"detail as possible and any error messages you are seeing:"
+msgstr ""
+"Опишите проблему, с которой вы сталкиваетесь при использовании плагина. "
+"Включите как можно больше деталей и любые сообщения об ошибках, которые вы "
+"видите:"
+
+#: views/page-fix-plugin.php:56
 msgid "Look for other issues in the plugin code as well"
 msgstr "Ищите другие проблемы в коде плагина также"
 
-#: views/page-fix-plugin.php:53
+#: views/page-fix-plugin.php:58
 msgid "Focus on the issue at hand"
 msgstr "Сосредоточьтесь на текущей проблеме"
 
 #. translators: %s: plugin name.
-#: views/page-fix-plugin.php:75
+#: views/page-fix-plugin.php:81
 msgid "Fixed Plugin: %s"
 msgstr "Исправленный плагин: %s"
 
-#: views/page-fix-plugin.php:78
-msgid "The plugin has been fixed successfully. You can review the changes before activating it:"
-msgstr "Плагин был успешно исправлен. Вы можете просмотреть изменения перед его активацией:"
+#: views/page-fix-plugin.php:84
+msgid ""
+"The plugin has been fixed successfully. You can review the changes before "
+"activating it:"
+msgstr ""
+"Плагин был успешно исправлен. Вы можете просмотреть изменения перед его "
+"активацией:"
 
 #: views/page-generate-plugin.php:21
 msgid "Generate Plugin"
-msgstr "Сгенерировать плагин"
+msgstr "Создать плагин"
 
 #: views/page-generate-plugin.php:24
 msgid "Enter a description of the plugin you want to generate:"
@@ -543,12 +682,20 @@ msgid "Generated Plugin Code"
 msgstr "Сгенерированный код плагина"
 
 #: views/page-generate-plugin.php:50
-msgid "The plugin code has been generated successfully. You can review and edit the plugin file before activating it:"
-msgstr "Код плагина был успешно сгенерирован. Вы можете просмотреть и отредактировать файл плагина перед его активацией:"
+msgid ""
+"The plugin code has been generated successfully. You can review and edit the "
+"plugin file before activating it:"
+msgstr ""
+"Код плагина был успешно сгенерирован. Вы можете просмотреть и "
+"отредактировать файл плагина перед его активацией:"
 
 #: views/page-generate-plugin.php:54
-msgid "AI-generated code may be unstable or insecure; use only after careful review and testing."
-msgstr "Код, сгенерированный ИИ, может быть нестабильным или небезопасным; используйте только после тщательного обзора и тестирования."
+msgid ""
+"AI-generated code may be unstable or insecure; use only after careful review "
+"and testing."
+msgstr ""
+"Код, сгенерированный ИИ, может быть нестабильным или небезопасным; "
+"используйте только после тщательного обзора и тестирования."
 
 #: views/page-generate-plugin.php:59
 msgid "Install Plugin"
@@ -563,8 +710,14 @@ msgid "You don't have any autoplugins yet."
 msgstr "У вас еще нет автоплагинов."
 
 #: views/page-list-plugins.php:38
-msgid "Autoplugins are regular plugins, but they are generated by AI. You can manage them just like any other plugin. They will be listed here for your convenience."
-msgstr "Autoplugins — это обычные плагины, но они генерируются ИИ. Вы можете управлять ими так же, как и любыми другими плагинами. Они будут перечислены здесь для вашего удобства."
+msgid ""
+"Autoplugins are regular plugins, but they are generated by AI. You can "
+"manage them just like any other plugin. They will be listed here for your "
+"convenience."
+msgstr ""
+"Autoplugins — это обычные плагины, но они генерируются ИИ. Вы можете "
+"управлять ими так же, как и любыми другими плагинами. Они будут перечислены "
+"здесь для вашего удобства."
 
 #: views/page-settings.php:21
 msgid "WP-Autoplugin Settings"
@@ -583,11 +736,15 @@ msgid "Google Gemini API Key"
 msgstr "Ключ API Google Gemini"
 
 #: views/page-settings.php:42
+#, fuzzy
+msgid "xAI API Key"
+msgstr "Ключ API OpenAI"
+
+#: views/page-settings.php:46
 msgid "Model"
 msgstr "Модель"
 
-#: views/page-settings.php:59
-#: views/page-settings.php:71
+#: views/page-settings.php:59 views/page-settings.php:71
 msgid "Custom Models"
 msgstr "Пользовательские модели"
 
@@ -603,8 +760,7 @@ msgstr "URL конечной точки API"
 msgid "\"model\" Parameter Value"
 msgstr "Значение параметра \"model\""
 
-#: views/page-settings.php:82
-#: views/page-settings.php:107
+#: views/page-settings.php:82 views/page-settings.php:107
 msgid "API Key"
 msgstr "Ключ API"
 
@@ -617,8 +773,14 @@ msgid "Add Custom Model"
 msgstr "Добавить пользовательскую модель"
 
 #: views/page-settings.php:90
-msgid "Add any custom models you want to use with WP-Autoplugin. These models will be available in the model selection dropdown. The API must be compatible with the OpenAI API."
-msgstr "Добавьте любые пользовательские модели, которые вы хотите использовать с WP-Autoplugin. Эти модели будут доступны в выпадающем меню выбора модели. API должен быть совместим с API OpenAI."
+msgid ""
+"Add any custom models you want to use with WP-Autoplugin. These models will "
+"be available in the model selection dropdown. The API must be compatible "
+"with the OpenAI API."
+msgstr ""
+"Добавьте любые пользовательские модели, которые вы хотите использовать с WP-"
+"Autoplugin. Эти модели будут доступны в выпадающем меню выбора модели. API "
+"должен быть совместим с API OpenAI."
 
 #: views/page-settings.php:104
 msgid "Details"
@@ -651,3 +813,118 @@ msgstr "Вы уверены, что хотите удалить эту моде�
 #: views/page-settings.php:112
 msgid "Error saving model"
 msgstr "Ошибка при сохранении модели"
+
+#~ msgid "A shortcode that shows a random quote"
+#~ msgstr "Шорткод, показывающий случайную цитату"
+
+#~ msgid "A user profile widget displaying avatar, bio, and website link"
+#~ msgstr ""
+#~ "Виджет профиля пользователя, отображающий аватар, биографию и ссылку на "
+#~ "сайт"
+
+#~ msgid "A custom post type for managing FAQs"
+#~ msgstr "Пользовательский тип записи для управления FAQ"
+
+#~ msgid "A post views counter that tracks and displays view counts"
+#~ msgstr ""
+#~ "Счётчик просмотров записей, отслеживающий и отображающий количество "
+#~ "просмотров"
+
+#~ msgid "Maintenance mode with a countdown timer to site return"
+#~ msgstr ""
+#~ "Режим обслуживания с таймером обратного отсчёта до возвращения сайта"
+
+#~ msgid "An admin quick links widget for the dashboard"
+#~ msgstr "Виджет быстрых ссылок администратора для панели управления"
+
+#~ msgid "Hide the admin bar for non-admin users"
+#~ msgstr ""
+#~ "Скрыть панель администратора для пользователей без прав администратора"
+
+#~ msgid "Hide specific menu items in the admin area"
+#~ msgstr "Скрыть определённые элементы меню в административной области"
+
+#~ msgid "A social media share buttons plugin for posts"
+#~ msgstr "Плагин кнопок для поделиться в социальных сетях для записей"
+
+#~ msgid "A custom footer credit remover"
+#~ msgstr "Удалитель пользовательских кредитов в подвале"
+
+#~ msgid "A plugin to add custom CSS to the WordPress login page"
+#~ msgstr ""
+#~ "Плагин для добавления пользовательского CSS на страницу входа в WordPress"
+
+#~ msgid "A related posts display below single post content"
+#~ msgstr "Отображение связанных записей под содержимым отдельной записи"
+
+#~ msgid "A custom excerpt length controller"
+#~ msgstr "Пользовательский контроллер длины отрывка"
+
+#~ msgid "A \"Back to Top\" button for long pages"
+#~ msgstr "Кнопка \"Вернуться к началу\" для длинных страниц"
+
+#~ msgid "A plugin to disable comments on specific post types"
+#~ msgstr "Плагин для отключения комментариев на определённых типах записей"
+
+#~ msgid "A simple Google Analytics integration"
+#~ msgstr "Простая интеграция с Google Analytics"
+
+#~ msgid "An author box display below posts"
+#~ msgstr "Отображение блока автора под записями"
+
+#~ msgid "A custom breadcrumb generator"
+#~ msgstr "Пользовательский генератор навигационных цепочек"
+
+#~ msgid "A plugin to add nofollow to external links"
+#~ msgstr "Плагин для добавления атрибута nofollow к внешним ссылкам"
+
+#~ msgid "A simple cookie consent banner"
+#~ msgstr "Простой баннер согласия на использование cookies"
+
+#~ msgid "A post expiration date setter"
+#~ msgstr "Установщик даты истечения срока действия записи"
+
+#~ msgid "A basic XML sitemap generator"
+#~ msgstr "Простой генератор XML-карты сайта"
+
+#~ msgid "A custom login URL creator for added security"
+#~ msgstr ""
+#~ "Пользовательский генератор URL для входа для дополнительной безопасности"
+
+#~ msgid "A simple contact information display shortcode"
+#~ msgstr "Простой шорткод для отображения контактной информации"
+
+#~ msgid "A plugin to add estimated reading time to posts"
+#~ msgstr "Плагин для добавления оценочного времени чтения к записям"
+
+#~ msgid "A custom RSS feed footer"
+#~ msgstr "Пользовательский подвал RSS-ленты"
+
+#~ msgid "A simple post duplication tool"
+#~ msgstr "Простая утилита для дублирования записей"
+
+#~ msgid "A basic schema markup generator"
+#~ msgstr "Простой генератор разметки schema"
+
+#~ msgid "A plugin to add custom admin footer text"
+#~ msgstr ""
+#~ "Плагин для добавления пользовательского текста в подвал администратора"
+
+#~ msgid "A plugin to add custom taxonomies easily"
+#~ msgstr "Плагин для лёгкого добавления пользовательских таксономий"
+
+#~ msgid "A simple email obfuscator to prevent spam"
+#~ msgstr "Простой обфускатор электронной почты для предотвращения спама"
+
+#~ msgid "A basic redirection manager"
+#~ msgstr "Простой менеджер перенаправлений"
+
+#~ msgid "A plugin to add custom fields to user profiles"
+#~ msgstr ""
+#~ "Плагин для добавления пользовательских полей в профили пользователей"
+
+#~ msgid "Installing the fix"
+#~ msgstr "Установка исправления"
+
+#~ msgid "Security check failed"
+#~ msgstr "Проверка безопасности не пройдена"
