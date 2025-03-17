@@ -35,7 +35,18 @@ WP-Autoplugin offers practical solutions for various WordPress development scena
 2. **AI Generation**: WP-Autoplugin uses AI to generate a development plan and write the code.
 3. **Review and Install**: Review the generated plan and code, make any necessary changes, and install the plugin with a single click.
 
-You can also use WP-Autoplugin to **fix bugs** or **add new features** to existing plugins you've created with the tool.
+You can also use WP-Autoplugin to **fix bugs**, **add new features**, or **explain plugins** you've created with the tool. The **Explain Plugin** feature allows you to ask questions or obtain general overviews of generated plugins, helping you better understand their functionality and structure.
+
+## Extend Third-Party Plugins with Hooks
+
+WP-Autoplugin allows you to easily extend **any** plugin directly from the WordPress Plugins page:
+
+- Click on the "**Extend Plugin**" action link for the plugin you'd like to enhance.
+- WP-Autoplugin will analyze the selected plugin, extracting available action and filter hooks along with relevant contextual details.
+- Provide a description of the desired extension; WP-Autoplugin assesses the technical feasibility using available hooks.
+- A new extension plugin will be generated based on your description, allowing seamless integration with the existing plugin functionality.
+
+This powerful feature streamlines the customization of third-party plugins, leveraging existing hooks to safely and effectively achieve your development goals.
 
 ## Auto-detect Fatal Errors
 
