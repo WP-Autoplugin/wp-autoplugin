@@ -472,9 +472,7 @@ class Ajax {
 		if ( ! $plan_array ) {
 			wp_send_json_error( esc_html__( 'Failed to decode the generated plan.', 'wp-autoplugin' ) );
 		}
-		if ( ! $plan_array['technically_feasible'] ) {
-			wp_send_json_error( $plan_array['explanation'] );
-		}
+
 		wp_send_json_success( $plan_array );
 	}
 
@@ -503,9 +501,14 @@ class Ajax {
 
 		$extender = new \WP_Autoplugin\Hooks_Extender( $this->ai_api );
 		$code = $extender->generate_hooks_extension_code( $hooks, $ai_plan, $plugin_name );
+
 		if ( is_wp_error( $code ) ) {
 			wp_send_json_error( $code->get_error_message() );
 		}
+
+		// Strip out code fences like ```php ... ```.
+		$code = preg_replace( '/^```(php)\n(.*)\n```$/s', '$2', $code );
+
 		wp_send_json_success( $code );
 	}
 

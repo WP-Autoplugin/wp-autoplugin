@@ -80,12 +80,7 @@ class Hooks_Extender {
 			Do not add any additional commentary. Make sure your response only contains a valid JSON object with the specified sections. Do not use Markdown formatting in your answer.
 		PROMPT;
 
-		error_log( '------------------- PROMPT -------------------' );
-		error_log( print_r( $prompt, true ) );
-
 		$plan_data = $this->ai_api->send_prompt( $prompt );
-		error_log( '------------------- AI RESPONSE -------------------' );
-		error_log( print_r( $plan_data, true ) );
 
 		return $plan_data;
 	}
@@ -105,7 +100,7 @@ class Hooks_Extender {
 		}
 
 		$prompt = <<<PROMPT
-			I need to create a new WordPress plugin that extends the functionality of an existing plugin using its hooks. Here are the available hooks in the original plugin:
+			I need to create a new WordPress plugin that extends the functionality of an existing plugin using its hooks. Here are the hooks we can use to achieve the desired extension:
 
 			$hooks_list
 
@@ -122,7 +117,9 @@ class Hooks_Extender {
 			Important: all code should be self-contained within one PHP file and follow WordPress coding standards. Use inline Javascript and CSS, inside the main PHP file. Additional CSS or JS files cannot be included. Use appropriate WP hooks, actions, and filters as necessary. Always use "WP-Autoplugin" for the Author of the plugin, with Author URI: https://wp-autoplugin.com. Do not add the final closing "?>" tag in the PHP file.
 		PROMPT;
 
-		return $this->ai_api->send_prompt( $prompt );
+		$plan_data = $this->ai_api->send_prompt( $prompt );
+
+		return $plan_data;
 	}
 
 	/**

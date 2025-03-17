@@ -136,6 +136,13 @@
             }
 
             pluginPlan = response.data;
+
+            // Check if the plan is technically feasible
+            if (pluginPlan.technically_feasible === false) {
+                messageGeneratePlan.innerHTML = wp_autoplugin.messages.plan_generation_error + ' <pre>' + pluginPlan.explanation + '</pre>';
+                return;
+            }
+            
             currentState = 'reviewPlan';
             wpAutoPluginCommon.handleStepChange(steps, 'reviewPlan', onShowStep);
         } catch (error) {
@@ -159,13 +166,14 @@
         let planHooks = [];
         let planPluginName = document.getElementById('plugin_name').value.trim();
         try {
-            const planObj = JSON.parse(planText);
-            if (Array.isArray(planObj.hooks)) {
-                planHooks = planObj.hooks; // Only the hooks used in the plan
+            if (Array.isArray(pluginPlan.hooks)) {
+                planHooks = pluginPlan.hooks; // Only the hooks used in the plan
+            } else {
+                console.error('Invalid plan format:', pluginPlan);
             }
             // If user didn't override the plugin_name input, set from plan:
-            if (!planPluginName && planObj.plugin_name) {
-                planPluginName = planObj.plugin_name;
+            if (!planPluginName && pluginPlan.plugin_name) {
+                planPluginName = pluginPlan.plugin_name;
             }
         } catch (e) {
             // ignore parse error
