@@ -93,8 +93,8 @@ class Ajax {
 	 * @return void
 	 */
 	public function ajax_generate_plan() {
-		$plan = isset( $_POST['plugin_description'] )
-			? sanitize_text_field( wp_unslash( $_POST['plugin_description'] ) )
+		$plan = isset( $_POST['plugin_description'] ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
+			? sanitize_text_field( wp_unslash( $_POST['plugin_description'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
 			: '';
 
 		$generator = new Plugin_Generator( $this->ai_api );
@@ -119,8 +119,8 @@ class Ajax {
 	 * @return void
 	 */
 	public function ajax_generate_code() {
-		$description = isset( $_POST['plugin_plan'] )
-			? sanitize_text_field( wp_unslash( $_POST['plugin_plan'] ) )
+		$description = isset( $_POST['plugin_plan'] ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
+			? sanitize_text_field( wp_unslash( $_POST['plugin_plan'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
 			: '';
 
 		$generator = new Plugin_Generator( $this->ai_api );
@@ -141,8 +141,8 @@ class Ajax {
 	 * @return void
 	 */
 	public function ajax_create_plugin() {
-		$code        = isset( $_POST['plugin_code'] ) ? wp_unslash( $_POST['plugin_code'] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- This cannot be sanitized, as it's the plugin code.
-		$plugin_name = isset( $_POST['plugin_name'] ) ? sanitize_text_field( wp_unslash( $_POST['plugin_name'] ) ) : '';
+		$code        = isset( $_POST['plugin_code'] ) ? wp_unslash( $_POST['plugin_code'] ) : ''; // phpcs:ignore -- This cannot be sanitized, as it's the plugin code. Nonce verification is done in the parent method.
+		$plugin_name = isset( $_POST['plugin_name'] ) ? sanitize_text_field( wp_unslash( $_POST['plugin_name'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
 
 		$installer = Plugin_Installer::get_instance();
 		$result    = $installer->install_plugin( $code, $plugin_name );
@@ -165,8 +165,8 @@ class Ajax {
 	 * @return void
 	 */
 	public function ajax_generate_fix_plan() {
-		$plugin_file = isset( $_POST['plugin_file'] )
-			? sanitize_text_field( wp_unslash( $_POST['plugin_file'] ) )
+		$plugin_file = isset( $_POST['plugin_file'] ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
+			? sanitize_text_field( wp_unslash( $_POST['plugin_file'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
 			: '';
 
 		$plugin_path = WP_CONTENT_DIR . '/plugins/' . $plugin_file;
@@ -175,10 +175,10 @@ class Ajax {
 			wp_send_json_error( esc_html__( 'Failed to read the plugin file.', 'wp-autoplugin' ) );
 		}
 
-		$problem            = isset( $_POST['plugin_issue'] )
-			? sanitize_text_field( wp_unslash( $_POST['plugin_issue'] ) )
+		$problem            = isset( $_POST['plugin_issue'] ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
+			? sanitize_text_field( wp_unslash( $_POST['plugin_issue'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
 			: '';
-		$check_other_issues = isset( $_POST['check_other_issues'] ) ? (bool) $_POST['check_other_issues'] : true;
+		$check_other_issues = isset( $_POST['check_other_issues'] ) ? (bool) $_POST['check_other_issues'] : true; // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
 
 		$fixer     = new Plugin_Fixer( $this->ai_api );
 		$plan_data = $fixer->identify_issue( $plugin_code, $problem, $check_other_issues );
@@ -195,8 +195,8 @@ class Ajax {
 	 * @return void
 	 */
 	public function ajax_generate_fix_code() {
-		$plugin_file = isset( $_POST['plugin_file'] )
-			? sanitize_text_field( wp_unslash( $_POST['plugin_file'] ) )
+		$plugin_file = isset( $_POST['plugin_file'] ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
+			? sanitize_text_field( wp_unslash( $_POST['plugin_file'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
 			: '';
 
 		$plugin_path = WP_CONTENT_DIR . '/plugins/' . $plugin_file;
@@ -205,11 +205,11 @@ class Ajax {
 			wp_send_json_error( esc_html__( 'Failed to read the plugin file.', 'wp-autoplugin' ) );
 		}
 
-		$problem        = isset( $_POST['plugin_issue'] )
-			? sanitize_text_field( wp_unslash( $_POST['plugin_issue'] ) )
+		$problem        = isset( $_POST['plugin_issue'] ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
+			? sanitize_text_field( wp_unslash( $_POST['plugin_issue'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
 			: '';
-		$ai_description = isset( $_POST['plugin_plan'] )
-			? sanitize_text_field( wp_unslash( $_POST['plugin_plan'] ) )
+		$ai_description = isset( $_POST['plugin_plan'] ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
+			? sanitize_text_field( wp_unslash( $_POST['plugin_plan'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
 			: '';
 
 		$fixer = new Plugin_Fixer( $this->ai_api );
@@ -224,9 +224,9 @@ class Ajax {
 	 * @return void
 	 */
 	public function ajax_fix_plugin() {
-		$code        = isset( $_POST['plugin_code'] ) ? wp_unslash( $_POST['plugin_code'] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- This cannot be sanitized, as it's the plugin code.
-		$plugin_file = isset( $_POST['plugin_file'] )
-			? sanitize_text_field( wp_unslash( $_POST['plugin_file'] ) )
+		$code        = isset( $_POST['plugin_code'] ) ? wp_unslash( $_POST['plugin_code'] ) : ''; // phpcs:ignore -- This cannot be sanitized, as it's the plugin code. Nonce verification is done in the parent method.
+		$plugin_file = isset( $_POST['plugin_file'] ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
+			? sanitize_text_field( wp_unslash( $_POST['plugin_file'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
 			: '';
 
 		$installer = Plugin_Installer::get_instance();
@@ -250,8 +250,8 @@ class Ajax {
 	 * @return void
 	 */
 	public function ajax_generate_extend_plan() {
-		$plugin_file = isset( $_POST['plugin_file'] )
-			? sanitize_text_field( wp_unslash( $_POST['plugin_file'] ) )
+		$plugin_file = isset( $_POST['plugin_file'] ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
+			? sanitize_text_field( wp_unslash( $_POST['plugin_file'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
 			: '';
 
 		$plugin_path = WP_CONTENT_DIR . '/plugins/' . $plugin_file;
@@ -260,8 +260,8 @@ class Ajax {
 			wp_send_json_error( esc_html__( 'Failed to read the plugin file.', 'wp-autoplugin' ) );
 		}
 
-		$problem = isset( $_POST['plugin_issue'] )
-			? sanitize_text_field( wp_unslash( $_POST['plugin_issue'] ) )
+		$problem = isset( $_POST['plugin_issue'] ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
+			? sanitize_text_field( wp_unslash( $_POST['plugin_issue'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
 			: '';
 
 		$extender  = new Plugin_Extender( $this->ai_api );
@@ -279,8 +279,8 @@ class Ajax {
 	 * @return void
 	 */
 	public function ajax_generate_extend_code() {
-		$plugin_file = isset( $_POST['plugin_file'] )
-			? sanitize_text_field( wp_unslash( $_POST['plugin_file'] ) )
+		$plugin_file = isset( $_POST['plugin_file'] ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
+			? sanitize_text_field( wp_unslash( $_POST['plugin_file'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
 			: '';
 
 		$plugin_path = WP_CONTENT_DIR . '/plugins/' . $plugin_file;
@@ -289,11 +289,11 @@ class Ajax {
 			wp_send_json_error( esc_html__( 'Failed to read the plugin file.', 'wp-autoplugin' ) );
 		}
 
-		$problem        = isset( $_POST['plugin_issue'] )
-			? sanitize_text_field( wp_unslash( $_POST['plugin_issue'] ) )
+		$problem        = isset( $_POST['plugin_issue'] ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
+			? sanitize_text_field( wp_unslash( $_POST['plugin_issue'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
 			: '';
-		$ai_description = isset( $_POST['plugin_plan'] )
-			? sanitize_text_field( wp_unslash( $_POST['plugin_plan'] ) )
+		$ai_description = isset( $_POST['plugin_plan'] ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
+			? sanitize_text_field( wp_unslash( $_POST['plugin_plan'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
 			: '';
 
 		$extender = new Plugin_Extender( $this->ai_api );
@@ -308,9 +308,9 @@ class Ajax {
 	 * @return void
 	 */
 	public function ajax_extend_plugin() {
-		$code        = isset( $_POST['plugin_code'] ) ? wp_unslash( $_POST['plugin_code'] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- This cannot be sanitized, as it's the plugin code.
-		$plugin_file = isset( $_POST['plugin_file'] )
-			? sanitize_text_field( wp_unslash( $_POST['plugin_file'] ) )
+		$code        = isset( $_POST['plugin_code'] ) ? wp_unslash( $_POST['plugin_code'] ) : ''; // phpcs:ignore -- This cannot be sanitized, as it's the plugin code. Nonce verification is done in the parent method.
+		$plugin_file = isset( $_POST['plugin_file'] ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
+			? sanitize_text_field( wp_unslash( $_POST['plugin_file'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
 			: '';
 
 		$installer = Plugin_Installer::get_instance();
@@ -334,8 +334,8 @@ class Ajax {
 	 * @return void
 	 */
 	public function ajax_explain_plugin() {
-		$plugin_file = isset( $_POST['plugin_file'] )
-			? sanitize_text_field( wp_unslash( $_POST['plugin_file'] ) )
+		$plugin_file = isset( $_POST['plugin_file'] ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
+			? sanitize_text_field( wp_unslash( $_POST['plugin_file'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
 			: '';
 
 		$plugin_path = WP_CONTENT_DIR . '/plugins/' . $plugin_file;
@@ -344,12 +344,12 @@ class Ajax {
 			wp_send_json_error( esc_html__( 'Failed to read the plugin file.', 'wp-autoplugin' ) );
 		}
 
-		$question = isset( $_POST['plugin_question'] )
-			? sanitize_text_field( wp_unslash( $_POST['plugin_question'] ) )
+		$question = isset( $_POST['plugin_question'] ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
+			? sanitize_text_field( wp_unslash( $_POST['plugin_question'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
 			: '';
 
-		$focus = isset( $_POST['explain_focus'] )
-			? sanitize_text_field( wp_unslash( $_POST['explain_focus'] ) )
+		$focus = isset( $_POST['explain_focus'] ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
+			? sanitize_text_field( wp_unslash( $_POST['explain_focus'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
 			: 'general';
 
 		$explainer = new \WP_Autoplugin\Plugin_Explainer( $this->ai_api );

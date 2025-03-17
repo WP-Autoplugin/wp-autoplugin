@@ -83,11 +83,6 @@ class Hooks_Extender {
 
 		$plan_data = $this->ai_api->send_prompt( $prompt );
 
-		error_log( '-----------------PROMPT-----------------' );
-		error_log( print_r( $prompt, true ) );
-		error_log( '-----------------PLAN DATA-----------------' );
-		error_log( print_r( $plan_data, true ) );
-
 		return $plan_data;
 	}
 
@@ -125,11 +120,6 @@ class Hooks_Extender {
 			PROMPT;
 
 		$plan_data = $this->ai_api->send_prompt( $prompt );
-
-		error_log( '-----------------PROMPT-----------------' );
-		error_log( print_r( $prompt, true ) );
-		error_log( '-----------------PLAN DATA-----------------' );
-		error_log( print_r( $plan_data, true ) );
 
 		return $plan_data;
 	}
