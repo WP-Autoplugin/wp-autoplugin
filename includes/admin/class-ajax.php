@@ -64,6 +64,7 @@ class Ajax {
 		// Add or remove custom model actions.
 		add_action( 'wp_ajax_wp_autoplugin_add_model', [ $this, 'ajax_add_model' ] );
 		add_action( 'wp_ajax_wp_autoplugin_remove_model', [ $this, 'ajax_remove_model' ] );
+		add_action( 'wp_ajax_wp_autoplugin_change_model', [ $this, 'ajax_change_model' ] );
 	}
 
 	/**
@@ -550,5 +551,56 @@ class Ajax {
 
 		$hooks = \WP_Autoplugin\Hooks_Extender::get_plugin_hooks( $plugin_file );
 		wp_send_json_success( $hooks ); // Returns empty array if no hooks found.
+	}
+
+	/**
+	 * AJAX handler for changing the current model.
+	 *
+	 * @return void
+	 */
+	public function ajax_change_model() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( [ 'message' => esc_html__( 'You are not allowed to access this page.', 'wp-autoplugin' ) ] );
+		}
+
+		if ( ! check_ajax_referer( 'wp_autoplugin_nonce', 'nonce', false ) ) {
+			wp_send_json_error( [ 'message' => esc_html__( 'Security check failed.', 'wp-autoplugin' ) ] );
+		}
+
+		$model = isset( $_POST['model'] ) ? sanitize_text_field( wp_unslash( $_POST['model'] ) ) : '';
+		if ( empty( $model ) ) {
+			wp_send_json_error( [ 'message' => esc_html__( 'No model specified.', 'wp-autoplugin' ) ] );
+		}
+
+		// Validate the model exists in one of the providers or custom models.
+		$valid_model = false;
+
+		// Check built-in models.
+		foreach ( \WP_Autoplugin\Admin::$models as $provider => $models ) {
+			if ( array_key_exists( $model, $models ) ) {
+				$valid_model = true;
+				break;
+			}
+		}
+
+		// Check custom models.
+		if ( ! $valid_model ) {
+			$custom_models = get_option( 'wp_autoplugin_custom_models', [] );
+			foreach ( $custom_models as $custom_model ) {
+				if ( $custom_model['name'] === $model ) {
+					$valid_model = true;
+					break;
+				}
+			}
+		}
+
+		if ( ! $valid_model ) {
+			wp_send_json_error( [ 'message' => esc_html__( 'Invalid model specified.', 'wp-autoplugin' ) ] );
+		}
+
+		// Update the model setting.
+		update_option( 'wp_autoplugin_model', $model );
+
+		wp_send_json_success( [ 'message' => esc_html__( 'Model changed successfully.', 'wp-autoplugin' ) ] );
 	}
 }

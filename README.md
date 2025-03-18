@@ -156,6 +156,10 @@ WP-Autoplugin is licensed under the GPLv3 or later.
 
 ## Changelog
 
+### 1.4.1
+- Added option to change model at every step
+- Fixed minor issues with the Extend Plugin feature
+
 ### 1.4
 - Analyze and extend any third-party plugin
 

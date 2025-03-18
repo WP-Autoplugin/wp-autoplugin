@@ -401,6 +401,7 @@ class Admin {
 	 * @return void
 	 */
 	public function output_admin_footer() {
+		$current_model = get_option( 'wp_autoplugin_model' );
 		?>
 		<div id="wp-autoplugin-footer">
 			<p>
@@ -416,20 +417,101 @@ class Admin {
 				</span>
 				<span class="separator">|</span>
 				<span class="model">
-					<?php
-					$translated_model_string = wp_kses(
-						// translators: %s: model name.
-						__( 'Model: %s', 'wp-autoplugin' ),
-						[ 'code' => [] ]
-					);
-					printf(
-						$translated_model_string, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- It's escaped just above.
-						'<code>' . esc_html( get_option( 'wp_autoplugin_model' ) ) . '</code>'
-					);
-					?>
+					<span id="model-display">
+						<?php
+						$translated_model_string = wp_kses(
+							// translators: %s: model name.
+							__( 'Model: %s', 'wp-autoplugin' ),
+							[ 'code' => [] ]
+						);
+						printf(
+							$translated_model_string, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- It's escaped just above.
+							'<code>' . esc_html( $current_model ) . '</code>'
+						);
+						?>
+						<a href="#" id="change-model-link" style="text-decoration: none;"><?php esc_html_e( '(Change)', 'wp-autoplugin' ); ?></a>
+					</span>
+					<span id="model-change-form" style="display: none;">
+						<select id="model-selector" style="width: 200px;">
+							<?php
+							// Loop through built-in models.
+							foreach ( self::$models as $provider => $models ) {
+								echo '<optgroup label="' . esc_attr( $provider ) . '">';
+								foreach ( $models as $model_id => $model_name ) {
+									printf(
+										'<option value="%s" %s>%s</option>',
+										esc_attr( $model_id ),
+										selected( $current_model, $model_id, false ),
+										esc_html( $model_name )
+									);
+								}
+								echo '</optgroup>';
+							}
+
+							// Add custom models if any.
+							$custom_models = get_option( 'wp_autoplugin_custom_models', [] );
+							if ( ! empty( $custom_models ) ) {
+								echo '<optgroup label="' . esc_attr__( 'Custom Models', 'wp-autoplugin' ) . '">';
+								foreach ( $custom_models as $custom_model ) {
+									printf(
+										'<option value="%s" %s>%s</option>',
+										esc_attr( $custom_model['name'] ),
+										selected( $current_model, $custom_model['name'], false ),
+										esc_html( $custom_model['name'] )
+									);
+								}
+								echo '</optgroup>';
+							}
+							?>
+						</select>
+						<button id="save-model-change" class="button button-small"><?php esc_html_e( 'Save', 'wp-autoplugin' ); ?></button>
+						<button id="cancel-model-change" class="button button-small"><?php esc_html_e( 'Cancel', 'wp-autoplugin' ); ?></button>
+					</span>
 				</span>
 			</p>
 		</div>
+		<script>
+		jQuery(document).ready(function($) {
+			$('#change-model-link').on('click', function(e) {
+				e.preventDefault();
+				$('#model-display').hide();
+				$('#model-change-form').show();
+			});
+			
+			$('#cancel-model-change').on('click', function(e) {
+				e.preventDefault();
+				$('#model-change-form').hide();
+				$('#model-display').show();
+			});
+			
+			$('#save-model-change').on('click', function(e) {
+				e.preventDefault();
+				var newModel = $('#model-selector').val();
+				
+				$.ajax({
+					url: ajaxurl,
+					type: 'POST',
+					data: {
+						action: 'wp_autoplugin_change_model',
+						nonce: '<?php echo wp_create_nonce( 'wp_autoplugin_nonce' ); ?>',
+						model: newModel
+					},
+					success: function(response) {
+						if (response.success) {
+							$('#model-display code').text(newModel);
+							$('#model-change-form').hide();
+							$('#model-display').show();
+						} else {
+							alert(response.data.message || '<?php esc_html_e( 'Failed to change model.', 'wp-autoplugin' ); ?>');
+						}
+					},
+					error: function() {
+						alert('<?php esc_html_e( 'An error occurred while changing the model.', 'wp-autoplugin' ); ?>');
+					}
+				});
+			});
+		});
+		</script>
 		<?php
 	}
 

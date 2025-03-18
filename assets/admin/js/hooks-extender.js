@@ -230,10 +230,10 @@
                 messageReviewCode
                     .insertAdjacentHTML(
                         'beforeend',
-                        `<a href="${wp_autoplugin.activate_url}&plugin=${response.data}"
+                        `<div><a href="${wp_autoplugin.activate_url}&plugin=${response.data}"
                            class="button button-primary">
                            ${wp_autoplugin.messages.activate}
-                         </a>`
+                         </a></div>`
                     );
 
                 // Hide form
