@@ -46,7 +46,7 @@ WP-Autoplugin allows you to easily extend **any plugin** directly from the WordP
 - Provide a description of the desired extension; WP-Autoplugin assesses the technical feasibility using available hooks.
 - A new extension plugin will be generated based on your description, allowing seamless integration with the existing plugin functionality.
 
-This feature is useful for developers who want to add custom features to third-party plugins without modifying the original codebase.
+Demo video: [Extend a third-party plugin with WP-Autoplugin](https://www.youtube.com/watch?v=_9RnFcEGncY)
 
 ## Auto-detect Fatal Errors
 
