@@ -30,6 +30,7 @@
     let issueDescription  = '';
     let pluginPlan        = {};
     let pluginName        = '';
+    let extractedHooks    = [];
 
     // Step mapping
     const steps = {
@@ -84,6 +85,7 @@
             hooksLoading.style.display = 'none';
             if (data.success) {
                 const hooks = data.data;
+                extractedHooks = hooks; // Store hooks for later use
                 if (hooks.length > 0) {
                     hooksSummary.textContent = `${hooks.length} hooks found in the plugin code`;
                     hooksUl.innerHTML = hooks.map(hook => `<li>${hook.name} (${hook.type})</li>`).join('');
@@ -225,7 +227,7 @@
 
             if (response.success) {
                 // Show success message
-                messageReviewCode.innerHTML = wp_autoplugin.messages.plugin_created;
+                messageReviewCode.innerHTML = '<p>' + wp_autoplugin.messages.plugin_created + '</p>';
 
                 messageReviewCode
                     .insertAdjacentHTML(
@@ -271,6 +273,23 @@
         } else {
             wpAutoPluginCommon.handleStepChange(steps, 'generatePlan', onShowStep);
         }
+    });
+
+    document.getElementById('copy-hooks').addEventListener('click', function() {
+        if (!extractedHooks.length) return;
+        
+        const hooksText = extractedHooks.map(hook => 
+            `${hook.type.charAt(0).toUpperCase() + hook.type.slice(1)}: \`${hook.name.replace(/['"]/g, '')}\`\n\nContext:\n\`\`\`${hook.context}\n\`\`\`\n\n`
+        ).join('');
+
+        navigator.clipboard.writeText(hooksText).then(() => {
+            const button = this;
+            const originalText = button.textContent;
+            button.textContent = 'Copied!';
+            setTimeout(() => {
+                button.textContent = originalText;
+            }, 2000);
+        });
     });
 
     // Initialize the first step

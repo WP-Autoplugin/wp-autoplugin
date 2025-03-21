@@ -31,6 +31,12 @@ $is_plugin_active = is_plugin_active( $plugin_file );
 			<details id="hooks-list">
 				<summary id="hooks-summary"></summary>
 				<ul id="hooks-ul"></ul>
+				<p class="copy-hooks-description">
+					<button type="button" id="copy-hooks" class="button button-small button-secondary">
+						<?php esc_html_e( 'Copy Hooks', 'wp-autoplugin' ); ?>
+					</button>
+					<?php esc_html_e( 'Copy all hooks to clipboard, along with relevant context, to use with your LLM of choice.', 'wp-autoplugin' ); ?>
+				</p>
 			</details>
 			<form method="post" action="" id="extend-hooks-form">
 				<p><?php esc_html_e( 'Describe the extension you would like to make to the plugin using its hooks:', 'wp-autoplugin' ); ?></p>
