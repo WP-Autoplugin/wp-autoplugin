@@ -198,3 +198,18 @@ function attachAccordionListeners() {
         });
     });
 }
+
+/**
+ * CMD/CTRL + Enter on a textarea inside a form inside .wp-autoplugin elements submits the form.
+ */
+function attachFormSubmitListeners() {
+    document.querySelectorAll('.wp-autoplugin form').forEach(form => {
+        form.querySelectorAll('textarea').forEach(textarea => {
+            textarea.addEventListener('keydown', function (event) {
+                if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
+                    form.querySelector('input[type="submit"]').click();
+                }
+            });
+        });
+    });
+}

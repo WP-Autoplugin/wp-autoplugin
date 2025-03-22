@@ -42,7 +42,6 @@ class Ajax {
 			'generate_plan',
 			'generate_code',
 			'create_plugin',
-			'extract_hooks',
 
 			'generate_fix_plan',
 			'generate_fix_code',
@@ -54,6 +53,7 @@ class Ajax {
 
 			'explain_plugin',
 
+			'extract_hooks',
 			'generate_extend_hooks_plan',
 			'generate_extend_hooks_code',
 		];

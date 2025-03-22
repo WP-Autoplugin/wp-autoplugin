@@ -156,6 +156,11 @@ WP-Autoplugin is licensed under the GPLv3 or later.
 
 ## Changelog
 
+### 1.4.2 
+- Added a "Copy Hooks" button to use the extracted hooks with any LLM
+- Added CMD/CTRL + Enter shortcut to submit the forms
+- Fixed minor UI issues
+
 ### 1.4.1
 - Added option to change model at every step
 - Fixed minor issues with the Extend Plugin feature

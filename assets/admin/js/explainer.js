@@ -201,4 +201,7 @@
     // Initialize the first step
     wpAutoPluginCommon.handleStepChange(steps, 'askQuestion', onShowStep);
 
+    // Initialize the submit handlers
+    attachFormSubmitListeners();
+
 })();

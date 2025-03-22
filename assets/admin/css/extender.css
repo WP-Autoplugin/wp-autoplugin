@@ -24,9 +24,20 @@
     text-wrap: wrap;
 }
 
-.wrap.wp-autoplugin.loading form {
+.wrap.wp-autoplugin.loading form,
+#hooks-content.loading form {
     opacity: 0.6;
     pointer-events: none;
+}
+
+#wp-autoplugin-footer span.dashicons.dashicons-admin-plugins {
+    border: 2px solid currentColor;
+    border-radius: 100px;
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    vertical-align: -5px;
+    margin-right: 2px;
 }
 
 /* Align buttons inside .autoplugin-actions */
@@ -58,6 +69,9 @@
 .wp-autoplugin p {
     margin-bottom: 10px;
 }
+#extended-hooks-plugin-message p {
+    margin-top: 0;
+}
 .wp-autoplugin .wrap {
     margin-top: 20px;
     padding: 20px;
@@ -85,6 +99,14 @@
 }
 .wp-autoplugin .button-primary.button-hero {
     margin-top: 20px;
+}
+.copy-hooks-description {
+    font-size: 12px;
+    color: #777;
+    font-style: italic;
+}
+.copy-hooks-description .button {
+    margin-right: 4px;
 }
 
 /* Accordions */

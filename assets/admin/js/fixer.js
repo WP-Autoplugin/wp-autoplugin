@@ -193,4 +193,6 @@
     // Initialize the first step
     wpAutoPluginCommon.handleStepChange(steps, 'generatePlan', onShowStep);
 
+    // Initialize the submit handlers
+    attachFormSubmitListeners();
 })();
