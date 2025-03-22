@@ -69,6 +69,11 @@ $is_plugin_active = is_plugin_active( $plugin_file );
 		<form method="post" action="" id="extended-hooks-plugin-form">
 			<p><?php esc_html_e( 'The extension plugin code has been generated. Review it before saving:', 'wp-autoplugin' ); ?></p>
 			<textarea name="extended_plugin_code" id="extended_plugin_code" rows="20" cols="100"></textarea>
+
+			<div class="autoplugin-code-warning">
+				<strong><?php esc_html_e( 'Warning:', 'wp-autoplugin' ); ?></strong> <?php esc_html_e( 'AI-generated code may be unstable or insecure; use only after careful review and testing.', 'wp-autoplugin' ); ?>
+			</div>
+
 			<div class="autoplugin-actions">
 				<button type="button" id="edit-plan" class="button"><?php esc_html_e( '« Edit Plan', 'wp-autoplugin' ); ?></button>
 				<?php submit_button( esc_html__( 'Save Extension Plugin', 'wp-autoplugin' ), 'primary', 'extended_plugin' ); ?>

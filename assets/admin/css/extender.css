@@ -24,7 +24,8 @@
     text-wrap: wrap;
 }
 
-.wrap.wp-autoplugin.loading form {
+.wrap.wp-autoplugin.loading form,
+#hooks-content.loading form {
     opacity: 0.6;
     pointer-events: none;
 }

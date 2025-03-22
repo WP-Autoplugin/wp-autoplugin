@@ -222,4 +222,7 @@
     let messages = wp_autoplugin.plugin_examples;
     messages.sort(() => Math.random() - 0.5);
     typingPlaceholder(document.getElementById('plugin_description'), messages);
+
+    // Initialize the submit handlers
+    attachFormSubmitListeners();
 })();
