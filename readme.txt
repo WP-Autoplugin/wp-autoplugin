@@ -4,7 +4,7 @@ Donate link: https://wp-autoplugin.com
 Tags: ai, plugin generator, development, wordpress, automation
 Requires at least: 6.0
 Tested up to: 6.7
-Stable tag: 1.4.2
+Stable tag: 1.4.3
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -59,6 +59,11 @@ Yes, the plugin is completely free with no ads or account requirements. However,
 While WP-Autoplugin aims to generate high-quality code adhering to WordPress standards, we recommend testing the code thoroughly before using it on a production site.
 
 == Changelog ==
+
+= 1.4.3 =
+* Added support for Google Gemini 2.5 Pro model
+* Fixed minor UI issue in the Fix Plugin form
+* Improved code generation step for the Fix Plugin feature to avoid fatal errors
 
 = 1.4.2 =
 * Added a "Copy Hooks" button to use the extracted hooks with any LLM

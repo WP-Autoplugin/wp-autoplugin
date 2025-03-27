@@ -175,6 +175,7 @@ class Scripts {
 						'activate'              => esc_html__( 'Activate Plugin', 'wp-autoplugin' ),
 						'creating_plugin'       => esc_html__( 'Installing the plugin.', 'wp-autoplugin' ),
 						'plugin_created'        => esc_html__( 'Plugin successfully installed.', 'wp-autoplugin' ),
+						'code_updated'          => esc_html__( 'The plugin code has been updated.', 'wp-autoplugin' ),
 					],
 				]
 			);

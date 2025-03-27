@@ -4,7 +4,7 @@
  *
  * @package WP-Autoplugin
  * @since 1.0.0
- * @version 1.3
+ * @version 1.4.3
  * @link https://wp-autoplugin.com
  * @license GPL-2.0+
  * @license https://www.gnu.org/licenses/gpl-2.0.html
@@ -61,6 +61,7 @@ class Admin {
 			'claude-3-haiku-20240307'    => 'Claude 3 Haiku-20240307',
 		],
 		'Google'    => [
+			'gemini-2.5-pro-exp-03-25'            => 'Gemini 2.5 Pro Experimental 03-25',
 			'gemini-2.0-pro-exp-02-05'            => 'Gemini 2.0 Pro Experimental 02-05',
 			'gemini-2.0-flash-thinking-exp'       => 'Gemini 2.0 Flash Thinking Experimental',
 			'gemini-2.0-flash'                    => 'Gemini 2.0 Flash',

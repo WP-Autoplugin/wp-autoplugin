@@ -216,6 +216,9 @@ class Ajax {
 		$fixer = new Plugin_Fixer( $this->ai_api );
 		$code  = $fixer->fix_plugin( $plugin_code, $problem, $ai_description );
 
+		// Strip out code fences like ```php ... ```.
+		$code = preg_replace( '/^```(php)\n(.*)\n```$/s', '$2', $code );
+
 		wp_send_json_success( $code );
 	}
 

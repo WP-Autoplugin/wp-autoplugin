@@ -156,6 +156,11 @@ WP-Autoplugin is licensed under the GPLv3 or later.
 
 ## Changelog
 
+### 1.4.3
+- Added support for Google Gemini 2.5 Pro model
+- Fixed minor UI issue in the Fix Plugin form
+- Improved code generation step for the Fix Plugin feature to avoid fatal errors
+
 ### 1.4.2 
 - Added a "Copy Hooks" button to use the extracted hooks with any LLM
 - Added CMD/CTRL + Enter shortcut to submit the forms
