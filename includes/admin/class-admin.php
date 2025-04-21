@@ -36,6 +36,9 @@ class Admin {
 	public static $models = [
 		'OpenAI'    => [
 			'gpt-4.5-preview'   => 'GPT-4.5 Preview',
+			'gpt-4.1'           => 'GPT-4.1',
+			'gpt-4.1-mini'      => 'GPT-4.1 mini',
+			'gpt-4.1-nano'      => 'GPT-4.1 nano',
 			'gpt-4o'            => 'GPT-4o',
 			'gpt-4o-mini'       => 'GPT-4o mini',
 			'chatgpt-4o-latest' => 'ChatGPT-4o-latest',
@@ -44,6 +47,12 @@ class Admin {
 			'o3-mini-low'       => 'o3-mini-low',
 			'o3-mini-medium'    => 'o3-mini-medium',
 			'o3-mini-high'      => 'o3-mini-high',
+			'o3-low'            => 'o3-low',
+			'o3-medium'         => 'o3-medium',
+			'o3-high'           => 'o3-high',
+			'o4-mini-low'       => 'o4-mini-low',
+			'o4-mini-medium'    => 'o4-mini-medium',
+			'o4-mini-high'      => 'o4-mini-high',
 			'gpt-4-turbo'       => 'GPT-4 Turbo',
 			'gpt-3.5-turbo'     => 'GPT-3.5 Turbo',
 		],
@@ -62,6 +71,7 @@ class Admin {
 		],
 		'Google'    => [
 			'gemini-2.5-pro-exp-03-25'            => 'Gemini 2.5 Pro Experimental 03-25',
+			'gemini-2.5-flash-preview-04-17'      => 'Gemini 2.5 Flash Preview 04-17',
 			'gemini-2.0-pro-exp-02-05'            => 'Gemini 2.0 Pro Experimental 02-05',
 			'gemini-2.0-flash-thinking-exp'       => 'Gemini 2.0 Flash Thinking Experimental',
 			'gemini-2.0-flash'                    => 'Gemini 2.0 Flash',
@@ -76,6 +86,8 @@ class Admin {
 			'gemma-3-27b-it'                      => 'Gemma 3 27B',
 		],
 		'xAI'       => [
+			'grok-3'      => 'Grok 3',
+			'grok-3-mini' => 'Grok 3 Mini',
 			'grok-2'      => 'Grok 2',
 			'grok-beta'   => 'Grok Beta',
 			'grok-2-1212' => 'Grok 2-1212',
