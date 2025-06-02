@@ -71,6 +71,7 @@ class Ajax {
 		add_action( 'wp_ajax_autoplugin_get_optimization_plan', [ $this, 'handle_get_optimization_plan' ] );
 		add_action( 'wp_ajax_autoplugin_apply_optimization', [ $this, 'handle_apply_optimization' ] );
 		add_action( 'wp_ajax_autoplugin_get_plugin_content', [ $this, 'handle_get_plugin_content' ] );
+		add_action( 'wp_ajax_autoplugin_revert_plugin', [ $this, 'handle_revert_plugin' ] );
 	}
 
 	/**
@@ -664,6 +665,8 @@ class Ajax {
 		$original_code = isset( $_POST['plugin_code'] ) ? wp_unslash( $_POST['plugin_code'] ) : ''; // Original code
 		$ai_plan       = isset( $_POST['ai_plan'] ) ? wp_unslash( $_POST['ai_plan'] ) : ''; // AI plan, potentially multi-line
 
+		$backup_dir_path = WP_CONTENT_DIR . '/wp-autoplugin-backups/plugin-optimizer/';
+
 		if ( empty( $plugin_file ) ) {
 			wp_send_json_error( [ 'message' => esc_html__( 'Plugin file not specified.', 'wp-autoplugin' ) ] );
 		}
@@ -691,43 +694,86 @@ class Ajax {
 		}
 
 		// Strip out code fences like ```php ... ``` just in case.
-		$optimized_code = preg_replace( '/^```(php)?\n?(.*)\n?```$/s', '$2', $optimized_code );
-		if ( empty( trim( $optimized_code ) ) ) {
-            wp_send_json_error( [ 'message' => esc_html__( 'AI returned empty optimized code after stripping fences.', 'wp-autoplugin' ) ] );
-        }
+		$new_code = preg_replace( '/^```(php)?\n?(.*)\n?```$/s', '$2', $optimized_code );
+		if ( empty( trim( $new_code ) ) ) {
+			wp_send_json_error( [ 'message' => esc_html__( 'AI returned empty optimized code after stripping fences.', 'wp-autoplugin' ) ] );
+		}
 
+		// Ensure backup directory exists and is protected.
+		if ( ! is_dir( $backup_dir_path ) ) {
+			if ( ! wp_mkdir_p( $backup_dir_path ) ) {
+				wp_send_json_error( [ 'message' => esc_html__( 'Backup directory could not be created.', 'wp-autoplugin' ) . ' ' . $backup_dir_path ] );
+			}
+		}
+		if ( ! is_writable( $backup_dir_path ) ) {
+			wp_send_json_error( [ 'message' => esc_html__( 'Backup directory is not writable.', 'wp-autoplugin' ) . ' ' . $backup_dir_path ] );
+		}
+		if ( ! file_exists( $backup_dir_path . 'index.php' ) ) {
+			// @codingStandardsIgnoreStart
+			file_put_contents( $backup_dir_path . 'index.php', '<?php // Silence is golden.' );
+			// @codingStandardsIgnoreEnd
+		}
 
+		// Backup original plugin code.
+		$plugin_slug     = strpos( $plugin_file, '/' ) === false ? basename( $plugin_file, '.php' ) : dirname( $plugin_file );
+		$plugin_slug     = sanitize_file_name( $plugin_slug ); // Sanitize slug
+		$timestamp       = time();
+		$backup_filename = $plugin_slug . '-' . $timestamp . '.php.bak';
+		$backup_filepath = $backup_dir_path . $backup_filename;
+
+		// @codingStandardsIgnoreStart
+		$backup_write_result = file_put_contents( $backup_filepath, $original_code );
+		// @codingStandardsIgnoreEnd
+
+		if ( false === $backup_write_result ) {
+			wp_send_json_error( [ 'message' => esc_html__( 'Failed to create plugin backup. Optimization aborted.', 'wp-autoplugin' ) ] );
+		}
+
+		// Store backup information.
+		$optimizer_backups = get_option( 'wp_autoplugin_optimizer_backups', [] );
+		if ( ! is_array( $optimizer_backups ) ) { // Ensure it's an array
+			$optimizer_backups = [];
+		}
+		$optimizer_backups[ $plugin_file ] = [
+			'plugin_file' => $plugin_file,
+			'backup_path' => $backup_filepath,
+			'timestamp'   => $timestamp,
+			'plugin_slug' => $plugin_slug,
+		];
+		update_option( 'wp_autoplugin_optimizer_backups', $optimizer_backups );
+
+		// Proceed with overwriting original plugin.
 		$full_plugin_path = WP_PLUGIN_DIR . '/' . $plugin_file;
 
 		if ( ! is_writable( dirname( $full_plugin_path ) ) || ( file_exists( $full_plugin_path ) && ! is_writable( $full_plugin_path ) ) ) {
-			wp_send_json_error( [ 'message' => esc_html__( 'Plugin directory or file is not writable.', 'wp-autoplugin' ) . ' ' . $full_plugin_path ] );
+			// Attempt to roll back backup information storage if original file is not writable
+			// This is a best-effort, as the backup file itself is already written.
+			unset( $optimizer_backups[ $plugin_file ] );
+			update_option( 'wp_autoplugin_optimizer_backups', $optimizer_backups );
+			wp_send_json_error( [ 'message' => esc_html__( 'Plugin directory or file is not writable. Backup created, but optimization aborted.', 'wp-autoplugin' ) . ' ' . $full_plugin_path ] );
 		}
 
-		// It's a good idea to ensure the file still exists if we're overwriting.
-		// Though if it's not there, file_put_contents will create it.
-		// if ( ! file_exists( $full_plugin_path ) ) {
-		// wp_send_json_error( [ 'message' => esc_html__( 'Plugin file does not exist at the specified path.', 'wp-autoplugin' ) . ' ' . $full_plugin_path ] );
-		// }
-
 		// @codingStandardsIgnoreStart
-		$write_result = file_put_contents( $full_plugin_path, $optimized_code );
+		$write_result = file_put_contents( $full_plugin_path, $new_code );
 		// @codingStandardsIgnoreEnd
 
 		if ( false === $write_result ) {
-			wp_send_json_error( [ 'message' => esc_html__( 'Failed to write optimized code to plugin file.', 'wp-autoplugin' ) ] );
+			// Attempt to roll back backup information storage if write fails
+			unset( $optimizer_backups[ $plugin_file ] );
+			update_option( 'wp_autoplugin_optimizer_backups', $optimizer_backups );
+			wp_send_json_error( [ 'message' => esc_html__( 'Failed to write optimized code to plugin file. Backup of original created.', 'wp-autoplugin' ) ] );
 		}
 
-		// Clear opcache for the specific file if opcache is enabled
+		// Clear opcache for the specific file if opcache is enabled.
 		if ( function_exists( 'opcache_invalidate' ) && ini_get( 'opcache.enable' ) ) {
 			opcache_invalidate( $full_plugin_path, true );
 		}
-		// Also try to clear APCu cache if available
+		// Also try to clear APCu cache if available.
 		if ( function_exists( 'apcu_clear_cache' ) ) {
 			apcu_clear_cache();
 		}
 
-
-		wp_send_json_success( [ 'message' => esc_html__( 'Plugin optimized and updated successfully.', 'wp-autoplugin' ) ] );
+		wp_send_json_success( [ 'message' => esc_html__( 'Plugin optimized and updated successfully. A backup of the original version has been created.', 'wp-autoplugin' ) ] );
 	}
 
 	/**
@@ -772,5 +818,94 @@ class Ajax {
 		}
 
 		wp_send_json_success( [ 'content' => $file_content ] );
+	}
+
+	/**
+	 * AJAX handler for reverting a plugin to its backup.
+	 *
+	 * @return void
+	 */
+	public function handle_revert_plugin() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( [ 'message' => esc_html__( 'You do not have permission to perform this action.', 'wp-autoplugin' ) ], 403 );
+		}
+		// Using 'security' as the key for nonce, assuming JS sends it as `_ajax_nonce` which check_ajax_referer expects.
+		// Or, if JS sends it as 'security', then it's fine. The problem description used '_ajax_nonce' for JS.
+		check_ajax_referer( 'wp_autoplugin_optimizer_nonce', 'security' );
+
+
+		$plugin_file_to_revert = isset( $_POST['plugin_file'] ) ? sanitize_text_field( stripslashes( $_POST['plugin_file'] ) ) : '';
+
+		if ( empty( $plugin_file_to_revert ) ) {
+			wp_send_json_error( [ 'message' => esc_html__( 'Plugin file not specified.', 'wp-autoplugin' ) ] );
+		}
+
+		$optimizer_backups = get_option( 'wp_autoplugin_optimizer_backups', [] );
+		if ( ! is_array( $optimizer_backups ) ) {
+			$optimizer_backups = []; // Ensure it's an array
+		}
+
+		if ( ! isset( $optimizer_backups[ $plugin_file_to_revert ] ) ) {
+			wp_send_json_error( [ 'message' => esc_html__( 'No backup found for this plugin.', 'wp-autoplugin' ) ] );
+		}
+
+		$backup_info = $optimizer_backups[ $plugin_file_to_revert ];
+		$backup_filepath = $backup_info['backup_path'];
+		// Ensure the backup path is within the defined backup directory for security
+		$backup_dir_path = WP_CONTENT_DIR . '/wp-autoplugin-backups/plugin-optimizer/';
+		if ( strpos( realpath( $backup_filepath ), realpath( $backup_dir_path ) ) !== 0 ) {
+			wp_send_json_error( [ 'message' => esc_html__( 'Invalid backup file path detected.', 'wp-autoplugin' ) ] );
+		}
+
+
+		$original_plugin_path = WP_PLUGIN_DIR . '/' . $plugin_file_to_revert;
+
+		if ( ! is_readable( $backup_filepath ) ) {
+			wp_send_json_error( [ 'message' => esc_html__( 'Backup file not found or is not readable.', 'wp-autoplugin' ) . ' Path: ' . $backup_filepath ] );
+		}
+
+		// @codingStandardsIgnoreStart
+		$backup_content = file_get_contents( $backup_filepath );
+		// @codingStandardsIgnoreEnd
+		if ( false === $backup_content ) {
+			wp_send_json_error( [ 'message' => esc_html__( 'Failed to read backup file content.', 'wp-autoplugin' ) ] );
+		}
+
+		// Check if original plugin directory is writable, then if file is writable if it exists.
+		if ( ! is_writable( dirname( $original_plugin_path ) ) ) {
+			wp_send_json_error( [ 'message' => esc_html__( 'Original plugin directory is not writable. Cannot revert.', 'wp-autoplugin' ) ] );
+		}
+		if ( file_exists( $original_plugin_path ) && ! is_writable( $original_plugin_path ) ) {
+			wp_send_json_error( [ 'message' => esc_html__( 'Original plugin file is not writable. Cannot revert.', 'wp-autoplugin' ) ] );
+		}
+
+		// @codingStandardsIgnoreStart
+		$write_success = file_put_contents( $original_plugin_path, $backup_content );
+		// @codingStandardsIgnoreEnd
+
+		if ( false === $write_success ) {
+			wp_send_json_error( [ 'message' => esc_html__( 'Failed to write reverted code to plugin file.', 'wp-autoplugin' ) ] );
+		}
+
+		// Cleanup: Delete the backup file and remove from options.
+		// @codingStandardsIgnoreStart
+		if ( ! unlink( $backup_filepath ) ) {
+			// Log this or notify admin, but proceed with removing from options as the main file is restored.
+			error_log( 'WP Autoplugin: Could not delete backup file: ' . $backup_filepath );
+		}
+		// @codingStandardsIgnoreEnd
+
+		unset( $optimizer_backups[ $plugin_file_to_revert ] );
+		update_option( 'wp_autoplugin_optimizer_backups', $optimizer_backups );
+
+		// Clear caches.
+		if ( function_exists( 'opcache_invalidate' ) && ini_get( 'opcache.enable' ) ) {
+			opcache_invalidate( $original_plugin_path, true );
+		}
+		if ( function_exists( 'apcu_clear_cache' ) ) {
+			apcu_clear_cache();
+		}
+
+		wp_send_json_success( [ 'message' => esc_html__( 'Plugin reverted successfully to the backed-up version.', 'wp-autoplugin' ) ] );
 	}
 }

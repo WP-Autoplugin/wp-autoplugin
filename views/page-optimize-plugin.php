@@ -43,6 +43,14 @@
             </button>
         </p>
 
+        <div id="revert-info-container" style="display: none; margin-top: 20px; padding: 10px; border: 1px solid #ccd0d4; background-color: #f6f7f7;">
+            <h3><?php esc_html_e( 'Backup Information', 'wp-autoplugin' ); ?></h3>
+            <p id="backup-timestamp-display"></p>
+            <button type="button" id="revert-plugin-btn" class="button">
+                <?php esc_html_e( 'Revert to Original Backup', 'wp-autoplugin' ); ?>
+            </button>
+        </div>
+
         <div id="optimizer-messages" style="margin-top: 15px;">
             <!-- Messages will be displayed here -->
         </div>

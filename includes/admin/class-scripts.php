@@ -368,14 +368,17 @@ class Scripts {
 					'get_plugin_content_action' => 'autoplugin_get_plugin_content',
 					'get_plan_action'             => 'autoplugin_get_optimization_plan',
 					'apply_action'                => 'autoplugin_apply_optimization',
+					'revert_action'               => 'autoplugin_revert_plugin',
+					'optimizer_backups'           => get_option( 'wp_autoplugin_optimizer_backups', [] ),
 					'loading_messages'            => [
 						'getting_content' => esc_html__( 'Fetching plugin content...', 'wp-autoplugin' ),
 						'getting_plan'    => esc_html__( 'Getting optimization plan...', 'wp-autoplugin' ),
 						'applying_plan'   => esc_html__( 'Applying optimization...', 'wp-autoplugin' ),
+						'reverting_plugin' => esc_html__( 'Reverting plugin...', 'wp-autoplugin' ),
 					],
 					'error_messages'              => [
 						'no_plugin_selected' => esc_html__( 'Please select a plugin to optimize.', 'wp-autoplugin' ),
-						// Other generic messages can be added here if needed
+						'no_plugin_file_revert' => esc_html__( 'Plugin file identifier missing for revert.', 'wp-autoplugin' ),
 					],
 				]
 			);
