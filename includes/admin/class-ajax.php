@@ -12,6 +12,7 @@ use WP_Autoplugin\Plugin_Generator;
 use WP_Autoplugin\Plugin_Fixer;
 use WP_Autoplugin\Plugin_Extender;
 use WP_Autoplugin\Plugin_Installer;
+use WP_Autoplugin\Plugin_Optimizer;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -65,6 +66,11 @@ class Ajax {
 		add_action( 'wp_ajax_wp_autoplugin_add_model', [ $this, 'ajax_add_model' ] );
 		add_action( 'wp_ajax_wp_autoplugin_remove_model', [ $this, 'ajax_remove_model' ] );
 		add_action( 'wp_ajax_wp_autoplugin_change_model', [ $this, 'ajax_change_model' ] );
+
+		// Plugin Optimizer actions
+		add_action( 'wp_ajax_autoplugin_get_optimization_plan', [ $this, 'handle_get_optimization_plan' ] );
+		add_action( 'wp_ajax_autoplugin_apply_optimization', [ $this, 'handle_apply_optimization' ] );
+		add_action( 'wp_ajax_autoplugin_get_plugin_content', [ $this, 'handle_get_plugin_content' ] );
 	}
 
 	/**
@@ -605,5 +611,166 @@ class Ajax {
 		update_option( 'wp_autoplugin_model', $model );
 
 		wp_send_json_success( [ 'message' => esc_html__( 'Model changed successfully.', 'wp-autoplugin' ) ] );
+	}
+
+	/**
+	 * AJAX handler for getting a plugin optimization plan.
+	 *
+	 * @return void
+	 */
+	public function handle_get_optimization_plan() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( [ 'message' => esc_html__( 'You do not have permission to perform this action.', 'wp-autoplugin' ) ], 403 );
+		}
+		check_ajax_referer( 'wp_autoplugin_optimizer_nonce', 'security' );
+
+		$plugin_file = isset( $_POST['plugin_file'] ) ? sanitize_text_field( wp_unslash( $_POST['plugin_file'] ) ) : '';
+		$plugin_code = isset( $_POST['plugin_code'] ) ? wp_unslash( $_POST['plugin_code'] ) : ''; // Code itself should not be sanitized beyond unslashing.
+
+		if ( empty( $plugin_file ) ) {
+			wp_send_json_error( [ 'message' => esc_html__( 'Plugin file not specified.', 'wp-autoplugin' ) ] );
+		}
+		if ( empty( $plugin_code ) ) {
+			wp_send_json_error( [ 'message' => esc_html__( 'Plugin code not provided.', 'wp-autoplugin' ) ] );
+		}
+
+		// Basic validation for plugin_file path
+		if ( strpos( $plugin_file, '..' ) !== false || ! preg_match( '/^.+\.php$/', $plugin_file ) ) {
+			wp_send_json_error( [ 'message' => esc_html__( 'Invalid plugin file path.', 'wp-autoplugin' ) ] );
+		}
+
+		$optimizer = new Plugin_Optimizer( $this->ai_api );
+		$ai_plan   = $optimizer->plan_plugin_optimization( $plugin_code );
+
+		if ( is_wp_error( $ai_plan ) ) {
+			wp_send_json_error( [ 'message' => $ai_plan->get_error_message() ] );
+		}
+
+		wp_send_json_success( [ 'plan' => $ai_plan ] );
+	}
+
+	/**
+	 * AJAX handler for applying a plugin optimization.
+	 *
+	 * @return void
+	 */
+	public function handle_apply_optimization() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( [ 'message' => esc_html__( 'You do not have permission to perform this action.', 'wp-autoplugin' ) ], 403 );
+		}
+		check_ajax_referer( 'wp_autoplugin_optimizer_nonce', 'security' );
+
+		$plugin_file   = isset( $_POST['plugin_file'] ) ? sanitize_text_field( wp_unslash( $_POST['plugin_file'] ) ) : '';
+		$original_code = isset( $_POST['plugin_code'] ) ? wp_unslash( $_POST['plugin_code'] ) : ''; // Original code
+		$ai_plan       = isset( $_POST['ai_plan'] ) ? wp_unslash( $_POST['ai_plan'] ) : ''; // AI plan, potentially multi-line
+
+		if ( empty( $plugin_file ) ) {
+			wp_send_json_error( [ 'message' => esc_html__( 'Plugin file not specified.', 'wp-autoplugin' ) ] );
+		}
+		if ( empty( $original_code ) ) {
+			wp_send_json_error( [ 'message' => esc_html__( 'Original plugin code not provided.', 'wp-autoplugin' ) ] );
+		}
+		if ( empty( $ai_plan ) ) {
+			wp_send_json_error( [ 'message' => esc_html__( 'AI optimization plan not provided.', 'wp-autoplugin' ) ] );
+		}
+
+		// Basic validation for plugin_file path
+		if ( strpos( $plugin_file, '..' ) !== false || ! preg_match( '/^.+\.php$/', $plugin_file ) ) {
+			wp_send_json_error( [ 'message' => esc_html__( 'Invalid plugin file path.', 'wp-autoplugin' ) ] );
+		}
+
+		$optimizer     = new Plugin_Optimizer( $this->ai_api );
+		$optimized_code = $optimizer->optimize_plugin( $original_code, $ai_plan );
+
+		if ( is_wp_error( $optimized_code ) ) {
+			wp_send_json_error( [ 'message' => $optimized_code->get_error_message() ] );
+		}
+
+		if ( empty( $optimized_code ) ) {
+			wp_send_json_error( [ 'message' => esc_html__( 'AI returned empty optimized code.', 'wp-autoplugin' ) ] );
+		}
+
+		// Strip out code fences like ```php ... ``` just in case.
+		$optimized_code = preg_replace( '/^```(php)?\n?(.*)\n?```$/s', '$2', $optimized_code );
+		if ( empty( trim( $optimized_code ) ) ) {
+            wp_send_json_error( [ 'message' => esc_html__( 'AI returned empty optimized code after stripping fences.', 'wp-autoplugin' ) ] );
+        }
+
+
+		$full_plugin_path = WP_PLUGIN_DIR . '/' . $plugin_file;
+
+		if ( ! is_writable( dirname( $full_plugin_path ) ) || ( file_exists( $full_plugin_path ) && ! is_writable( $full_plugin_path ) ) ) {
+			wp_send_json_error( [ 'message' => esc_html__( 'Plugin directory or file is not writable.', 'wp-autoplugin' ) . ' ' . $full_plugin_path ] );
+		}
+
+		// It's a good idea to ensure the file still exists if we're overwriting.
+		// Though if it's not there, file_put_contents will create it.
+		// if ( ! file_exists( $full_plugin_path ) ) {
+		// wp_send_json_error( [ 'message' => esc_html__( 'Plugin file does not exist at the specified path.', 'wp-autoplugin' ) . ' ' . $full_plugin_path ] );
+		// }
+
+		// @codingStandardsIgnoreStart
+		$write_result = file_put_contents( $full_plugin_path, $optimized_code );
+		// @codingStandardsIgnoreEnd
+
+		if ( false === $write_result ) {
+			wp_send_json_error( [ 'message' => esc_html__( 'Failed to write optimized code to plugin file.', 'wp-autoplugin' ) ] );
+		}
+
+		// Clear opcache for the specific file if opcache is enabled
+		if ( function_exists( 'opcache_invalidate' ) && ini_get( 'opcache.enable' ) ) {
+			opcache_invalidate( $full_plugin_path, true );
+		}
+		// Also try to clear APCu cache if available
+		if ( function_exists( 'apcu_clear_cache' ) ) {
+			apcu_clear_cache();
+		}
+
+
+		wp_send_json_success( [ 'message' => esc_html__( 'Plugin optimized and updated successfully.', 'wp-autoplugin' ) ] );
+	}
+
+	/**
+	 * AJAX handler for getting plugin content.
+	 *
+	 * @return void
+	 */
+	public function handle_get_plugin_content() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( [ 'message' => esc_html__( 'You do not have permission to perform this action.', 'wp-autoplugin' ) ], 403 );
+		}
+		// Using the same nonce as other optimizer actions for simplicity, can be a dedicated one if needed.
+		check_ajax_referer( 'wp_autoplugin_optimizer_nonce', 'security' );
+
+		$plugin_file = isset( $_POST['plugin_file'] ) ? sanitize_text_field( wp_unslash( $_POST['plugin_file'] ) ) : '';
+
+		if ( empty( $plugin_file ) ) {
+			wp_send_json_error( [ 'message' => esc_html__( 'Plugin file not specified.', 'wp-autoplugin' ) ] );
+		}
+
+		// Basic validation for plugin_file path to prevent directory traversal.
+		if ( strpos( $plugin_file, '..' ) !== false || ! preg_match( '/^.+\.php$/', $plugin_file ) ) {
+			wp_send_json_error( [ 'message' => esc_html__( 'Invalid plugin file path.', 'wp-autoplugin' ) ] );
+		}
+
+		$full_plugin_path = WP_PLUGIN_DIR . '/' . $plugin_file;
+
+		if ( ! file_exists( $full_plugin_path ) ) {
+			wp_send_json_error( [ 'message' => esc_html__( 'Plugin file not found.', 'wp-autoplugin' ) . ' ' . $full_plugin_path ] );
+		}
+
+		if ( ! is_readable( $full_plugin_path ) ) {
+			wp_send_json_error( [ 'message' => esc_html__( 'Plugin file is not readable.', 'wp-autoplugin' ) ] );
+		}
+
+		// @codingStandardsIgnoreStart
+		$file_content = file_get_contents( $full_plugin_path );
+		// @codingStandardsIgnoreEnd
+
+		if ( false === $file_content ) {
+			wp_send_json_error( [ 'message' => esc_html__( 'Failed to read plugin file content.', 'wp-autoplugin' ) ] );
+		}
+
+		wp_send_json_success( [ 'content' => $file_content ] );
 	}
 }

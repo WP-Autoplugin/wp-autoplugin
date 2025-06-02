@@ -349,6 +349,43 @@ class Scripts {
 				[],
 				WP_AUTOPLUGIN_VERSION
 			);
+		} elseif ( $screen->id === 'wp-autoplugin_page_wp-autoplugin-optimizer' ) {
+			// Scripts for Plugin Optimizer page.
+			wp_enqueue_script(
+				'wp-autoplugin-optimizer',
+				WP_AUTOPLUGIN_URL . 'assets/admin/js/optimizer.js',
+				[ 'wp-autoplugin-utils' ], // Assuming utils might be useful
+				WP_AUTOPLUGIN_VERSION,
+				true
+			);
+
+			wp_localize_script(
+				'wp-autoplugin-optimizer',
+				'wpAutopluginOptimizer', // Changed object name to be more specific and follow camelCase convention
+				[
+					'ajax_url'                    => admin_url( 'admin-ajax.php' ),
+					'nonce'                       => wp_create_nonce( 'wp_autoplugin_optimizer_nonce' ),
+					'get_plugin_content_action' => 'autoplugin_get_plugin_content',
+					'get_plan_action'             => 'autoplugin_get_optimization_plan',
+					'apply_action'                => 'autoplugin_apply_optimization',
+					'loading_messages'            => [
+						'getting_content' => esc_html__( 'Fetching plugin content...', 'wp-autoplugin' ),
+						'getting_plan'    => esc_html__( 'Getting optimization plan...', 'wp-autoplugin' ),
+						'applying_plan'   => esc_html__( 'Applying optimization...', 'wp-autoplugin' ),
+					],
+					'error_messages'              => [
+						'no_plugin_selected' => esc_html__( 'Please select a plugin to optimize.', 'wp-autoplugin' ),
+						// Other generic messages can be added here if needed
+					],
+				]
+			);
+
+			wp_enqueue_style(
+				'wp-autoplugin-optimizer',
+				WP_AUTOPLUGIN_URL . 'assets/admin/css/optimizer.css',
+				[],
+				WP_AUTOPLUGIN_VERSION
+			);
 		}
 	}
 
