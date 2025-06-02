@@ -282,6 +282,24 @@ class Admin {
 			'wp-autoplugin-extend-hooks',
 			[ $this, 'render_extend_hooks_page' ]
 		);
+
+		add_submenu_page(
+			'wp-autoplugin',
+			esc_html__( 'Plugin Optimizer', 'wp-autoplugin' ),
+			esc_html__( 'Optimizer', 'wp-autoplugin' ),
+			'manage_options',
+			'wp-autoplugin-optimizer',
+			[ $this, 'render_optimizer_page' ]
+		);
+	}
+
+	/**
+	 * Display the plugin optimizer page.
+	 *
+	 * @return void
+	 */
+	public function render_optimizer_page() {
+		require_once WP_AUTOPLUGIN_DIR . 'views/page-optimize-plugin.php';
 	}
 
 	/**

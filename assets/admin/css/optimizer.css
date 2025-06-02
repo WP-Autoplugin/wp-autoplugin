@@ -1,0 +1,14 @@
+/* CSS for Plugin Optimizer Page */
+/* Add any specific styles for views/page-optimize-plugin.php here */
+#optimization-plan-display {
+    font-family: monospace;
+    white-space: pre-wrap;
+    background-color: #f7f7f7;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+#optimizer-messages .notice {
+    margin-top: 10px;
+}
