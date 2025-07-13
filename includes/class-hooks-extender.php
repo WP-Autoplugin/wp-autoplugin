@@ -209,6 +209,84 @@ class Hooks_Extender {
 	}
 
 	/**
+	 * Collect all action and filter hooks from a theme's PHP files.
+	 *
+	 * @param string $theme_slug The theme slug (e.g., 'twentytwentyfour').
+	 * @return array Array of hooks with name, type, and context.
+	 */
+	public static function get_theme_hooks( $theme_slug ) {
+		$hooks         = [];
+		$excluded_dirs = [
+			'vendor',
+			'node_modules',
+			'.git',
+			'tests',
+			'docs',
+			'build',
+			'dist',
+		];
+
+		// Get custom extraction config for the theme, if any.
+		$config = self::get_extraction_config( $theme_slug );
+
+		if ( $config ) {
+			$regex_pattern         = $config['regex_pattern'];
+			$method_to_type        = $config['method_to_type'];
+			$hook_name_transformer = $config['hook_name_transformer'] ?? null;
+		} else {
+			// Default configuration for standard WordPress hooks.
+			$regex_pattern         = '/(apply_filters|do_action|do_action_ref_array)\s*\(\s*([\'"]([^\'"]+)[\'"]|\$[^,]+|\w+)\s*,/m';
+			$method_to_type        = [
+				'apply_filters'       => 'filter',
+				'do_action'           => 'action',
+				'do_action_ref_array' => 'action',
+			];
+			$hook_name_transformer = null;
+		}
+
+		// Theme directory path.
+		$theme_path = get_theme_root() . '/' . $theme_slug;
+
+		if ( ! is_dir( $theme_path ) ) {
+			return $hooks;
+		}
+
+		$iterator = new \RecursiveIteratorIterator(
+			new \RecursiveDirectoryIterator( $theme_path, \RecursiveDirectoryIterator::SKIP_DOTS )
+		);
+
+		foreach ( $iterator as $file ) {
+			if ( ! $file->isFile() || $file->getExtension() !== 'php' ) {
+				continue;
+			}
+
+			// Check if file is in an excluded directory.
+			$relative_path = str_replace( $theme_path, '', $file->getPath() );
+			$skip_file     = false;
+			foreach ( $excluded_dirs as $excluded_dir ) {
+				if ( strpos( $relative_path, '/' . $excluded_dir . '/' ) !== false ) {
+					$skip_file = true;
+					break;
+				}
+			}
+			if ( $skip_file ) {
+				continue;
+			}
+
+			$hooks = array_merge( $hooks, self::process_file_hooks( $file->getPathname(), $regex_pattern, $method_to_type, $hook_name_transformer ) );
+		}
+
+		// Remove duplicates by `name` key.
+		$unique_hooks = [];
+		foreach ( $hooks as $hook ) {
+			if ( ! isset( $unique_hooks[ $hook['name'] ] ) ) {
+				$unique_hooks[ $hook['name'] ] = $hook;
+			}
+		}
+		return array_values( $unique_hooks );
+	}
+
+	/**
 	 * Get custom hook extraction configuration for a plugin.
 	 *
 	 * @param string $plugin_slug The plugin slug (e.g., 'seo-by-rank-math').
