@@ -657,7 +657,7 @@ class Ajax {
 
 		$theme_changes = sanitize_text_field( wp_unslash( $_POST['theme_issue'] ) );
 		$extender      = new \WP_Autoplugin\Hooks_Extender( $this->ai_api );
-		$plan_data     = $extender->plan_plugin_hooks_extension( $original_theme_name, $hooks, $theme_changes );
+		$plan_data     = $extender->plan_theme_hooks_extension( $original_theme_name, $hooks, $theme_changes );
 		if ( is_wp_error( $plan_data ) ) {
 			wp_send_json_error( $plan_data->get_error_message() );
 		}
@@ -707,7 +707,7 @@ class Ajax {
 		$original_theme_name = $theme_data->get( 'Name' );
 
 		$extender = new \WP_Autoplugin\Hooks_Extender( $this->ai_api );
-		$code     = $extender->generate_hooks_extension_code( $original_theme_name, $hooks, $ai_plan, $plugin_name );
+		$code     = $extender->generate_theme_extension_code( $original_theme_name, $hooks, $ai_plan, $plugin_name );
 
 		if ( is_wp_error( $code ) ) {
 			wp_send_json_error( $code->get_error_message() );

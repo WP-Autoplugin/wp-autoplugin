@@ -91,7 +91,10 @@
                     hooksUl.innerHTML = hooks.map(hook => `<li>${hook.name} (${hook.type})</li>`).join('');
                     hooksContent.style.display = 'block';
                 } else {
-                    messageGeneratePlan.innerHTML = wp_autoplugin.messages.no_hooks_found || 'No hooks found in the theme code. Cannot proceed with extension.';
+                    // Info message, but allow proceeding
+                    hooksSummary.textContent = wp_autoplugin.messages.no_hooks_found || 'No hooks found in the theme code. You can still create an extension, but you may need to add hooks manually.';
+                    hooksUl.innerHTML = '';
+                    hooksContent.style.display = 'block';
                 }
             } else {
                 messageGeneratePlan.innerHTML = 'Error extracting hooks: ' + (data.data || 'Unknown error');

@@ -125,6 +125,92 @@ class Hooks_Extender {
 	}
 
 	/**
+	 * Plan a theme extension using hooks.
+	 *
+	 * @param string $original_theme_name The theme name (e.g., 'Twenty Twenty-Four').
+	 * @param array  $hooks Array of hooks with name, type, and context.
+	 * @param string $theme_changes Description of the desired changes.
+	 * @return string|WP_Error The AI-generated plan in JSON format.
+	 */
+	public function plan_theme_hooks_extension( $original_theme_name, $hooks, $theme_changes ) {
+		$hooks_list = '';
+		foreach ( $hooks as $hook ) {
+			$hooks_list .= "```
+{$hook['type']}: '{$hook['name']}'\n\nContext:\n{$hook['context']}\n```
+\n";
+		}
+
+		$prompt = <<<PROMPT
+			I want to extend a WordPress theme ('$original_theme_name') using its available hooks. Your task is to create a plan for this extension. Here are the theme hooks we can use:
+
+			$hooks_list
+
+			I want to make the following changes to the theme's functionality:
+
+			$theme_changes
+
+			In addition to the provided theme hooks, you may also make use of core WordPress hooks (actions and filters) if needed to achieve the desired changes.
+
+			Please determine if the requested extension is technically feasible with the available theme and core hooks. If it is not feasible, explain why.
+
+			If feasible, provide a technical specification and development plan for creating a plugin that uses one or more of the hooks to achieve the desired changes. Include which hooks to use, how to use them, and any additional code or logic needed.
+
+			Do not write the actual code. Your response should be a valid JSON object, with clear and concise text in each of the following sections:
+			{
+				"technically_feasible": true,
+				"explanation": "If not feasible, explain why. If feasible, you can skip this.",
+				"hooks": [ "hook_name_1", "hook_name_2" ],
+				"plan": "The development plan if feasible.",
+				"plugin_name": "Name of the new plugin"
+			}
+
+			Do not add any additional commentary. Do not write example code. Make sure your response only contains a valid JSON object with the specified sections. Do not use Markdown formatting in your answer.
+			PROMPT;
+
+		$plan_data = $this->ai_api->send_prompt( $prompt );
+
+		return $plan_data;
+	}
+
+	/**
+	 * Generate code for a new plugin using theme hooks based on a plan.
+	 *
+	 * @param string $original_theme_name The theme name (e.g., 'Twenty Twenty-Four').
+	 * @param array  $hooks Array of hooks with name, type, and context.
+	 * @param string $ai_plan The AI-generated plan.
+	 * @param string $plugin_name The name of the new plugin.
+	 * @return string|WP_Error The generated plugin code.
+	 */
+	public function generate_theme_extension_code( $original_theme_name, $hooks, $ai_plan, $plugin_name ) {
+		$hooks_list = '';
+		foreach ( $hooks as $hook ) {
+			$hooks_list .= "```\n{$hook['type']}: '{$hook['name']}'\n\nContext:\n{$hook['context']}\n```\n\n";
+		}
+
+		$prompt = <<<PROMPT
+			I need to create a new WordPress plugin that extends the functionality of an existing theme ('$original_theme_name') using its hooks. Here are the hooks we can use to achieve the desired extension:
+
+			$hooks_list
+
+			Here is the plan for the extension:
+
+			$ai_plan
+
+			The name of the new plugin is: "$plugin_name".
+
+			Please write the complete code for the new plugin. The plugin should be contained within a single PHP file. Include the necessary plugin header, and ensure that it uses the specified hooks correctly to achieve the desired extension.
+
+			Do not use Markdown formatting in your answer. Ensure the response does not contain any explanation or commentary, ONLY the complete, working code without any placeholders. "Add X here" comments are not allowed in the code, you need to write out the full, working code.
+
+			Important: all code should be self-contained within one PHP file and follow WordPress coding standards. Use inline Javascript and CSS, inside the main PHP file. Additional CSS or JS files cannot be included. Use appropriate WP hooks, actions, and filters as necessary. Always use "WP-Autoplugin" for the Author of the plugin, with Author URI: https://wp-autoplugin.com. Do not add the final closing "?>" tag in the PHP file.
+			PROMPT;
+
+		$plugin_code = $this->ai_api->send_prompt( $prompt );
+
+		return $plugin_code;
+	}
+
+	/**
 	 * Collect all action and filter hooks from a plugin's PHP files.
 	 *
 	 * @param string $plugin_file The plugin file (e.g., 'my-plugin/my-plugin.php').

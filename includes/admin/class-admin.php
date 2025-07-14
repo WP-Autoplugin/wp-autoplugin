@@ -57,6 +57,8 @@ class Admin {
 			'gpt-3.5-turbo'     => 'GPT-3.5 Turbo',
 		],
 		'Anthropic' => [
+			'claude-opus-4-20250514'     => 'Claude Opus 4-20250514',
+			'claude-sonnet-4-20250514'   => 'Claude Sonnet 4-20250514',
 			'claude-3-7-sonnet-latest'   => 'Claude 3.7 Sonnet-latest',
 			'claude-3-7-sonnet-20250219' => 'Claude 3.7 Sonnet-20250219',
 			'claude-3-7-sonnet-thinking' => 'Claude 3.7 Sonnet Thinking',
@@ -70,6 +72,9 @@ class Admin {
 			'claude-3-haiku-20240307'    => 'Claude 3 Haiku-20240307',
 		],
 		'Google'    => [
+			'gemini-2.5-pro'                      => 'Gemini 2.5 Pro',
+			'gemini-2.5-flash'                    => 'Gemini 2.5 Flash',
+			'gemini-2.5-flash-lite-preview-06-17' => 'Gemini 2.5 Flash Lite Preview 06-17',
 			'gemini-2.5-pro-exp-03-25'            => 'Gemini 2.5 Pro Experimental 03-25',
 			'gemini-2.5-flash-preview-04-17'      => 'Gemini 2.5 Flash Preview 04-17',
 			'gemini-2.0-pro-exp-02-05'            => 'Gemini 2.0 Pro Experimental 02-05',
