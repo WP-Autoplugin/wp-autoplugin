@@ -156,6 +156,10 @@ WP-Autoplugin is licensed under the GPLv3 or later.
 
 ## Changelog
 
+### 1.5
+- Added Extend Themes feature to extend existing themes with hooks
+- Added support for new AI models
+
 ### 1.4.3
 - Added support for Google Gemini 2.5 Pro model
 - Fixed minor UI issue in the Fix Plugin form

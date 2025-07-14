@@ -349,6 +349,57 @@ class Scripts {
 				[],
 				WP_AUTOPLUGIN_VERSION
 			);
+		} elseif ( $screen->id === 'admin_page_wp-autoplugin-extend-theme' ) {
+			$settings = wp_enqueue_code_editor( [ 'type' => 'application/x-httpd-php' ] );
+			if ( false !== $settings ) {
+				wp_enqueue_script( 'wp-theme-plugin-editor' );
+				wp_enqueue_style( 'wp-codemirror' );
+			}
+
+			wp_enqueue_script(
+				'wp-autoplugin-extend-theme',
+				WP_AUTOPLUGIN_URL . 'assets/admin/js/theme-extender.js',
+				[ 'wp-autoplugin-utils' ],
+				WP_AUTOPLUGIN_VERSION,
+				true
+			);
+
+			wp_localize_script(
+				'wp-autoplugin-extend-theme',
+				'wp_autoplugin',
+				[
+					'ajax_url'         => esc_url( admin_url( 'admin-ajax.php' ) ),
+					'nonce'            => wp_create_nonce( 'wp_autoplugin_generate' ),
+					'activate_url'     => esc_url(
+						admin_url(
+							'admin.php?page=wp-autoplugin&action=activate&nonce=' .
+							wp_create_nonce( 'wp-autoplugin-activate-plugin' )
+						)
+					),
+					'messages'         => [
+						'empty_description'       => esc_html__( 'Please describe the changes you want to make to the theme.', 'wp-autoplugin' ),
+						'generating_plan'         => esc_html__( 'Generating a plan for your theme extension.', 'wp-autoplugin' ),
+						'plan_generation_error'   => esc_html__( 'Error generating the development plan.', 'wp-autoplugin' ),
+						'generating_code'         => esc_html__( 'Generating the extension plugin code.', 'wp-autoplugin' ),
+						'code_generation_error'   => esc_html__( 'Error generating the extension code.', 'wp-autoplugin' ),
+						'plugin_creation_error'   => esc_html__( 'Error creating the extension plugin.', 'wp-autoplugin' ),
+						'code_updated'            => esc_html__( 'The extension plugin has been created.', 'wp-autoplugin' ),
+						'activate'                => esc_html__( 'Activate Plugin', 'wp-autoplugin' ),
+						'creating_plugin'         => esc_html__( 'Creating the extension plugin.', 'wp-autoplugin' ),
+						'plugin_created'          => esc_html__( 'Plugin successfully installed.', 'wp-autoplugin' ),
+						'plugin_activation_error' => esc_html__( 'Error activating the plugin.', 'wp-autoplugin' ),
+						'extracting_hooks'        => esc_html__( 'Extracting theme hooks, please wait...', 'wp-autoplugin' ),
+						'no_hooks_found'          => esc_html__( 'No hooks found in the theme code. Cannot proceed with extension.', 'wp-autoplugin' ),
+					],
+				]
+			);
+
+			wp_enqueue_style(
+				'wp-autoplugin-extend-theme',
+				WP_AUTOPLUGIN_URL . 'assets/admin/css/extender.css',
+				[],
+				WP_AUTOPLUGIN_VERSION
+			);
 		}
 	}
 

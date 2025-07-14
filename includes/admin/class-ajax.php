@@ -56,6 +56,9 @@ class Ajax {
 			'extract_hooks',
 			'generate_extend_hooks_plan',
 			'generate_extend_hooks_code',
+			'extract_theme_hooks',
+			'generate_extend_theme_plan',
+			'generate_extend_theme_code',
 		];
 		foreach ( $actions as $action ) {
 			add_action( 'wp_ajax_wp_autoplugin_' . $action, [ $this, 'ajax_actions' ] );
@@ -605,5 +608,114 @@ class Ajax {
 		update_option( 'wp_autoplugin_model', $model );
 
 		wp_send_json_success( [ 'message' => esc_html__( 'Model changed successfully.', 'wp-autoplugin' ) ] );
+	}
+
+	/**
+	 * AJAX handler for extracting theme hooks.
+	 *
+	 * @return void
+	 */
+	public function ajax_extract_theme_hooks() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( esc_html__( 'You are not allowed to access this page.', 'wp-autoplugin' ) );
+		}
+		check_ajax_referer( 'wp_autoplugin_generate', 'security' );
+
+		$theme_slug = isset( $_POST['theme_slug'] ) ? sanitize_text_field( wp_unslash( $_POST['theme_slug'] ) ) : '';
+		if ( empty( $theme_slug ) ) {
+			wp_send_json_error( esc_html__( 'No theme slug specified.', 'wp-autoplugin' ) );
+		}
+
+		$hooks = \WP_Autoplugin\Hooks_Extender::get_theme_hooks( $theme_slug );
+		wp_send_json_success( $hooks ); // Returns empty array if no hooks found.
+	}
+
+	/**
+	 * AJAX handler for generating a plan to extend theme hooks.
+	 *
+	 * @return void
+	 */
+	public function ajax_generate_extend_theme_plan() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( esc_html__( 'You are not allowed to access this page.', 'wp-autoplugin' ) );
+		}
+		check_ajax_referer( 'wp_autoplugin_generate', 'security' );
+
+		if ( ! isset( $_POST['theme_slug'] ) || ! isset( $_POST['theme_issue'] ) ) {
+			wp_send_json_error( esc_html__( 'Missing required parameters.', 'wp-autoplugin' ) );
+		}
+
+		$theme_slug = sanitize_text_field( wp_unslash( $_POST['theme_slug'] ) );
+		$hooks      = \WP_Autoplugin\Hooks_Extender::get_theme_hooks( $theme_slug );
+		if ( empty( $hooks ) ) {
+			wp_send_json_error( esc_html__( 'No hooks found in the theme.', 'wp-autoplugin' ) );
+		}
+
+		// Get original theme name.
+		$theme_data           = wp_get_theme( $theme_slug );
+		$original_theme_name  = $theme_data->get( 'Name' );
+
+		$theme_changes = sanitize_text_field( wp_unslash( $_POST['theme_issue'] ) );
+		$extender      = new \WP_Autoplugin\Hooks_Extender( $this->ai_api );
+		$plan_data     = $extender->plan_theme_hooks_extension( $original_theme_name, $hooks, $theme_changes );
+		if ( is_wp_error( $plan_data ) ) {
+			wp_send_json_error( $plan_data->get_error_message() );
+		}
+
+		// Strip out any code block fences like ```json ... ```.
+		$plan_data  = preg_replace( '/^```(json)\n(.*)\n```$/s', '$2', $plan_data );
+		$plan_array = json_decode( $plan_data, true );
+		if ( ! $plan_array ) {
+			wp_send_json_error( esc_html__( 'Failed to decode the generated plan.', 'wp-autoplugin' ) );
+		}
+
+		wp_send_json_success( $plan_array );
+	}
+
+	/**
+	 * AJAX handler for generating code to extend theme hooks.
+	 *
+	 * @return void
+	 */
+	public function ajax_generate_extend_theme_code() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( esc_html__( 'You are not allowed to access this page.', 'wp-autoplugin' ) );
+		}
+		check_ajax_referer( 'wp_autoplugin_generate', 'security' );
+
+		if ( ! isset( $_POST['theme_slug'] ) || ! isset( $_POST['theme_plan'] ) || ! isset( $_POST['hooks'] ) ) {
+			wp_send_json_error( esc_html__( 'Missing required parameters.', 'wp-autoplugin' ) );
+		}
+
+		$theme_slug = sanitize_text_field( wp_unslash( $_POST['theme_slug'] ) );
+		$ai_plan    = sanitize_text_field( wp_unslash( $_POST['theme_plan'] ) );
+		$hooks      = \WP_Autoplugin\Hooks_Extender::get_theme_hooks( $theme_slug );
+		$hooks_param = json_decode( sanitize_text_field( wp_unslash( $_POST['hooks'] ) ), true );
+
+		// The $hooks_param is an array of hook names. Keep only the hooks that are in the plan.
+		$hooks = array_filter(
+			$hooks,
+			function ( $hook ) use ( $hooks_param ) {
+				return in_array( $hook['name'], $hooks_param, true );
+			}
+		);
+
+		$plugin_name = isset( $_POST['plugin_name'] ) ? sanitize_text_field( wp_unslash( $_POST['plugin_name'] ) ) : '';
+
+		// Get original theme name.
+		$theme_data          = wp_get_theme( $theme_slug );
+		$original_theme_name = $theme_data->get( 'Name' );
+
+		$extender = new \WP_Autoplugin\Hooks_Extender( $this->ai_api );
+		$code     = $extender->generate_theme_extension_code( $original_theme_name, $hooks, $ai_plan, $plugin_name );
+
+		if ( is_wp_error( $code ) ) {
+			wp_send_json_error( $code->get_error_message() );
+		}
+
+		// Strip out code fences like ```php ... ```.
+		$code = preg_replace( '/^```(php)\n(.*)\n```$/s', '$2', $code );
+
+		wp_send_json_success( $code );
 	}
 }

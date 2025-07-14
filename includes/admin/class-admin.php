@@ -36,6 +36,9 @@ class Admin {
 	public static $models = [
 		'OpenAI'    => [
 			'gpt-4.5-preview'   => 'GPT-4.5 Preview',
+			'gpt-4.1'           => 'GPT-4.1',
+			'gpt-4.1-mini'      => 'GPT-4.1 mini',
+			'gpt-4.1-nano'      => 'GPT-4.1 nano',
 			'gpt-4o'            => 'GPT-4o',
 			'gpt-4o-mini'       => 'GPT-4o mini',
 			'chatgpt-4o-latest' => 'ChatGPT-4o-latest',
@@ -44,10 +47,18 @@ class Admin {
 			'o3-mini-low'       => 'o3-mini-low',
 			'o3-mini-medium'    => 'o3-mini-medium',
 			'o3-mini-high'      => 'o3-mini-high',
+			'o3-low'            => 'o3-low',
+			'o3-medium'         => 'o3-medium',
+			'o3-high'           => 'o3-high',
+			'o4-mini-low'       => 'o4-mini-low',
+			'o4-mini-medium'    => 'o4-mini-medium',
+			'o4-mini-high'      => 'o4-mini-high',
 			'gpt-4-turbo'       => 'GPT-4 Turbo',
 			'gpt-3.5-turbo'     => 'GPT-3.5 Turbo',
 		],
 		'Anthropic' => [
+			'claude-opus-4-20250514'     => 'Claude Opus 4-20250514',
+			'claude-sonnet-4-20250514'   => 'Claude Sonnet 4-20250514',
 			'claude-3-7-sonnet-latest'   => 'Claude 3.7 Sonnet-latest',
 			'claude-3-7-sonnet-20250219' => 'Claude 3.7 Sonnet-20250219',
 			'claude-3-7-sonnet-thinking' => 'Claude 3.7 Sonnet Thinking',
@@ -61,7 +72,11 @@ class Admin {
 			'claude-3-haiku-20240307'    => 'Claude 3 Haiku-20240307',
 		],
 		'Google'    => [
+			'gemini-2.5-pro'                      => 'Gemini 2.5 Pro',
+			'gemini-2.5-flash'                    => 'Gemini 2.5 Flash',
+			'gemini-2.5-flash-lite-preview-06-17' => 'Gemini 2.5 Flash Lite Preview 06-17',
 			'gemini-2.5-pro-exp-03-25'            => 'Gemini 2.5 Pro Experimental 03-25',
+			'gemini-2.5-flash-preview-04-17'      => 'Gemini 2.5 Flash Preview 04-17',
 			'gemini-2.0-pro-exp-02-05'            => 'Gemini 2.0 Pro Experimental 02-05',
 			'gemini-2.0-flash-thinking-exp'       => 'Gemini 2.0 Flash Thinking Experimental',
 			'gemini-2.0-flash'                    => 'Gemini 2.0 Flash',
@@ -76,6 +91,8 @@ class Admin {
 			'gemma-3-27b-it'                      => 'Gemma 3 27B',
 		],
 		'xAI'       => [
+			'grok-3'      => 'Grok 3',
+			'grok-3-mini' => 'Grok 3 Mini',
 			'grok-2'      => 'Grok 2',
 			'grok-beta'   => 'Grok Beta',
 			'grok-2-1212' => 'Grok 2-1212',
@@ -106,6 +123,12 @@ class Admin {
 
 		// Add "Extend Plugin" links to the plugin list table.
 		add_filter( 'plugin_action_links', [ $this, 'add_extend_plugin_link' ], 20, 2 );
+
+		// Add "Extend Theme" links to the plugin list table.
+		add_action( 'admin_enqueue_scripts', [ $this, 'add_extend_theme_action_links' ] );
+
+		// Add "Extend Theme" links to the theme list table (Multisite)
+		add_filter( 'theme_action_links', [ $this, 'add_extend_theme_link' ], 20, 2 );
 
 		// Add custom hook extraction config for Rank Math.
 		add_filter( 'wp_autoplugin_hook_extraction_config', [ $this, 'add_rank_math_hook_extraction_config' ] );
@@ -157,6 +180,48 @@ class Admin {
 		}
 		$actions['extend_plugin'] = '<a href="' . esc_url( $extend_url ) . '">' . esc_html__( 'Extend Plugin', 'wp-autoplugin' ) . '</a>';
 		return $actions;
+	}
+
+	/**
+	 * Add an "Extend Theme" link to the theme list table (Multisite).
+	 *
+	 * @param array  $actions The theme action links.
+	 * @param string $theme The theme slug.
+	 *
+	 * @return array
+	 */
+	public function add_extend_theme_link( $actions, $theme ) {
+		$extend_url = admin_url( 'admin.php?page=wp-autoplugin-extend-theme&theme=' . rawurlencode( $theme ) );
+		$extend_url = wp_nonce_url( $extend_url, 'wp-autoplugin-extend-theme', 'nonce' );
+		$actions['extend_theme'] = '<a href="' . esc_url( $extend_url ) . '">' . esc_html__( 'Extend Theme', 'wp-autoplugin' ) . '</a>';
+		return $actions;
+	}
+
+	/**
+	 * Add "Extend Theme" action links to the plugin list table.
+	 * Note: this is hooked to 'admin_enqueue_scripts'.
+	 *
+	 * @return void
+	 */
+	public function add_extend_theme_action_links( $hook ) {
+		if ( 'themes.php' !== $hook ) {
+			return;
+		}
+
+		wp_add_inline_script( 'theme', "
+			jQuery(document).ready(function($) {
+				console.log('Adding Extend Theme button to theme list table.');
+
+				wp.themes.data.themes.forEach(function(theme) {
+					if (theme.id) {
+						const selector = '.theme[data-slug=\"' + theme.id + '\"] .theme-actions';
+						const extendUrl = '" . esc_url( admin_url( 'admin.php?page=wp-autoplugin-extend-theme&theme=' ) ) . "' + encodeURIComponent(theme.id) + '&nonce=' + '" . esc_js( wp_create_nonce( 'wp-autoplugin-extend-theme' ) ) . "';
+						const actionLink = $('<a class=\"button button-small\" style=\"vertical-align: text-top;\" href=\"' + extendUrl + '\">' + '" . esc_html__( 'Extend', 'wp-autoplugin' ) . "' + '</a>');
+						$(selector).append(actionLink);
+					}
+				});
+			});
+		" );
 	}
 
 	/**
@@ -282,6 +347,15 @@ class Admin {
 			'wp-autoplugin-extend-hooks',
 			[ $this, 'render_extend_hooks_page' ]
 		);
+
+		add_submenu_page(
+			'options.php',
+			esc_html__( 'Extend Theme', 'wp-autoplugin' ),
+			esc_html__( 'Extend Theme', 'wp-autoplugin' ),
+			'manage_options',
+			'wp-autoplugin-extend-theme',
+			[ $this, 'render_extend_theme_page' ]
+		);
 	}
 
 	/**
@@ -361,6 +435,16 @@ class Admin {
 	}
 
 	/**
+	 * Display the extend theme page.
+	 *
+	 * @return void
+	 */
+	public function render_extend_theme_page() {
+		$this->validate_theme( 'wp-autoplugin-extend-theme' );
+		include WP_AUTOPLUGIN_DIR . 'views/page-extend-theme.php';
+	}
+
+	/**
 	 * Check if the plugin in the query string is valid and the user has permission.
 	 *
 	 * @param string $nonce The nonce action name.
@@ -391,6 +475,37 @@ class Admin {
 		$plugins = get_option( 'wp_autoplugins', [] );
 		if ( ! in_array( sanitize_text_field( wp_unslash( $_GET['plugin'] ) ), $plugins, true ) ) {
 			wp_die( esc_html__( 'The specified plugin does not exist.', 'wp-autoplugin' ) );
+		}
+
+		return true;
+	}
+
+	/**
+	 * Check if the theme in the query string is valid and the user has permission.
+	 *
+	 * @param string $nonce The nonce action name.
+	 *
+	 * @return bool
+	 */
+	public function validate_theme( $nonce ) {
+		if ( ! isset( $_GET['theme'] ) ) {
+			wp_die( esc_html__( 'No theme specified.', 'wp-autoplugin' ) );
+		}
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'wp-autoplugin' ) );
+		}
+
+		$nonce_value = isset( $_GET['nonce'] ) ? sanitize_text_field( wp_unslash( $_GET['nonce'] ) ) : '';
+		if ( ! $nonce_value || ! wp_verify_nonce( $nonce_value, $nonce ) ) {
+			wp_die( esc_html__( 'Security check failed.', 'wp-autoplugin' ) );
+		}
+
+		// Check if the theme exists.
+		$theme_slug = sanitize_text_field( wp_unslash( $_GET['theme'] ) );
+		$theme_path = get_theme_root() . '/' . $theme_slug;
+		if ( ! is_dir( $theme_path ) ) {
+			wp_die( esc_html__( 'The specified theme does not exist.', 'wp-autoplugin' ) );
 		}
 
 		return true;

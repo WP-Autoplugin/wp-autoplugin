@@ -74,8 +74,11 @@ class OpenAI_API extends API {
 		$this->original_model = sanitize_text_field( $model );
 
 		// Handle o3-mini model variants.
-		if ( in_array( $model, [ 'o3-mini-low', 'o3-mini-medium', 'o3-mini-high' ], true ) ) {
-			$this->model = 'o3-mini';
+		if ( in_array( $model, [ 'o3-mini-low', 'o3-mini-medium', 'o3-mini-high', 'o3-low', 'o3-medium', 'o3-high', 'o4-mini-low', 'o4-mini-medium', 'o4-mini-high' ], true ) ) {
+
+			// Extract the base model name (e.g., o3-mini, o3, o4-mini).
+			$base_model  = preg_replace( '/-low|-medium|-high$/', '', $model );
+			$this->model = $base_model;
 
 			// Extract reasoning effort from model name.
 			$parts                  = explode( '-', $model );
@@ -98,6 +101,30 @@ class OpenAI_API extends API {
 				'max_tokens'       => 100000,
 				'reasoning_effort' => 'high',
 			],
+			'o3-low'       => [
+				'max_tokens'       => 100000,
+				'reasoning_effort' => 'low',
+			],
+			'o3-medium'    => [
+				'max_tokens'       => 100000,
+				'reasoning_effort' => 'medium',
+			],
+			'o3-high'      => [
+				'max_tokens'       => 100000,
+				'reasoning_effort' => 'high',
+			],
+			'o4-mini-low'       => [
+				'max_tokens'       => 100000,
+				'reasoning_effort' => 'low',
+			],
+			'o4-mini-medium'    => [
+				'max_tokens'       => 100000,
+				'reasoning_effort' => 'medium',
+			],
+			'o4-mini-high'      => [
+				'max_tokens'       => 100000,
+				'reasoning_effort' => 'high',
+			],
 			'o1'                => [
 				'max_tokens' => 32000,
 			],
@@ -107,6 +134,18 @@ class OpenAI_API extends API {
 			'gpt-4o'            => [
 				'temperature' => 0.2,
 				'max_tokens'  => 4096,
+			],
+			'gpt-4.1'           => [
+				'temperature' => 0.2,
+				'max_tokens'  => 32768,
+			],
+			'gpt-4.1-mini'      => [
+				'temperature' => 0.2,
+				'max_tokens'  => 32768,
+			],
+			'gpt-4.1-nano'      => [
+				'temperature' => 0.2,
+				'max_tokens'  => 32768,
 			],
 			'chatgpt-4o-latest' => [
 				'temperature' => 0.2,
@@ -165,7 +204,7 @@ class OpenAI_API extends API {
 		];
 
 		// Handle special case for o3-mini-* models.
-		if ( strpos( $this->original_model, 'o3-mini' ) === 0 ) {
+		if ( in_array( $this->model, [ 'o3-mini', 'o3', 'o4-mini' ], true ) ) {
 			$body['max_completion_tokens'] = $this->max_tokens;
 			$body['reasoning_effort']      = $this->reasoning_effort;
 		} elseif ( 'o1' === $this->model || 'o1-preview' === $this->model ) {
