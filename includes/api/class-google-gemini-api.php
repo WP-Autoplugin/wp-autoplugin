@@ -62,6 +62,15 @@ class Google_Gemini_API extends API {
 	public function send_prompt( $prompt, $system_message = '', $override_body = [] ) {
 		$url = 'https://generativelanguage.googleapis.com/v1beta/models/' . $this->model . ':generateContent?key=' . $this->api_key;
 
+		// Set max tokens for Gemini 2.5 Flash & Pro.
+		$max_tokens = $this->max_tokens;
+		if (
+			stripos( $this->model, 'gemini-2.5-pro' ) !== false ||
+			stripos( $this->model, 'gemini-2.5-flash' ) !== false
+		) {
+			$max_tokens = 65535;
+		}
+
 		// Default safetySettings.
 		$safety_settings = [
 			[
@@ -73,7 +82,7 @@ class Google_Gemini_API extends API {
 		// Default generationConfig.
 		$generation_config = [
 			'temperature'     => $this->temperature,
-			'maxOutputTokens' => $this->max_tokens,
+			'maxOutputTokens' => $max_tokens,
 		];
 
 		// Merge override_body['generationConfig'] into $generation_config.
@@ -122,11 +131,22 @@ class Google_Gemini_API extends API {
 
 		$data = json_decode( $body, true );
 
-		if ( ! is_array( $data ) || ! isset( $data['candidates'][0]['content']['parts'] ) ) {
+		if ( ! is_array( $data ) || ! isset( $data['candidates'][0] ) ) {
 			return new \WP_Error( 'api_error', 'Error communicating with the Google Gemini API.' . "\n" . print_r( $data, true ) ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r
 		}
 
-		$parts     = $data['candidates'][0]['content']['parts'];
+		$candidate = $data['candidates'][0];
+		
+		// Check for finish reason errors.
+		if ( isset( $candidate['finishReason'] ) && $candidate['finishReason'] === 'MAX_TOKENS' ) {
+			// return new \WP_Error( 'max_tokens_error', 'The response was cut off due to maximum token limit. Please try generating a shorter response or reduce the context size.' );
+		}
+		
+		if ( ! isset( $candidate['content']['parts'] ) ) {
+			return new \WP_Error( 'api_error', 'Error communicating with the Google Gemini API.' . "\n" . print_r( $data, true ) ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r
+		}
+
+		$parts     = $candidate['content']['parts'];
 		$last_part = end( $parts );
 		return $last_part['text'];
 	}

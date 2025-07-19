@@ -47,8 +47,34 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<h1><?php esc_html_e( 'Generated Plugin Code', 'wp-autoplugin' ); ?></h1>
 		<form method="post" action="" id="create-plugin-form">
 			<?php wp_nonce_field( 'create_plugin', 'create_plugin_nonce' ); ?>
-			<p><?php esc_html_e( 'The plugin code has been generated successfully. You can review and edit the plugin file before activating it:', 'wp-autoplugin' ); ?></p>
-			<textarea name="plugin_code" id="plugin_code" rows="20" cols="100"></textarea>
+			
+			<!-- Simple plugin mode -->
+			<div id="simple-plugin-content">
+				<p><?php esc_html_e( 'The plugin code has been generated successfully. You can review and edit the plugin file before activating it:', 'wp-autoplugin' ); ?></p>
+				<textarea name="plugin_code" id="plugin_code" rows="20" cols="100"></textarea>
+			</div>
+			
+			<!-- Complex plugin mode -->
+			<div id="complex-plugin-content" style="display: none;">
+				<p><?php esc_html_e( 'The plugin files have been generated successfully. You can review and edit each file before installing:', 'wp-autoplugin' ); ?></p>
+				
+				<div class="generation-progress" style="display: none;">
+					<div class="progress-bar-container">
+						<div class="progress-bar" id="file-generation-progress"></div>
+					</div>
+					<span class="progress-text" id="progress-text"><?php esc_html_e( 'Generating files...', 'wp-autoplugin' ); ?></span>
+				</div>
+				
+				<div class="generated-files-container">
+					<div class="files-tabs" id="files-tabs">
+						<!-- File tabs will be populated by JavaScript -->
+					</div>
+					
+					<div class="file-content" id="file-content">
+						<!-- File editors will be populated by JavaScript -->
+					</div>
+				</div>
+			</div>
 			
 			<div class="autoplugin-code-warning">
 				<strong><?php esc_html_e( 'Warning:', 'wp-autoplugin' ); ?></strong> <?php esc_html_e( 'AI-generated code may be unstable or insecure; use only after careful review and testing.', 'wp-autoplugin' ); ?>

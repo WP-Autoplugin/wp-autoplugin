@@ -52,6 +52,14 @@ class Anthropic_API extends API {
 
 		// Set the temperature and max tokens based on the model.
 		$model_params = [
+			'claude-opus-4-20250514'     => [
+				'temperature' => 0.2,
+				'max_tokens'  => 8192,
+			],
+			'claude-sonnet-4-20250514'   => [
+				'temperature' => 0.2,
+				'max_tokens'  => 8192,
+			],
 			'claude-3-7-sonnet-20250219' => [
 				'temperature' => 0.2,
 				'max_tokens'  => 8192,

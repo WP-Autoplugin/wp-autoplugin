@@ -219,3 +219,265 @@ input#plugin_name {
     margin: 2em 0 -1em;
     text-align: center;
 }
+
+/* Project Structure Display */
+.project-structure-display {
+    margin: 20px 0;
+}
+
+.project-structure-display h4 {
+    margin: 15px 0 10px 0;
+    color: #23282d;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.directory-tree {
+    margin: 10px 0;
+}
+
+.directory-item {
+    padding: 5px 0;
+    font-family: monospace;
+    font-size: 13px;
+    color: #50575e;
+}
+
+.directory-item .folder-icon {
+    margin-right: 8px;
+}
+
+.files-table {
+    margin: 10px 0;
+}
+
+.files-table table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.files-table th,
+.files-table td {
+    padding: 8px 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+.files-table th {
+    background-color: #f1f1f1;
+    font-weight: 600;
+}
+
+.files-table .file-icon {
+    margin-right: 8px;
+}
+
+.files-table .file-type {
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.files-table .file-type.php {
+    background-color: #8892BF;
+    color: white;
+}
+
+.files-table .file-type.js {
+    background-color: #F7DF1E;
+    color: #323330;
+}
+
+.files-table .file-type.css {
+    background-color: #1572B6;
+    color: white;
+}
+
+.files-table .file-description-input {
+    width: 100%;
+    padding: 4px 8px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    font-size: 12px;
+}
+
+/* Complex Plugin Generation UI */
+.generation-progress {
+    margin: 20px 0;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+}
+
+.progress-bar-container {
+    width: 100%;
+    height: 20px;
+    background-color: #e9ecef;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: #007cba;
+    transition: width 0.3s ease;
+    border-radius: 10px;
+}
+
+.progress-text {
+    font-size: 14px;
+    color: #495057;
+    font-weight: 500;
+}
+
+.generated-files-container {
+    margin: 20px 0;
+}
+
+.files-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 20px;
+}
+
+.file-tab {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    margin-right: 5px;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-bottom: none;
+    border-radius: 6px 6px 0 0;
+    cursor: pointer;
+    font-size: 13px;
+    position: relative;
+}
+
+.file-tab:hover {
+    background-color: #e9ecef;
+}
+
+.file-tab.active {
+    background-color: #fff;
+    border-bottom: 1px solid #fff;
+    margin-bottom: -1px;
+}
+
+.file-tab .file-icon {
+    margin-right: 8px;
+    font-size: 16px;
+}
+
+.file-tab .file-icon.php::before {
+    content: "🐘";
+}
+
+.file-tab .file-icon.js::before {
+    content: "📜";
+}
+
+.file-tab .file-icon.css::before {
+    content: "🎨";
+}
+
+.file-tab .status-indicator {
+    margin-left: 8px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    position: relative;
+}
+
+.file-tab .status-indicator.pending {
+    background-color: #6c757d;
+}
+
+.file-tab .status-indicator.generating {
+    background-color: #007cba;
+    animation: pulse 1s infinite;
+}
+
+.file-tab .status-indicator.generated {
+    background-color: #28a745;
+}
+
+.file-tab .status-indicator.error {
+    background-color: #dc3545;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.7;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.file-content {
+    position: relative;
+}
+
+.file-editor {
+    margin-bottom: 20px;
+}
+
+.file-editor textarea {
+    width: 100%;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    resize: vertical;
+}
+
+.file-editor .CodeMirror {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    height: 400px;
+}
+
+/* Error handling and retry functionality */
+.error-message {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+.retry-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.retry-actions .button {
+    padding: 8px 16px;
+    font-size: 13px;
+}
+
+.file-tab .status-indicator.error {
+    background-color: #dc3545;
+    animation: none;
+}
+
+.file-tab .status-indicator.error[title="Skipped"] {
+    background-color: #ffc107;
+}

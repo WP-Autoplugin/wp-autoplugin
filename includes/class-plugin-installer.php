@@ -95,6 +95,88 @@ class Plugin_Installer {
 	}
 
 	/**
+	 * Install a complex multi-file plugin.
+	 *
+	 * @param string $plugin_name The plugin name.
+	 * @param array  $project_structure The project structure.
+	 * @param array  $generated_files The generated files.
+	 *
+	 * @return string|WP_Error
+	 */
+	public function install_complex_plugin( $plugin_name, $project_structure, $generated_files ) {
+		// If DISALLOW_FILE_MODS is set, we can't install plugins.
+		if ( defined( 'DISALLOW_FILE_MODS' ) && DISALLOW_FILE_MODS ) {
+			return new \WP_Error( 'file_mods_disabled', 'Plugin installation is disabled.' );
+		}
+
+		// Initialize WP_Filesystem.
+		global $wp_filesystem;
+		if ( empty( $wp_filesystem ) ) {
+			require_once ABSPATH . 'wp-admin/includes/file.php';
+			WP_Filesystem();
+		}
+
+		$plugin_name = sanitize_title( $plugin_name, 'wp-autoplugin-' . md5( wp_json_encode( $generated_files ) ) );
+		$plugin_dir  = WP_PLUGIN_DIR . '/' . $plugin_name . '/';
+
+		// Create plugin directory if it doesn't exist
+		if ( ! $wp_filesystem->exists( $plugin_dir ) ) {
+			$wp_filesystem->mkdir( $plugin_dir, 0755, true );
+		}
+
+		// Create subdirectories
+		if ( isset( $project_structure['directories'] ) ) {
+			foreach ( $project_structure['directories'] as $directory ) {
+				$dir_path = $plugin_dir . $directory;
+				if ( ! $wp_filesystem->exists( $dir_path ) ) {
+					$wp_filesystem->mkdir( $dir_path, 0755, true );
+				}
+			}
+		}
+
+		// Write all files
+		$main_file = '';
+		if ( isset( $project_structure['files'] ) ) {
+			foreach ( $project_structure['files'] as $file_info ) {
+				$file_path = $plugin_dir . $file_info['path'];
+				$file_content = isset( $generated_files[ $file_info['path'] ] ) ? $generated_files[ $file_info['path'] ] : '';
+
+				if ( empty( $file_content ) ) {
+					return new \WP_Error( 'missing_file_content', 'Missing content for file: ' . $file_info['path'] );
+				}
+
+				// Create directory for the file if it doesn't exist
+				$file_dir = dirname( $file_path );
+				if ( ! $wp_filesystem->exists( $file_dir ) ) {
+					wp_mkdir_p( $file_dir );
+				}
+
+				$result = $wp_filesystem->put_contents( $file_path, $file_content, FS_CHMOD_FILE );
+				if ( false === $result ) {
+					return new \WP_Error( 'file_creation_error', 'Error creating file: ' . $file_info['path'] );
+				}
+
+				// Identify the main plugin file (should be in root and end with .php)
+				if ( ! strpos( $file_info['path'], '/' ) && 'php' === $file_info['type'] ) {
+					$main_file = $file_info['path'];
+				}
+			}
+		}
+
+		if ( empty( $main_file ) ) {
+			return new \WP_Error( 'no_main_file', 'No main plugin file found.' );
+		}
+
+		// Add the plugin to the list of autoplugins
+		$autoplugins   = get_option( 'wp_autoplugins', [] );
+		$autoplugins[] = $plugin_name . '/' . $main_file;
+		$autoplugins   = array_values( array_unique( $autoplugins ) );
+		update_option( 'wp_autoplugins', $autoplugins );
+
+		return $plugin_name . '/' . $main_file;
+	}
+
+	/**
 	 * Try to activate a plugin and catch fatal errors.
 	 *
 	 * @param string $plugin The plugin file.

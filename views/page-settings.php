@@ -68,6 +68,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</td>
 			</tr>
 			<tr valign="top">
+				<th scope="row"><?php esc_html_e( 'Generate Plugins', 'wp-autoplugin' ); ?></th>
+				<td>
+					<select name="wp_autoplugin_plugin_mode" id="wp_autoplugin_plugin_mode">
+						<?php $current_mode = get_option( 'wp_autoplugin_plugin_mode', 'simple' ); ?>
+						<option value="simple" <?php selected( $current_mode, 'simple' ); ?>><?php esc_html_e( 'Simple plugin mode (single-file plugins)', 'wp-autoplugin' ); ?></option>
+						<option value="complex" <?php selected( $current_mode, 'complex' ); ?>><?php esc_html_e( 'Complex plugin mode (multi-file plugins)', 'wp-autoplugin' ); ?></option>
+					</select>
+					<p class="description">
+						<?php esc_html_e( 'For complex plugin mode, it is recommended to use more capable and modern models to ensure optimal results. Complex mode may use significantly more tokens than simple mode.', 'wp-autoplugin' ); ?>
+					</p>
+				</td>
+			</tr>
+			<tr valign="top">
 				<th scope="row"><?php esc_html_e( 'Custom Models', 'wp-autoplugin' ); ?></th>
 				<td>
 					<div id="custom-models-list">
