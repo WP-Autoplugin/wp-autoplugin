@@ -24,6 +24,7 @@
     let generatedFiles     = {};
     let currentFileIndex   = 0;
     let fileEditors        = {};
+    let totalTokenUsage    = { input_tokens: 0, output_tokens: 0 };
 
     // Step mapping
     const steps = {
@@ -280,6 +281,8 @@
 
         generatedFiles = {};
         currentFileIndex = 0;
+        totalTokenUsage = { input_tokens: 0, output_tokens: 0 };
+        updateTokenDisplay();
         
         // Create file tabs
         createFileTabs();
@@ -421,6 +424,13 @@
             status.className = 'status-indicator generated';
             generatedFiles[file.path] = response.data.file_content;
             
+            // Update token usage
+            if (response.data.token_usage) {
+                totalTokenUsage.input_tokens += response.data.token_usage.input_tokens || 0;
+                totalTokenUsage.output_tokens += response.data.token_usage.output_tokens || 0;
+                updateTokenDisplay();
+            }
+            
             // Update editor content
             const textarea = document.getElementById(`file-editor-${currentFileIndex}`);
             
@@ -471,6 +481,15 @@
             progressText.innerHTML = `Generating <code>${fileName}</code> (${current} of ${total})...`;
         } else {
             progressText.textContent = `Generating file ${current} of ${total}...`;
+        }
+    }
+
+    function updateTokenDisplay() {
+        const tokenCountElement = document.getElementById('token-count');
+        if (tokenCountElement) {
+            const inputTokens = totalTokenUsage.input_tokens.toLocaleString();
+            const outputTokens = totalTokenUsage.output_tokens.toLocaleString();
+            tokenCountElement.textContent = `${inputTokens} input + ${outputTokens} output`;
         }
     }
 
@@ -629,7 +648,8 @@
             get currentFileIndex() { return currentFileIndex; },
             get generatedFiles() { return generatedFiles; },
             get fileEditors() { return fileEditors; },
-            get projectStructure() { return projectStructure; }
+            get projectStructure() { return projectStructure; },
+            get totalTokenUsage() { return totalTokenUsage; }
         }
     };
 

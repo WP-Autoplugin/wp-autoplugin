@@ -148,6 +148,10 @@ class Google_Gemini_API extends API {
 
 		$parts     = $candidate['content']['parts'];
 		$last_part = end( $parts );
+		
+		// Extract token usage
+		$this->last_token_usage = $this->extract_token_usage( $data, 'google' );
+		
 		return $last_part['text'];
 	}
 }

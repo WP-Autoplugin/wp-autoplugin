@@ -64,6 +64,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</div>
 					<span class="progress-text" id="progress-text"><?php esc_html_e( 'Generating files...', 'wp-autoplugin' ); ?></span>
 				</div>
+
+				<div class="token-usage-display" id="token-usage-display">
+					<span class="token-info"><?php esc_html_e( 'Tokens used:', 'wp-autoplugin' ); ?> <span id="token-count">0 input + 0 output</span></span>
+				</div>
 				
 				<div class="generated-files-container">
 					<div class="files-tabs" id="files-tabs">

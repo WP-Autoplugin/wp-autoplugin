@@ -183,10 +183,14 @@ class Ajax {
 			$file_content = preg_replace( '/^```(js|javascript)\n(.*)\n```$/s', '$2', $file_content );
 		}
 
+		// Get token usage from the AI API
+		$token_usage = $this->ai_api->get_last_token_usage();
+
 		wp_send_json_success( [
 			'file_path' => $file_info['path'],
 			'file_content' => $file_content,
 			'file_type' => $file_type,
+			'token_usage' => $token_usage,
 		] );
 	}
 

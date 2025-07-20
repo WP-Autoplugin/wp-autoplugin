@@ -335,6 +335,26 @@ input#plugin_name {
     font-weight: 500;
 }
 
+.token-usage-display {
+    margin-top: 10px;
+    padding: 8px 12px;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+.token-info {
+    color: #495057;
+    font-weight: 500;
+}
+
+#token-count {
+    font-family: monospace;
+    color: #007cba;
+    font-weight: 600;
+}
+
 .generated-files-container {
     margin: 20px 0;
 }
