@@ -69,6 +69,31 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<span class="token-info"><?php esc_html_e( 'Tokens used:', 'wp-autoplugin' ); ?> <span id="token-count">0 input + 0 output</span></span>
 				</div>
 				
+				<div class="code-review-section" id="code-review-section" style="display: none;">
+					<div class="review-progress">
+						<div class="progress-text" id="review-progress-text"><?php esc_html_e( 'AI is reviewing the complete codebase...', 'wp-autoplugin' ); ?></div>
+					</div>
+					
+					<div class="review-results" id="review-results" style="display: none;">
+						<h4><?php esc_html_e( 'Code Review Results', 'wp-autoplugin' ); ?></h4>
+						<div class="review-summary" id="review-summary"></div>
+						
+						<div class="review-suggestions" id="review-suggestions" style="display: none;">
+							<h5><?php esc_html_e( 'Suggested Improvements', 'wp-autoplugin' ); ?></h5>
+							<div class="suggestions-list" id="suggestions-list"></div>
+							
+							<div class="review-actions" style="margin-top: 15px;">
+								<button type="button" id="apply-suggestions" class="button button-primary">
+									<?php esc_html_e( 'Apply Suggestions', 'wp-autoplugin' ); ?>
+								</button>
+								<button type="button" id="skip-review" class="button">
+									<?php esc_html_e( 'Skip Review', 'wp-autoplugin' ); ?>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				
 				<div class="generated-files-container">
 					<div class="files-tabs" id="files-tabs">
 						<!-- File tabs will be populated by JavaScript -->

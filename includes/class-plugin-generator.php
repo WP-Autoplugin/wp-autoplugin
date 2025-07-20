@@ -357,4 +357,57 @@ class Plugin_Generator {
 
 		return $context;
 	}
+
+	/**
+	 * Review the complete generated codebase and suggest improvements.
+	 *
+	 * @param string $plugin_plan The original plugin plan.
+	 * @param array  $project_structure The project structure.
+	 * @param array  $generated_files All generated files.
+	 *
+	 * @return string|WP_Error JSON response with suggested updates/additions.
+	 */
+	public function review_generated_code( $plugin_plan, $project_structure, $generated_files ) {
+		$context = $this->build_file_context( $generated_files, $project_structure );
+		
+		$prompt = <<<PROMPT
+			You are reviewing a complete WordPress plugin codebase that was generated based on the following plan:
+
+			Plugin Plan:
+			```
+			$plugin_plan
+			```
+
+			$context
+
+			Please analyze the complete codebase and suggest improvements, missing functionality, or additional files that would make this plugin more robust and complete.
+
+			Your response should be a valid JSON object with the following structure:
+			{
+				"review_summary": "Brief summary of your overall assessment",
+				"suggestions": [
+					{
+						"action": "ADD|UPDATE",
+						"file_path": "path/to/file.php",
+						"file_type": "php|css|js",
+						"reason": "Why this file should be added or updated",
+						"description": "What this file should contain or what changes should be made"
+					}
+				]
+			}
+
+			Guidelines for suggestions:
+			- Only suggest files that would significantly improve the plugin's functionality, security, or user experience
+			- Focus on missing essential files (e.g., uninstall.php, proper error handling, validation)
+			- Suggest improvements to existing files only if there are critical issues
+			- Do not suggest unnecessary files or over-engineering
+			- Limit suggestions to a maximum of 5 files to keep the plugin focused
+			- All suggested files must be PHP, CSS, or JS only
+			- Ensure all suggestions align with WordPress coding standards and best practices
+
+			Return ONLY the JSON response without any explanation or markdown formatting.
+			PROMPT;
+
+		return $this->ai_api->send_prompt( $prompt, '', [ 'response_format' => [ 'type' => 'json_object' ] ] );
+	}
 }

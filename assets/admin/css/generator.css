@@ -501,3 +501,102 @@ input#plugin_name {
 .file-tab .status-indicator.error[title="Skipped"] {
     background-color: #ffc107;
 }
+
+/* Code Review Section */
+.code-review-section {
+    margin: 20px 0;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+}
+
+.review-progress {
+    text-align: center;
+    padding: 20px;
+}
+
+.review-results h4 {
+    color: #23282d;
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+
+.review-summary {
+    padding: 12px;
+    background-color: #e7f3ff;
+    border: 1px solid #b3d9ff;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.review-suggestions h5 {
+    color: #23282d;
+    margin: 15px 0 10px 0;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.suggestion-item {
+    padding: 12px;
+    margin-bottom: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    border-left: 4px solid #007cba;
+}
+
+.suggestion-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.suggestion-action {
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-right: 10px;
+}
+
+.suggestion-action.add {
+    background-color: #28a745;
+    color: white;
+}
+
+.suggestion-action.update {
+    background-color: #ffc107;
+    color: #856404;
+}
+
+.suggestion-file-path {
+    font-family: monospace;
+    font-size: 13px;
+    color: #495057;
+    font-weight: 600;
+}
+
+.suggestion-reason {
+    font-size: 13px;
+    color: #6c757d;
+    margin-bottom: 6px;
+    font-style: italic;
+}
+
+.suggestion-description {
+    font-size: 14px;
+    color: #495057;
+    line-height: 1.4;
+}
+
+.review-actions {
+    display: flex;
+    gap: 10px;
+    padding-top: 15px;
+    border-top: 1px solid #dee2e6;
+}

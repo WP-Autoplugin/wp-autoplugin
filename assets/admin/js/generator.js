@@ -25,6 +25,7 @@
     let currentFileIndex   = 0;
     let fileEditors        = {};
     let totalTokenUsage    = { input_tokens: 0, output_tokens: 0 };
+    let reviewData         = null;
 
     // Step mapping
     const steps = {
@@ -377,14 +378,9 @@
 
     async function generateNextFile() {
         if (currentFileIndex >= projectStructure.files.length) {
-            // All files generated
+            // All files generated, start code review
             document.querySelector('.generation-progress').style.display = 'none';
-            document.getElementById('create_plugin').disabled = false;
-            
-            // Switch to the last generated file
-            const lastFile = projectStructure.files[projectStructure.files.length - 1];
-            switchToFile(lastFile.path);
-            
+            await startCodeReview();
             return;
         }
 
@@ -505,6 +501,223 @@
                 return 'text';
         }
     }
+
+    async function startCodeReview() {
+        document.getElementById('code-review-section').style.display = 'block';
+        document.getElementById('review-progress-text').textContent = 'AI is reviewing the complete codebase...';
+        
+        const formData = new FormData();
+        formData.append('action', 'wp_autoplugin_review_code');
+        formData.append('plugin_plan', JSON.stringify(pluginPlan));
+        formData.append('project_structure', JSON.stringify(projectStructure));
+        formData.append('generated_files', JSON.stringify(generatedFiles));
+        formData.append('security', wp_autoplugin.nonce);
+
+        try {
+            const response = await wpAutoPluginCommon.sendRequest(formData);
+            
+            if (!response.success) {
+                showReviewError(response.data);
+                return;
+            }
+
+            // Update token usage
+            if (response.data.token_usage) {
+                totalTokenUsage.input_tokens += response.data.token_usage.input_tokens || 0;
+                totalTokenUsage.output_tokens += response.data.token_usage.output_tokens || 0;
+                updateTokenDisplay();
+            }
+
+            reviewData = response.data.review_data;
+            showReviewResults();
+
+        } catch (error) {
+            showReviewError(error.message);
+        }
+    }
+
+    function showReviewResults() {
+        document.getElementById('review-results').style.display = 'block';
+        document.querySelector('.review-progress').style.display = 'none';
+        
+        // Show review summary
+        document.getElementById('review-summary').textContent = reviewData.review_summary;
+        
+        if (reviewData.suggestions && reviewData.suggestions.length > 0) {
+            document.getElementById('review-suggestions').style.display = 'block';
+            displaySuggestions(reviewData.suggestions);
+        } else {
+            // No suggestions, enable plugin creation
+            finishGeneration();
+        }
+    }
+
+    function displaySuggestions(suggestions) {
+        const suggestionsList = document.getElementById('suggestions-list');
+        suggestionsList.innerHTML = '';
+        
+        suggestions.forEach((suggestion, index) => {
+            const item = document.createElement('div');
+            item.className = 'suggestion-item';
+            
+            const actionClass = suggestion.action.toLowerCase();
+            
+            item.innerHTML = `
+                <div class="suggestion-header">
+                    <span class="suggestion-action ${actionClass}">${suggestion.action}</span>
+                    <span class="suggestion-file-path">${suggestion.file_path}</span>
+                </div>
+                <div class="suggestion-reason">${suggestion.reason}</div>
+                <div class="suggestion-description">${suggestion.description}</div>
+            `;
+            
+            suggestionsList.appendChild(item);
+        });
+    }
+
+    function showReviewError(errorMessage) {
+        document.getElementById('review-results').style.display = 'block';
+        document.querySelector('.review-progress').style.display = 'none';
+        document.getElementById('review-summary').innerHTML = `<strong>Review Error:</strong> ${errorMessage}`;
+        
+        // Skip review and finish generation
+        finishGeneration();
+    }
+
+    async function applySuggestions() {
+        if (!reviewData || !reviewData.suggestions) return;
+        
+        document.getElementById('apply-suggestions').disabled = true;
+        document.getElementById('apply-suggestions').textContent = 'Applying suggestions...';
+        
+        // Add suggested files to project structure
+        const newFiles = [];
+        reviewData.suggestions.forEach(suggestion => {
+            if (suggestion.action === 'ADD') {
+                const newFile = {
+                    path: suggestion.file_path,
+                    type: suggestion.file_type,
+                    description: suggestion.description
+                };
+                projectStructure.files.push(newFile);
+                newFiles.push(newFile);
+            }
+        });
+        
+        // Update file tabs if new files were added
+        if (newFiles.length > 0) {
+            const currentFileCount = currentFileIndex;
+            createFileTabs();
+            currentFileIndex = currentFileCount; // Resume from where we left off
+        }
+        
+        // Generate/regenerate suggested files
+        const filesToProcess = reviewData.suggestions.map(suggestion => {
+            return projectStructure.files.find(file => file.path === suggestion.file_path);
+        }).filter(file => file); // Remove any undefined entries
+        
+        for (const file of filesToProcess) {
+            const fileIndex = projectStructure.files.indexOf(file);
+            await generateSingleFile(fileIndex, true); // true indicates this is a review regeneration
+        }
+        
+        finishGeneration();
+    }
+
+    async function generateSingleFile(fileIndex, isRegeneration = false) {
+        const file = projectStructure.files[fileIndex];
+        
+        // Update tab status
+        const tab = document.querySelector(`[data-index="${fileIndex}"]`);
+        if (tab) {
+            const status = tab.querySelector('.status-indicator');
+            status.className = 'status-indicator generating';
+        }
+
+        const formData = new FormData();
+        formData.append('action', 'wp_autoplugin_generate_file');
+        formData.append('file_index', fileIndex);
+        formData.append('plugin_plan', JSON.stringify(pluginPlan));
+        formData.append('project_structure', JSON.stringify(projectStructure));
+        formData.append('generated_files', JSON.stringify(generatedFiles));
+        formData.append('security', wp_autoplugin.nonce);
+
+        try {
+            const response = await wpAutoPluginCommon.sendRequest(formData);
+            
+            if (!response.success) {
+                if (tab) {
+                    const status = tab.querySelector('.status-indicator');
+                    status.className = 'status-indicator error';
+                    status.title = response.data;
+                }
+                return;
+            }
+
+            // File generated successfully
+            if (tab) {
+                const status = tab.querySelector('.status-indicator');
+                status.className = 'status-indicator generated';
+            }
+            generatedFiles[file.path] = response.data.file_content;
+            
+            // Update token usage
+            if (response.data.token_usage) {
+                totalTokenUsage.input_tokens += response.data.token_usage.input_tokens || 0;
+                totalTokenUsage.output_tokens += response.data.token_usage.output_tokens || 0;
+                updateTokenDisplay();
+            }
+            
+            // Update editor content
+            const textarea = document.getElementById(`file-editor-${fileIndex}`);
+            
+            if (textarea) {
+                textarea.value = response.data.file_content;
+                textarea.placeholder = '';
+                
+                // Initialize CodeMirror editor
+                const mode = getCodeMirrorMode(response.data.file_type);
+                
+                fileEditors[file.path] = wpAutoPluginCommon.updateCodeEditor(
+                    fileEditors[file.path], 
+                    textarea, 
+                    response.data.file_content,
+                    mode
+                );
+                
+                // Force refresh the editor display
+                if (fileEditors[file.path] && fileEditors[file.path].codemirror) {
+                    setTimeout(() => {
+                        fileEditors[file.path].codemirror.refresh();
+                    }, 100);
+                }
+            }
+
+        } catch (error) {
+            if (tab) {
+                const status = tab.querySelector('.status-indicator');
+                status.className = 'status-indicator error';
+                status.title = error.message;
+            }
+        }
+    }
+
+    function finishGeneration() {
+        document.getElementById('code-review-section').style.display = 'none';
+        document.getElementById('create_plugin').disabled = false;
+        
+        // Switch to the last generated file
+        if (projectStructure.files && projectStructure.files.length > 0) {
+            const lastFile = projectStructure.files[projectStructure.files.length - 1];
+            switchToFile(lastFile.path);
+        }
+    }
+
+    // Event listeners for review actions
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('apply-suggestions')?.addEventListener('click', applySuggestions);
+        document.getElementById('skip-review')?.addEventListener('click', finishGeneration);
+    });
 
     function debugAllEditors() {
         // Check which tab is currently active

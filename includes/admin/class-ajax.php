@@ -42,6 +42,7 @@ class Ajax {
 			'generate_plan',
 			'generate_code',
 			'generate_file',
+			'review_code',
 			'create_plugin',
 
 			'generate_fix_plan',
@@ -820,5 +821,46 @@ class Ajax {
 		$code = preg_replace( '/^```(php)\n(.*)\n```$/s', '$2', $code );
 
 		wp_send_json_success( $code );
+	}
+
+	/**
+	 * AJAX handler for reviewing generated code and suggesting improvements.
+	 *
+	 * @return void
+	 */
+	public function ajax_review_code() {
+		$plugin_plan = isset( $_POST['plugin_plan'] ) ? wp_unslash( $_POST['plugin_plan'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Cannot sanitize JSON data. Nonce verification is done in the parent method.
+		$project_structure = isset( $_POST['project_structure'] ) ? wp_unslash( $_POST['project_structure'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Cannot sanitize JSON data. Nonce verification is done in the parent method.
+		$generated_files = isset( $_POST['generated_files'] ) ? wp_unslash( $_POST['generated_files'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Cannot sanitize JSON data. Nonce verification is done in the parent method.
+
+		// Decode JSON data
+		$project_structure_array = json_decode( $project_structure, true );
+		$generated_files_array = json_decode( $generated_files, true );
+
+		if ( ! $project_structure_array || ! $generated_files_array ) {
+			wp_send_json_error( esc_html__( 'Invalid input data.', 'wp-autoplugin' ) );
+		}
+
+		$generator = new Plugin_Generator( $this->ai_api );
+		$review_result = $generator->review_generated_code( $plugin_plan, $project_structure_array, $generated_files_array );
+
+		if ( is_wp_error( $review_result ) ) {
+			wp_send_json_error( $review_result->get_error_message() );
+		}
+
+		// Strip out any code block fences like ```json ... ```.
+		$review_result = preg_replace( '/^```(json)\n(.*)\n```$/s', '$2', $review_result );
+		$review_result = json_decode( $review_result, true );
+		if ( ! $review_result ) {
+			wp_send_json_error( esc_html__( 'Failed to decode the review result.', 'wp-autoplugin' ) );
+		}
+
+		// Get token usage from the AI API
+		$token_usage = $this->ai_api->get_last_token_usage();
+
+		wp_send_json_success( [
+			'review_data' => $review_result,
+			'token_usage' => $token_usage,
+		] );
 	}
 }
