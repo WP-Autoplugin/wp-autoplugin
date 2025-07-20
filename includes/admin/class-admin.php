@@ -91,6 +91,8 @@ class Admin {
 			'gemma-3-27b-it'                      => 'Gemma 3 27B',
 		],
 		'xAI'       => [
+			'grok-4'      => 'Grok 4 (Latest)',
+			'grok-4-0709' => 'Grok 4-0709',
 			'grok-3'      => 'Grok 3',
 			'grok-3-mini' => 'Grok 3 Mini',
 			'grok-2'      => 'Grok 2',

@@ -199,7 +199,7 @@ class Plugin_Generator {
 	 */
 	private function generate_php_file( $file_path, $file_description, $plan, $context ) {
 		$is_main_file = basename( $file_path ) === basename( $file_path, '.php' ) . '.php' && ! strpos( $file_path, '/' );
-		
+
 		$prompt = <<<PROMPT
 			Generate a PHP file for a WordPress plugin with the following specifications:
 
@@ -214,13 +214,13 @@ class Plugin_Generator {
 			$context
 
 			Requirements:
-			- Follow WordPress coding standards
+			- Follow WordPress coding standards and use tabs for indentation
 			- Use appropriate PHP namespaces and class structures
 			- Include proper WordPress security measures (nonces, capability checks, sanitization)
 			- Use "WP-Autoplugin" as the plugin author with Author URI: https://wp-autoplugin.com
 			- Do not add the final closing "?>" tag in PHP files
-			- Ensure the code is complete and functional without placeholders
-			
+			- Ensure the code is complete and functional – do not add placeholders
+			- Ensure the code complements the overall plugin plan and works seamlessly with other files
 			PROMPT;
 
 		if ( $is_main_file ) {
@@ -229,7 +229,7 @@ class Plugin_Generator {
 			$prompt .= "- This is a supporting file, do not include the WordPress plugin header\n";
 		}
 
-		$prompt .= "\nReturn ONLY the PHP code without any explanation or markdown formatting.";
+		$prompt .= "\nReturn ONLY the PHP code ($file_path) without any explanation or markdown formatting.";
 
 		return $this->ai_api->send_prompt( $prompt );
 	}
@@ -260,7 +260,7 @@ class Plugin_Generator {
 
 			Requirements:
 			- Follow WordPress CSS guidelines
-			- Use appropriate CSS selectors that won't conflict with themes
+			- Use appropriate CSS selectors that won't conflict with themes or other plugins
 			- Include responsive design considerations
 			- Use meaningful class names and comments
 			- Ensure cross-browser compatibility
@@ -319,22 +319,22 @@ class Plugin_Generator {
 	 */
 	private function build_file_context( $generated_files, $project_structure ) {
 		$context = "Project Structure:\n";
-		
+
 		if ( isset( $project_structure['directories'] ) ) {
 			$context .= "Directories: " . implode( ', ', $project_structure['directories'] ) . "\n";
 		}
-		
+
 		if ( isset( $project_structure['files'] ) ) {
 			$context .= "Files:\n";
 			foreach ( $project_structure['files'] as $file ) {
 				$context .= "- {$file['path']} ({$file['type']}): {$file['description']}\n";
 			}
 		}
-		
+
 		if ( ! empty( $generated_files ) ) {
 			$context .= "\nPreviously Generated Files:\n";
 			$file_count = count( $generated_files );
-			$lines_limit = $file_count > 5 ? 500 : 1000; // Reduce context for more files
+			$lines_limit = $file_count > 5 ? 1000 : 2000; // Reduce context for more files
 
 			foreach ( $generated_files as $file_path => $file_content ) {
 				$context .= "File: $file_path\n";

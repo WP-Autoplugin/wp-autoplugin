@@ -76,7 +76,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<option value="complex" <?php selected( $current_mode, 'complex' ); ?>><?php esc_html_e( 'Complex plugin mode (multi-file plugins)', 'wp-autoplugin' ); ?></option>
 					</select>
 					<p class="description">
-						<?php esc_html_e( 'For complex plugin mode, it is recommended to use more capable and modern models to ensure optimal results. Complex mode may use significantly more tokens than simple mode.', 'wp-autoplugin' ); ?>
+						<?php esc_html_e( 'Complex mode uses more tokens. For best results, use capable models.', 'wp-autoplugin' ); ?>
 					</p>
 				</td>
 			</tr>
