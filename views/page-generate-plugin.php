@@ -56,7 +56,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			
 			<!-- Complex plugin mode -->
 			<div id="complex-plugin-content" style="display: none;">
-				<p><?php esc_html_e( 'The plugin files have been generated successfully. You can review and edit each file before installing:', 'wp-autoplugin' ); ?></p>
+				<p><?php esc_html_e( 'You can review and edit the generated code before installing:', 'wp-autoplugin' ); ?></p>
 				
 				<div class="generation-progress" style="display: none;">
 					<div class="progress-bar-container">

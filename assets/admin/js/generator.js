@@ -327,6 +327,7 @@
             textarea.id = `file-editor-${index}`;
             textarea.rows = 20;
             textarea.cols = 100;
+            textarea.placeholder = `[Contents of ${file.path} will appear here]`;
             content.appendChild(textarea);
             
             contentContainer.appendChild(content);
@@ -385,7 +386,13 @@
         }
 
         const file = projectStructure.files[currentFileIndex];
-        updateProgress(currentFileIndex + 1, projectStructure.files.length);
+        updateProgress(currentFileIndex + 1, projectStructure.files.length, file.path);
+        
+        // Update textarea placeholder to show it's being generated
+        const textarea = document.getElementById(`file-editor-${currentFileIndex}`);
+        if (textarea) {
+            textarea.placeholder = `Generating ${file.path} now...`;
+        }
         
         // Update tab status
         const tab = document.querySelector(`[data-index="${currentFileIndex}"]`);
@@ -419,6 +426,7 @@
             
             if (textarea) {
                 textarea.value = response.data.file_content;
+                textarea.placeholder = ''; // Clear placeholder once content is loaded
                 
                 // Initialize CodeMirror editor
                 const mode = getCodeMirrorMode(response.data.file_type);
@@ -452,13 +460,18 @@
         }
     }
 
-    function updateProgress(current, total) {
+    function updateProgress(current, total, fileName = '') {
         const progressBar = document.getElementById('file-generation-progress');
         const progressText = document.getElementById('progress-text');
         
         const percentage = (current / total) * 100;
         progressBar.style.width = percentage + '%';
-        progressText.textContent = `Generating file ${current} of ${total}...`;
+        
+        if (fileName) {
+            progressText.innerHTML = `Generating <code>${fileName}</code> (${current} of ${total})...`;
+        } else {
+            progressText.textContent = `Generating file ${current} of ${total}...`;
+        }
     }
 
     function getCodeMirrorMode(fileType) {
