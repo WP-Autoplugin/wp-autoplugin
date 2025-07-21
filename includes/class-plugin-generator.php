@@ -369,9 +369,9 @@ class Plugin_Generator {
 	 */
 	public function review_generated_code( $plugin_plan, $project_structure, $generated_files ) {
 		$context = $this->build_file_context( $generated_files, $project_structure );
-		
+
 		$prompt = <<<PROMPT
-			You are reviewing a complete WordPress plugin codebase that was generated based on the following plan:
+			You are reviewing a complete WordPress plugin codebase for critical errors that would prevent it from working. Your goal is to identify issues that would break the plugin's functionality.
 
 			Plugin Plan:
 			```
@@ -380,31 +380,38 @@ class Plugin_Generator {
 
 			$context
 
-			Please analyze the complete codebase and suggest improvements, missing functionality, or additional files that would make this plugin more robust and complete.
-
+			Analyze the codebase for critical issues only:
+			- Syntax errors in PHP, CSS, or JavaScript
+			- Missing required WordPress functions or hooks
+			- Incorrect file references or dependencies between files
+			- Critical security vulnerabilities that would cause immediate problems
+			- Function/class name conflicts or undefined references
+			- Missing essential WordPress plugin requirements (like proper plugin headers)
+			
+			If the plugin appears to work correctly as specified in the plan, respond with an empty suggestions array.
+			
 			Your response should be a valid JSON object with the following structure:
 			{
-				"review_summary": "Brief summary of your overall assessment",
+				"review_summary": "Brief summary - either 'No critical issues found' or describe the problems",
 				"suggestions": [
 					{
-						"action": "ADD|UPDATE",
+						"action": "UPDATE",
 						"file_path": "path/to/file.php",
 						"file_type": "php|css|js",
-						"reason": "Why this file should be added or updated",
-						"description": "What this file should contain or what changes should be made"
+						"reason": "Critical issue that prevents plugin from working",
+						"description": "Specific fix needed to resolve the issue"
 					}
 				]
 			}
-
-			Guidelines for suggestions:
-			- Only suggest files that would significantly improve the plugin's functionality, security, or user experience
-			- Focus on missing essential files (e.g., uninstall.php, proper error handling, validation)
-			- Suggest improvements to existing files only if there are critical issues
-			- Do not suggest unnecessary files or over-engineering
-			- Limit suggestions to a maximum of 5 files to keep the plugin focused
-			- All suggested files must be PHP, CSS, or JS only
-			- Ensure all suggestions align with WordPress coding standards and best practices
-
+			
+			Guidelines:
+			- ONLY suggest fixes for issues that would prevent the plugin from functioning
+			- Do NOT suggest improvements, additional features, or optimizations
+			- Do NOT suggest new files unless something is critically missing
+			- Focus on making the existing code work, not making it better
+			- If the plugin will likely work as intended, return empty suggestions array
+			- Maximum 3 suggestions for only the most critical issues
+			
 			Return ONLY the JSON response without any explanation or markdown formatting.
 			PROMPT;
 

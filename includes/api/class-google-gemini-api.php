@@ -117,7 +117,7 @@ class Google_Gemini_API extends API {
 		$response = wp_remote_post(
 			$url,
 			[
-				'timeout' => 60,
+				'timeout' => 90,
 				'headers' => $headers,
 				'body'    => wp_json_encode( $body ),
 			]
