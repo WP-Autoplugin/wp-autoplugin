@@ -635,8 +635,7 @@ class Admin {
 		$next_task_model = $this->get_next_task_model();
 		?>
 		<div id="wp-autoplugin-footer">
-			<p>
-				<span class="dashicons dashicons-admin-plugins"></span>
+			<div class="footer-left">
 				<span class="credits">
 					<?php
 					printf(
@@ -663,7 +662,12 @@ class Admin {
 						<a href="#" id="change-model-link" style="text-decoration: none;"><?php esc_html_e( '(Change)', 'wp-autoplugin' ); ?></a>
 					</span>
 				</span>
-			</p>
+			</div>
+			<div class="footer-right">
+				<span id="token-display" style="display: none; cursor: pointer;" title="<?php esc_attr_e( 'Click for token usage breakdown', 'wp-autoplugin' ); ?>">
+					<span id="token-input">0</span> IN | <span id="token-output">0</span> OUT
+				</span>
+			</div>
 		</div>
 
 		<!-- Model Selection Modal -->
@@ -817,6 +821,24 @@ class Admin {
 			</div>
 		</div>
 
+		<!-- Token Usage Breakdown Modal -->
+		<div id="token-breakdown-modal" style="display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);">
+			<div style="background-color: #fefefe; margin: 10% auto; padding: 20px; border: 1px solid #888; width: 600px; max-width: 90%; border-radius: 4px;">
+				<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+					<h3 style="margin: 0;"><?php esc_html_e( 'Token Usage Breakdown', 'wp-autoplugin' ); ?></h3>
+					<span id="close-token-modal" style="color: #aaa; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
+				</div>
+				
+				<div id="token-breakdown-content" style="margin-bottom: 20px;">
+					<p style="text-align: center; color: #666; font-style: italic;"><?php esc_html_e( 'No token usage data available yet.', 'wp-autoplugin' ); ?></p>
+				</div>
+
+				<div style="text-align: right;">
+					<button id="close-token-breakdown" class="button"><?php esc_html_e( 'Close', 'wp-autoplugin' ); ?></button>
+				</div>
+			</div>
+		</div>
+
 		<script>
 		jQuery(document).ready(function($) {
 			// Store model information for dynamic updates
@@ -825,6 +847,12 @@ class Admin {
 				planner: '<?php echo esc_js( $this->get_planner_model() ); ?>',
 				coder: '<?php echo esc_js( $this->get_coder_model() ); ?>',
 				reviewer: '<?php echo esc_js( $this->get_reviewer_model() ); ?>'
+			};
+			
+			// Global token tracking
+			window.wpAutopluginTokens = {
+				total: { input_tokens: 0, output_tokens: 0 },
+				steps: []
 			};
 			
 			// Set initial step and model
@@ -863,15 +891,90 @@ class Admin {
 				}
 			};
 
-			// Show modal when change link is clicked
+			// Function to add token usage for a specific step
+			window.addTokenUsage = function(stepName, modelUsed, inputTokens, outputTokens) {
+				if (inputTokens !== undefined && outputTokens !== undefined && inputTokens >= 0 && outputTokens >= 0) {
+					// Ensure global object exists
+					if (!window.wpAutopluginTokens) {
+						window.wpAutopluginTokens = {
+							total: { input_tokens: 0, output_tokens: 0 },
+							steps: []
+						};
+					}
+					
+					// Add to total
+					window.wpAutopluginTokens.total.input_tokens += inputTokens;
+					window.wpAutopluginTokens.total.output_tokens += outputTokens;
+					
+					// Record step data
+					window.wpAutopluginTokens.steps.push({
+						step: stepName || 'Unknown Step',
+						model: modelUsed || 'Unknown Model',
+						input_tokens: inputTokens,
+						output_tokens: outputTokens,
+						timestamp: new Date().toISOString()
+					});
+					
+					// Update display
+					updateTokenDisplayFromGlobal();
+					
+					console.log('Token usage added:', stepName, modelUsed, inputTokens, outputTokens);
+					console.log('Total steps:', window.wpAutopluginTokens.steps.length);
+				}
+			};
+			
+			// Function to update footer display from global totals
+			function updateTokenDisplayFromGlobal() {
+				var total = window.wpAutopluginTokens.total;
+				$('#token-input').text(total.input_tokens.toLocaleString());
+				$('#token-output').text(total.output_tokens.toLocaleString());
+				$('#token-display').show();
+			}
+
+			// Function to update token counts in footer (legacy compatibility)
+			window.updateTokenDisplay = function(inputTokens, outputTokens) {
+				if (inputTokens !== undefined && outputTokens !== undefined) {
+					$('#token-input').text(inputTokens.toLocaleString());
+					$('#token-output').text(outputTokens.toLocaleString());
+					$('#token-display').show();
+				}
+			};
+
+			// Function to hide token display
+			window.hideTokenDisplay = function() {
+				$('#token-display').hide();
+			};
+			
+			// Function to reset all token tracking (only when starting completely over)
+			window.resetTokenTracking = function() {
+				window.wpAutopluginTokens = {
+					total: { input_tokens: 0, output_tokens: 0 },
+					steps: []
+				};
+				$('#token-display').hide();
+			};
+
+			// Show model modal when change link is clicked
 			$('#change-model-link').on('click', function(e) {
 				e.preventDefault();
 				$('#model-selection-modal').show();
 			});
 			
-			// Close modal when X is clicked
+			// Show token breakdown modal when token display is clicked
+			$('#token-display').on('click', function(e) {
+				e.preventDefault();
+				showTokenBreakdown();
+				$('#token-breakdown-modal').show();
+			});
+			
+			// Close model modal when X is clicked
 			$('#close-modal').on('click', function() {
 				$('#model-selection-modal').hide();
+			});
+			
+			// Close token modal when X is clicked
+			$('#close-token-modal, #close-token-breakdown').on('click', function() {
+				$('#token-breakdown-modal').hide();
 			});
 			
 			// Close modal when cancel is clicked
@@ -879,12 +982,62 @@ class Admin {
 				$('#model-selection-modal').hide();
 			});
 			
-			// Close modal when clicking outside
+			// Close modals when clicking outside
 			$(window).on('click', function(e) {
 				if (e.target.id === 'model-selection-modal') {
 					$('#model-selection-modal').hide();
 				}
+				if (e.target.id === 'token-breakdown-modal') {
+					$('#token-breakdown-modal').hide();
+				}
 			});
+			
+			// Function to show token breakdown
+			function showTokenBreakdown() {
+				var content = $('#token-breakdown-content');
+				var steps = window.wpAutopluginTokens ? window.wpAutopluginTokens.steps : [];
+				var total = window.wpAutopluginTokens ? window.wpAutopluginTokens.total : {input_tokens: 0, output_tokens: 0};
+				
+				console.log('showTokenBreakdown called');
+				console.log('Steps array:', steps);
+				console.log('Total tokens:', total);
+				
+				if (!steps || steps.length === 0) {
+					content.html('<p style="text-align: center; color: #666; font-style: italic;"><?php esc_html_e( 'No token usage data available yet.', 'wp-autoplugin' ); ?></p>');
+					return;
+				}
+				
+				var html = '<div style="margin-bottom: 15px;">';
+				html += '<h4 style="margin: 0 0 10px 0; color: #23282d;"><?php esc_html_e( 'Total Usage', 'wp-autoplugin' ); ?></h4>';
+				html += '<div style="background: #f8f9fa; padding: 10px; border-radius: 4px; font-family: monospace; font-size: 14px; font-weight: 600;">';
+				html += '<span style="color: #007cba;">' + total.input_tokens.toLocaleString() + '</span> input tokens + ';
+				html += '<span style="color: #d63384;">' + total.output_tokens.toLocaleString() + '</span> output tokens';
+				html += '</div></div>';
+				
+				html += '<h4 style="margin: 15px 0 10px 0; color: #23282d;"><?php esc_html_e( 'Step Breakdown', 'wp-autoplugin' ); ?></h4>';
+				html += '<div style="max-height: 300px; overflow-y: auto;">';
+				
+				steps.forEach(function(step, index) {
+					html += '<div style="background: #fff; border: 1px solid #ddd; border-radius: 4px; padding: 12px; margin-bottom: 8px;">';
+					html += '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">';
+					html += '<div>';
+					html += '<span style="font-weight: 600; color: #23282d;">' + step.step + '</span>';
+					html += '<span style="margin-left: 10px; font-size: 12px; color: #666;">Model: ' + step.model + '</span>';
+					html += '</div>';
+					html += '<div style="font-family: monospace; font-size: 12px; color: #666;">';
+					html += new Date(step.timestamp).toLocaleTimeString();
+					html += '</div>';
+					html += '</div>';
+					html += '<div style="font-family: monospace; font-size: 13px;">';
+					html += '<span style="color: #007cba;">' + step.input_tokens.toLocaleString() + '</span> IN | ';
+					html += '<span style="color: #d63384;">' + step.output_tokens.toLocaleString() + '</span> OUT';
+					html += '</div>';
+					html += '</div>';
+				});
+				
+				html += '</div>';
+				content.html(html);
+			}
 			
 			// Save models
 			$('#save-models').on('click', function(e) {
@@ -918,7 +1071,7 @@ class Admin {
 							$('#model-selection-modal').hide();
 							
 							// Update footer display based on current step
-							var currentStep = $('body').data('current-step') || 'default';
+							var currentStep = $('body').attr('data-current-step') || 'default';
 							var modelType = window.getModelForStep(currentStep);
 							window.updateFooterModel(modelType);
 						} else {

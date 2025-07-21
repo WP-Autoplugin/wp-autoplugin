@@ -100,6 +100,19 @@
                 totalTokenUsage.input_tokens += response.data.token_usage.input_tokens || 0;
                 totalTokenUsage.output_tokens += response.data.token_usage.output_tokens || 0;
                 updateTokenDisplay();
+                
+                // Add to global tracking
+                if (window.addTokenUsage) {
+                    var currentStep = document.body.getAttribute('data-current-step') || 'generatePlan';
+                    var modelType = window.getModelForStep ? window.getModelForStep(currentStep) : 'default';
+                    var modelName = window.wpAutopluginModels ? window.wpAutopluginModels[modelType] : 'Unknown';
+                    window.addTokenUsage(
+                        currentStep, 
+                        modelName, 
+                        response.data.token_usage.input_tokens || 0, 
+                        response.data.token_usage.output_tokens || 0
+                    );
+                }
             }
             currentState = 'reviewPlan';
             wpAutoPluginCommon.handleStepChange(steps, 'reviewPlan', onShowStep);
@@ -163,6 +176,19 @@
                     totalTokenUsage.input_tokens += response.data.token_usage.input_tokens || 0;
                     totalTokenUsage.output_tokens += response.data.token_usage.output_tokens || 0;
                     updateTokenDisplay();
+                    
+                    // Add to global tracking
+                    if (window.addTokenUsage) {
+                        var currentStep = document.body.getAttribute('data-current-step') || 'reviewPlan';
+                        var modelType = window.getModelForStep ? window.getModelForStep(currentStep) : 'default';
+                        var modelName = window.wpAutopluginModels ? window.wpAutopluginModels[modelType] : 'Unknown';
+                        window.addTokenUsage(
+                            currentStep, 
+                            modelName, 
+                            response.data.token_usage.input_tokens || 0, 
+                            response.data.token_usage.output_tokens || 0
+                        );
+                    }
                 }
                 currentState = 'reviewCode';
                 wpAutoPluginCommon.handleStepChange(steps, 'reviewCode', onShowStep);
@@ -296,7 +322,7 @@
 
         generatedFiles = {};
         currentFileIndex = 0;
-        totalTokenUsage = { input_tokens: 0, output_tokens: 0 };
+        // Don't reset totalTokenUsage here - we want to accumulate across steps
         updateTokenDisplay();
         
         // Create file tabs
@@ -495,11 +521,8 @@
     }
 
     function updateTokenDisplay() {
-        const tokenCountElement = document.getElementById('token-count');
-        if (tokenCountElement) {
-            const inputTokens = totalTokenUsage.input_tokens.toLocaleString();
-            const outputTokens = totalTokenUsage.output_tokens.toLocaleString();
-            tokenCountElement.textContent = `${inputTokens} input + ${outputTokens} output`;
+        if (window.updateTokenDisplay) {
+            window.updateTokenDisplay(totalTokenUsage.input_tokens, totalTokenUsage.output_tokens);
         }
     }
 

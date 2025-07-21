@@ -24,6 +24,7 @@
     let pluginCode        = '';
     let issueDescription  = '';
     let pluginPlan        = {};
+    let totalTokenUsage   = { input_tokens: 0, output_tokens: 0 };
 
     // Step mapping
     const steps = {
@@ -81,7 +82,16 @@
                 return;
             }
 
-            pluginPlan = response.data.plan || response.data; // Handle new format with token_usage
+            pluginPlan = response.data.plan_data || response.data; // Handle new format with token_usage
+            
+            // Track token usage
+            if (response.data.token_usage) {
+                totalTokenUsage.input_tokens += response.data.token_usage.input_tokens || 0;
+                totalTokenUsage.output_tokens += response.data.token_usage.output_tokens || 0;
+                updateTokenDisplay();
+                addTokenUsageToGlobal('Extend Plan Generation', response.data.token_usage.input_tokens || 0, response.data.token_usage.output_tokens || 0);
+            }
+            
             currentState = 'reviewPlan';
             wpAutoPluginCommon.handleStepChange(steps, 'reviewPlan', onShowStep);
         } catch (error) {
@@ -116,6 +126,15 @@
             }
 
             pluginCode = response.data.code || response.data; // Handle new format with token_usage
+            
+            // Track token usage
+            if (response.data.token_usage) {
+                totalTokenUsage.input_tokens += response.data.token_usage.input_tokens || 0;
+                totalTokenUsage.output_tokens += response.data.token_usage.output_tokens || 0;
+                updateTokenDisplay();
+                addTokenUsageToGlobal('Extend Code Generation', response.data.token_usage.input_tokens || 0, response.data.token_usage.output_tokens || 0);
+            }
+            
             currentState = 'reviewCode';
             wpAutoPluginCommon.handleStepChange(steps, 'reviewCode', onShowStep);
         } catch (error) {
@@ -161,6 +180,23 @@
             loader.stop();
             createPluginForm.parentElement.classList.remove('loading');
             messageReviewCode.innerHTML = wp_autoplugin.messages.plugin_creation_error + ' <pre>' + error.message + '</pre>';
+        }
+    }
+
+    // ----- Helper Functions -----
+    
+    function updateTokenDisplay() {
+        if (window.updateTokenDisplay) {
+            window.updateTokenDisplay(totalTokenUsage.input_tokens, totalTokenUsage.output_tokens);
+        }
+    }
+    
+    function addTokenUsageToGlobal(stepName, inputTokens, outputTokens) {
+        if (window.addTokenUsage) {
+            var currentStep = document.body.getAttribute('data-current-step') || stepName;
+            var modelType = window.getModelForStep ? window.getModelForStep(currentStep) : 'default';
+            var modelName = window.wpAutopluginModels ? window.wpAutopluginModels[modelType] : 'Unknown';
+            window.addTokenUsage(stepName, modelName, inputTokens, outputTokens);
         }
     }
 
