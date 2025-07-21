@@ -465,6 +465,17 @@
                 totalTokenUsage.input_tokens += response.data.token_usage.input_tokens || 0;
                 totalTokenUsage.output_tokens += response.data.token_usage.output_tokens || 0;
                 updateTokenDisplay();
+                
+                // Add to global tracking - this is file generation using coder model
+                if (window.addTokenUsage) {
+                    var coderModel = window.wpAutopluginModels ? window.wpAutopluginModels.coder : 'Unknown';
+                    window.addTokenUsage(
+                        'Generate File: ' + file.path, 
+                        coderModel, 
+                        response.data.token_usage.input_tokens || 0, 
+                        response.data.token_usage.output_tokens || 0
+                    );
+                }
             }
             
             // Update editor content
@@ -563,6 +574,17 @@
                 totalTokenUsage.input_tokens += response.data.token_usage.input_tokens || 0;
                 totalTokenUsage.output_tokens += response.data.token_usage.output_tokens || 0;
                 updateTokenDisplay();
+                
+                // Add to global tracking - this is code review using reviewer model
+                if (window.addTokenUsage) {
+                    var reviewerModel = window.wpAutopluginModels ? window.wpAutopluginModels.reviewer : 'Unknown';
+                    window.addTokenUsage(
+                        'Code Review', 
+                        reviewerModel, 
+                        response.data.token_usage.input_tokens || 0, 
+                        response.data.token_usage.output_tokens || 0
+                    );
+                }
             }
 
             reviewData = response.data.review_data;
@@ -703,6 +725,18 @@
                 totalTokenUsage.input_tokens += response.data.token_usage.input_tokens || 0;
                 totalTokenUsage.output_tokens += response.data.token_usage.output_tokens || 0;
                 updateTokenDisplay();
+                
+                // Add to global tracking - this is file generation using coder model
+                if (window.addTokenUsage) {
+                    var coderModel = window.wpAutopluginModels ? window.wpAutopluginModels.coder : 'Unknown';
+                    var stepName = isRegeneration ? 'Regenerate File: ' + file.path : 'Generate File: ' + file.path;
+                    window.addTokenUsage(
+                        stepName, 
+                        coderModel, 
+                        response.data.token_usage.input_tokens || 0, 
+                        response.data.token_usage.output_tokens || 0
+                    );
+                }
             }
             
             // Update editor content

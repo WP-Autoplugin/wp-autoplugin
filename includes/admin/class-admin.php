@@ -917,9 +917,6 @@ class Admin {
 					
 					// Update display
 					updateTokenDisplayFromGlobal();
-					
-					console.log('Token usage added:', stepName, modelUsed, inputTokens, outputTokens);
-					console.log('Total steps:', window.wpAutopluginTokens.steps.length);
 				}
 			};
 			
@@ -997,10 +994,6 @@ class Admin {
 				var content = $('#token-breakdown-content');
 				var steps = window.wpAutopluginTokens ? window.wpAutopluginTokens.steps : [];
 				var total = window.wpAutopluginTokens ? window.wpAutopluginTokens.total : {input_tokens: 0, output_tokens: 0};
-				
-				console.log('showTokenBreakdown called');
-				console.log('Steps array:', steps);
-				console.log('Total tokens:', total);
 				
 				if (!steps || steps.length === 0) {
 					content.html('<p style="text-align: center; color: #666; font-style: italic;"><?php esc_html_e( 'No token usage data available yet.', 'wp-autoplugin' ); ?></p>');
