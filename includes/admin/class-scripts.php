@@ -389,7 +389,7 @@ class Scripts {
 						'plugin_created'          => esc_html__( 'Plugin successfully installed.', 'wp-autoplugin' ),
 						'plugin_activation_error' => esc_html__( 'Error activating the plugin.', 'wp-autoplugin' ),
 						'extracting_hooks'        => esc_html__( 'Extracting theme hooks, please wait...', 'wp-autoplugin' ),
-						'no_hooks_found'          => esc_html__( 'No hooks found in the theme code. Cannot proceed with extension.', 'wp-autoplugin' ),
+						'no_hooks_found'          => esc_html__( 'No hooks found in the theme code.', 'wp-autoplugin' ),
 					],
 				]
 			);

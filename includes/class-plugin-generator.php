@@ -410,7 +410,7 @@ class Plugin_Generator {
 			- Do NOT suggest new files unless something is critically missing
 			- Focus on making the existing code work, not making it better
 			- If the plugin will likely work as intended, return empty suggestions array
-			- Maximum 3 suggestions for only the most critical issues
+			- Maximum 5 suggestions for only the most critical issues
 			
 			Return ONLY the JSON response without any explanation or markdown formatting.
 			PROMPT;

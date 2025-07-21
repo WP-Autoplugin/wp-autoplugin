@@ -137,7 +137,7 @@
                 return;
             }
 
-            pluginPlan = response.data;
+            pluginPlan = response.data.plan || response.data; // Handle new format with token_usage
 
             // Check if the plan is technically feasible
             if (pluginPlan.technically_feasible === false) {
@@ -196,7 +196,7 @@
                 return;
             }
 
-            pluginCode = response.data;
+            pluginCode = response.data.code || response.data; // Handle new format with token_usage
             currentState = 'reviewCode';
             wpAutoPluginCommon.handleStepChange(steps, 'reviewCode', onShowStep);
         } catch (error) {

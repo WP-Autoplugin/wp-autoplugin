@@ -81,7 +81,7 @@
                 return;
             }
 
-            pluginPlan = response.data;
+            pluginPlan = response.data.plan || response.data; // Handle new format with token_usage
             currentState = 'reviewPlan';
             wpAutoPluginCommon.handleStepChange(steps, 'reviewPlan', onShowStep);
         } catch (error) {
@@ -115,7 +115,7 @@
                 return;
             }
 
-            pluginCode = response.data;
+            pluginCode = response.data.code || response.data; // Handle new format with token_usage
             currentState = 'reviewCode';
             wpAutoPluginCommon.handleStepChange(steps, 'reviewCode', onShowStep);
         } catch (error) {

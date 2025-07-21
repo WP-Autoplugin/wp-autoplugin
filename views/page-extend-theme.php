@@ -43,7 +43,7 @@ $theme_data = wp_get_theme( $theme_slug );
 				</p>
 			</details>
 			<form method="post" action="" id="extend-theme-form">
-				<p><?php esc_html_e( 'Describe the extension you would like to make to the theme using its hooks:', 'wp-autoplugin' ); ?></p>
+				<p><?php esc_html_e( 'Describe the extension you would like to make to the theme:', 'wp-autoplugin' ); ?></p>
 				<textarea name="theme_issue" id="theme_issue" rows="10" cols="100"></textarea>
 				<?php submit_button( esc_html__( 'Generate Extension Plan', 'wp-autoplugin' ), 'primary', 'generate_plan' ); ?>
 				<input type="hidden" name="theme_slug" value="<?php echo esc_attr( $theme_slug ); ?>" id="theme_slug" />

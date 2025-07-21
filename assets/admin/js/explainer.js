@@ -116,7 +116,7 @@
                 return;
             }
 
-            explanationText = response.data;
+            explanationText = response.data.explanation || response.data; // Handle new format with token_usage
             currentState = 'showExplanation';
             wpAutoPluginCommon.handleStepChange(steps, 'showExplanation', onShowStep);
         } catch (error) {

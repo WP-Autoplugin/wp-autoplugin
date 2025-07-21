@@ -82,7 +82,7 @@
                 return;
             }
 
-            pluginPlan = response.data;
+            pluginPlan = response.data.plan_data || response.data; // Handle new format with token_usage
             currentState = 'reviewPlan';
             wpAutoPluginCommon.handleStepChange(steps, 'reviewPlan', onShowStep);
         } catch (error) {

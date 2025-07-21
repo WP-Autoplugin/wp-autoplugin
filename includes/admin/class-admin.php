@@ -26,7 +26,7 @@ class Admin {
 	 *
 	 * @var API
 	 */
-	private $ai_api;
+	public $ai_api;
 
 	/**
 	 * The built-in models.
@@ -113,7 +113,7 @@ class Admin {
 		// Instantiate other admin components (each handles its own hooks).
 		new Admin\Settings();
 		new Admin\Scripts();
-		new Admin\Ajax( $this->ai_api );
+		new Admin\Ajax( $this );
 		new Admin\Bulk_Actions();
 		new Admin\Notices();
 
@@ -277,6 +277,92 @@ class Admin {
 		}
 
 		return $api;
+	}
+
+	/**
+	 * Get the planner model or fall back to default model.
+	 *
+	 * @return string
+	 */
+	public function get_planner_model() {
+		$planner_model = get_option( 'wp_autoplugin_planner_model' );
+		return ! empty( $planner_model ) ? $planner_model : get_option( 'wp_autoplugin_model' );
+	}
+
+	/**
+	 * Get the coder model or fall back to default model.
+	 *
+	 * @return string
+	 */
+	public function get_coder_model() {
+		$coder_model = get_option( 'wp_autoplugin_coder_model' );
+		return ! empty( $coder_model ) ? $coder_model : get_option( 'wp_autoplugin_model' );
+	}
+
+	/**
+	 * Get the reviewer model or fall back to default model.
+	 *
+	 * @return string
+	 */
+	public function get_reviewer_model() {
+		$reviewer_model = get_option( 'wp_autoplugin_reviewer_model' );
+		return ! empty( $reviewer_model ) ? $reviewer_model : get_option( 'wp_autoplugin_model' );
+	}
+
+	/**
+	 * Get the API object for planner tasks.
+	 *
+	 * @return API|null
+	 */
+	public function get_planner_api() {
+		return $this->get_api( $this->get_planner_model() );
+	}
+
+	/**
+	 * Get the API object for coder tasks.
+	 *
+	 * @return API|null
+	 */
+	public function get_coder_api() {
+		return $this->get_api( $this->get_coder_model() );
+	}
+
+	/**
+	 * Get the API object for reviewer tasks.
+	 *
+	 * @return API|null
+	 */
+	public function get_reviewer_api() {
+		return $this->get_api( $this->get_reviewer_model() );
+	}
+
+	/**
+	 * Get the model that will be used for the next task based on current page.
+	 *
+	 * @return string
+	 */
+	public function get_next_task_model() {
+		$screen = get_current_screen();
+		if ( ! $screen ) {
+			return get_option( 'wp_autoplugin_model' );
+		}
+
+		switch ( $screen->id ) {
+			case 'wp-autoplugin_page_wp-autoplugin-generate':
+				return $this->get_planner_model();
+			case 'admin_page_wp-autoplugin-fix':
+				return $this->get_planner_model();
+			case 'admin_page_wp-autoplugin-extend':
+				return $this->get_planner_model();
+			case 'admin_page_wp-autoplugin-extend-hooks':
+				return $this->get_planner_model();
+			case 'admin_page_wp-autoplugin-extend-theme':
+				return $this->get_planner_model();
+			case 'admin_page_wp-autoplugin-explain':
+				return $this->get_reviewer_model();
+			default:
+				return get_option( 'wp_autoplugin_model' );
+		}
 	}
 
 	/**
@@ -519,7 +605,34 @@ class Admin {
 	 * @return void
 	 */
 	public function output_admin_footer() {
-		$current_model = get_option( 'wp_autoplugin_model' );
+		$screen = get_current_screen();
+		$default_step = 'default';
+		
+		// Set default step based on page context
+		if ( $screen ) {
+			switch ( $screen->id ) {
+				case 'wp-autoplugin_page_wp-autoplugin-generate':
+					$default_step = 'generatePlan';
+					break;
+				case 'admin_page_wp-autoplugin-fix':
+					$default_step = 'generatePlan';
+					break;
+				case 'admin_page_wp-autoplugin-extend':
+					$default_step = 'generatePlan';
+					break;
+				case 'admin_page_wp-autoplugin-extend-hooks':
+					$default_step = 'generatePlan';
+					break;
+				case 'admin_page_wp-autoplugin-extend-theme':
+					$default_step = 'generatePlan';
+					break;
+				case 'admin_page_wp-autoplugin-explain':
+					$default_step = 'askQuestion';
+					break;
+			}
+		}
+		
+		$next_task_model = $this->get_next_task_model();
 		?>
 		<div id="wp-autoplugin-footer">
 			<p>
@@ -544,87 +657,276 @@ class Admin {
 						);
 						printf(
 							$translated_model_string, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- It's escaped just above.
-							'<code>' . esc_html( $current_model ) . '</code>'
+							'<code>' . esc_html( $next_task_model ) . '</code>'
 						);
 						?>
 						<a href="#" id="change-model-link" style="text-decoration: none;"><?php esc_html_e( '(Change)', 'wp-autoplugin' ); ?></a>
 					</span>
-					<span id="model-change-form" style="display: none;">
-						<select id="model-selector" style="width: 200px;">
-							<?php
-							// Loop through built-in models.
-							foreach ( self::$models as $provider => $models ) {
-								echo '<optgroup label="' . esc_attr( $provider ) . '">';
-								foreach ( $models as $model_id => $model_name ) {
-									printf(
-										'<option value="%s" %s>%s</option>',
-										esc_attr( $model_id ),
-										selected( $current_model, $model_id, false ),
-										esc_html( $model_name )
-									);
-								}
-								echo '</optgroup>';
-							}
-
-							// Add custom models if any.
-							$custom_models = get_option( 'wp_autoplugin_custom_models', [] );
-							if ( ! empty( $custom_models ) ) {
-								echo '<optgroup label="' . esc_attr__( 'Custom Models', 'wp-autoplugin' ) . '">';
-								foreach ( $custom_models as $custom_model ) {
-									printf(
-										'<option value="%s" %s>%s</option>',
-										esc_attr( $custom_model['name'] ),
-										selected( $current_model, $custom_model['name'], false ),
-										esc_html( $custom_model['name'] )
-									);
-								}
-								echo '</optgroup>';
-							}
-							?>
-						</select>
-						<button id="save-model-change" class="button button-small"><?php esc_html_e( 'Save', 'wp-autoplugin' ); ?></button>
-						<button id="cancel-model-change" class="button button-small"><?php esc_html_e( 'Cancel', 'wp-autoplugin' ); ?></button>
-					</span>
 				</span>
 			</p>
 		</div>
+
+		<!-- Model Selection Modal -->
+		<div id="model-selection-modal" style="display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);">
+			<div style="background-color: #fefefe; margin: 10% auto; padding: 20px; border: 1px solid #888; width: 500px; max-width: 90%; border-radius: 4px;">
+				<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+					<h3 style="margin: 0;"><?php esc_html_e( 'Select Models', 'wp-autoplugin' ); ?></h3>
+					<span id="close-modal" style="color: #aaa; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
+				</div>
+				
+				<div style="margin-bottom: 15px;">
+					<label for="modal-default-model" style="display: block; font-weight: bold; margin-bottom: 5px;"><?php esc_html_e( 'Default Model:', 'wp-autoplugin' ); ?></label>
+					<select id="modal-default-model" style="width: 100%;">
+						<?php
+						foreach ( self::$models as $provider => $models ) {
+							echo '<optgroup label="' . esc_attr( $provider ) . '">';
+							foreach ( $models as $model_id => $model_name ) {
+								printf(
+									'<option value="%s" %s>%s</option>',
+									esc_attr( $model_id ),
+									selected( get_option( 'wp_autoplugin_model' ), $model_id, false ),
+									esc_html( $model_name )
+								);
+							}
+							echo '</optgroup>';
+						}
+
+						$custom_models = get_option( 'wp_autoplugin_custom_models', [] );
+						if ( ! empty( $custom_models ) ) {
+							echo '<optgroup label="' . esc_attr__( 'Custom Models', 'wp-autoplugin' ) . '">';
+							foreach ( $custom_models as $custom_model ) {
+								printf(
+									'<option value="%s" %s>%s</option>',
+									esc_attr( $custom_model['name'] ),
+									selected( get_option( 'wp_autoplugin_model' ), $custom_model['name'], false ),
+									esc_html( $custom_model['name'] )
+								);
+							}
+							echo '</optgroup>';
+						}
+						?>
+					</select>
+				</div>
+
+				<div style="margin-bottom: 15px;">
+					<label for="modal-planner-model" style="display: block; font-weight: bold; margin-bottom: 5px;"><?php esc_html_e( 'Planner Model:', 'wp-autoplugin' ); ?></label>
+					<select id="modal-planner-model" style="width: 100%;">
+						<option value="" <?php selected( get_option( 'wp_autoplugin_planner_model' ), '', false ); ?>><?php esc_html_e( 'Use Default Model', 'wp-autoplugin' ); ?></option>
+						<?php
+						foreach ( self::$models as $provider => $models ) {
+							echo '<optgroup label="' . esc_attr( $provider ) . '">';
+							foreach ( $models as $model_id => $model_name ) {
+								printf(
+									'<option value="%s" %s>%s</option>',
+									esc_attr( $model_id ),
+									selected( get_option( 'wp_autoplugin_planner_model' ), $model_id, false ),
+									esc_html( $model_name )
+								);
+							}
+							echo '</optgroup>';
+						}
+
+						if ( ! empty( $custom_models ) ) {
+							echo '<optgroup label="' . esc_attr__( 'Custom Models', 'wp-autoplugin' ) . '">';
+							foreach ( $custom_models as $custom_model ) {
+								printf(
+									'<option value="%s" %s>%s</option>',
+									esc_attr( $custom_model['name'] ),
+									selected( get_option( 'wp_autoplugin_planner_model' ), $custom_model['name'], false ),
+									esc_html( $custom_model['name'] )
+								);
+							}
+							echo '</optgroup>';
+						}
+						?>
+					</select>
+				</div>
+
+				<div style="margin-bottom: 15px;">
+					<label for="modal-coder-model" style="display: block; font-weight: bold; margin-bottom: 5px;"><?php esc_html_e( 'Coder Model:', 'wp-autoplugin' ); ?></label>
+					<select id="modal-coder-model" style="width: 100%;">
+						<option value="" <?php selected( get_option( 'wp_autoplugin_coder_model' ), '', false ); ?>><?php esc_html_e( 'Use Default Model', 'wp-autoplugin' ); ?></option>
+						<?php
+						foreach ( self::$models as $provider => $models ) {
+							echo '<optgroup label="' . esc_attr( $provider ) . '">';
+							foreach ( $models as $model_id => $model_name ) {
+								printf(
+									'<option value="%s" %s>%s</option>',
+									esc_attr( $model_id ),
+									selected( get_option( 'wp_autoplugin_coder_model' ), $model_id, false ),
+									esc_html( $model_name )
+								);
+							}
+							echo '</optgroup>';
+						}
+
+						if ( ! empty( $custom_models ) ) {
+							echo '<optgroup label="' . esc_attr__( 'Custom Models', 'wp-autoplugin' ) . '">';
+							foreach ( $custom_models as $custom_model ) {
+								printf(
+									'<option value="%s" %s>%s</option>',
+									esc_attr( $custom_model['name'] ),
+									selected( get_option( 'wp_autoplugin_coder_model' ), $custom_model['name'], false ),
+									esc_html( $custom_model['name'] )
+								);
+							}
+							echo '</optgroup>';
+						}
+						?>
+					</select>
+				</div>
+
+				<div style="margin-bottom: 20px;">
+					<label for="modal-reviewer-model" style="display: block; font-weight: bold; margin-bottom: 5px;"><?php esc_html_e( 'Reviewer Model:', 'wp-autoplugin' ); ?></label>
+					<select id="modal-reviewer-model" style="width: 100%;">
+						<option value="" <?php selected( get_option( 'wp_autoplugin_reviewer_model' ), '', false ); ?>><?php esc_html_e( 'Use Default Model', 'wp-autoplugin' ); ?></option>
+						<?php
+						foreach ( self::$models as $provider => $models ) {
+							echo '<optgroup label="' . esc_attr( $provider ) . '">';
+							foreach ( $models as $model_id => $model_name ) {
+								printf(
+									'<option value="%s" %s>%s</option>',
+									esc_attr( $model_id ),
+									selected( get_option( 'wp_autoplugin_reviewer_model' ), $model_id, false ),
+									esc_html( $model_name )
+								);
+							}
+							echo '</optgroup>';
+						}
+
+						if ( ! empty( $custom_models ) ) {
+							echo '<optgroup label="' . esc_attr__( 'Custom Models', 'wp-autoplugin' ) . '">';
+							foreach ( $custom_models as $custom_model ) {
+								printf(
+									'<option value="%s" %s>%s</option>',
+									esc_attr( $custom_model['name'] ),
+									selected( get_option( 'wp_autoplugin_reviewer_model' ), $custom_model['name'], false ),
+									esc_html( $custom_model['name'] )
+								);
+							}
+							echo '</optgroup>';
+						}
+						?>
+					</select>
+				</div>
+
+				<div style="text-align: right;">
+					<button id="save-models" class="button button-primary"><?php esc_html_e( 'Save Models', 'wp-autoplugin' ); ?></button>
+					<button id="cancel-models" class="button" style="margin-left: 10px;"><?php esc_html_e( 'Cancel', 'wp-autoplugin' ); ?></button>
+				</div>
+			</div>
+		</div>
+
 		<script>
 		jQuery(document).ready(function($) {
+			// Store model information for dynamic updates
+			window.wpAutopluginModels = {
+				default: '<?php echo esc_js( get_option( 'wp_autoplugin_model' ) ); ?>',
+				planner: '<?php echo esc_js( $this->get_planner_model() ); ?>',
+				coder: '<?php echo esc_js( $this->get_coder_model() ); ?>',
+				reviewer: '<?php echo esc_js( $this->get_reviewer_model() ); ?>'
+			};
+			
+			// Set initial step and model
+			var defaultStep = '<?php echo esc_js( $default_step ); ?>';
+			document.body.setAttribute('data-current-step', defaultStep);
+			if (window.getModelForStep) {
+				var initialModelType = window.getModelForStep(defaultStep);
+				window.updateFooterModel(initialModelType);
+			}
+
+			// Function to update footer model display
+			window.updateFooterModel = function(modelType) {
+				var modelToShow = window.wpAutopluginModels[modelType] || window.wpAutopluginModels.default;
+				$('#model-display code').text(modelToShow);
+			};
+
+			// Function to get model type for current workflow step
+			window.getModelForStep = function(step) {
+				switch(step) {
+					case 'generatePlan':
+						return 'planner';
+
+					case 'reviewPlan':
+						return 'coder';
+
+					case 'reviewCode':
+						return 'reviewer';
+
+					case 'showExplanation':
+					case 'askQuestion':
+						return 'reviewer';
+					
+					// Default fallback
+					default:
+						return 'default';
+				}
+			};
+
+			// Show modal when change link is clicked
 			$('#change-model-link').on('click', function(e) {
 				e.preventDefault();
-				$('#model-display').hide();
-				$('#model-change-form').show();
+				$('#model-selection-modal').show();
 			});
 			
-			$('#cancel-model-change').on('click', function(e) {
-				e.preventDefault();
-				$('#model-change-form').hide();
-				$('#model-display').show();
+			// Close modal when X is clicked
+			$('#close-modal').on('click', function() {
+				$('#model-selection-modal').hide();
 			});
 			
-			$('#save-model-change').on('click', function(e) {
+			// Close modal when cancel is clicked
+			$('#cancel-models').on('click', function() {
+				$('#model-selection-modal').hide();
+			});
+			
+			// Close modal when clicking outside
+			$(window).on('click', function(e) {
+				if (e.target.id === 'model-selection-modal') {
+					$('#model-selection-modal').hide();
+				}
+			});
+			
+			// Save models
+			$('#save-models').on('click', function(e) {
 				e.preventDefault();
-				var newModel = $('#model-selector').val();
+				
+				var defaultModel = $('#modal-default-model').val();
+				var plannerModel = $('#modal-planner-model').val();
+				var coderModel = $('#modal-coder-model').val();
+				var reviewerModel = $('#modal-reviewer-model').val();
 				
 				$.ajax({
 					url: ajaxurl,
 					type: 'POST',
 					data: {
-						action: 'wp_autoplugin_change_model',
+						action: 'wp_autoplugin_change_models',
 						nonce: '<?php echo wp_create_nonce( 'wp_autoplugin_nonce' ); ?>',
-						model: newModel
+						default_model: defaultModel,
+						planner_model: plannerModel,
+						coder_model: coderModel,
+						reviewer_model: reviewerModel
 					},
 					success: function(response) {
 						if (response.success) {
-							$('#model-display code').text(newModel);
-							$('#model-change-form').hide();
-							$('#model-display').show();
+							// Update stored models and refresh display
+							window.wpAutopluginModels.default = defaultModel;
+							window.wpAutopluginModels.planner = plannerModel || defaultModel;
+							window.wpAutopluginModels.coder = coderModel || defaultModel;
+							window.wpAutopluginModels.reviewer = reviewerModel || defaultModel;
+							
+							// Hide modal
+							$('#model-selection-modal').hide();
+							
+							// Update footer display based on current step
+							var currentStep = $('body').data('current-step') || 'default';
+							var modelType = window.getModelForStep(currentStep);
+							window.updateFooterModel(modelType);
 						} else {
-							alert(response.data.message || '<?php esc_html_e( 'Failed to change model.', 'wp-autoplugin' ); ?>');
+							alert(response.data.message || '<?php esc_html_e( 'Failed to save models.', 'wp-autoplugin' ); ?>');
 						}
 					},
 					error: function() {
-						alert('<?php esc_html_e( 'An error occurred while changing the model.', 'wp-autoplugin' ); ?>');
+						alert('<?php esc_html_e( 'An error occurred while saving models.', 'wp-autoplugin' ); ?>');
 					}
 				});
 			});

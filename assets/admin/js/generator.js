@@ -89,10 +89,17 @@
                 return;
             }
 
-            pluginPlan = response.data;
+            pluginPlan = response.data.plan || response.data; // Handle new format with token_usage
             pluginMode = pluginPlan.project_structure ? 'complex' : 'simple';
             if (pluginMode === 'complex') {
                 projectStructure = pluginPlan.project_structure;
+            }
+            
+            // Update token usage if provided
+            if (response.data.token_usage) {
+                totalTokenUsage.input_tokens += response.data.token_usage.input_tokens || 0;
+                totalTokenUsage.output_tokens += response.data.token_usage.output_tokens || 0;
+                updateTokenDisplay();
             }
             currentState = 'reviewPlan';
             wpAutoPluginCommon.handleStepChange(steps, 'reviewPlan', onShowStep);
@@ -149,7 +156,14 @@
                     return;
                 }
 
-                pluginCode = response.data;
+                pluginCode = response.data.code || response.data; // Handle new format with token_usage
+                
+                // Update token usage if provided
+                if (response.data.token_usage) {
+                    totalTokenUsage.input_tokens += response.data.token_usage.input_tokens || 0;
+                    totalTokenUsage.output_tokens += response.data.token_usage.output_tokens || 0;
+                    updateTokenDisplay();
+                }
                 currentState = 'reviewCode';
                 wpAutoPluginCommon.handleStepChange(steps, 'reviewCode', onShowStep);
             } catch (error) {

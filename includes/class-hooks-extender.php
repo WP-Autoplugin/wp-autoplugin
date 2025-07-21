@@ -140,8 +140,13 @@ class Hooks_Extender {
 \n";
 		}
 
+		if ( empty( $hooks_list ) ) {
+			$hooks_list = esc_html__( '(No custom hooks found in the theme code.)', 'wp-autoplugin' );
+		}
+
 		$prompt = <<<PROMPT
-			I want to extend a WordPress theme ('$original_theme_name') using its available hooks. Your task is to create a plan for this extension. Here are the theme hooks we can use:
+			I want to extend a WordPress theme ('$original_theme_name'), preferably using hooks available in the theme.
+			Your task is to create a plan for this extension. Here are the theme hooks we can use:
 
 			$hooks_list
 

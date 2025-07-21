@@ -30,12 +30,20 @@ class Ajax {
 	private $ai_api;
 
 	/**
-	 * Constructor sets the AI API and hooks into AJAX actions.
+	 * The Admin object for accessing specialized model APIs.
 	 *
-	 * @param API $ai_api The AI API instance.
+	 * @var \WP_Autoplugin\Admin
 	 */
-	public function __construct( $ai_api ) {
-		$this->ai_api = $ai_api;
+	private $admin;
+
+	/**
+	 * Constructor sets the Admin instance and hooks into AJAX actions.
+	 *
+	 * @param \WP_Autoplugin\Admin $admin The Admin instance.
+	 */
+	public function __construct( $admin ) {
+		$this->admin  = $admin;
+		$this->ai_api = $admin->ai_api;
 
 		// Register all needed AJAX actions.
 		$actions = [
@@ -70,6 +78,7 @@ class Ajax {
 		add_action( 'wp_ajax_wp_autoplugin_add_model', [ $this, 'ajax_add_model' ] );
 		add_action( 'wp_ajax_wp_autoplugin_remove_model', [ $this, 'ajax_remove_model' ] );
 		add_action( 'wp_ajax_wp_autoplugin_change_model', [ $this, 'ajax_change_model' ] );
+		add_action( 'wp_ajax_wp_autoplugin_change_models', [ $this, 'ajax_change_models' ] );
 	}
 
 	/**
@@ -103,20 +112,27 @@ class Ajax {
 			? sanitize_text_field( wp_unslash( $_POST['plugin_description'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
 			: '';
 
-		$generator = new Plugin_Generator( $this->ai_api );
+		$planner_api = $this->admin->get_planner_api();
+		$generator = new Plugin_Generator( $planner_api );
 		$plan_data = $generator->generate_plugin_plan( $plan );
 		if ( is_wp_error( $plan_data ) ) {
 			wp_send_json_error( $plan_data->get_error_message() );
 		}
 
 		// Strip out any code block fences like ```json ... ```.
-		$plan_data  = preg_replace( '/^```(json)\n(.*)\n```$/s', '$2', $plan_data );
+		$plan_data  = preg_replace( '/^```(json)?\n(.*)\n```$/s', '$2', $plan_data );
 		$plan_array = json_decode( $plan_data, true );
 		if ( ! $plan_array ) {
 			wp_send_json_error( esc_html__( 'Failed to decode the generated plan: ', 'wp-autoplugin' ) . $plan_data );
 		}
 
-		wp_send_json_success( $plan_array );
+		// Get token usage from the actual API that was used
+		$token_usage = $planner_api->get_last_token_usage();
+
+		wp_send_json_success( [
+			'plan' => $plan_array,
+			'token_usage' => $token_usage,
+		] );
 	}
 
 	/**
@@ -129,7 +145,8 @@ class Ajax {
 			? sanitize_text_field( wp_unslash( $_POST['plugin_plan'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
 			: '';
 
-		$generator = new Plugin_Generator( $this->ai_api );
+		$coder_api = $this->admin->get_coder_api();
+		$generator = new Plugin_Generator( $coder_api );
 		$code      = $generator->generate_plugin_code( $description );
 		if ( is_wp_error( $code ) ) {
 			wp_send_json_error( $code->get_error_message() );
@@ -138,7 +155,13 @@ class Ajax {
 		// Strip out code fences like ```php ... ```.
 		$code = preg_replace( '/^```(php)\n(.*)\n```$/s', '$2', $code );
 
-		wp_send_json_success( $code );
+		// Get token usage from the actual API that was used
+		$token_usage = $coder_api->get_last_token_usage();
+
+		wp_send_json_success( [
+			'code' => $code,
+			'token_usage' => $token_usage,
+		] );
 	}
 
 	/**
@@ -167,7 +190,8 @@ class Ajax {
 		}
 
 		$file_info = $files[ $file_index ];
-		$generator = new Plugin_Generator( $this->ai_api );
+		$coder_api = $this->admin->get_coder_api();
+		$generator = new Plugin_Generator( $coder_api );
 		$file_content = $generator->generate_plugin_file( $file_info, wp_json_encode( $plugin_plan_array ), $project_structure_array, $generated_files_array );
 
 		if ( is_wp_error( $file_content ) ) {
@@ -184,8 +208,8 @@ class Ajax {
 			$file_content = preg_replace( '/^```(js|javascript)\n(.*)\n```$/s', '$2', $file_content );
 		}
 
-		// Get token usage from the AI API
-		$token_usage = $this->ai_api->get_last_token_usage();
+		// Get token usage from the actual API that was used
+		$token_usage = $coder_api->get_last_token_usage();
 
 		wp_send_json_success( [
 			'file_path' => $file_info['path'],
@@ -288,13 +312,20 @@ class Ajax {
 			: '';
 		$check_other_issues = isset( $_POST['check_other_issues'] ) ? (bool) $_POST['check_other_issues'] : true; // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
 
-		$fixer     = new Plugin_Fixer( $this->ai_api );
+		$reviewer_api = $this->admin->get_reviewer_api();
+		$fixer     = new Plugin_Fixer( $reviewer_api );
 		$plan_data = $fixer->identify_issue( $plugin_code, $problem, $check_other_issues );
 		if ( is_wp_error( $plan_data ) ) {
 			wp_send_json_error( $plan_data->get_error_message() );
 		}
 
-		wp_send_json_success( $plan_data );
+		// Get token usage from the actual API that was used
+		$token_usage = $reviewer_api->get_last_token_usage();
+
+		wp_send_json_success( [
+			'plan_data' => $plan_data,
+			'token_usage' => $token_usage,
+		] );
 	}
 
 	/**
@@ -320,13 +351,20 @@ class Ajax {
 			? sanitize_text_field( wp_unslash( $_POST['plugin_plan'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
 			: '';
 
-		$fixer = new Plugin_Fixer( $this->ai_api );
+		$coder_api = $this->admin->get_coder_api();
+		$fixer = new Plugin_Fixer( $coder_api );
 		$code  = $fixer->fix_plugin( $plugin_code, $problem, $ai_description );
 
 		// Strip out code fences like ```php ... ```.
 		$code = preg_replace( '/^```(php)\n(.*)\n```$/s', '$2', $code );
 
-		wp_send_json_success( $code );
+		// Get token usage from the actual API that was used
+		$token_usage = $coder_api->get_last_token_usage();
+
+		wp_send_json_success( [
+			'code' => $code,
+			'token_usage' => $token_usage,
+		] );
 	}
 
 	/**
@@ -375,13 +413,20 @@ class Ajax {
 			? sanitize_text_field( wp_unslash( $_POST['plugin_issue'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
 			: '';
 
-		$extender  = new Plugin_Extender( $this->ai_api );
+		$planner_api = $this->admin->get_planner_api();
+		$extender  = new Plugin_Extender( $planner_api );
 		$plan_data = $extender->plan_plugin_extension( $plugin_code, $problem );
 		if ( is_wp_error( $plan_data ) ) {
 			wp_send_json_error( $plan_data->get_error_message() );
 		}
 
-		wp_send_json_success( $plan_data );
+		// Get token usage from the actual API that was used
+		$token_usage = $planner_api->get_last_token_usage();
+
+		wp_send_json_success( [
+			'plan_data' => $plan_data,
+			'token_usage' => $token_usage,
+		] );
 	}
 
 	/**
@@ -407,10 +452,17 @@ class Ajax {
 			? sanitize_text_field( wp_unslash( $_POST['plugin_plan'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
 			: '';
 
-		$extender = new Plugin_Extender( $this->ai_api );
+		$coder_api = $this->admin->get_coder_api();
+		$extender = new Plugin_Extender( $coder_api );
 		$code     = $extender->extend_plugin( $plugin_code, $problem, $ai_description );
 
-		wp_send_json_success( $code );
+		// Get token usage from the actual API that was used
+		$token_usage = $coder_api->get_last_token_usage();
+
+		wp_send_json_success( [
+			'code' => $code,
+			'token_usage' => $token_usage,
+		] );
 	}
 
 	/**
@@ -463,7 +515,8 @@ class Ajax {
 			? sanitize_text_field( wp_unslash( $_POST['explain_focus'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
 			: 'general';
 
-		$explainer = new \WP_Autoplugin\Plugin_Explainer( $this->ai_api );
+		$reviewer_api = $this->admin->get_reviewer_api();
+		$explainer = new \WP_Autoplugin\Plugin_Explainer( $reviewer_api );
 		if ( ! empty( $question ) ) {
 			$explanation = $explainer->answer_plugin_question( $plugin_code, $question );
 		} elseif ( $focus !== 'general' ) {
@@ -476,7 +529,13 @@ class Ajax {
 			wp_send_json_error( $explanation->get_error_message() );
 		}
 
-		wp_send_json_success( $explanation );
+		// Get token usage from the actual API that was used
+		$token_usage = $reviewer_api->get_last_token_usage();
+
+		wp_send_json_success( [
+			'explanation' => $explanation,
+			'token_usage' => $token_usage,
+		] );
 	}
 
 	/**
@@ -580,20 +639,27 @@ class Ajax {
 		$original_plugin_name = $plugin_data['Name'];
 
 		$plugin_changes = sanitize_text_field( wp_unslash( $_POST['plugin_issue'] ) );
-		$extender       = new \WP_Autoplugin\Hooks_Extender( $this->ai_api );
+		$planner_api = $this->admin->get_planner_api();
+		$extender       = new \WP_Autoplugin\Hooks_Extender( $planner_api );
 		$plan_data      = $extender->plan_plugin_hooks_extension( $original_plugin_name, $hooks, $plugin_changes );
 		if ( is_wp_error( $plan_data ) ) {
 			wp_send_json_error( $plan_data->get_error_message() );
 		}
 
 		// Strip out any code block fences like ```json ... ```.
-		$plan_data  = preg_replace( '/^```(json)\n(.*)\n```$/s', '$2', $plan_data );
+		$plan_data  = preg_replace( '/^```(json)?\n(.*)\n```$/s', '$2', $plan_data );
 		$plan_array = json_decode( $plan_data, true );
 		if ( ! $plan_array ) {
 			wp_send_json_error( esc_html__( 'Failed to decode the generated plan.', 'wp-autoplugin' ) );
 		}
 
-		wp_send_json_success( $plan_array );
+		// Get token usage from the actual API that was used
+		$token_usage = $planner_api->get_last_token_usage();
+
+		wp_send_json_success( [
+			'plan' => $plan_array,
+			'token_usage' => $token_usage,
+		] );
 	}
 
 	/**
@@ -630,7 +696,8 @@ class Ajax {
 		$plugin_data          = get_plugin_data( WP_CONTENT_DIR . '/plugins/' . $plugin_file );
 		$original_plugin_name = $plugin_data['Name'];
 
-		$extender = new \WP_Autoplugin\Hooks_Extender( $this->ai_api );
+		$coder_api = $this->admin->get_coder_api();
+		$extender = new \WP_Autoplugin\Hooks_Extender( $coder_api );
 		$code     = $extender->generate_hooks_extension_code( $original_plugin_name, $hooks, $ai_plan, $plugin_name );
 
 		if ( is_wp_error( $code ) ) {
@@ -640,7 +707,13 @@ class Ajax {
 		// Strip out code fences like ```php ... ```.
 		$code = preg_replace( '/^```(php)\n(.*)\n```$/s', '$2', $code );
 
-		wp_send_json_success( $code );
+		// Get token usage from the actual API that was used
+		$token_usage = $coder_api->get_last_token_usage();
+
+		wp_send_json_success( [
+			'code' => $code,
+			'token_usage' => $token_usage,
+		] );
 	}
 
 	/**
@@ -715,6 +788,67 @@ class Ajax {
 	}
 
 	/**
+	 * AJAX handler for changing multiple models at once.
+	 *
+	 * @return void
+	 */
+	public function ajax_change_models() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( [ 'message' => esc_html__( 'You are not allowed to access this page.', 'wp-autoplugin' ) ] );
+		}
+
+		if ( ! check_ajax_referer( 'wp_autoplugin_nonce', 'nonce', false ) ) {
+			wp_send_json_error( [ 'message' => esc_html__( 'Security check failed.', 'wp-autoplugin' ) ] );
+		}
+
+		$default_model = isset( $_POST['default_model'] ) ? sanitize_text_field( wp_unslash( $_POST['default_model'] ) ) : '';
+		$planner_model = isset( $_POST['planner_model'] ) ? sanitize_text_field( wp_unslash( $_POST['planner_model'] ) ) : '';
+		$coder_model   = isset( $_POST['coder_model'] ) ? sanitize_text_field( wp_unslash( $_POST['coder_model'] ) ) : '';
+		$reviewer_model = isset( $_POST['reviewer_model'] ) ? sanitize_text_field( wp_unslash( $_POST['reviewer_model'] ) ) : '';
+
+		if ( empty( $default_model ) ) {
+			wp_send_json_error( [ 'message' => esc_html__( 'Default model is required.', 'wp-autoplugin' ) ] );
+		}
+
+		// Validate all non-empty models.
+		$models_to_validate = array_filter( [ $default_model, $planner_model, $coder_model, $reviewer_model ] );
+		foreach ( $models_to_validate as $model ) {
+			$valid_model = false;
+
+			// Check built-in models.
+			foreach ( \WP_Autoplugin\Admin::$models as $provider => $models ) {
+				if ( array_key_exists( $model, $models ) ) {
+					$valid_model = true;
+					break;
+				}
+			}
+
+			// Check custom models.
+			if ( ! $valid_model ) {
+				$custom_models = get_option( 'wp_autoplugin_custom_models', [] );
+				foreach ( $custom_models as $custom_model ) {
+					if ( $custom_model['name'] === $model ) {
+						$valid_model = true;
+						break;
+					}
+				}
+			}
+
+			if ( ! $valid_model ) {
+				wp_send_json_error( [ 'message' => sprintf( esc_html__( 'Invalid model specified: %s', 'wp-autoplugin' ), $model ) ] );
+			}
+		}
+
+		// Update all model settings.
+		update_option( 'wp_autoplugin_model', $default_model );
+		update_option( 'wp_autoplugin_planner_model', $planner_model );
+		update_option( 'wp_autoplugin_coder_model', $coder_model );
+		update_option( 'wp_autoplugin_reviewer_model', $reviewer_model );
+
+		wp_send_json_success( [ 'message' => esc_html__( 'Models updated successfully.', 'wp-autoplugin' ) ] );
+	}
+
+	/**
 	 * AJAX handler for extracting theme hooks.
 	 *
 	 * @return void
@@ -760,20 +894,27 @@ class Ajax {
 		$original_theme_name  = $theme_data->get( 'Name' );
 
 		$theme_changes = sanitize_text_field( wp_unslash( $_POST['theme_issue'] ) );
-		$extender      = new \WP_Autoplugin\Hooks_Extender( $this->ai_api );
+		$planner_api = $this->admin->get_planner_api();
+		$extender      = new \WP_Autoplugin\Hooks_Extender( $planner_api );
 		$plan_data     = $extender->plan_theme_hooks_extension( $original_theme_name, $hooks, $theme_changes );
 		if ( is_wp_error( $plan_data ) ) {
 			wp_send_json_error( $plan_data->get_error_message() );
 		}
 
 		// Strip out any code block fences like ```json ... ```.
-		$plan_data  = preg_replace( '/^```(json)\n(.*)\n```$/s', '$2', $plan_data );
+		$plan_data  = preg_replace( '/^```(json)?\n(.*)\n```$/s', '$2', $plan_data );
 		$plan_array = json_decode( $plan_data, true );
 		if ( ! $plan_array ) {
 			wp_send_json_error( esc_html__( 'Failed to decode the generated plan.', 'wp-autoplugin' ) );
 		}
 
-		wp_send_json_success( $plan_array );
+		// Get token usage from the actual API that was used
+		$token_usage = $planner_api->get_last_token_usage();
+
+		wp_send_json_success( [
+			'plan' => $plan_array,
+			'token_usage' => $token_usage,
+		] );
 	}
 
 	/**
@@ -810,7 +951,8 @@ class Ajax {
 		$theme_data          = wp_get_theme( $theme_slug );
 		$original_theme_name = $theme_data->get( 'Name' );
 
-		$extender = new \WP_Autoplugin\Hooks_Extender( $this->ai_api );
+		$coder_api = $this->admin->get_coder_api();
+		$extender = new \WP_Autoplugin\Hooks_Extender( $coder_api );
 		$code     = $extender->generate_theme_extension_code( $original_theme_name, $hooks, $ai_plan, $plugin_name );
 
 		if ( is_wp_error( $code ) ) {
@@ -820,7 +962,13 @@ class Ajax {
 		// Strip out code fences like ```php ... ```.
 		$code = preg_replace( '/^```(php)\n(.*)\n```$/s', '$2', $code );
 
-		wp_send_json_success( $code );
+		// Get token usage from the actual API that was used
+		$token_usage = $coder_api->get_last_token_usage();
+
+		wp_send_json_success( [
+			'code' => $code,
+			'token_usage' => $token_usage,
+		] );
 	}
 
 	/**
@@ -833,7 +981,7 @@ class Ajax {
 		$project_structure = isset( $_POST['project_structure'] ) ? wp_unslash( $_POST['project_structure'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Cannot sanitize JSON data. Nonce verification is done in the parent method.
 		$generated_files = isset( $_POST['generated_files'] ) ? wp_unslash( $_POST['generated_files'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Cannot sanitize JSON data. Nonce verification is done in the parent method.
 
-		// Decode JSON data
+		// Decode JSON data.
 		$project_structure_array = json_decode( $project_structure, true );
 		$generated_files_array = json_decode( $generated_files, true );
 
@@ -841,7 +989,8 @@ class Ajax {
 			wp_send_json_error( esc_html__( 'Invalid input data.', 'wp-autoplugin' ) );
 		}
 
-		$generator = new Plugin_Generator( $this->ai_api );
+		$reviewer_api = $this->admin->get_reviewer_api();
+		$generator = new Plugin_Generator( $reviewer_api );
 		$review_result = $generator->review_generated_code( $plugin_plan, $project_structure_array, $generated_files_array );
 
 		if ( is_wp_error( $review_result ) ) {
@@ -849,14 +998,14 @@ class Ajax {
 		}
 
 		// Strip out any code block fences like ```json ... ```.
-		$review_result = preg_replace( '/^```(json)\n(.*)\n```$/s', '$2', $review_result );
+		$review_result = preg_replace( '/^```(json)?\n(.*)\n```$/s', '$2', $review_result );
 		$review_result = json_decode( $review_result, true );
 		if ( ! $review_result ) {
 			wp_send_json_error( esc_html__( 'Failed to decode the review result.', 'wp-autoplugin' ) );
 		}
 
-		// Get token usage from the AI API
-		$token_usage = $this->ai_api->get_last_token_usage();
+		// Get token usage from the actual API that was used
+		$token_usage = $reviewer_api->get_last_token_usage();
 
 		wp_send_json_success( [
 			'review_data' => $review_result,
