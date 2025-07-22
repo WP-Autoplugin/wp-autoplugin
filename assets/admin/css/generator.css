@@ -7,6 +7,10 @@
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
+.wrap.wp-autoplugin {
+    margin: 0;
+}
+
 .wrap.wp-autoplugin h1 {
     color: #23282d;
     font-size: 24px;

@@ -92,29 +92,46 @@ if ( ! defined( 'ABSPATH' ) ) {
 							?>
 						</optgroup>
 					</select>
+					<p>
+						<button type="button" id="toggle-specialized-models" class="button-link"><?php esc_html_e( 'Show specialized model settings', 'wp-autoplugin' ); ?> <span class="dashicons dashicons-arrow-down-alt2"></span></button>
+					</p>
 				</td>
 			</tr>
-			<tr valign="top">
-				<th scope="row"><?php esc_html_e( 'Planner Model', 'wp-autoplugin' ); ?></th>
-				<td>
-					<?php render_model_dropdown( 'wp_autoplugin_planner_model', get_option( 'wp_autoplugin_planner_model' ) ); ?>
-					<p class="description"><?php esc_html_e( 'Used for planning plugin extensions and analyzing hooks. Falls back to Default Model if not set.', 'wp-autoplugin' ); ?></p>
-				</td>
-			</tr>
-			<tr valign="top">
-				<th scope="row"><?php esc_html_e( 'Coder Model', 'wp-autoplugin' ); ?></th>
-				<td>
-					<?php render_model_dropdown( 'wp_autoplugin_coder_model', get_option( 'wp_autoplugin_coder_model' ) ); ?>
-					<p class="description"><?php esc_html_e( 'Used for generating and fixing code. Falls back to Default Model if not set.', 'wp-autoplugin' ); ?></p>
-				</td>
-			</tr>
-			<tr valign="top">
-				<th scope="row"><?php esc_html_e( 'Reviewer Model', 'wp-autoplugin' ); ?></th>
-				<td>
-					<?php render_model_dropdown( 'wp_autoplugin_reviewer_model', get_option( 'wp_autoplugin_reviewer_model' ) ); ?>
-					<p class="description"><?php esc_html_e( 'Used for explaining code and reviewing generated plugins. Falls back to Default Model if not set.', 'wp-autoplugin' ); ?></p>
-				</td>
-			</tr>
+		</table>
+		
+		<?php
+		// Check if any specialized model is set.
+		$planner_model = get_option( 'wp_autoplugin_planner_model' );
+		$coder_model = get_option( 'wp_autoplugin_coder_model' );
+		$reviewer_model = get_option( 'wp_autoplugin_reviewer_model' );
+		$has_specialized_models = ! empty( $planner_model ) || ! empty( $coder_model ) || ! empty( $reviewer_model );
+		?>
+		<div class="wp-autoplugin-per-step-models">
+			<table class="form-table" style="<?php echo $has_specialized_models ? '' : 'display: none;'; ?>">
+				<tr valign="top">
+					<th scope="row"><?php esc_html_e( 'Planner Model', 'wp-autoplugin' ); ?></th>
+					<td>
+						<?php render_model_dropdown( 'wp_autoplugin_planner_model', get_option( 'wp_autoplugin_planner_model' ) ); ?>
+						<p class="description"><?php esc_html_e( 'Used for planning plugin extensions and analyzing hooks. Falls back to Default Model if not set.', 'wp-autoplugin' ); ?></p>
+					</td>
+				</tr>
+				<tr valign="top">
+					<th scope="row"><?php esc_html_e( 'Coder Model', 'wp-autoplugin' ); ?></th>
+					<td>
+						<?php render_model_dropdown( 'wp_autoplugin_coder_model', get_option( 'wp_autoplugin_coder_model' ) ); ?>
+						<p class="description"><?php esc_html_e( 'Used for generating and fixing code. Falls back to Default Model if not set.', 'wp-autoplugin' ); ?></p>
+					</td>
+				</tr>
+				<tr valign="top">
+					<th scope="row"><?php esc_html_e( 'Reviewer Model', 'wp-autoplugin' ); ?></th>
+					<td>
+						<?php render_model_dropdown( 'wp_autoplugin_reviewer_model', get_option( 'wp_autoplugin_reviewer_model' ) ); ?>
+						<p class="description"><?php esc_html_e( 'Used for explaining code and reviewing generated plugins. Falls back to Default Model if not set.', 'wp-autoplugin' ); ?></p>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<table class="form-table">
 			<tr valign="top">
 				<th scope="row"><?php esc_html_e( 'Generate Plugins', 'wp-autoplugin' ); ?></th>
 				<td>
@@ -159,6 +176,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 	jQuery(document).ready(function($) {
 		let customModels = JSON.parse($('#wp_autoplugin_custom_models').val() || '[]');
 		const nonce = $('#wp_autoplugin_settings_nonce').val();
+		
+		// Toggle specialized models section
+		$('#toggle-specialized-models').on('click', function() {
+			const $section = $('.wp-autoplugin-per-step-models');
+			const $button = $(this);
+			const $icon = $button.find('.dashicons');
+			
+			if ($section.is(':visible')) {
+				$section.hide();
+				$button.html('<?php esc_html_e( 'Show specialized model settings', 'wp-autoplugin' ); ?> <span class="dashicons dashicons-arrow-down-alt2"></span>');
+			} else {
+				$section.show();
+				$button.html('<?php esc_html_e( 'Hide specialized model settings', 'wp-autoplugin' ); ?> <span class="dashicons dashicons-arrow-up-alt2"></span>');
+			}
+		});
+		
+		// Update toggle button text based on initial visibility
+		if ($('.wp-autoplugin-per-step-models').is(':visible')) {
+			$('#toggle-specialized-models').html('<?php esc_html_e( 'Hide specialized model settings', 'wp-autoplugin' ); ?> <span class="dashicons dashicons-arrow-up-alt2"></span>');
+		}
 		
 		// Later this may be moved to a wp_localize_script call
 		const wp_autoplugin_i18n = {
@@ -284,6 +321,31 @@ if ( ! defined( 'ABSPATH' ) ) {
 	});
 </script>
 <style>
+	/* Specialized Models Toggle */
+	#toggle-specialized-models {
+		margin-top: 8px;
+		display: block;
+		color: #2271b1;
+		text-decoration: none;
+		padding: 0;
+	}
+	
+	#toggle-specialized-models:focus {
+		box-shadow: none;
+		outline: none;
+	}
+	
+	#toggle-specialized-models .dashicons {
+		font-size: 16px;
+		line-height: 1.5;
+		vertical-align: middle;
+	}
+	
+	.wp-autoplugin-per-step-models h3 {
+		margin-top: 0;
+		padding-top: 0;
+	}
+	
 	/* Custom Models Section Styling */
 	#custom-models-list {
 		margin-bottom: 20px;
@@ -366,5 +428,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 		border-color: #2271b1;
 		box-shadow: 0 0 0 1px #2271b1;
 		outline: 2px solid transparent;
+	}
+
+	/* make it a box */
+	.wp-autoplugin-per-step-models {
+		background: #fff;
+		border: 1px solid #ccd0d4;
+		border-radius: 4px;
+		padding: 0 2rem;
+		margin-bottom: 15px;
 	}
 </style>

@@ -65,10 +65,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<span class="progress-text" id="progress-text"><?php esc_html_e( 'Generating files...', 'wp-autoplugin' ); ?></span>
 				</div>
 
-				<div class="token-usage-display" id="token-usage-display">
-					<span class="token-info"><?php esc_html_e( 'Tokens used:', 'wp-autoplugin' ); ?> <span id="token-count">0 input + 0 output</span></span>
-				</div>
-				
 				<div class="code-review-section" id="code-review-section" style="display: none;">
 					<div class="review-progress">
 						<div class="progress-text" id="review-progress-text"><?php esc_html_e( 'AI is reviewing the complete codebase...', 'wp-autoplugin' ); ?></div>

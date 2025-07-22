@@ -95,6 +95,76 @@ class Plugin_Installer {
 	}
 
 	/**
+	 * Remove common directory prefix from file paths.
+	 *
+	 * @param array $project_structure The project structure.
+	 * @param array $generated_files The generated files array.
+	 * @return array Array containing normalized project structure and files.
+	 */
+	private function normalize_file_paths( $project_structure, $generated_files ) {
+		if ( ! isset( $project_structure['files'] ) || empty( $project_structure['files'] ) ) {
+			return array( $project_structure, $generated_files );
+		}
+
+		$file_paths = array_column( $project_structure['files'], 'path' );
+		
+		// Find common prefix
+		$common_prefix = '';
+		if ( count( $file_paths ) > 1 ) {
+			$first_path = $file_paths[0];
+			$prefix_parts = explode( '/', $first_path );
+			
+			// Check if first part is common to all paths
+			if ( strpos( $first_path, '/' ) !== false ) {
+				$potential_prefix = $prefix_parts[0] . '/';
+				$all_have_prefix = true;
+				
+				foreach ( $file_paths as $path ) {
+					if ( strpos( $path, $potential_prefix ) !== 0 ) {
+						$all_have_prefix = false;
+						break;
+					}
+				}
+				
+				if ( $all_have_prefix ) {
+					$common_prefix = $potential_prefix;
+				}
+			}
+		}
+
+		// Remove common prefix if found
+		if ( ! empty( $common_prefix ) ) {
+			$normalized_generated_files = array();
+			
+			foreach ( $project_structure['files'] as &$file_info ) {
+				$old_path = $file_info['path'];
+				$new_path = substr( $file_info['path'], strlen( $common_prefix ) );
+				$file_info['path'] = $new_path;
+				
+				// Update generated_files keys
+				if ( isset( $generated_files[ $old_path ] ) ) {
+					$normalized_generated_files[ $new_path ] = $generated_files[ $old_path ];
+				}
+			}
+			
+			$generated_files = $normalized_generated_files;
+			
+			// Also update directories if they exist
+			if ( isset( $project_structure['directories'] ) ) {
+				foreach ( $project_structure['directories'] as &$directory ) {
+					if ( strpos( $directory, $common_prefix ) === 0 ) {
+						$directory = substr( $directory, strlen( $common_prefix ) );
+					}
+				}
+				// Remove empty directories after prefix removal
+				$project_structure['directories'] = array_filter( $project_structure['directories'] );
+			}
+		}
+
+		return array( $project_structure, $generated_files );
+	}
+
+	/**
 	 * Install a complex multi-file plugin.
 	 *
 	 * @param string $plugin_name The plugin name.
@@ -115,6 +185,9 @@ class Plugin_Installer {
 			require_once ABSPATH . 'wp-admin/includes/file.php';
 			WP_Filesystem();
 		}
+
+		// Normalize file paths to remove common directory prefix
+		list( $project_structure, $generated_files ) = $this->normalize_file_paths( $project_structure, $generated_files );
 
 		$plugin_name = sanitize_title( $plugin_name, 'wp-autoplugin-' . md5( wp_json_encode( $generated_files ) ) );
 		$plugin_dir  = WP_PLUGIN_DIR . '/' . $plugin_name . '/';

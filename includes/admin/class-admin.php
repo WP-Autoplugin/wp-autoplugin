@@ -852,7 +852,8 @@ class Admin {
 			// Global token tracking
 			window.wpAutopluginTokens = {
 				total: { input_tokens: 0, output_tokens: 0 },
-				steps: []
+				steps: [],
+				lastStepTime: new Date()
 			};
 			
 			// Set initial step and model
@@ -898,9 +899,14 @@ class Admin {
 					if (!window.wpAutopluginTokens) {
 						window.wpAutopluginTokens = {
 							total: { input_tokens: 0, output_tokens: 0 },
-							steps: []
+							steps: [],
+							lastStepTime: new Date()
 						};
 					}
+					
+					// Calculate duration since last step
+					var now = new Date();
+					var duration = Math.round((now - window.wpAutopluginTokens.lastStepTime) / 1000); // Duration in seconds
 					
 					// Add to total
 					window.wpAutopluginTokens.total.input_tokens += inputTokens;
@@ -912,8 +918,12 @@ class Admin {
 						model: modelUsed || 'Unknown Model',
 						input_tokens: inputTokens,
 						output_tokens: outputTokens,
-						timestamp: new Date().toISOString()
+						timestamp: now.toISOString(),
+						duration: duration > 0 ? duration : 1 // At least 1 second, avoid 0
 					});
+					
+					// Update last step time for next calculation
+					window.wpAutopluginTokens.lastStepTime = now;
 					
 					// Update display
 					updateTokenDisplayFromGlobal();
@@ -946,7 +956,8 @@ class Admin {
 			window.resetTokenTracking = function() {
 				window.wpAutopluginTokens = {
 					total: { input_tokens: 0, output_tokens: 0 },
-					steps: []
+					steps: [],
+					lastStepTime: new Date()
 				};
 				$('#token-display').hide();
 			};
@@ -989,6 +1000,22 @@ class Admin {
 				}
 			});
 			
+			// Function to format duration in seconds to human readable format
+			function formatDuration(seconds) {
+				if (seconds < 60) {
+					return seconds + 's';
+				} else if (seconds < 3600) {
+					var mins = Math.floor(seconds / 60);
+					var secs = seconds % 60;
+					return mins + 'm ' + secs + 's';
+				} else {
+					var hours = Math.floor(seconds / 3600);
+					var mins = Math.floor((seconds % 3600) / 60);
+					var secs = seconds % 60;
+					return hours + 'h ' + mins + 'm ' + secs + 's';
+				}
+			}
+			
 			// Function to show token breakdown
 			function showTokenBreakdown() {
 				var content = $('#token-breakdown-content');
@@ -1011,14 +1038,21 @@ class Admin {
 				html += '<div style="max-height: 300px; overflow-y: auto;">';
 				
 				steps.forEach(function(step, index) {
+					var step_label = step.step || 'Step ' + (index + 1);
+					if ( step.step === 'reviewPlan' ) {
+						step_label = 'Generate Code';
+					} else if ( step.step === 'generatePlan' ) {
+						step_label = 'Generate Plan';
+					}
+
 					html += '<div style="background: #fff; border: 1px solid #ddd; border-radius: 4px; padding: 12px; margin-bottom: 8px;">';
 					html += '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">';
 					html += '<div>';
-					html += '<span style="font-weight: 600; color: #23282d;">' + step.step + '</span>';
+					html += '<span style="font-weight: 600; color: #23282d;">' + step_label + '</span>';
 					html += '<span style="margin-left: 10px; font-size: 12px; color: #666;">Model: ' + step.model + '</span>';
 					html += '</div>';
 					html += '<div style="font-family: monospace; font-size: 12px; color: #666;">';
-					html += new Date(step.timestamp).toLocaleTimeString();
+					html += formatDuration(step.duration);
 					html += '</div>';
 					html += '</div>';
 					html += '<div style="font-family: monospace; font-size: 13px;">';
