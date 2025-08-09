@@ -57,7 +57,7 @@ class Hooks_Extender {
 		}
 
 		$prompt = <<<PROMPT
-			I want to extend a WordPress plugin ($original_plugin) using its hooks. Here are the available hooks in the plugin:
+			I want to extend a WordPress plugin ($original_plugin), preferably using the filter and action hooks available in its code. Here are the available hooks in the plugin:
 
 			$hooks_list
 			
@@ -65,7 +65,9 @@ class Hooks_Extender {
 
 			$plugin_changes
 
-			Please determine if the requested extension is technically feasible with the available hooks. If it is not feasible, explain why.
+			In addition to the provided hooks, you may also make use of core WordPress hooks (actions and filters) if needed to achieve the desired changes.
+
+			Please determine if the requested extension is technically feasible. If it is not feasible, explain why.
 
 			If feasible, provide a technical specification and development plan for creating a new plugin that uses one or more of the hooks to achieve the desired changes. Include which hooks to use, how to use them, and any additional code or logic needed.
 
