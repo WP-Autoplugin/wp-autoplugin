@@ -186,18 +186,18 @@ class Plugin_Installer {
 			WP_Filesystem();
 		}
 
-		// Normalize file paths to remove common directory prefix
+		// Normalize file paths to remove common directory prefix.
 		list( $project_structure, $generated_files ) = $this->normalize_file_paths( $project_structure, $generated_files );
 
 		$plugin_name = sanitize_title( $plugin_name, 'wp-autoplugin-' . md5( wp_json_encode( $generated_files ) ) );
 		$plugin_dir  = WP_PLUGIN_DIR . '/' . $plugin_name . '/';
 
-		// Create plugin directory if it doesn't exist
+		// Create plugin directory if it doesn't exist.
 		if ( ! $wp_filesystem->exists( $plugin_dir ) ) {
 			$wp_filesystem->mkdir( $plugin_dir, 0755, true );
 		}
 
-		// Create subdirectories
+		// Create subdirectories.
 		if ( isset( $project_structure['directories'] ) ) {
 			foreach ( $project_structure['directories'] as $directory ) {
 				$dir_path = $plugin_dir . $directory;
@@ -247,6 +247,63 @@ class Plugin_Installer {
 		update_option( 'wp_autoplugins', $autoplugins );
 
 		return $plugin_name . '/' . $main_file;
+	}
+
+	/**
+	 * Update an existing plugin (directory) with multiple files.
+	 *
+	 * @param string $plugin_file Main plugin file relative path (e.g., slug/slug.php).
+	 * @param array  $files_map   Map of relative file paths => full contents.
+	 * @return string|\WP_Error  Returns the main plugin file on success.
+	 */
+	public function update_existing_plugin_files( $plugin_file, $files_map ) {
+		// If DISALLOW_FILE_MODS is set, we can't modify plugins.
+		if ( defined( 'DISALLOW_FILE_MODS' ) && DISALLOW_FILE_MODS ) {
+			return new \WP_Error( 'file_mods_disabled', 'Plugin modification is disabled.' );
+		}
+
+		// Initialize WP_Filesystem.
+		global $wp_filesystem;
+		if ( empty( $wp_filesystem ) ) {
+			require_once ABSPATH . 'wp-admin/includes/file.php';
+			WP_Filesystem();
+		}
+
+		$plugin_root_rel = dirname( $plugin_file );
+		$plugin_root_abs = WP_PLUGIN_DIR . '/' . $plugin_root_rel . '/';
+
+		if ( ! $wp_filesystem->is_dir( $plugin_root_abs ) ) {
+			return new \WP_Error( 'invalid_plugin_dir', 'Target plugin directory does not exist.' );
+		}
+
+		$allowed_ext = [ 'php', 'css', 'js' ];
+
+		foreach ( $files_map as $rel_path => $contents ) {
+			$rel_path = ltrim( str_replace( ['..\\', '../', '\\'], '/', (string) $rel_path ), '/' );
+			// Ensure path stays inside plugin directory
+			if ( strpos( $rel_path, $plugin_root_rel . '/' ) === 0 ) {
+				$rel_path = substr( $rel_path, strlen( $plugin_root_rel . '/' ) );
+			}
+			$target_path = $plugin_root_abs . $rel_path;
+
+			$ext = strtolower( pathinfo( $target_path, PATHINFO_EXTENSION ) );
+			if ( ! in_array( $ext, $allowed_ext, true ) ) {
+				return new \WP_Error( 'invalid_file_type', 'Unsupported file type for update: ' . $rel_path );
+			}
+
+			// Ensure directory exists
+			$dir = dirname( $target_path );
+			if ( ! $wp_filesystem->exists( $dir ) ) {
+				wp_mkdir_p( $dir );
+			}
+
+			$result = $wp_filesystem->put_contents( $target_path, (string) $contents, FS_CHMOD_FILE );
+			if ( false === $result ) {
+				return new \WP_Error( 'file_write_error', 'Failed to write file: ' . $rel_path );
+			}
+		}
+
+		return $plugin_file;
 	}
 
 	/**

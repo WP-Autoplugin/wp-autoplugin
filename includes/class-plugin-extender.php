@@ -38,28 +38,26 @@ class Plugin_Extender {
 	}
 
 	/**
-	 * Prompt the AI to plan the extension of a WordPress plugin.
+	 * Prompt the AI to plan the extension of a WordPress plugin (single-file or multi-file).
 	 *
-	 * @param string $plugin_code    The plugin code.
-	 * @param string $plugin_changes The plugin changes to be made.
+	 * @param string|array $plugin_code_or_files The plugin code string OR array of [ path => contents ].
+	 * @param string       $plugin_changes       The plugin changes to be made.
 	 *
 	 * @return string|WP_Error
 	 */
-	public function plan_plugin_extension( $plugin_code, $plugin_changes ) {
+	public function plan_plugin_extension( $plugin_code_or_files, $plugin_changes ) {
+		$code_context = $this->build_code_context( $plugin_code_or_files );
 		$prompt = <<<PROMPT
-			I have a WordPress plugin file I would like to extend. Here is the code:
-			
-			```php
-			$plugin_code
-			```
+			I have a WordPress plugin I would like to extend. It may be a single file or a multi-file codebase. Here is the codebase:
+
+			$code_context
 
 			I want the following changes to be made to the plugin:
 			```
 			$plugin_changes
 			```
 
-			Please provide a technical specification and development plan for extending the plugin: what changes need to be made, how they should be implemented, and any other relevant details. Remember, the plugin must be contained within a single PHP file.
-			Note: Do not write the actual plugin code, only provide the plan for extending the plugin. Do not use Markdown formatting in your answer. Your response should be clear and concise.
+			Please provide a concise technical specification and development plan for extending the plugin: what changes need to be made, how they should be implemented, and any other relevant details. Do not write actual code. Do not use Markdown formatting in your answer.
 			PROMPT;
 
 		return $this->ai_api->send_prompt( $prompt );
@@ -67,30 +65,64 @@ class Plugin_Extender {
 
 	/**
 	 * Prompt the AI to extend a WordPress plugin based on a plan.
+	 * Supports single-file or multi-file output.
 	 *
-	 * @param string $plugin_code    The plugin code.
-	 * @param string $plugin_changes The plugin changes.
-	 * @param string $ai_plan        The AI plan for extending the plugin.
+	 * @param string|array $plugin_code_or_files The plugin code string OR array of [ path => contents ].
+	 * @param string       $plugin_changes       The plugin changes.
+	 * @param string       $ai_plan              The AI plan for extending the plugin.
+	 * @param bool         $is_complex           Whether this is a multi-file plugin.
 	 *
 	 * @return string|WP_Error
 	 */
-	public function extend_plugin( $plugin_code, $plugin_changes, $ai_plan ) {
-		$prompt = <<<PROMPT
-			I have a WordPress plugin file I would like to extend. Here is the code:
-			
-			```php
-			$plugin_code
-			```
+	public function extend_plugin( $plugin_code_or_files, $plugin_changes, $ai_plan, $is_complex = false ) {
+		$code_context = $this->build_code_context( $plugin_code_or_files );
+		$instructions = $is_complex
+			? 'Output a JSON object with a "files" map of file paths to their complete, updated contents. Do not include any explanation.'
+			: 'Output ONLY the complete, updated PHP code for the plugin file, without any explanation or markdown.';
 
-			Here is the plan for extending the plugin, provided by the developer:
+		$prompt = <<<PROMPT
+			I have a WordPress plugin I would like to extend. It may be single-file or multi-file. Here is the current codebase:
+
+			$code_context
+
+			Here is the plan for extending the plugin:
 			```
 			$ai_plan
 			```
 
-			Please write the complete, extended code for the plugin. Your response should be valid PHP code that implements the changes described in the plan. Note: the plugin must be contained within a single PHP file. Don't forget to increment the version number in the plugin header.
-			Do not write any additional code or commentary. Make sure your response only contains the whole, updated code. Do not use Markdown formatting in your answer.
+			Please implement the changes. $instructions
+
+			If JSON is returned, use file paths relative to the plugin root and include the full content for each changed file.
 			PROMPT;
 
 		return $this->ai_api->send_prompt( $prompt );
+	}
+
+	/**
+	 * Build a readable context for either a single string or multiple files.
+	 *
+	 * @param string|array $plugin_code_or_files Code string or [ path => contents ].
+	 * @return string
+	 */
+	private function build_code_context( $plugin_code_or_files ) {
+		if ( is_array( $plugin_code_or_files ) ) {
+			$context = "Plugin Files:\n";
+			foreach ( $plugin_code_or_files as $path => $contents ) {
+				$lang = 'php';
+				if ( preg_match( '/\.css$/i', $path ) ) { $lang = 'css'; }
+				elseif ( preg_match( '/\.(js|mjs)$/i', $path ) ) { $lang = 'javascript'; }
+
+				$lines = explode( "\n", (string) $contents );
+				$max   = 2500;
+				if ( count( $lines ) > $max ) {
+					$contents = implode( "\n", array_slice( $lines, 0, $max ) ) . "\n/* ... truncated ... */";
+				}
+
+				$context .= "\nFile: {$path}\n```{$lang}\n{$contents}\n```\n";
+			}
+			return $context;
+		}
+
+		return "```php\n" . (string) $plugin_code_or_files . "\n```";
 	}
 }

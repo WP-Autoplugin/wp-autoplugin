@@ -38,19 +38,18 @@ class Plugin_Explainer {
 	}
 
 	/**
-	 * Generate a general explanation of a WordPress plugin.
+	 * Generate a general explanation of a WordPress plugin (single-file or multi-file).
 	 *
-	 * @param string $plugin_code The plugin code.
+	 * @param string|array $plugin_code_or_files Code string or [ path => contents ].
 	 *
 	 * @return string|WP_Error
 	 */
-	public function explain_plugin( $plugin_code ) {
+	public function explain_plugin( $plugin_code_or_files ) {
+		$code_context = $this->build_code_context( $plugin_code_or_files );
 		$prompt = <<<PROMPT
-			I have a WordPress plugin file I would like you to analyze and explain. Here is the code:
-			
-			```php
-			$plugin_code
-			```
+			I have a WordPress plugin I would like you to analyze and explain. The plugin may be a single file or a multi-file codebase. Here is the codebase:
+
+			$code_context
 
 			Please provide a comprehensive explanation of this plugin's functionality, including:
 			1. Overview and main purpose
@@ -67,18 +66,17 @@ class Plugin_Explainer {
 	/**
 	 * Answer a specific question about a WordPress plugin.
 	 *
-	 * @param string $plugin_code The plugin code.
-	 * @param string $question    The specific question about the plugin.
+	 * @param string|array $plugin_code_or_files Code string or [ path => contents ].
+	 * @param string       $question             The specific question about the plugin.
 	 *
 	 * @return string|WP_Error
 	 */
-	public function answer_plugin_question( $plugin_code, $question ) {
+	public function answer_plugin_question( $plugin_code_or_files, $question ) {
+		$code_context = $this->build_code_context( $plugin_code_or_files );
 		$prompt = <<<PROMPT
-			I have a WordPress plugin file and a specific question about it. Here is the code:
-			
-			```php
-			$plugin_code
-			```
+			I have a WordPress plugin and a specific question about it. The plugin may be a single file or a multi-file codebase. Here is the codebase:
+
+			$code_context
 
 			My question is:
 			```
@@ -96,12 +94,12 @@ class Plugin_Explainer {
 	/**
 	 * Analyze specific aspects of a WordPress plugin.
 	 *
-	 * @param string $plugin_code The plugin code.
-	 * @param string $aspect      The specific aspect to analyze (e.g., 'security', 'performance', 'code-quality').
+	 * @param string|array $plugin_code_or_files Code string or [ path => contents ].
+	 * @param string       $aspect               The specific aspect to analyze.
 	 *
 	 * @return string|WP_Error
 	 */
-	public function analyze_plugin_aspect( $plugin_code, $aspect ) {
+	public function analyze_plugin_aspect( $plugin_code_or_files, $aspect ) {
 		$aspect_prompts = [
 			'security'     => 'security considerations, potential vulnerabilities, and security best practices',
 			'performance'  => 'performance implications, optimization opportunities, and potential bottlenecks',
@@ -111,12 +109,11 @@ class Plugin_Explainer {
 
 		$aspect_prompt = isset( $aspect_prompts[ $aspect ] ) ? 'Please analyze this plugin with a focus on ' . $aspect_prompts[ $aspect ] . '.' : 'Provide a general analysis.';
 
+		$code_context = $this->build_code_context( $plugin_code_or_files );
 		$prompt = <<<PROMPT
-			I have a WordPress plugin file I would like you to analyze. Here is the code:
-			
-			```php
-			$plugin_code
-			```
+			I have a WordPress plugin I would like you to analyze. The plugin may be a single file or a multi-file codebase. Here is the codebase:
+
+			$code_context
 
 			$aspect_prompt
 
@@ -124,5 +121,33 @@ class Plugin_Explainer {
 			PROMPT;
 
 		return $this->ai_api->send_prompt( $prompt );
+	}
+
+	/**
+	 * Build a readable context for either a single string or multiple files.
+	 *
+	 * @param string|array $plugin_code_or_files Code string or [ path => contents ].
+	 * @return string
+	 */
+	private function build_code_context( $plugin_code_or_files ) {
+		if ( is_array( $plugin_code_or_files ) ) {
+			$context = "Plugin Files:\n";
+			foreach ( $plugin_code_or_files as $path => $contents ) {
+				$lang = 'php';
+				if ( preg_match( '/\.css$/i', $path ) ) { $lang = 'css'; }
+				elseif ( preg_match( '/\.(js|mjs)$/i', $path ) ) { $lang = 'javascript'; }
+
+				$lines = explode( "\n", (string) $contents );
+				$max   = 2500;
+				if ( count( $lines ) > $max ) {
+					$contents = implode( "\n", array_slice( $lines, 0, $max ) ) . "\n/* ... truncated ... */";
+				}
+
+				$context .= "\nFile: {$path}\n```{$lang}\n{$contents}\n```\n";
+			}
+			return $context;
+		}
+
+		return "```php\n" . (string) $plugin_code_or_files . "\n```";
 	}
 }
