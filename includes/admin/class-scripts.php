@@ -186,6 +186,14 @@ class Scripts {
 				[],
 				WP_AUTOPLUGIN_VERSION
 			);
+
+			// Reuse generator styles for multi-file editor UI
+			wp_enqueue_style(
+				'wp-autoplugin-generator-shared',
+				WP_AUTOPLUGIN_URL . 'assets/admin/css/generator.css',
+				[],
+				WP_AUTOPLUGIN_VERSION
+			);
 		} elseif ( $screen->id === 'admin_page_wp-autoplugin-extend' ) {
 			// Code editor for Extend page.
 			$settings = wp_enqueue_code_editor( [ 'type' => 'application/x-httpd-php' ] );
@@ -239,6 +247,14 @@ class Scripts {
 			wp_enqueue_style(
 				'wp-autoplugin-extend',
 				WP_AUTOPLUGIN_URL . 'assets/admin/css/extender.css',
+				[],
+				WP_AUTOPLUGIN_VERSION
+			);
+
+			// Reuse generator styles for multi-file editor UI
+			wp_enqueue_style(
+				'wp-autoplugin-generator-shared',
+				WP_AUTOPLUGIN_URL . 'assets/admin/css/generator.css',
 				[],
 				WP_AUTOPLUGIN_VERSION
 			);

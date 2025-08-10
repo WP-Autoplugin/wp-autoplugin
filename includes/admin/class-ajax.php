@@ -57,10 +57,12 @@ class Ajax {
 			'generate_fix_plan',
 			'generate_fix_code',
 			'fix_plugin',
+			'generate_fix_file',
 
 			'generate_extend_plan',
 			'generate_extend_code',
 			'extend_plugin',
+			'generate_extend_file',
 
 			'explain_plugin',
 
@@ -386,6 +388,9 @@ class Ajax {
 		// Get token usage from the actual API that was used
 		$token_usage = $reviewer_api->get_last_token_usage();
 
+		// Strip code fences if model returns ```json
+		$plan_data = preg_replace( '/^```(json)?\n(.*)\n```$/s', '$2', $plan_data );
+
 		wp_send_json_success( [
 			'plan_data' => $plan_data,
 			'token_usage' => $token_usage,
@@ -468,6 +473,62 @@ class Ajax {
 	}
 
 	/**
+	 * AJAX: generate a single fixed file during Fix flow (complex mode).
+	 */
+	public function ajax_generate_fix_file() {
+		$plugin_file = isset( $_POST['plugin_file'] )
+			? sanitize_text_field( wp_unslash( $_POST['plugin_file'] ) )
+			: '';
+
+		$codebase = $this->collect_plugin_codebase( $plugin_file );
+
+		$file_index = isset( $_POST['file_index'] ) ? intval( wp_unslash( $_POST['file_index'] ) ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$plugin_plan = isset( $_POST['plugin_plan'] ) ? wp_unslash( $_POST['plugin_plan'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$project_structure = isset( $_POST['project_structure'] ) ? wp_unslash( $_POST['project_structure'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$generated_files = isset( $_POST['generated_files'] ) ? wp_unslash( $_POST['generated_files'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$problem = isset( $_POST['plugin_issue'] ) ? sanitize_text_field( wp_unslash( $_POST['plugin_issue'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+
+		$project_structure_array = json_decode( $project_structure, true );
+		$generated_files_array = json_decode( $generated_files, true );
+
+		if ( ! $project_structure_array || ! isset( $project_structure_array['files'] ) ) {
+			wp_send_json_error( esc_html__( 'Invalid input data.', 'wp-autoplugin' ) );
+		}
+
+		$files = $project_structure_array['files'];
+		if ( ! isset( $files[ $file_index ] ) ) {
+			wp_send_json_error( esc_html__( 'File index out of range.', 'wp-autoplugin' ) );
+		}
+
+		$file_info = $files[ $file_index ];
+		$coder_api = $this->admin->get_coder_api();
+		$fixer  = new \WP_Autoplugin\Plugin_Fixer( $coder_api );
+		$file_content = $fixer->fix_single_file( $codebase['files'], $problem, $plugin_plan, $project_structure_array, is_array( $generated_files_array ) ? $generated_files_array : [], $file_info );
+		if ( is_wp_error( $file_content ) ) {
+			wp_send_json_error( $file_content->get_error_message() );
+		}
+
+		// Strip out code fences based on file type
+		$file_type = isset( $file_info['type'] ) ? $file_info['type'] : 'php';
+		if ( 'php' === $file_type ) {
+			$file_content = preg_replace( '/^```(php)\n(.*)\n```$/s', '$2', $file_content );
+		} elseif ( 'css' === $file_type ) {
+			$file_content = preg_replace( '/^```(css)\n(.*)\n```$/s', '$2', $file_content );
+		} elseif ( 'js' === $file_type ) {
+			$file_content = preg_replace( '/^```(js|javascript)\n(.*)\n```$/s', '$2', $file_content );
+		}
+
+		$token_usage = $coder_api->get_last_token_usage();
+
+		wp_send_json_success( [
+			'file_path'    => $file_info['path'],
+			'file_content' => $file_content,
+			'file_type'    => $file_type,
+			'token_usage'  => $token_usage,
+		] );
+	}
+
+	/**
 	 * AJAX handler for generating an extension plan for a plugin.
 	 *
 	 * @return void
@@ -492,6 +553,9 @@ class Ajax {
 
 		// Get token usage from the actual API that was used
 		$token_usage = $planner_api->get_last_token_usage();
+
+		// Strip code fences if model returns ```json blocks
+		$plan_data = preg_replace( '/^```(json)?\n(.*)\n```$/s', '$2', $plan_data );
 
 		wp_send_json_success( [
 			'plan_data' => $plan_data,
@@ -528,6 +592,68 @@ class Ajax {
 		wp_send_json_success( [
 			'code' => $code,
 			'token_usage' => $token_usage,
+		] );
+	}
+
+	/**
+	 * AJAX handler for generating a single file for plugin extension (complex flow).
+	 *
+	 * Expected POST:
+	 * - plugin_file (slug/main.php)
+	 * - file_index (int)
+	 * - plugin_plan (JSON string)
+	 * - project_structure (JSON string)
+	 * - generated_files (JSON string)
+	 */
+	public function ajax_generate_extend_file() {
+		$plugin_file = isset( $_POST['plugin_file'] )
+			? sanitize_text_field( wp_unslash( $_POST['plugin_file'] ) )
+			: '';
+
+		$codebase = $this->collect_plugin_codebase( $plugin_file );
+
+		$file_index = isset( $_POST['file_index'] ) ? intval( wp_unslash( $_POST['file_index'] ) ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$plugin_plan = isset( $_POST['plugin_plan'] ) ? wp_unslash( $_POST['plugin_plan'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$project_structure = isset( $_POST['project_structure'] ) ? wp_unslash( $_POST['project_structure'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$generated_files = isset( $_POST['generated_files'] ) ? wp_unslash( $_POST['generated_files'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+
+		$project_structure_array = json_decode( $project_structure, true );
+		$generated_files_array = json_decode( $generated_files, true );
+
+		if ( ! $project_structure_array || ! isset( $project_structure_array['files'] ) ) {
+			wp_send_json_error( esc_html__( 'Invalid input data.', 'wp-autoplugin' ) );
+		}
+
+		$files = $project_structure_array['files'];
+		if ( ! isset( $files[ $file_index ] ) ) {
+			wp_send_json_error( esc_html__( 'File index out of range.', 'wp-autoplugin' ) );
+		}
+
+		$file_info = $files[ $file_index ];
+		$coder_api = $this->admin->get_coder_api();
+		$extender  = new \WP_Autoplugin\Plugin_Extender( $coder_api );
+		$file_content = $extender->extend_single_file( $codebase['files'], $plugin_plan, $project_structure_array, is_array( $generated_files_array ) ? $generated_files_array : [], $file_info );
+		if ( is_wp_error( $file_content ) ) {
+			wp_send_json_error( $file_content->get_error_message() );
+		}
+
+		// Strip out code fences based on file type
+		$file_type = isset( $file_info['type'] ) ? $file_info['type'] : 'php';
+		if ( 'php' === $file_type ) {
+			$file_content = preg_replace( '/^```(php)\n(.*)\n```$/s', '$2', $file_content );
+		} elseif ( 'css' === $file_type ) {
+			$file_content = preg_replace( '/^```(css)\n(.*)\n```$/s', '$2', $file_content );
+		} elseif ( 'js' === $file_type ) {
+			$file_content = preg_replace( '/^```(js|javascript)\n(.*)\n```$/s', '$2', $file_content );
+		}
+
+		$token_usage = $coder_api->get_last_token_usage();
+
+		wp_send_json_success( [
+			'file_path'    => $file_info['path'],
+			'file_content' => $file_content,
+			'file_type'    => $file_type,
+			'token_usage'  => $token_usage,
 		] );
 	}
 

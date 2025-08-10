@@ -48,17 +48,93 @@ class Plugin_Extender {
 	public function plan_plugin_extension( $plugin_code_or_files, $plugin_changes ) {
 		$code_context = $this->build_code_context( $plugin_code_or_files );
 		$prompt = <<<PROMPT
-			I have a WordPress plugin I would like to extend. It may be a single file or a multi-file codebase. Here is the codebase:
+I have a WordPress plugin I would like to extend. It may be a single file or a multi-file codebase. Here is the codebase:
 
-			$code_context
+$code_context
 
-			I want the following changes to be made to the plugin:
-			```
-			$plugin_changes
-			```
+I want the following changes to be made to the plugin:
+```
+$plugin_changes
+```
 
-			Please provide a concise technical specification and development plan for extending the plugin: what changes need to be made, how they should be implemented, and any other relevant details. Do not write actual code. Do not use Markdown formatting in your answer.
-			PROMPT;
+Provide a machine-readable plan in strict JSON (no markdown code fences, no commentary). Include:
+{
+  "plan_summary": string,
+  "project_structure": {
+	"files": [
+	  { "path": string, "type": "php"|"js"|"css", "description": string, "action": "update"|"add" }
+	]
+  }
+}
+
+Notes:
+- Only include files that will be modified or added.
+- Do NOT include any code in this response. Only the JSON object above.
+PROMPT;
+
+		return $this->ai_api->send_prompt( $prompt );
+	}
+
+	/**
+	 * Generate the updated content for a single file as part of an extension, using full codebase context.
+	 *
+	 * @param array  $plugin_code_or_files Map of path => contents of the current plugin codebase.
+	 * @param string $ai_plan              The JSON plan string describing the extension.
+	 * @param array  $project_structure    Parsed project structure array with files list.
+	 * @param array  $generated_files      Map of already generated files for this extension run.
+	 * @param array  $file_info            Target file info: [ path, type, description, action ].
+	 * @return string|\WP_Error
+	 */
+	public function extend_single_file( $plugin_code_or_files, $ai_plan, $project_structure, $generated_files, $file_info ) {
+		$code_context = $this->build_code_context( $plugin_code_or_files );
+
+		$file_path = isset( $file_info['path'] ) ? $file_info['path'] : '';
+		$file_type = isset( $file_info['type'] ) ? $file_info['type'] : 'php';
+		$action    = isset( $file_info['action'] ) ? $file_info['action'] : 'update';
+
+		$lang = 'php';
+		if ( 'css' === $file_type ) { $lang = 'css'; }
+		elseif ( 'js' === $file_type ) { $lang = 'javascript'; }
+
+		$generated_context = '';
+		if ( is_array( $generated_files ) && ! empty( $generated_files ) ) {
+			$generated_context = "Previously updated/added files in this extension run:\n";
+			foreach ( $generated_files as $path => $contents ) {
+				$gLang = 'php';
+				if ( preg_match( '/\\.css$/i', $path ) ) { $gLang = 'css'; }
+				elseif ( preg_match( '/\\.(js|mjs)$/i', $path ) ) { $gLang = 'javascript'; }
+				$lines = explode( "\n", (string) $contents );
+				$max   = 1200;
+				if ( count( $lines ) > $max ) {
+					$contents = implode( "\n", array_slice( $lines, 0, $max ) ) . "\n/* ... truncated ... */";
+				}
+				$generated_context .= "\nFile: {$path}\n```{$gLang}\n{$contents}\n```\n";
+			}
+		}
+
+		$prompt = <<<PROMPT
+You are extending an existing WordPress plugin codebase. Here is the current codebase:
+
+$code_context
+
+Here is the extension plan in JSON:
+```
+$ai_plan
+```
+
+Here is the list of files selected for this extension and any content already produced during this run:
+$generated_context
+
+Your task: Output ONLY the complete, final contents for the single target file below, implementing the extension described in the plan:
+- Target file path: {$file_path}
+- File type: {$file_type}
+- Action: {$action}
+
+Constraints:
+- Do not output any explanation. Do not output any other files.
+- Output only the code for {$file_path} wrapped in a proper code block for the file type (```{$lang}).
+- If the file does not exist yet (action is ADD), create it with complete, working content.
+PROMPT;
 
 		return $this->ai_api->send_prompt( $prompt );
 	}

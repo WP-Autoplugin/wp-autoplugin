@@ -46,49 +46,112 @@ class Plugin_Fixer {
 	 *
 	 * @return string|WP_Error
 	 */
-	public function identify_issue( $plugin_code_or_files, $problem, $check_other_issues = true ) {
-		$code_context = $this->build_code_context( $plugin_code_or_files );
+    public function identify_issue( $plugin_code_or_files, $problem, $check_other_issues = true ) {
+        $code_context = $this->build_code_context( $plugin_code_or_files );
 
-		$base_prompt = <<<PROMPT
-			I have a WordPress plugin that needs fixing. The plugin may be a single file or a multi-file codebase. Here is the codebase:
+        $focus = $check_other_issues
+            ? 'You may propose additional fixes beyond the immediate problem if you find clear issues.'
+            : 'Focus only on the issue at hand.';
 
-			$code_context
+        $prompt = <<<PROMPT
+I have a WordPress plugin that needs fixing. The plugin may be a single file or a multi-file codebase. Here is the codebase:
 
-			The problem I am encountering:
-			```
-			$problem
-			```
+$code_context
 
-			Please provide an explanation of the issues and a possible solution. Do not write the fixed code. Your response should only contain clear and concise text in the following sections:
+The problem I am encountering:
+```
+$problem
+```
 
-			- Issue Description: Describe the issue in detail, including the impact on the plugin's functionality.
-			- Proposed Fix: Provide a detailed explanation of how to fix the issues, along with any additional recommendations or best practices.
+{$focus}
 
-			Make sure your response only contains the specified sections, without any additional commentary. Do not include any code. Do not use Markdown formatting in your answer.
-			PROMPT;
+Provide a machine-readable plan in strict JSON (no markdown code fences, no commentary). Include:
+{
+  "plan_summary": string,
+  "project_structure": {
+    "files": [
+      { "path": string, "type": "php"|"js"|"css", "description": string, "action": "update"|"add" }
+    ]
+  }
+}
 
-		if ( ! $check_other_issues ) {
-			$base_prompt = <<<PROMPT
-				I have a WordPress plugin that needs fixing. The plugin may be a single file or a multi-file codebase. Here is the codebase:
+Notes:
+- Only include the files that actually need to be modified or added to implement the fix.
+- Do NOT include any code in this response. Only the JSON object above.
+PROMPT;
 
-				$code_context
+        return $this->ai_api->send_prompt( $prompt );
+    }
 
-				The problem I am encountering:
-				```
-				$problem
-				```
+    /**
+     * Generate fixed content for a single file using the full codebase and the plan.
+     *
+     * @param array  $plugin_code_or_files Map of path => contents.
+     * @param string $problem              Problem description.
+     * @param string $ai_plan              JSON plan string.
+     * @param array  $project_structure    Parsed plan project structure.
+     * @param array  $generated_files      Map of already fixed files in this run.
+     * @param array  $file_info            Target file info [path,type,description,action].
+     * @return string|\WP_Error
+     */
+    public function fix_single_file( $plugin_code_or_files, $problem, $ai_plan, $project_structure, $generated_files, $file_info ) {
+        $code_context = $this->build_code_context( $plugin_code_or_files );
 
-				Please provide a detailed technical explanation of the issues and a possible solution. Do not write the fixed code. Your response should only contain clear and concise text in the following sections:
+        $file_path = isset( $file_info['path'] ) ? $file_info['path'] : '';
+        $file_type = isset( $file_info['type'] ) ? $file_info['type'] : 'php';
+        $action    = isset( $file_info['action'] ) ? $file_info['action'] : 'update';
 
-				- Issue Description: Describe the issue in detail, including the impact on the plugin's functionality. Focus only on the issue at hand.
-				- Proposed Fix: Provide a detailed explanation of how to fix the issues.
+        $lang = 'php';
+        if ( 'css' === $file_type ) { $lang = 'css'; }
+        elseif ( 'js' === $file_type ) { $lang = 'javascript'; }
 
-				Make sure your response only contains the specified sections, without any additional commentary. Do not include any code. Do not use Markdown formatting in your answer.
-				PROMPT;
-		}
+        $generated_context = '';
+        if ( is_array( $generated_files ) && ! empty( $generated_files ) ) {
+            $generated_context = "Previously updated/added files in this fix run:\n";
+            foreach ( $generated_files as $path => $contents ) {
+                $gLang = 'php';
+                if ( preg_match( '/\\.css$/i', $path ) ) { $gLang = 'css'; }
+                elseif ( preg_match( '/\\.(js|mjs)$/i', $path ) ) { $gLang = 'javascript'; }
+                $lines = explode( "\n", (string) $contents );
+                $max   = 1200;
+                if ( count( $lines ) > $max ) {
+                    $contents = implode( "\n", array_slice( $lines, 0, $max ) ) . "\n/* ... truncated ... */";
+                }
+                $generated_context .= "\nFile: {$path}\n```{$gLang}\n{$contents}\n```\n";
+            }
+        }
 
-		return $this->ai_api->send_prompt( $base_prompt, '' );
-	}
+        $prompt = <<<PROMPT
+You are fixing an existing WordPress plugin codebase. Here is the current codebase:
+
+$code_context
+
+The problem:
+```
+$problem
+```
+
+Here is the fix plan in JSON:
+```
+$ai_plan
+```
+
+Here are files already updated during this run (if any):
+$generated_context
+
+Your task: Output ONLY the complete, final contents for the single target file below, implementing the fix described in the plan:
+- Target file path: {$file_path}
+- File type: {$file_type}
+- Action: {$action}
+
+Constraints:
+- Do not output any explanation. Do not output any other files.
+- Output only the code for {$file_path} wrapped in a proper code block for the file type (```{$lang}).
+- If the file does not exist yet (action is ADD), create it with complete, working content.
+PROMPT;
+
+        return $this->ai_api->send_prompt( $prompt );
+    }
 
 	/**
 	 * Prompt the AI to fix a WordPress plugin (single-file or multi-file).
