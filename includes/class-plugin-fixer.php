@@ -207,26 +207,6 @@ PROMPT;
 	 * @return string
 	 */
 	private function build_code_context( $plugin_code_or_files ) {
-		if ( is_array( $plugin_code_or_files ) ) {
-			$context = "Plugin Files:\n";
-			foreach ( $plugin_code_or_files as $path => $contents ) {
-				$lang = 'php';
-				if ( preg_match( '/\.css$/i', $path ) ) { $lang = 'css'; }
-				elseif ( preg_match( '/\.(js|mjs)$/i', $path ) ) { $lang = 'javascript'; }
-
-				// Limit extremely large files to avoid token overflow
-				$lines = explode( "\n", (string) $contents );
-				$max   = 2500;
-				if ( count( $lines ) > $max ) {
-					$contents = implode( "\n", array_slice( $lines, 0, $max ) ) . "\n/* ... truncated ... */";
-				}
-
-				$context .= "\nFile: {$path}\n```{$lang}\n{$contents}\n```\n";
-			}
-			return $context;
-		}
-
-		// Single-file code
-		return "```php\n" . (string) $plugin_code_or_files . "\n```";
+		return AI_Utils::build_code_context( $plugin_code_or_files );
 	}
 }

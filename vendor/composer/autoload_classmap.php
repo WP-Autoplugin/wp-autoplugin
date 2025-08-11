@@ -7,6 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
+    'WP_Autoplugin\\AI_Utils' => $baseDir . '/includes/class-ai-utils.php',
     'WP_Autoplugin\\API' => $baseDir . '/includes/api/class-api.php',
     'WP_Autoplugin\\Admin' => $baseDir . '/includes/admin/class-admin.php',
     'WP_Autoplugin\\Admin\\Ajax' => $baseDir . '/includes/admin/class-ajax.php',

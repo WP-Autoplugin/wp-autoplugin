@@ -8,6 +8,7 @@ class ComposerStaticInit62b8c0a821dc44c3b86fc9def1bcbee9
 {
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'WP_Autoplugin\\AI_Utils' => __DIR__ . '/../..' . '/includes/class-ai-utils.php',
         'WP_Autoplugin\\API' => __DIR__ . '/../..' . '/includes/api/class-api.php',
         'WP_Autoplugin\\Admin' => __DIR__ . '/../..' . '/includes/admin/class-admin.php',
         'WP_Autoplugin\\Admin\\Ajax' => __DIR__ . '/../..' . '/includes/admin/class-ajax.php',

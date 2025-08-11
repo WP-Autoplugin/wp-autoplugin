@@ -509,15 +509,29 @@ class Admin {
 	 * @return void
 	 */
 	public function render_extend_hooks_page() {
+		// Capability check.
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'wp-autoplugin' ) );
+		}
+
+		// Required params and nonce.
 		if ( ! isset( $_GET['plugin'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
 			wp_die( esc_html__( 'No plugin specified.', 'wp-autoplugin' ) );
 		}
+		$nonce_value = isset( $_GET['nonce'] ) ? sanitize_text_field( wp_unslash( $_GET['nonce'] ) ) : '';
+		if ( ! $nonce_value || ! wp_verify_nonce( $nonce_value, 'wp-autoplugin-extend-hooks' ) ) {
+			wp_die( esc_html__( 'Security check failed.', 'wp-autoplugin' ) );
+		}
+
+		// Sanitize and constrain plugin path inside plugins directory.
 		$plugin_file = sanitize_text_field( wp_unslash( $_GET['plugin'] ) ); // phpcs:ignore WordPress.Security.NonceVerification
-		$plugin_file = str_replace( '../', '', $plugin_file );
-		$plugin_path = WP_CONTENT_DIR . '/plugins/' . $plugin_file;
-		if ( ! file_exists( $plugin_path ) ) {
+		$plugin_file = ltrim( str_replace( [ '..\\', '../', '\\' ], '/', $plugin_file ), '/' );
+		$plugin_path = wp_normalize_path( WP_PLUGIN_DIR . '/' . $plugin_file );
+		$plugins_base = wp_normalize_path( trailingslashit( WP_PLUGIN_DIR ) );
+		if ( strpos( $plugin_path, $plugins_base ) !== 0 || ! file_exists( $plugin_path ) ) {
 			wp_die( esc_html__( 'The specified plugin does not exist.', 'wp-autoplugin' ) );
 		}
+
 		$plugin_data = get_plugin_data( $plugin_path );
 		include WP_AUTOPLUGIN_DIR . 'views/page-extend-hooks.php';
 	}

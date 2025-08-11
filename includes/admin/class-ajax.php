@@ -191,7 +191,7 @@ class Ajax {
 		}
 
 		// Strip out any code block fences like ```json ... ```.
-		$plan_data  = preg_replace( '/^```(json)?\n(.*)\n```$/s', '$2', $plan_data );
+		$plan_data  = \WP_Autoplugin\AI_Utils::strip_code_fences( $plan_data, 'json' );
 		$plan_array = json_decode( $plan_data, true );
 		if ( ! $plan_array ) {
 			wp_send_json_error( esc_html__( 'Failed to decode the generated plan: ', 'wp-autoplugin' ) . $plan_data );
@@ -224,7 +224,7 @@ class Ajax {
 		}
 
 		// Strip out code fences like ```php ... ```.
-		$code = preg_replace( '/^```(php)\n(.*)\n```$/s', '$2', $code );
+		$code = \WP_Autoplugin\AI_Utils::strip_code_fences( $code, 'php' );
 
 		// Get token usage from the actual API that was used
 		$token_usage = $coder_api->get_last_token_usage();
@@ -270,14 +270,8 @@ class Ajax {
 		}
 
 		// Strip out code fences based on file type
-		$file_type = $file_info['type'];
-		if ( 'php' === $file_type ) {
-			$file_content = preg_replace( '/^```(php)\n(.*)\n```$/s', '$2', $file_content );
-		} elseif ( 'css' === $file_type ) {
-			$file_content = preg_replace( '/^```(css)\n(.*)\n```$/s', '$2', $file_content );
-		} elseif ( 'js' === $file_type ) {
-			$file_content = preg_replace( '/^```(js|javascript)\n(.*)\n```$/s', '$2', $file_content );
-		}
+		$file_type    = $file_info['type'];
+		$file_content = \WP_Autoplugin\AI_Utils::strip_code_fences( $file_content, $file_type );
 
 		// Get token usage from the actual API that was used
 		$token_usage = $coder_api->get_last_token_usage();
@@ -390,7 +384,7 @@ class Ajax {
 		$token_usage = $reviewer_api->get_last_token_usage();
 
 		// Strip code fences if model returns ```json
-		$plan_data = preg_replace( '/^```(json)?\n(.*)\n```$/s', '$2', $plan_data );
+		$plan_data = \WP_Autoplugin\AI_Utils::strip_code_fences( $plan_data, 'json' );
 
 		wp_send_json_success( [
 			'plan_data' => $plan_data,
@@ -424,7 +418,7 @@ class Ajax {
 		// For simple code responses, strip code fences. If JSON, keep as-is.
 		$trimmed = is_string( $code ) ? ltrim( $code ) : '';
 		if ( is_string( $code ) && $trimmed && $trimmed[0] !== '{' && $trimmed[0] !== '[' ) {
-			$code = preg_replace( '/^```(php)\n(.*)\n```$/s', '$2', $code );
+			$code = \WP_Autoplugin\AI_Utils::strip_code_fences( $code, 'php' );
 		}
 
 		// Get token usage from the actual API that was used
@@ -446,6 +440,20 @@ class Ajax {
 		$plugin_file = isset( $_POST['plugin_file'] )
 			? sanitize_text_field( wp_unslash( $_POST['plugin_file'] ) )
 			: '';
+
+		// Constrain plugin_file to plugins directory.
+		$plugin_file = ltrim( str_replace( [ '..\\', '../', '\\' ], '/', $plugin_file ), '/' );
+		$abs_plugin  = wp_normalize_path( WP_PLUGIN_DIR . '/' . $plugin_file );
+		$plugins_dir = wp_normalize_path( trailingslashit( WP_PLUGIN_DIR ) );
+		if ( strpos( $abs_plugin, $plugins_dir ) !== 0 ) {
+			wp_send_json(
+				[
+					'success'    => false,
+					'data'       => esc_html__( 'Invalid plugin path.', 'wp-autoplugin' ),
+					'error_type' => 'install_error',
+				]
+			);
+		}
 
 		$installer = Plugin_Installer::get_instance();
 
@@ -510,14 +518,8 @@ class Ajax {
 		}
 
 		// Strip out code fences based on file type
-		$file_type = isset( $file_info['type'] ) ? $file_info['type'] : 'php';
-		if ( 'php' === $file_type ) {
-			$file_content = preg_replace( '/^```(php)\n(.*)\n```$/s', '$2', $file_content );
-		} elseif ( 'css' === $file_type ) {
-			$file_content = preg_replace( '/^```(css)\n(.*)\n```$/s', '$2', $file_content );
-		} elseif ( 'js' === $file_type ) {
-			$file_content = preg_replace( '/^```(js|javascript)\n(.*)\n```$/s', '$2', $file_content );
-		}
+		$file_type    = isset( $file_info['type'] ) ? $file_info['type'] : 'php';
+		$file_content = \WP_Autoplugin\AI_Utils::strip_code_fences( $file_content, $file_type );
 
 		$token_usage = $coder_api->get_last_token_usage();
 
@@ -556,7 +558,7 @@ class Ajax {
 		$token_usage = $planner_api->get_last_token_usage();
 
 		// Strip code fences if model returns ```json blocks
-		$plan_data = preg_replace( '/^```(json)?\n(.*)\n```$/s', '$2', $plan_data );
+		$plan_data = \WP_Autoplugin\AI_Utils::strip_code_fences( $plan_data, 'json' );
 
 		wp_send_json_success( [
 			'plan_data' => $plan_data,
@@ -639,14 +641,8 @@ class Ajax {
 		}
 
 		// Strip out code fences based on file type
-		$file_type = isset( $file_info['type'] ) ? $file_info['type'] : 'php';
-		if ( 'php' === $file_type ) {
-			$file_content = preg_replace( '/^```(php)\n(.*)\n```$/s', '$2', $file_content );
-		} elseif ( 'css' === $file_type ) {
-			$file_content = preg_replace( '/^```(css)\n(.*)\n```$/s', '$2', $file_content );
-		} elseif ( 'js' === $file_type ) {
-			$file_content = preg_replace( '/^```(js|javascript)\n(.*)\n```$/s', '$2', $file_content );
-		}
+		$file_type    = isset( $file_info['type'] ) ? $file_info['type'] : 'php';
+		$file_content = \WP_Autoplugin\AI_Utils::strip_code_fences( $file_content, $file_type );
 
 		$token_usage = $coder_api->get_last_token_usage();
 
@@ -847,7 +843,7 @@ class Ajax {
 		}
 
 		// Strip out any code block fences like ```json ... ```.
-		$plan_data  = preg_replace( '/^```(json)?\n(.*)\n```$/s', '$2', $plan_data );
+		$plan_data  = \WP_Autoplugin\AI_Utils::strip_code_fences( $plan_data, 'json' );
 		$plan_array = json_decode( $plan_data, true );
 		if ( ! $plan_array ) {
 			wp_send_json_error( esc_html__( 'Failed to decode the generated plan.', 'wp-autoplugin' ) );
@@ -905,7 +901,7 @@ class Ajax {
 		}
 
 		// Strip out code fences like ```php ... ```.
-		$code = preg_replace( '/^```(php)\n(.*)\n```$/s', '$2', $code );
+		$code = \WP_Autoplugin\AI_Utils::strip_code_fences( $code, 'php' );
 
 		// Get token usage from the actual API that was used
 		$token_usage = $coder_api->get_last_token_usage();
@@ -979,14 +975,8 @@ class Ajax {
 		}
 
 		// Strip out code fences based on file type
-		$file_type = isset( $file_info['type'] ) ? $file_info['type'] : 'php';
-		if ( 'php' === $file_type ) {
-			$file_content = preg_replace( '/^```(php)\n(.*)\n```$/s', '$2', $file_content );
-		} elseif ( 'css' === $file_type ) {
-			$file_content = preg_replace( '/^```(css)\n(.*)\n```$/s', '$2', $file_content );
-		} elseif ( 'js' === $file_type ) {
-			$file_content = preg_replace( '/^```(js|javascript)\n(.*)\n```$/s', '$2', $file_content );
-		}
+		$file_type    = isset( $file_info['type'] ) ? $file_info['type'] : 'php';
+		$file_content = \WP_Autoplugin\AI_Utils::strip_code_fences( $file_content, $file_type );
 
 		$token_usage = $coder_api->get_last_token_usage();
 
@@ -1184,7 +1174,7 @@ class Ajax {
 		}
 
 		// Strip out any code block fences like ```json ... ```.
-		$plan_data  = preg_replace( '/^```(json)?\n(.*)\n```$/s', '$2', $plan_data );
+		$plan_data  = \WP_Autoplugin\AI_Utils::strip_code_fences( $plan_data, 'json' );
 		$plan_array = json_decode( $plan_data, true );
 		if ( ! $plan_array ) {
 			wp_send_json_error( esc_html__( 'Failed to decode the generated plan.', 'wp-autoplugin' ) );
@@ -1242,7 +1232,7 @@ class Ajax {
 		}
 
 		// Strip out code fences like ```php ... ```.
-		$code = preg_replace( '/^```(php)\n(.*)\n```$/s', '$2', $code );
+		$code = \WP_Autoplugin\AI_Utils::strip_code_fences( $code, 'php' );
 
 		// Get token usage from the actual API that was used
 		$token_usage = $coder_api->get_last_token_usage();
@@ -1280,7 +1270,7 @@ class Ajax {
 		}
 
 		// Strip out any code block fences like ```json ... ```.
-		$review_result = preg_replace( '/^```(json)?\n(.*)\n```$/s', '$2', $review_result );
+		$review_result = \WP_Autoplugin\AI_Utils::strip_code_fences( $review_result, 'json' );
 		$review_result = json_decode( $review_result, true );
 		if ( ! $review_result ) {
 			wp_send_json_error( esc_html__( 'Failed to decode the review result.', 'wp-autoplugin' ) );

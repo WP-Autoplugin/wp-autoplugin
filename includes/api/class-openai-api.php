@@ -283,6 +283,9 @@ class OpenAI_API extends API {
 			$data['choices'][0]['message']['content'] .= $new_data['choices'][0]['message']['content'];
 		}
 
+		// Extract token usage for reporting.
+		$this->last_token_usage = $this->extract_token_usage( $data, 'openai' );
+
 		if ( isset( $data['choices'][0]['message']['content'] ) ) {
 			return $data['choices'][0]['message']['content'];
 		} else {

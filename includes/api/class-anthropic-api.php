@@ -226,6 +226,9 @@ class Anthropic_API extends API {
 			$data['content'][0]['text'] .= $new_data['content'][0]['text'];
 		}
 
+		// Extract token usage for reporting.
+		$this->last_token_usage = $this->extract_token_usage( $data, 'anthropic' );
+
 		if ( isset( $data['content'][0]['text'] ) ) {
 			return $data['content'][0]['text'];
 		} else {
