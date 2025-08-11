@@ -31,9 +31,12 @@ function buildAccordion(plan) {
     }
 
     let accordion = '';
+    let hasActive = false;
+    let index = 0;
+    const skipParts = new Set(['testing_plan', 'technically_feasible', 'explanation', 'hooks']);
     for (const part in plan) {
         // Hide testing_plan for now; store it globally for later display.
-        if (part === 'testing_plan') {
+        if (skipParts.has(part)) {
             if (typeof plan[part] === 'object') {
                 wp_autoplugin.testing_plan = buildSubSections(plan[part]);
             } else {
@@ -46,6 +49,7 @@ function buildAccordion(plan) {
         let className = 'autoplugin-accordion';
         if (part === 'plugin_name') {
             className += ' active';
+            hasActive = true;
         }
         accordion += `<div class="${className}">`;
         accordion += '<h3 class="autoplugin-accordion-heading">';
@@ -64,15 +68,24 @@ function buildAccordion(plan) {
             content = buildSubSections(content);
             accordion += `<textarea rows="10">${content.trim()}</textarea>`;
         } else {
+            // Normalize non-string values
+            const normalized = (content === null || content === undefined) ? '' : String(content);
             // Put content in a textarea for editing (except plugin_name → text input)
             if (part === 'plugin_name') {
-                accordion += `<input type="text" value="${content}" id="plugin_name" />`;
+                accordion += `<input type="text" value="${normalized}" id="plugin_name" />`;
             } else {
-                accordion += `<textarea rows="10">${content.trim()}</textarea>`;
+                accordion += `<textarea rows="10">${normalized.trim()}</textarea>`;
             }
         }
         accordion += '</div>';
         accordion += '</div>';
+        index++;
+    }
+
+    // If nothing marked active (e.g. no plugin_name in plan), open the first section
+    if (!hasActive) {
+        // Add ' active' to the first accordion container
+        accordion = accordion.replace('class="autoplugin-accordion"', 'class="autoplugin-accordion active"');
     }
 
     return accordion;

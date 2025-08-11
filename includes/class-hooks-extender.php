@@ -56,7 +56,47 @@ class Hooks_Extender {
 			$hooks_list .= "```\n{$hook['type']}: '{$hook['name']}'\n\nContext:\n{$hook['context']}\n```\n\n";
 		}
 
-		$prompt = <<<PROMPT
+		$plugin_mode = get_option( 'wp_autoplugin_plugin_mode', 'simple' );
+
+		if ( 'complex' === $plugin_mode ) {
+			$prompt = <<<PROMPT
+			I want to extend a WordPress plugin ($original_plugin), preferably using the filter and action hooks available in its code. Here are the available hooks in the plugin:
+
+			$hooks_list
+			
+			I want to make the following changes to the plugin's functionality:
+
+			$plugin_changes
+
+			In addition to the provided hooks, you may also make use of core WordPress hooks (actions and filters) if needed to achieve the desired changes.
+
+			Please determine if the requested extension is technically feasible. If it is not feasible, explain why.
+
+			If feasible, provide a technical specification and development plan for creating a new extension plugin that uses one or more of the hooks to achieve the desired changes. Include which hooks to use, how to use them, and any additional code or logic needed.
+
+			Do not write the actual plugin code. Your response must be a valid JSON object with the following sections:
+			{
+				"technically_feasible": true,
+				"explanation": "If not feasible, explain why (otherwise brief).",
+				"hooks": [ "hook_name_1", "hook_name_2" ],
+				"plan": "The development plan if feasible.",
+				"plugin_name": "Name of the new extension plugin",
+				"project_structure": {
+					"directories": ["includes/", "assets/css/", "assets/js/"],
+					"files": [
+						{ "path": "extension-plugin.php", "type": "php", "description": "Main plugin file with headers and bootstrapping." }
+					]
+				}
+			}
+
+			Guidelines:
+			- Keep structure minimal and only include necessary PHP/CSS/JS files
+			- Ensure the plan focuses on using the selected hooks correctly
+			- Do not include any code; only the JSON plan
+			- Response must be a single JSON object without Markdown formatting
+			PROMPT;
+		} else {
+			$prompt = <<<PROMPT
 			I want to extend a WordPress plugin ($original_plugin), preferably using the filter and action hooks available in its code. Here are the available hooks in the plugin:
 
 			$hooks_list
@@ -82,8 +122,9 @@ class Hooks_Extender {
 
 			Do not add any additional commentary. Make sure your response only contains a valid JSON object with the specified sections. Do not use Markdown formatting in your answer.
 			PROMPT;
+		}
 
-		$plan_data = $this->ai_api->send_prompt( $prompt );
+		$plan_data = $this->ai_api->send_prompt( $prompt, '', [ 'response_format' => [ 'type' => 'json_object' ] ] );
 
 		return $plan_data;
 	}
@@ -215,6 +256,105 @@ class Hooks_Extender {
 		$plugin_code = $this->ai_api->send_prompt( $prompt );
 
 		return $plugin_code;
+	}
+
+	/**
+	 * Generate a single file for a complex hooks-based extension plugin.
+	 *
+	 * @param string $original_plugin    The original plugin name.
+	 * @param array  $hooks              Array of hooks with name, type, and context (filtered to those used).
+	 * @param array  $file_info          File info from project_structure (path, type, description).
+	 * @param array  $project_structure  Full project structure array.
+	 * @param array  $ai_plan_array      The full JSON plan array.
+	 * @param array  $generated_files    Map of already generated files for context.
+	 * @return string|\WP_Error         File contents.
+	 */
+	public function generate_hooks_extension_file( $original_plugin, $hooks, $file_info, $project_structure, $ai_plan_array, $generated_files = [] ) {
+		$file_type        = isset( $file_info['type'] ) ? $file_info['type'] : 'php';
+		$file_path        = isset( $file_info['path'] ) ? $file_info['path'] : 'plugin.php';
+		$file_description = isset( $file_info['description'] ) ? $file_info['description'] : '';
+
+		$context   = $this->build_file_context( is_array( $generated_files ) ? $generated_files : [], is_array( $project_structure ) ? $project_structure : [] );
+		$plan_json = wp_json_encode( $ai_plan_array );
+
+		$hooks_list = '';
+		foreach ( $hooks as $hook ) {
+			$hooks_list .= "\n- {$hook['type']}: '{$hook['name']}'\nContext:\n{$hook['context']}\n";
+		}
+
+		if ( 'php' === $file_type ) {
+			$prompt = "Generate only the PHP code for a single file in a multi-file WordPress extension plugin that extends \"$original_plugin\" using its hooks.\n\n";
+			$prompt .= "File Path: $file_path\n";
+			$prompt .= "File Purpose: $file_description\n\n";
+			$prompt .= "Plugin Plan (JSON):\n" . $plan_json . "\n\n";
+			$prompt .= "Available Hooks to use:\n$hooks_list\n\n";
+			$prompt .= "Project Context:\n$context\n\n";
+			$prompt .= "Requirements:\n";
+			$prompt .= "- Follow WordPress coding standards; use tabs for indentation\n";
+			$prompt .= "- Correctly use the specified hooks in this file's implementation\n";
+			// Detect main file (simple heuristic: top-level PHP file)
+			$is_main_file = ( false === strpos( $file_path, '/' ) ) && ( substr( $file_path, -4 ) === '.php' );
+			if ( $is_main_file ) {
+				$prompt .= "- This is the main plugin file; include a proper WordPress plugin header\n";
+			} else {
+				$prompt .= "- This is a supporting PHP file; do not include a plugin header\n";
+			}
+			$prompt .= "- Do not include placeholders; provide complete working code\n";
+			$prompt .= "- Do not output any explanation or markdown; return only raw PHP code for $file_path";
+
+			return $this->ai_api->send_prompt( $prompt );
+		} elseif ( 'css' === $file_type ) {
+			$prompt = "Generate only the CSS code for the following file in a WordPress extension plugin:\n\n";
+			$prompt .= "File Path: $file_path\n";
+			$prompt .= "File Purpose: $file_description\n\n";
+			$prompt .= "Do not include explanations or markdown. Return only raw CSS.";
+			return $this->ai_api->send_prompt( $prompt );
+		} elseif ( 'js' === $file_type ) {
+			$prompt = "Generate only the JavaScript code for the following file in a WordPress extension plugin:\n\n";
+			$prompt .= "File Path: $file_path\n";
+			$prompt .= "File Purpose: $file_description\n\n";
+			$prompt .= "Use jQuery if needed. Do not include explanations or markdown. Return only raw JavaScript.";
+			return $this->ai_api->send_prompt( $prompt );
+		}
+
+		return new \WP_Error( 'invalid_file_type', 'Unsupported file type: ' . $file_type );
+	}
+
+	/**
+	 * Build context string from generated files and project structure.
+	 *
+	 * @param array $generated_files Previously generated files.
+	 * @param array $project_structure The project structure.
+	 * @return string
+	 */
+	private function build_file_context( $generated_files, $project_structure ) {
+		$context = "Project Structure:\n";
+
+		if ( isset( $project_structure['directories'] ) && is_array( $project_structure['directories'] ) ) {
+			$context .= 'Directories: ' . implode( ', ', $project_structure['directories'] ) . "\n";
+		}
+
+		if ( isset( $project_structure['files'] ) && is_array( $project_structure['files'] ) ) {
+			$context .= "Files:\n";
+			foreach ( $project_structure['files'] as $file ) {
+				$path = isset( $file['path'] ) ? $file['path'] : '';
+				$type = isset( $file['type'] ) ? $file['type'] : '';
+				$desc = isset( $file['description'] ) ? $file['description'] : '';
+				$context .= "- $path ($type): $desc\n";
+			}
+		}
+
+		if ( ! empty( $generated_files ) && is_array( $generated_files ) ) {
+			$context .= "\nPreviously Generated Files:\n";
+			foreach ( $generated_files as $file_path => $file_content ) {
+				$context .= "File: $file_path\n";
+				$lines   = explode( "\n", (string) $file_content );
+				$snippet = implode( "\n", array_slice( $lines, 0, 200 ) );
+				$context .= "```\n$snippet\n```\n";
+			}
+		}
+
+		return $context;
 	}
 
 	/**

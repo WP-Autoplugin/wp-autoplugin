@@ -51,11 +51,7 @@ $is_plugin_active = is_plugin_active( $plugin_file );
 		<h1><?php esc_html_e( 'Generated Extension Plan', 'wp-autoplugin' ); ?></h1>
 		<form method="post" action="" id="extend-hooks-code-form">
 			<p><?php esc_html_e( 'Review or edit the generated plan for the extension plugin:', 'wp-autoplugin' ); ?></p>
-			<textarea name="plugin_plan_container" id="plugin_plan_container" rows="20" cols="100"></textarea>
-			<p>
-				<label for="plugin_name"><?php esc_html_e( 'Plugin Name:', 'wp-autoplugin' ); ?></label><br />
-				<input type="text" name="plugin_name" id="plugin_name" value="" style="width: 50%;" />
-			</p>
+			<div id="plugin_plan_container"></div>
 			<div class="autoplugin-actions">
 				<button type="button" id="edit-issue" class="button"><?php esc_html_e( '« Edit Description', 'wp-autoplugin' ); ?></button>
 				<?php submit_button( esc_html__( 'Generate Extension Code', 'wp-autoplugin' ), 'primary', 'extend_code' ); ?>
@@ -67,8 +63,27 @@ $is_plugin_active = is_plugin_active( $plugin_file );
 		<?php /* translators: %s: plugin name. */ ?>
 		<h1><?php printf( esc_html__( 'Extension Plugin for: %s', 'wp-autoplugin' ), esc_html( $plugin_data['Name'] ) ); ?></h1>
 		<form method="post" action="" id="extended-hooks-plugin-form">
-			<p><?php esc_html_e( 'The extension plugin code has been generated. Review it before saving:', 'wp-autoplugin' ); ?></p>
-			<textarea name="extended_plugin_code" id="extended_plugin_code" rows="20" cols="100"></textarea>
+			<p><?php esc_html_e( 'Review the generated code before saving:', 'wp-autoplugin' ); ?></p>
+
+			<!-- Simple (single-file) mode -->
+			<div id="simple-plugin-content">
+				<textarea name="extended_plugin_code" id="extended_plugin_code" rows="20" cols="100"></textarea>
+			</div>
+
+			<!-- Complex (multi-file) mode -->
+			<div id="complex-plugin-content" style="display: none;">
+				<div class="generation-progress" style="display: none;">
+					<div class="progress-bar-container">
+						<div class="progress-bar" id="file-generation-progress"></div>
+					</div>
+					<span class="progress-text" id="progress-text"><?php esc_html_e( 'Generating files...', 'wp-autoplugin' ); ?></span>
+				</div>
+
+				<div class="generated-files-container" id="extended-files-container">
+					<div class="files-tabs" id="files-tabs"></div>
+					<div class="file-content" id="file-content"></div>
+				</div>
+			</div>
 
 			<div class="autoplugin-code-warning">
 				<strong><?php esc_html_e( 'Warning:', 'wp-autoplugin' ); ?></strong> <?php esc_html_e( 'AI-generated code may be unstable or insecure; use only after careful review and testing.', 'wp-autoplugin' ); ?>

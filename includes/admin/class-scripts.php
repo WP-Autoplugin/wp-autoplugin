@@ -365,6 +365,14 @@ class Scripts {
 				[],
 				WP_AUTOPLUGIN_VERSION
 			);
+
+			// Reuse generator styles so Project Structure table matches other flows
+			wp_enqueue_style(
+				'wp-autoplugin-generator-shared',
+				WP_AUTOPLUGIN_URL . 'assets/admin/css/generator.css',
+				[],
+				WP_AUTOPLUGIN_VERSION
+			);
 		} elseif ( $screen->id === 'admin_page_wp-autoplugin-extend-theme' ) {
 			$settings = wp_enqueue_code_editor( [ 'type' => 'application/x-httpd-php' ] );
 			if ( false !== $settings ) {
