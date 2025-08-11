@@ -48,24 +48,30 @@ class Plugin_Extender {
 	public function plan_plugin_extension( $plugin_code_or_files, $plugin_changes ) {
 		$code_context = $this->build_code_context( $plugin_code_or_files );
 		$prompt = <<<PROMPT
-I have a WordPress plugin I would like to extend. It may be a single file or a multi-file codebase. Here is the codebase:
+I have a WordPress plugin I would like to modify. Here is the plugin codebase:
 
 $code_context
 
 I want the following changes to be made to the plugin:
-```
+"""
 $plugin_changes
-```
+"""
+
+Your task is to analyze the plugin code and the requested changes, and provide a detailed plan in JSON format for how to implement these changes. The plan should include:
+1. A detailed description of the changes to be made, including any new features or modifications.
+2. A list of files that will be modified or added, with a brief description of each. Do not write the code yet.
 
 Provide a machine-readable plan in strict JSON (no markdown code fences, no commentary). Include:
+```
 {
-  "plan_summary": string,
+  "plan_details": string,
   "project_structure": {
 	"files": [
 	  { "path": string, "type": "php"|"js"|"css", "description": string, "action": "update"|"add" }
 	]
   }
 }
+```
 
 Notes:
 - Only include files that will be modified or added.
@@ -134,6 +140,7 @@ Constraints:
 - Do not output any explanation. Do not output any other files.
 - Output only the code for {$file_path} wrapped in a proper code block for the file type (```{$lang}).
 - If the file does not exist yet (action is ADD), create it with complete, working content.
+- If the file is being updated (action is UPDATE), ensure it contains all necessary code, not just the changes.
 PROMPT;
 
 		return $this->ai_api->send_prompt( $prompt );
@@ -153,22 +160,20 @@ PROMPT;
 	public function extend_plugin( $plugin_code_or_files, $plugin_changes, $ai_plan, $is_complex = false ) {
 		$code_context = $this->build_code_context( $plugin_code_or_files );
 		$instructions = $is_complex
-			? 'Output a JSON object with a "files" map of file paths to their complete, updated contents. Do not include any explanation.'
+			? 'Output a JSON object with a "files" map of file paths to their complete, updated contents. Do not include any explanation. Use file paths relative to the plugin root and include the full content for each changed file.'
 			: 'Output ONLY the complete, updated PHP code for the plugin file, without any explanation or markdown.';
 
 		$prompt = <<<PROMPT
-			I have a WordPress plugin I would like to extend. It may be single-file or multi-file. Here is the current codebase:
+			I have a WordPress plugin I would like to extend. Here is the current codebase:
 
 			$code_context
 
 			Here is the plan for extending the plugin:
-			```
+			"""
 			$ai_plan
-			```
+			"""
 
 			Please implement the changes. $instructions
-
-			If JSON is returned, use file paths relative to the plugin root and include the full content for each changed file.
 			PROMPT;
 
 		return $this->ai_api->send_prompt( $prompt );

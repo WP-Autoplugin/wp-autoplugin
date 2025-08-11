@@ -46,82 +46,88 @@ class Plugin_Fixer {
 	 *
 	 * @return string|WP_Error
 	 */
-    public function identify_issue( $plugin_code_or_files, $problem, $check_other_issues = true ) {
-        $code_context = $this->build_code_context( $plugin_code_or_files );
+	public function identify_issue( $plugin_code_or_files, $problem, $check_other_issues = true ) {
+		$code_context = $this->build_code_context( $plugin_code_or_files );
 
-        $focus = $check_other_issues
-            ? 'You may propose additional fixes beyond the immediate problem if you find clear issues.'
-            : 'Focus only on the issue at hand.';
+		$focus = $check_other_issues
+			? 'You may propose additional fixes beyond the immediate problem if you find clear issues.'
+			: 'Focus only on the issue at hand.';
 
-        $prompt = <<<PROMPT
-I have a WordPress plugin that needs fixing. The plugin may be a single file or a multi-file codebase. Here is the codebase:
+		$prompt = <<<PROMPT
+I have a WordPress plugin that needs fixing. Here is the current codebase:
 
 $code_context
 
 The problem I am encountering:
-```
+"""
 $problem
-```
+"""
 
 {$focus}
 
+Your task is to analyze the plugin code and the reported problem, and provide a detailed plan in JSON format for how to fix the issue. The plan should include:
+1. A detailed description of the fix to be applied.
+2. A list of files that will be modified or added to implement the fix, with a brief description of each. Do not write the code yet.
+
 Provide a machine-readable plan in strict JSON (no markdown code fences, no commentary). Include:
+```
 {
-  "plan_summary": string,
+  "plan_details": string,
   "project_structure": {
-    "files": [
-      { "path": string, "type": "php"|"js"|"css", "description": string, "action": "update"|"add" }
-    ]
+	"files": [
+	  { "path": string, "type": "php"|"js"|"css", "description": string, "action": "update"|"add" }
+	]
   }
 }
+```
 
 Notes:
 - Only include the files that actually need to be modified or added to implement the fix.
 - Do NOT include any code in this response. Only the JSON object above.
 PROMPT;
 
-        return $this->ai_api->send_prompt( $prompt );
-    }
+		return $this->ai_api->send_prompt( $prompt );
+	}
 
-    /**
-     * Generate fixed content for a single file using the full codebase and the plan.
-     *
-     * @param array  $plugin_code_or_files Map of path => contents.
-     * @param string $problem              Problem description.
-     * @param string $ai_plan              JSON plan string.
-     * @param array  $project_structure    Parsed plan project structure.
-     * @param array  $generated_files      Map of already fixed files in this run.
-     * @param array  $file_info            Target file info [path,type,description,action].
-     * @return string|\WP_Error
-     */
-    public function fix_single_file( $plugin_code_or_files, $problem, $ai_plan, $project_structure, $generated_files, $file_info ) {
-        $code_context = $this->build_code_context( $plugin_code_or_files );
+	/**
+	 * Generate fixed content for a single file using the full codebase and the plan.
+	 *
+	 * @param array  $plugin_code_or_files Map of path => contents.
+	 * @param string $problem              Problem description.
+	 * @param string $ai_plan              JSON plan string.
+	 * @param array  $project_structure    Parsed plan project structure.
+	 * @param array  $generated_files      Map of already fixed files in this run.
+	 * @param array  $file_info            Target file info [path,type,description,action].
+	 * @return string|\WP_Error
+	 */
+	public function fix_single_file( $plugin_code_or_files, $problem, $ai_plan, $project_structure, $generated_files, $file_info ) {
+		$code_context = $this->build_code_context( $plugin_code_or_files );
 
-        $file_path = isset( $file_info['path'] ) ? $file_info['path'] : '';
-        $file_type = isset( $file_info['type'] ) ? $file_info['type'] : 'php';
-        $action    = isset( $file_info['action'] ) ? $file_info['action'] : 'update';
+		$file_path = isset( $file_info['path'] ) ? $file_info['path'] : '';
+		$file_type = isset( $file_info['type'] ) ? $file_info['type'] : 'php';
+		$action    = isset( $file_info['action'] ) ? $file_info['action'] : 'update';
 
-        $lang = 'php';
-        if ( 'css' === $file_type ) { $lang = 'css'; }
-        elseif ( 'js' === $file_type ) { $lang = 'javascript'; }
+		$lang = 'php';
+		if ( 'css' === $file_type ) { $lang = 'css'; }
+		elseif ( 'js' === $file_type ) { $lang = 'javascript'; }
 
-        $generated_context = '';
-        if ( is_array( $generated_files ) && ! empty( $generated_files ) ) {
-            $generated_context = "Previously updated/added files in this fix run:\n";
-            foreach ( $generated_files as $path => $contents ) {
-                $gLang = 'php';
-                if ( preg_match( '/\\.css$/i', $path ) ) { $gLang = 'css'; }
-                elseif ( preg_match( '/\\.(js|mjs)$/i', $path ) ) { $gLang = 'javascript'; }
-                $lines = explode( "\n", (string) $contents );
-                $max   = 1200;
-                if ( count( $lines ) > $max ) {
-                    $contents = implode( "\n", array_slice( $lines, 0, $max ) ) . "\n/* ... truncated ... */";
-                }
-                $generated_context .= "\nFile: {$path}\n```{$gLang}\n{$contents}\n```\n";
-            }
-        }
+		$generated_context = '';
+		if ( is_array( $generated_files ) && ! empty( $generated_files ) ) {
+			$generated_context = "Previously updated/added files in this fix run:\n";
+			foreach ( $generated_files as $path => $contents ) {
+				$gLang = 'php';
+				if ( preg_match( '/\\.css$/i', $path ) ) { $gLang = 'css'; }
+				elseif ( preg_match( '/\\.(js|mjs)$/i', $path ) ) { $gLang = 'javascript'; }
+				$lines = explode( "\n", (string) $contents );
+				$max   = 1200;
+				if ( count( $lines ) > $max ) {
+					$contents = implode( "\n", array_slice( $lines, 0, $max ) ) . "\n/* ... truncated ... */";
+				}
+				$generated_context .= "\nFile: {$path}\n```{$gLang}\n{$contents}\n```\n";
+			}
+		}
 
-        $prompt = <<<PROMPT
+		$prompt = <<<PROMPT
 You are fixing an existing WordPress plugin codebase. Here is the current codebase:
 
 $code_context
@@ -150,8 +156,8 @@ Constraints:
 - If the file does not exist yet (action is ADD), create it with complete, working content.
 PROMPT;
 
-        return $this->ai_api->send_prompt( $prompt );
-    }
+		return $this->ai_api->send_prompt( $prompt );
+	}
 
 	/**
 	 * Prompt the AI to fix a WordPress plugin (single-file or multi-file).
