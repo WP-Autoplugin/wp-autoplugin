@@ -1031,7 +1031,7 @@ class Ajax {
 		$valid_model = false;
 
 		// Check built-in models.
-		foreach ( \WP_Autoplugin\Admin::$models as $provider => $models ) {
+		foreach ( \WP_Autoplugin\Admin::get_models() as $provider => $models ) {
 			if ( array_key_exists( $model, $models ) ) {
 				$valid_model = true;
 				break;
@@ -1088,7 +1088,7 @@ class Ajax {
 			$valid_model = false;
 
 			// Check built-in models.
-			foreach ( \WP_Autoplugin\Admin::$models as $provider => $models ) {
+			foreach ( \WP_Autoplugin\Admin::get_models() as $provider => $models ) {
 				if ( array_key_exists( $model, $models ) ) {
 					$valid_model = true;
 					break;

@@ -64,17 +64,13 @@ class Plugin_Installer {
 		$plugin_file = '';
 		if ( strpos( $plugin_name, '/' ) !== false && substr( $plugin_name, -4 ) === '.php' ) {
 			// Treat as update to an existing plugin file path relative to WP_PLUGIN_DIR.
-			$clean_rel   = ltrim( str_replace( [ '..\\', '../', '\\' ], '/', (string) $plugin_name ), '/' );
-			$plugin_file = wp_normalize_path( WP_PLUGIN_DIR . '/' . $clean_rel );
-			$plugins_dir = wp_normalize_path( trailingslashit( WP_PLUGIN_DIR ) );
-			if ( strpos( $plugin_file, $plugins_dir ) !== 0 ) {
-				return new \WP_Error( 'file_creation_error', __( 'Invalid plugin path.', 'wp-autoplugin' ) );
+			$clean_rel   = wp_normalize_path( $plugin_name );
+			if ( strpos( $clean_rel, '../' ) !== false ) {
+				return new \WP_Error( 'invalid_path', __( 'Plugin path cannot contain "../".', 'wp-autoplugin' ) );
 			}
-			// If file exists, check if writable using WP_Filesystem.
-			if ( $wp_filesystem->exists( $plugin_file ) ) {
-				// ok
-			} else {
-				return new \WP_Error( 'file_creation_error', __( 'Error updating plugin file.', 'wp-autoplugin' ) );
+			$plugin_file = WP_PLUGIN_DIR . '/' . $clean_rel;
+			if ( ! $wp_filesystem->exists( $plugin_file ) ) {
+				return new \WP_Error( 'file_not_found', __( 'Error updating plugin file: file does not exist.', 'wp-autoplugin' ) );
 			}
 		} else {
 			$plugin_name = sanitize_title( $plugin_name, 'wp-autoplugin-' . md5( $code ) );
@@ -195,7 +191,7 @@ class Plugin_Installer {
 		list( $project_structure, $generated_files ) = $this->normalize_file_paths( $project_structure, $generated_files );
 
 		$plugin_name = sanitize_title( $plugin_name, 'wp-autoplugin-' . md5( wp_json_encode( $generated_files ) ) );
-		$plugin_dir  = WP_PLUGIN_DIR . '/' . $plugin_name . '/';
+		$plugin_dir  = wp_normalize_path( WP_PLUGIN_DIR . '/' . $plugin_name . '/' );
 
 		// Create plugin directory if it doesn't exist.
 		if ( ! $wp_filesystem->exists( $plugin_dir ) ) {
@@ -205,6 +201,10 @@ class Plugin_Installer {
 		// Create subdirectories.
 		if ( isset( $project_structure['directories'] ) ) {
 			foreach ( $project_structure['directories'] as $directory ) {
+				$directory = wp_normalize_path( $directory );
+				if ( strpos( $directory, '../' ) !== false ) {
+					return new \WP_Error( 'invalid_path', __( 'Invalid directory path.', 'wp-autoplugin' ) );
+				}
 				$dir_path = $plugin_dir . $directory;
 				if ( ! $wp_filesystem->exists( $dir_path ) ) {
 					$wp_filesystem->mkdir( $dir_path, 0755, true );
@@ -216,7 +216,11 @@ class Plugin_Installer {
 		$main_file = '';
 		if ( isset( $project_structure['files'] ) ) {
 			foreach ( $project_structure['files'] as $file_info ) {
-				$file_path = $plugin_dir . $file_info['path'];
+				$file_path = wp_normalize_path( $file_info['path'] );
+				if ( strpos( $file_path, '../' ) !== false ) {
+					return new \WP_Error( 'invalid_path', __( 'Invalid file path.', 'wp-autoplugin' ) );
+				}
+				$file_path = $plugin_dir . $file_path;
 				$file_content = isset( $generated_files[ $file_info['path'] ] ) ? $generated_files[ $file_info['path'] ] : '';
 
 				if ( empty( $file_content ) ) {
@@ -237,6 +241,18 @@ class Plugin_Installer {
 				// Identify the main plugin file (should be in root and end with .php)
 				if ( ! strpos( $file_info['path'], '/' ) && 'php' === $file_info['type'] ) {
 					$main_file = $file_info['path'];
+				}
+			}
+		}
+
+		if ( empty( $main_file ) ) {
+			// Fallback to find the first php file in the root directory
+			if ( isset( $project_structure['files'] ) ) {
+				foreach ( $project_structure['files'] as $file_info ) {
+					if ( ! strpos( $file_info['path'], '/' ) && 'php' === $file_info['type'] ) {
+						$main_file = $file_info['path'];
+						break;
+					}
 				}
 			}
 		}
@@ -275,13 +291,12 @@ class Plugin_Installer {
 		}
 
 		// Sanitize and constrain plugin root inside plugins directory.
-		$plugin_file     = ltrim( str_replace( [ '..\\', '../', '\\' ], '/', (string) $plugin_file ), '/' );
+		$plugin_file     = wp_normalize_path( $plugin_file );
+		if ( strpos( $plugin_file, '../' ) !== false ) {
+			return new \WP_Error( 'invalid_path', __( 'Plugin path cannot contain "../".', 'wp-autoplugin' ) );
+		}
 		$plugin_root_rel = dirname( $plugin_file );
 		$plugin_root_abs = wp_normalize_path( WP_PLUGIN_DIR . '/' . $plugin_root_rel . '/' );
-		$plugins_dir     = wp_normalize_path( trailingslashit( WP_PLUGIN_DIR ) );
-		if ( strpos( $plugin_root_abs, $plugins_dir ) !== 0 ) {
-			return new \WP_Error( 'invalid_plugin_dir', __( 'Target plugin directory does not exist.', 'wp-autoplugin' ) );
-		}
 
 		if ( ! $wp_filesystem->is_dir( $plugin_root_abs ) ) {
 			return new \WP_Error( 'invalid_plugin_dir', __( 'Target plugin directory does not exist.', 'wp-autoplugin' ) );
@@ -290,7 +305,10 @@ class Plugin_Installer {
 		$allowed_ext = [ 'php', 'css', 'js' ];
 
 		foreach ( $files_map as $rel_path => $contents ) {
-			$rel_path = ltrim( str_replace( ['..\\', '../', '\\'], '/', (string) $rel_path ), '/' );
+			$rel_path = wp_normalize_path( $rel_path );
+			if ( strpos( $rel_path, '../' ) !== false ) {
+				return new \WP_Error( 'invalid_path', __( 'Invalid file path.', 'wp-autoplugin' ) );
+			}
 			// Ensure path stays inside plugin directory
 			if ( strpos( $rel_path, $plugin_root_rel . '/' ) === 0 ) {
 				$rel_path = substr( $rel_path, strlen( $plugin_root_rel . '/' ) );

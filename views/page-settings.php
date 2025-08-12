@@ -44,7 +44,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</tr>
 <?php
 			function render_model_dropdown( $name, $selected_value ) {
-				$models = Admin::$models;
+				$models = Admin::get_models();
 				$custom_models = get_option( 'wp_autoplugin_custom_models', [] );
 				
 				echo '<select name="' . esc_attr( $name ) . '" id="' . esc_attr( $name ) . '">';
@@ -74,7 +74,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<td>
 					<select name="wp_autoplugin_model" id="wp_autoplugin_model">
 						<?php
-						$models = Admin::$models;
+						$models = Admin::get_models();
 						foreach ( $models as $provider => $model ) {
 							echo '<optgroup label="' . esc_attr( $provider ) . '">';
 							foreach ( $model as $key => $value ) {
