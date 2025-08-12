@@ -86,7 +86,6 @@
         formData.append('action', 'wp_autoplugin_generate_fix_plan');
         formData.append('plugin_issue', issueDescription);
         formData.append('plugin_file', document.getElementById('plugin_file').value);
-        formData.append('check_other_issues', document.getElementById('check_other_issues').checked ? 1 : 0);
         formData.append('security', wp_autoplugin.nonce);
 
         try {

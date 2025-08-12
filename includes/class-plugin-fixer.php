@@ -42,16 +42,11 @@ class Plugin_Fixer {
 	 *
 	 * @param string|array $plugin_code_or_files The plugin code string OR array of [ path => contents ].
 	 * @param string       $problem              The problem encountered.
-	 * @param bool         $check_other_issues   Whether to check for other issues in the code.
 	 *
 	 * @return string|WP_Error
 	 */
-	public function identify_issue( $plugin_code_or_files, $problem, $check_other_issues = true ) {
+	public function identify_issue( $plugin_code_or_files, $problem ) {
 		$code_context = $this->build_code_context( $plugin_code_or_files );
-
-		$focus = $check_other_issues
-			? 'You may propose additional fixes beyond the immediate problem if you find clear issues.'
-			: 'Focus only on the issue at hand.';
 
 		$prompt = <<<PROMPT
 I have a WordPress plugin that needs fixing. Here is the current codebase:
@@ -62,8 +57,6 @@ The problem I am encountering:
 """
 $problem
 """
-
-{$focus}
 
 Your task is to analyze the plugin code and the reported problem, and provide a detailed plan in JSON format for how to fix the issue. The plan should include:
 1. A detailed description of the fix to be applied.

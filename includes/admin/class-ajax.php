@@ -183,7 +183,7 @@ class Ajax {
 			? sanitize_text_field( wp_unslash( $_POST['plugin_description'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
 			: '';
 
-		$planner_api = $this->admin->get_planner_api();
+		$planner_api = $this->admin->api_handler->get_planner_api();
 		$generator = new Plugin_Generator( $planner_api );
 		$plan_data = $generator->generate_plugin_plan( $plan );
 		if ( is_wp_error( $plan_data ) ) {
@@ -216,7 +216,7 @@ class Ajax {
 			? sanitize_text_field( wp_unslash( $_POST['plugin_plan'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
 			: '';
 
-		$coder_api = $this->admin->get_coder_api();
+		$coder_api = $this->admin->api_handler->get_coder_api();
 		$generator = new Plugin_Generator( $coder_api );
 		$code      = $generator->generate_plugin_code( $description );
 		if ( is_wp_error( $code ) ) {
@@ -261,7 +261,7 @@ class Ajax {
 		}
 
 		$file_info = $files[ $file_index ];
-		$coder_api = $this->admin->get_coder_api();
+		$coder_api = $this->admin->api_handler->get_coder_api();
 		$generator = new Plugin_Generator( $coder_api );
 		$file_content = $generator->generate_plugin_file( $file_info, wp_json_encode( $plugin_plan_array ), $project_structure_array, $generated_files_array );
 
@@ -371,11 +371,10 @@ class Ajax {
 		$problem            = isset( $_POST['plugin_issue'] ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
 			? sanitize_text_field( wp_unslash( $_POST['plugin_issue'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
 			: '';
-		$check_other_issues = isset( $_POST['check_other_issues'] ) ? (bool) $_POST['check_other_issues'] : true; // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
 
-		$reviewer_api = $this->admin->get_reviewer_api();
+		$reviewer_api = $this->admin->api_handler->get_reviewer_api();
 		$fixer       = new Plugin_Fixer( $reviewer_api );
-		$plan_data   = $fixer->identify_issue( $codebase['files'], $problem, $check_other_issues );
+		$plan_data   = $fixer->identify_issue( $codebase['files'], $problem );
 		if ( is_wp_error( $plan_data ) ) {
 			wp_send_json_error( $plan_data->get_error_message() );
 		}
@@ -411,7 +410,7 @@ class Ajax {
 			? sanitize_text_field( wp_unslash( $_POST['plugin_plan'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
 			: '';
 
-		$coder_api = $this->admin->get_coder_api();
+		$coder_api = $this->admin->api_handler->get_coder_api();
 		$fixer = new Plugin_Fixer( $coder_api );
 		$code  = $fixer->fix_plugin( $codebase['files'], $problem, $ai_description, $codebase['is_complex'], $codebase['main_file'] );
 
@@ -510,7 +509,7 @@ class Ajax {
 		}
 
 		$file_info = $files[ $file_index ];
-		$coder_api = $this->admin->get_coder_api();
+		$coder_api = $this->admin->api_handler->get_coder_api();
 		$fixer  = new \WP_Autoplugin\Plugin_Fixer( $coder_api );
 		$file_content = $fixer->fix_single_file( $codebase['files'], $problem, $plugin_plan, $project_structure_array, is_array( $generated_files_array ) ? $generated_files_array : [], $file_info );
 		if ( is_wp_error( $file_content ) ) {
@@ -547,7 +546,7 @@ class Ajax {
 			? sanitize_text_field( wp_unslash( $_POST['plugin_issue'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
 			: '';
 
-		$planner_api = $this->admin->get_planner_api();
+		$planner_api = $this->admin->api_handler->get_planner_api();
 		$extender    = new \WP_Autoplugin\Plugin_Extender( $planner_api );
 		$plan_data   = $extender->plan_plugin_extension( $codebase['files'], $problem );
 		if ( is_wp_error( $plan_data ) ) {
@@ -585,7 +584,7 @@ class Ajax {
 			? sanitize_text_field( wp_unslash( $_POST['plugin_plan'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
 			: '';
 
-		$coder_api = $this->admin->get_coder_api();
+		$coder_api = $this->admin->api_handler->get_coder_api();
 		$extender  = new \WP_Autoplugin\Plugin_Extender( $coder_api );
 		$code      = $extender->extend_plugin( $codebase['files'], $problem, $ai_description, $codebase['is_complex'] );
 
@@ -633,7 +632,7 @@ class Ajax {
 		}
 
 		$file_info = $files[ $file_index ];
-		$coder_api = $this->admin->get_coder_api();
+		$coder_api = $this->admin->api_handler->get_coder_api();
 		$extender  = new \WP_Autoplugin\Plugin_Extender( $coder_api );
 		$file_content = $extender->extend_single_file( $codebase['files'], $plugin_plan, $project_structure_array, is_array( $generated_files_array ) ? $generated_files_array : [], $file_info );
 		if ( is_wp_error( $file_content ) ) {
@@ -711,7 +710,7 @@ class Ajax {
 			? sanitize_text_field( wp_unslash( $_POST['explain_focus'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
 			: 'general';
 
-		$reviewer_api = $this->admin->get_reviewer_api();
+		$reviewer_api = $this->admin->api_handler->get_reviewer_api();
 		$explainer    = new Plugin_Explainer( $reviewer_api );
 		if ( ! empty( $question ) ) {
 			$explanation = $explainer->answer_plugin_question( $codebase['files'], $question );
@@ -835,7 +834,7 @@ class Ajax {
 		$original_plugin_name = $plugin_data['Name'];
 
 		$plugin_changes = sanitize_text_field( wp_unslash( $_POST['plugin_issue'] ) );
-		$planner_api = $this->admin->get_planner_api();
+		$planner_api = $this->admin->api_handler->get_planner_api();
 		$extender       = new \WP_Autoplugin\Hooks_Extender( $planner_api );
 		$plan_data      = $extender->plan_plugin_hooks_extension( $original_plugin_name, $hooks, $plugin_changes );
 		if ( is_wp_error( $plan_data ) ) {
@@ -892,7 +891,7 @@ class Ajax {
 		$plugin_data          = get_plugin_data( WP_CONTENT_DIR . '/plugins/' . $plugin_file );
 		$original_plugin_name = $plugin_data['Name'];
 
-		$coder_api = $this->admin->get_coder_api();
+		$coder_api = $this->admin->api_handler->get_coder_api();
 		$extender = new \WP_Autoplugin\Hooks_Extender( $coder_api );
 		$code     = $extender->generate_hooks_extension_code( $original_plugin_name, $hooks, $ai_plan, $plugin_name );
 
@@ -965,7 +964,7 @@ class Ajax {
 		$plugin_data          = get_plugin_data( WP_CONTENT_DIR . '/plugins/' . $plugin_file );
 		$original_plugin_name = $plugin_data['Name'];
 
-		$coder_api = $this->admin->get_coder_api();
+		$coder_api = $this->admin->api_handler->get_coder_api();
 		$extender  = new \WP_Autoplugin\Hooks_Extender( $coder_api );
 		$file_info = $files[ $file_index ];
 		$file_content = $extender->generate_hooks_extension_file( $original_plugin_name, $selected_hooks, $file_info, $project_structure_array, $plugin_plan_array, is_array( $generated_files_array ) ? $generated_files_array : [] );
@@ -1166,7 +1165,7 @@ class Ajax {
 		$original_theme_name  = $theme_data->get( 'Name' );
 
 		$theme_changes = sanitize_text_field( wp_unslash( $_POST['theme_issue'] ) );
-		$planner_api = $this->admin->get_planner_api();
+		$planner_api = $this->admin->api_handler->get_planner_api();
 		$extender      = new \WP_Autoplugin\Hooks_Extender( $planner_api );
 		$plan_data     = $extender->plan_theme_hooks_extension( $original_theme_name, $hooks, $theme_changes );
 		if ( is_wp_error( $plan_data ) ) {
@@ -1223,7 +1222,7 @@ class Ajax {
 		$theme_data          = wp_get_theme( $theme_slug );
 		$original_theme_name = $theme_data->get( 'Name' );
 
-		$coder_api = $this->admin->get_coder_api();
+		$coder_api = $this->admin->api_handler->get_coder_api();
 		$extender = new \WP_Autoplugin\Hooks_Extender( $coder_api );
 		$code     = $extender->generate_theme_extension_code( $original_theme_name, $hooks, $ai_plan, $plugin_name );
 
@@ -1261,7 +1260,7 @@ class Ajax {
 			wp_send_json_error( esc_html__( 'Invalid input data.', 'wp-autoplugin' ) );
 		}
 
-		$reviewer_api = $this->admin->get_reviewer_api();
+		$reviewer_api = $this->admin->api_handler->get_reviewer_api();
 		$generator = new Plugin_Generator( $reviewer_api );
 		$review_result = $generator->review_generated_code( $plugin_plan, $project_structure_array, $generated_files_array );
 

@@ -107,5 +107,5 @@ if ( isset( $_GET['error_message'] ) && check_admin_referer( 'extend-plugin', 'e
 		</form>
 		<div id="extended-plugin-message" class="autoplugin-message"></div>
 	</div>
-	<?php $this->output_admin_footer(); ?>
+	<?php $this->admin->output_admin_footer(); ?>
 </div>

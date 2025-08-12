@@ -50,14 +50,6 @@ if ( isset( $_GET['error_message'] ) ) {
 			<?php wp_nonce_field( 'fix_plugin', 'fix_plugin_nonce' ); ?>
 			<p><?php esc_html_e( 'Describe the issue you are experiencing with the plugin. Include as much detail as possible and any error messages you are seeing:', 'wp-autoplugin' ); ?></p>
 			<textarea name="plugin_issue" id="plugin_issue" rows="10" cols="100"><?php echo esc_textarea( $value ); ?></textarea>
-
-			<p>
-				<input type="radio" name="check_other_issues" value="1" id="check_other_issues" checked="checked" />
-				<label for="check_other_issues"><?php esc_html_e( 'Look for other issues in the plugin code as well', 'wp-autoplugin' ); ?></label><br />
-				<input type="radio" name="check_other_issues" value="0" id="focus_on_issue" />
-				<label for="focus_on_issue"><?php esc_html_e( 'Focus on the issue at hand', 'wp-autoplugin' ); ?></label>
-			</p>
-
 			<?php submit_button( esc_html__( 'Fix Plugin', 'wp-autoplugin' ), 'primary', 'fix_plugin' ); ?>
 			<input type="hidden" name="plugin_file" value="<?php echo esc_attr( $plugin_file ); ?>" id="plugin_file" />
 		</form>
@@ -117,5 +109,5 @@ if ( isset( $_GET['error_message'] ) ) {
 		</form>
 		<div id="fixed-plugin-message" class="autoplugin-message"></div>
 	</div>
-	<?php $this->output_admin_footer(); ?>
+	<?php $this->admin->output_admin_footer(); ?>
 </div>

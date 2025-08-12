@@ -96,5 +96,5 @@ $is_plugin_active = is_plugin_active( $plugin_file );
 		</form>
 		<div id="extended-hooks-plugin-message" class="autoplugin-message"></div>
 	</div>
-	<?php $this->output_admin_footer(); ?>
+	<?php $this->admin->output_admin_footer(); ?>
 </div>

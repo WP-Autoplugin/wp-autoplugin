@@ -24,40 +24,45 @@ class Scripts {
 		add_action( 'admin_head', [ $this, 'admin_css' ] );
 	}
 
+	/**
+	 * Get localized messages for JavaScript.
+	 *
+	 * @return array
+	 */
 	private function get_localized_messages() {
-        return [
-            'empty_description' => esc_html__('Please enter a plugin description.', 'wp-autoplugin'),
-            'generating_plan' => esc_html__('Generating a plan for your plugin.', 'wp-autoplugin'),
-            'plan_generation_error' => esc_html__('Error generating the plugin plan.', 'wp-autoplugin'),
-            'generating_code' => esc_html__('Generating code.', 'wp-autoplugin'),
-            'code_generation_error' => esc_html__('Error generating the plugin code.', 'wp-autoplugin'),
-            'plugin_creation_error' => esc_html__('Error creating the plugin.', 'wp-autoplugin'),
-            'creating_plugin' => esc_html__('Installing the plugin.', 'wp-autoplugin'),
-            'plugin_created' => esc_html__('Plugin successfully installed.', 'wp-autoplugin'),
-            'how_to_test' => esc_html__('How to test it?', 'wp-autoplugin'),
-            'use_fixer' => esc_html__('If you notice any issues, use the Fix button in the Autoplugins list.', 'wp-autoplugin'),
-            'activate' => esc_html__('Activate Plugin', 'wp-autoplugin'),
-            'code_updated' => esc_html__('The plugin code has been updated.', 'wp-autoplugin'),
-            'generating_explanation' => esc_html__('Generating explanation...', 'wp-autoplugin'),
-            'explanation_error' => esc_html__('Error generating explanation.', 'wp-autoplugin'),
-            'security_focus' => esc_html__('Security Analysis', 'wp-autoplugin'),
-            'performance_focus' => esc_html__('Performance Review', 'wp-autoplugin'),
-            'code_quality_focus' => esc_html__('Code Quality Analysis', 'wp-autoplugin'),
-            'usage_focus' => esc_html__('Usage Instructions', 'wp-autoplugin'),
-            'general_explanation' => esc_html__('General Explanation', 'wp-autoplugin'),
-            'copied' => esc_html__('Explanation copied to clipboard!', 'wp-autoplugin'),
-            'copy_failed' => esc_html__('Failed to copy explanation.', 'wp-autoplugin'),
-            'empty_changes_description' => esc_html__('Please describe the changes you want to make to the plugin.', 'wp-autoplugin'),
-            'plan_generation_error_dev' => esc_html__('Error generating the development plan.', 'wp-autoplugin'),
-            'generating_extended_code' => esc_html__('Generating the extended plugin code.', 'wp-autoplugin'),
-            'code_generation_error_extended' => esc_html__('Error generating the extended code.', 'wp-autoplugin'),
-            'plugin_creation_error_extended' => esc_html__('Error creating the extended plugin.', 'wp-autoplugin'),
-            'creating_extended_plugin' => esc_html__('Creating the extension plugin.', 'wp-autoplugin'),
-            'plugin_activation_error' => esc_html__('Error activating the plugin.', 'wp-autoplugin'),
-            'extracting_hooks' => esc_html__('Extracting theme hooks, please wait...', 'wp-autoplugin'),
-            'no_hooks_found' => esc_html__('No hooks found in the theme code.', 'wp-autoplugin'),
-        ];
-    }
+		return [
+			'empty_description'              => esc_html__( 'Please enter a plugin description.', 'wp-autoplugin' ),
+			'generating_plan'                => esc_html__( 'Generating a plan for your plugin.', 'wp-autoplugin' ),
+			'plan_generation_error'          => esc_html__( 'Error generating the plugin plan.', 'wp-autoplugin' ),
+			'generating_code'                => esc_html__( 'Generating code.', 'wp-autoplugin' ),
+			'code_generation_error'          => esc_html__( 'Error generating the plugin code.', 'wp-autoplugin' ),
+			'plugin_creation_error'          => esc_html__( 'Error creating the plugin.', 'wp-autoplugin' ),
+			'creating_plugin'                => esc_html__( 'Installing the plugin.', 'wp-autoplugin' ),
+			'plugin_created'                 => esc_html__( 'Plugin successfully installed.', 'wp-autoplugin' ),
+			'how_to_test'                    => esc_html__( 'How to test it?', 'wp-autoplugin' ),
+			'use_fixer'                      => esc_html__( 'If you notice any issues, use the Fix button in the Autoplugins list.', 'wp-autoplugin' ),
+			'activate'                       => esc_html__( 'Activate Plugin', 'wp-autoplugin' ),
+			'code_updated'                   => esc_html__( 'The plugin code has been updated.', 'wp-autoplugin' ),
+			'generating_explanation'         => esc_html__( 'Generating explanation...', 'wp-autoplugin' ),
+			'explanation_error'              => esc_html__( 'Error generating explanation.', 'wp-autoplugin' ),
+			'security_focus'                 => esc_html__( 'Security Analysis', 'wp-autoplugin' ),
+			'performance_focus'              => esc_html__( 'Performance Review', 'wp-autoplugin' ),
+			'code_quality_focus'             => esc_html__( 'Code Quality Analysis', 'wp-autoplugin' ),
+			'usage_focus'                    => esc_html__( 'Usage Instructions', 'wp-autoplugin' ),
+			'general_explanation'            => esc_html__( 'General Explanation', 'wp-autoplugin' ),
+			'copied'                         => esc_html__( 'Explanation copied to clipboard!', 'wp-autoplugin' ),
+			'copy_failed'                    => esc_html__( 'Failed to copy explanation.', 'wp-autoplugin' ),
+			'empty_changes_description'      => esc_html__( 'Please describe the changes you want to make to the plugin.', 'wp-autoplugin' ),
+			'plan_generation_error_dev'      => esc_html__( 'Error generating the development plan.', 'wp-autoplugin' ),
+			'generating_extended_code'       => esc_html__( 'Generating the extended plugin code.', 'wp-autoplugin' ),
+			'code_generation_error_extended' => esc_html__( 'Error generating the extended code.', 'wp-autoplugin' ),
+			'plugin_creation_error_extended' => esc_html__( 'Error creating the extended plugin.', 'wp-autoplugin' ),
+			'creating_extended_plugin'       => esc_html__( 'Creating the extension plugin.', 'wp-autoplugin' ),
+			'plugin_activation_error'        => esc_html__( 'Error activating the plugin.', 'wp-autoplugin' ),
+			'extracting_hooks'               => esc_html__( 'Extracting theme hooks, please wait...', 'wp-autoplugin' ),
+			'no_hooks_found'                 => esc_html__( 'No hooks found in the theme code.', 'wp-autoplugin' ),
+		];
+	}
 
 	/**
 	 * Enqueue scripts/styles depending on the current admin page.
@@ -85,11 +90,11 @@ class Scripts {
 			true
 		);
 
-        $localized_data = [
-            'ajax_url' => esc_url(admin_url('admin-ajax.php')),
-            'nonce' => wp_create_nonce('wp_autoplugin_generate'),
-            'messages' => $this->get_localized_messages(),
-        ];
+		$localized_data = [
+			'ajax_url' => esc_url(admin_url('admin-ajax.php')),
+			'nonce' => wp_create_nonce('wp_autoplugin_generate'),
+			'messages' => $this->get_localized_messages(),
+		];
 
 		// The main list page.
 		if ( $screen->id === 'toplevel_page_wp-autoplugin' ) {
@@ -123,14 +128,14 @@ class Scripts {
 			);
 
 			$localized_data['fix_url'] = esc_url(admin_url('admin.php?page=wp-autoplugin-fix&nonce=' . wp_create_nonce('wp-autoplugin-fix-plugin')));
-            $localized_data['activate_url'] = esc_url(admin_url('admin.php?page=wp-autoplugin&action=activate&nonce=' . wp_create_nonce('wp-autoplugin-activate-plugin')));
-            $localized_data['testing_plan'] = '';
-            $localized_data['plugin_examples'] = [
-                esc_html__('A simple contact form with honeypot spam protection.', 'wp-autoplugin'),
-                esc_html__('A custom post type for testimonials.', 'wp-autoplugin'),
-                esc_html__('A widget that displays recent posts.', 'wp-autoplugin'),
-                esc_html__('A simple image compression tool.', 'wp-autoplugin'),
-            ];
+			$localized_data['activate_url'] = esc_url(admin_url('admin.php?page=wp-autoplugin&action=activate&nonce=' . wp_create_nonce('wp-autoplugin-activate-plugin')));
+			$localized_data['testing_plan'] = '';
+			$localized_data['plugin_examples'] = [
+				esc_html__('A simple contact form with honeypot spam protection.', 'wp-autoplugin'),
+				esc_html__('A custom post type for testimonials.', 'wp-autoplugin'),
+				esc_html__('A widget that displays recent posts.', 'wp-autoplugin'),
+				esc_html__('A simple image compression tool.', 'wp-autoplugin'),
+			];
 
 			wp_enqueue_style(
 				'wp-autoplugin-generator',
@@ -162,7 +167,7 @@ class Scripts {
 			);
 
 			$localized_data['activate_url'] = esc_url(admin_url('admin.php?page=wp-autoplugin&action=activate&nonce=' . wp_create_nonce('wp-autoplugin-activate-plugin')));
-            $localized_data['is_plugin_active'] = $is_plugin_active;
+			$localized_data['is_plugin_active'] = $is_plugin_active;
 
 			wp_enqueue_style(
 				'wp-autoplugin-fix',
@@ -202,7 +207,7 @@ class Scripts {
 			);
 
 			$localized_data['activate_url'] = esc_url(admin_url('admin.php?page=wp-autoplugin&action=activate&nonce=' . wp_create_nonce('wp-autoplugin-activate-plugin')));
-            $localized_data['is_plugin_active'] = $is_plugin_active;
+			$localized_data['is_plugin_active'] = $is_plugin_active;
 
 			wp_enqueue_style(
 				'wp-autoplugin-extend',
@@ -273,7 +278,7 @@ class Scripts {
 			);
 
 			$localized_data['activate_url'] = esc_url(admin_url('admin.php?page=wp-autoplugin&action=activate&nonce=' . wp_create_nonce('wp-autoplugin-activate-plugin')));
-            $localized_data['is_plugin_active'] = $is_plugin_active;
+			$localized_data['is_plugin_active'] = $is_plugin_active;
 
 			wp_enqueue_style(
 				'wp-autoplugin-extend-hooks',
@@ -323,11 +328,11 @@ class Scripts {
 			true
 		);
 
-		$admin = new \WP_Autoplugin\Admin();
+		$api_handler = new \WP_Autoplugin\Admin\API_Handler();
 
 		wp_localize_script(
 			'wp-autoplugin-common',
-			'wpAutoplugin',
+			'wp_autoplugin',
 			$localized_data
 		);
 
@@ -338,11 +343,11 @@ class Scripts {
 				'nonce'                 => wp_create_nonce( 'wp_autoplugin_nonce' ),
 				'models'                => [
 					'default'  => get_option( 'wp_autoplugin_model' ),
-					'planner'  => $admin->get_planner_model(),
-					'coder'    => $admin->get_coder_model(),
-					'reviewer' => $admin->get_reviewer_model(),
+					'planner'  => $api_handler->get_planner_model(),
+					'coder'    => $api_handler->get_coder_model(),
+					'reviewer' => $api_handler->get_reviewer_model(),
 				],
-				'default_step'          => $admin->get_next_task_model(),
+				'default_step'          => $api_handler->get_next_task_model(),
 				'no_token_data'         => esc_html__( 'No token usage data available yet.', 'wp-autoplugin' ),
 				'total_usage'           => esc_html__( 'Total Usage', 'wp-autoplugin' ),
 				'step_breakdown'        => esc_html__( 'Step Breakdown', 'wp-autoplugin' ),

@@ -90,5 +90,5 @@ $plugin_data = get_plugin_data( $plugin_path );
 		</div>
 		<div id="explanation-message" class="autoplugin-message"></div>
 	</div>
-	<?php $this->output_admin_footer(); ?>
+	<?php $this->admin->output_admin_footer(); ?>
 </div>
