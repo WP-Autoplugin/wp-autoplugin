@@ -13,7 +13,7 @@ use WP_Autoplugin\Anthropic_API;
 use WP_Autoplugin\Google_Gemini_API;
 use WP_Autoplugin\XAI_API;
 use WP_Autoplugin\Custom_API;
-use WP_Autoplugin\Admin;
+use WP_Autoplugin\Admin\Admin;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

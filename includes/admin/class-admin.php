@@ -10,7 +10,9 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html
  */
 
-namespace WP_Autoplugin;
+namespace WP_Autoplugin\Admin;
+
+use WP_Autoplugin\Admin\Ajax;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -24,7 +26,7 @@ class Admin {
 	/**
 	 * The API handler instance.
 	 *
-	 * @var Admin\Api_Handler
+	 * @var Api_Handler
 	 */
 	public $api_handler;
 
@@ -35,15 +37,15 @@ class Admin {
 	 */
 	public function __construct() {
 		// Instantiate other admin components (each handles its own hooks).
-		new Admin\Menu( $this );
-		$this->api_handler = new Admin\Api_Handler();
-		new Admin\Action_Links();
-		new Admin\Updater();
-		new Admin\Settings();
-		new Admin\Scripts();
-		new Admin\Ajax( $this->api_handler );
-		new Admin\Bulk_Actions();
-		new Admin\Notices();
+		new Menu( $this );
+		$this->api_handler = new Api_Handler();
+		new Action_Links();
+		new Updater();
+		new Settings();
+		new Scripts();
+		new Ajax( $this );
+		new Bulk_Actions();
+		new Notices();
 	}
 
 	/**

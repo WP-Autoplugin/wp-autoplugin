@@ -38,6 +38,6 @@ require_once WP_AUTOPLUGIN_DIR . 'vendor/autoload.php';
  */
 function wp_autoplugin_init() {
 	load_plugin_textdomain( 'wp-autoplugin', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
-	$admin_pages = new \WP_Autoplugin\Admin();
+	$admin_pages = new \WP_Autoplugin\Admin\Admin();
 }
 add_action( 'plugins_loaded', 'wp_autoplugin_init' );
