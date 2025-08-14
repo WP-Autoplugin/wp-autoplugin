@@ -12,6 +12,8 @@
 
 namespace WP_Autoplugin;
 
+use WP_Autoplugin\Admin\Admin;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
