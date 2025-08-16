@@ -95,8 +95,8 @@ class Menu {
 
 		add_submenu_page(
 			'options.php',
-			esc_html__( 'Extend Plugin with Hooks', 'wp-autoplugin' ),
-			esc_html__( 'Extend Plugin with Hooks', 'wp-autoplugin' ),
+			esc_html__( 'Create Extension', 'wp-autoplugin' ),
+			esc_html__( 'Create Extension', 'wp-autoplugin' ),
 			'manage_options',
 			'wp-autoplugin-extend-hooks',
 			[ $this, 'render_extend_hooks_page' ]

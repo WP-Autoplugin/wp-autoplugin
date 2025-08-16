@@ -39,11 +39,13 @@ class Action_Links {
 		if ( in_array( $plugin_file, $autoplugins, true ) ) {
 			$extend_url = admin_url( 'admin.php?page=wp-autoplugin-extend&plugin=' . rawurlencode( $plugin_file ) );
 			$extend_url = wp_nonce_url( $extend_url, 'wp-autoplugin-extend-plugin', 'nonce' );
+			$link_text  = esc_html__( 'Modify (Patch)', 'wp-autoplugin' );
 		} else {
 			$extend_url = admin_url( 'admin.php?page=wp-autoplugin-extend-hooks&plugin=' . rawurlencode( $plugin_file ) );
 			$extend_url = wp_nonce_url( $extend_url, 'wp-autoplugin-extend-hooks', 'nonce' );
+			$link_text  = esc_html__( 'Create Extension', 'wp-autoplugin' );
 		}
-		$actions['extend_plugin'] = '<a href="' . esc_url( $extend_url ) . '">' . esc_html__( 'Extend Plugin', 'wp-autoplugin' ) . '</a>';
+		$actions['extend_plugin'] = '<a href="' . esc_url( $extend_url ) . '">' . $link_text . '</a>';
 		return $actions;
 	}
 

@@ -59,8 +59,8 @@ class Scripts {
 			'plugin_creation_error_extended' => esc_html__( 'Error creating the extended plugin.', 'wp-autoplugin' ),
 			'creating_extended_plugin'       => esc_html__( 'Creating the extension plugin.', 'wp-autoplugin' ),
 			'plugin_activation_error'        => esc_html__( 'Error activating the plugin.', 'wp-autoplugin' ),
-			'extracting_hooks'               => esc_html__( 'Extracting theme hooks, please wait...', 'wp-autoplugin' ),
-			'no_hooks_found'                 => esc_html__( 'No hooks found in the theme code.', 'wp-autoplugin' ),
+			'extracting_hooks'               => esc_html__( 'Extracting hooks, please wait...', 'wp-autoplugin' ),
+			'no_hooks_found'                 => esc_html__( 'No hooks found in the codebase. Cannot extend the plugin.', 'wp-autoplugin' ),
 		];
 	}
 

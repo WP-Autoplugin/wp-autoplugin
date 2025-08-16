@@ -43,12 +43,12 @@ if ( isset( $_GET['error_message'] ) && check_admin_referer( 'extend-plugin', 'e
 <div class="wp-autoplugin-admin-container">
 	<div class="wrap wp-autoplugin step-1-extend">
 		<?php /* translators: %s: plugin name. */ ?>
-		<h1><?php printf( esc_html__( 'Extend This Plugin: %s', 'wp-autoplugin' ), esc_html( $plugin_data['Name'] ) ); ?></h1>
+		<h1><?php printf( esc_html__( 'Modify This Plugin: %s', 'wp-autoplugin' ), esc_html( $plugin_data['Name'] ) ); ?></h1>
 		<form method="post" action="" id="extend-plugin-form">
 			<?php wp_nonce_field( 'extend_plugin', 'extend_plugin_nonce' ); ?>
 			<p><?php esc_html_e( 'Describe the changes you would like to make to the plugin. Include as much detail as possible:', 'wp-autoplugin' ); ?></p>
 			<textarea name="plugin_issue" id="plugin_issue" rows="10" cols="100"><?php echo esc_textarea( $value ); ?></textarea>
-			<?php submit_button( esc_html__( 'Extend Plugin', 'wp-autoplugin' ), 'primary', 'extend_plugin' ); ?>
+			<?php submit_button( esc_html__( 'Generate Plan', 'wp-autoplugin' ), 'primary', 'extend_plugin' ); ?>
 			<input type="hidden" name="plugin_file" value="<?php echo esc_attr( $plugin_file ); ?>" id="plugin_file" />
 		</form>
 		<div id="extend-plugin-message" class="autoplugin-message"></div>
@@ -71,7 +71,7 @@ if ( isset( $_GET['error_message'] ) && check_admin_referer( 'extend-plugin', 'e
 		<h1><?php printf( esc_html__( 'Extended Plugin: %s', 'wp-autoplugin' ), esc_html( $plugin_data['Name'] ) ); ?></h1>
 		<form method="post" action="" id="extended-plugin-form">
 			<?php wp_nonce_field( 'extended_plugin', 'extended_plugin_nonce' ); ?>
-			<p><?php esc_html_e( 'The plugin has been extended successfully. You can review the changes before activating it:', 'wp-autoplugin' ); ?></p>
+			<p><?php esc_html_e( 'The plugin has been modified successfully. You can review the changes before activating it:', 'wp-autoplugin' ); ?></p>
 
 			<!-- Generation progress (complex flow) -->
 			<div class="generation-progress" style="display: none;">

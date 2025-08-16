@@ -468,7 +468,7 @@ msgstr ""
 
 #. translators: %s: plugin name.
 #: views/page-extend-hooks.php:24
-msgid "Extend This Plugin with Hooks: %s"
+msgid "Create Extension for: %s"
 msgstr ""
 
 #: views/page-extend-hooks.php:27

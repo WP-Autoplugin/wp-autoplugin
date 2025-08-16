@@ -108,8 +108,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 		$reviewer_model = get_option( 'wp_autoplugin_reviewer_model' );
 		$has_specialized_models = ! empty( $planner_model ) || ! empty( $coder_model ) || ! empty( $reviewer_model );
 		?>
-		<div class="wp-autoplugin-per-step-models">
-			<table class="form-table" style="<?php echo $has_specialized_models ? '' : 'display: none;'; ?>">
+		<div class="wp-autoplugin-per-step-models" style="<?php echo $has_specialized_models ? '' : 'display: none;'; ?>">
+			<table class="form-table">
 				<tr valign="top">
 					<th scope="row"><?php esc_html_e( 'Planner Model', 'wp-autoplugin' ); ?></th>
 					<td>

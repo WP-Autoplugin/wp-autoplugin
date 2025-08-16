@@ -1,6 +1,6 @@
 <?php
 /**
- * Admin view for the Extend Plugin with Hooks page.
+ * Admin view for the Create Extension page.
  *
  * @package WP-Autoplugin
  */
@@ -21,7 +21,7 @@ $is_plugin_active = is_plugin_active( $plugin_file );
 <div class="wp-autoplugin-admin-container">
 	<div class="wrap wp-autoplugin step-1-extend">
 		<?php /* translators: %s: plugin name. */ ?>
-		<h1><?php printf( esc_html__( 'Extend This Plugin with Hooks: %s', 'wp-autoplugin' ), esc_html( $plugin_data['Name'] ) ); ?></h1>
+		<h1><?php printf( esc_html__( 'Create Extension for: %s', 'wp-autoplugin' ), esc_html( $plugin_data['Name'] ) ); ?></h1>
 		<!-- Loading message, visible by default -->
 		<div id="hooks-loading" style="display: block;">
 			<p><?php esc_html_e( 'Extracting plugin hooks, please wait...', 'wp-autoplugin' ); ?></p>
@@ -39,7 +39,7 @@ $is_plugin_active = is_plugin_active( $plugin_file );
 				</p>
 			</details>
 			<form method="post" action="" id="extend-hooks-form">
-				<p><?php esc_html_e( 'Describe the extension you would like to make to the plugin using its hooks:', 'wp-autoplugin' ); ?></p>
+				<p><?php esc_html_e( 'Describe the extension you would like to create:', 'wp-autoplugin' ); ?></p>
 				<textarea name="plugin_issue" id="plugin_issue" rows="10" cols="100"></textarea>
 				<?php submit_button( esc_html__( 'Generate Extension Plan', 'wp-autoplugin' ), 'primary', 'generate_plan' ); ?>
 				<input type="hidden" name="plugin_file" value="<?php echo esc_attr( $plugin_file ); ?>" id="plugin_file" />
