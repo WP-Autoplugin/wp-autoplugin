@@ -90,7 +90,7 @@ class Custom_API extends OpenAI_API {
 		$response = wp_remote_post(
 			$this->api_url,
 			[
-				'timeout' => 60,
+				'timeout' => 300,
 				'headers' => $headers,
 				'body'    => wp_json_encode( $body ),
 			]

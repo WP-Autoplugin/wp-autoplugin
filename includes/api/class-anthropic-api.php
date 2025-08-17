@@ -166,7 +166,7 @@ class Anthropic_API extends API {
 		$response = wp_remote_post(
 			'https://api.anthropic.com/v1/messages',
 			[
-				'timeout' => 60,
+				'timeout' => 300,
 				'headers' => $headers,
 				'body'    => wp_json_encode( $body ),
 			]
@@ -204,7 +204,7 @@ class Anthropic_API extends API {
 			$response = wp_remote_post(
 				'https://api.anthropic.com/v1/messages',
 				[
-					'timeout' => 60,
+					'timeout' => 300,
 					'headers' => $headers,
 					'body'    => wp_json_encode( $body ),
 				]

@@ -222,7 +222,7 @@ class OpenAI_API extends API {
 		$response = wp_remote_post(
 			$this->api_url,
 			[
-				'timeout' => 60,
+				'timeout' => 300,
 				'headers' => [
 					'Authorization' => 'Bearer ' . $this->api_key,
 					'Content-Type'  => 'application/json',
@@ -258,7 +258,7 @@ class OpenAI_API extends API {
 			$response = wp_remote_post(
 				$this->api_url,
 				[
-					'timeout' => 60,
+					'timeout' => 300,
 					'headers' => [
 						'Authorization' => 'Bearer ' . $this->api_key,
 						'Content-Type'  => 'application/json',
