@@ -74,8 +74,8 @@ Provide a machine-readable plan in strict JSON (no markdown code fences, no comm
 ```
 
 Notes:
-- Only include files that will be modified or added.
-- Do NOT include any code in this response. Only the JSON object above.
+- Only include files in `project_structure.files` that will be modified or added.
+- Do NOT include any code in your response. Only the JSON object above.
 PROMPT;
 
 		return $this->ai_api->send_prompt( $prompt );

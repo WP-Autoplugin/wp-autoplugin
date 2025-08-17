@@ -99,7 +99,6 @@ WP-Autoplugin aims to generate code that adheres to WordPress coding standards. 
 
 WP-Autoplugin has some limitations to be aware of:
 - Works best with simple plugins; may struggle with complex, multi-feature plugins.
-- Generates single-file plugins only.
 - Plugins require thorough testing before use on production sites.
 
 ## Installation
@@ -155,6 +154,11 @@ WP-Autoplugin is fully translatable. If you would like to contribute a translati
 WP-Autoplugin is licensed under the GPLv3 or later.
 
 ## Changelog
+
+### 1.6
+- Support for complex, multi-file plugins
+- Added detailed token usage information
+- Various UI improvements
 
 ### 1.5
 - Added Extend Themes feature to extend existing themes with hooks

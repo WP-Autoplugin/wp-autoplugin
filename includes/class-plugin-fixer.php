@@ -171,7 +171,7 @@ PROMPT;
 			: 'Output ONLY the complete, fixed PHP code for the plugin file, without any explanation or markdown.';
 
 		$prompt = <<<PROMPT
-			I have a WordPress plugin that needs fixing. The plugin may be single-file or multi-file. Here is the current codebase:
+			I have a WordPress plugin that needs fixing. Here is the current codebase of the plugin:
 
 			$code_context
 
