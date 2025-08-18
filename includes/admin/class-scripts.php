@@ -336,6 +336,32 @@ class Scripts {
 			$localized_data
 		);
 
+		$default_step = 'default';
+
+		// Set default step based on page context.
+		if ( $screen ) {
+			switch ( $screen->id ) {
+				case 'wp-autoplugin_page_wp-autoplugin-generate':
+					$default_step = 'generatePlan';
+					break;
+				case 'admin_page_wp-autoplugin-fix':
+					$default_step = 'generatePlan';
+					break;
+				case 'admin_page_wp-autoplugin-extend':
+					$default_step = 'generatePlan';
+					break;
+				case 'admin_page_wp-autoplugin-extend-hooks':
+					$default_step = 'generatePlan';
+					break;
+				case 'admin_page_wp-autoplugin-extend-theme':
+					$default_step = 'generatePlan';
+					break;
+				case 'admin_page_wp-autoplugin-explain':
+					$default_step = 'askQuestion';
+					break;
+			}
+		}
+
 		wp_localize_script(
 			'wp-autoplugin-footer',
 			'wpAutopluginFooter',
@@ -347,7 +373,7 @@ class Scripts {
 					'coder'    => $api_handler->get_coder_model(),
 					'reviewer' => $api_handler->get_reviewer_model(),
 				],
-				'default_step'          => $api_handler->get_next_task_model(),
+				'default_step'          => $default_step,
 				'no_token_data'         => esc_html__( 'No token usage data available yet.', 'wp-autoplugin' ),
 				'total_usage'           => esc_html__( 'Total Usage', 'wp-autoplugin' ),
 				'step_breakdown'        => esc_html__( 'Step Breakdown', 'wp-autoplugin' ),

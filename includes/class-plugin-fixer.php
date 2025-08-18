@@ -77,6 +77,7 @@ Provide a machine-readable plan in strict JSON (no markdown code fences, no comm
 Notes:
 - Only include the files that actually need to be modified or added to implement the fix.
 - Do NOT include any code in this response. Only the JSON object above.
+- Don't forget to increment the version number in the plugin header.
 PROMPT;
 
 		return $this->ai_api->send_prompt( $prompt );
@@ -120,6 +121,9 @@ PROMPT;
 			}
 		}
 
+		// To do: Make sure the "increment version number" instruction is
+		// only applied when editing the main plugin file.
+
 		$prompt = <<<PROMPT
 You are fixing an existing WordPress plugin codebase. Here is the current codebase:
 
@@ -147,6 +151,7 @@ Constraints:
 - Do not output any explanation. Do not output any other files.
 - Output only the code for {$file_path} wrapped in a proper code block for the file type (```{$lang}).
 - If the file does not exist yet (action is ADD), create it with complete, working content.
+- Increment the version number in the plugin header if applicable.
 PROMPT;
 
 		return $this->ai_api->send_prompt( $prompt );

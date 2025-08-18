@@ -76,6 +76,7 @@ Provide a machine-readable plan in strict JSON (no markdown code fences, no comm
 Notes:
 - Only include files in `project_structure.files` that will be modified or added.
 - Do NOT include any code in your response. Only the JSON object above.
+- Always increment the version number in the plugin header if applicable.
 PROMPT;
 
 		return $this->ai_api->send_prompt( $prompt );
@@ -118,6 +119,9 @@ PROMPT;
 			}
 		}
 
+		// To do: Make sure the "increment version number" instruction is
+		// only applied when editing the main plugin file.
+
 		$prompt = <<<PROMPT
 You are extending an existing WordPress plugin codebase. Here is the current codebase:
 
@@ -136,11 +140,12 @@ Your task: Output ONLY the complete, final contents for the single target file b
 - File type: {$file_type}
 - Action: {$action}
 
-Constraints:
+Format your response as follows:
 - Do not output any explanation. Do not output any other files.
 - Output only the code for {$file_path} wrapped in a proper code block for the file type (```{$lang}).
 - If the file does not exist yet (action is ADD), create it with complete, working content.
 - If the file is being updated (action is UPDATE), ensure it contains all necessary code, not just the changes.
+- Increment the version number in the plugin header if applicable.
 PROMPT;
 
 		return $this->ai_api->send_prompt( $prompt );

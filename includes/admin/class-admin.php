@@ -63,33 +63,6 @@ class Admin {
 	 * @return void
 	 */
 	public function output_admin_footer() {
-		$screen = get_current_screen();
-		$default_step = 'default';
-
-		// Set default step based on page context.
-		if ( $screen ) {
-			switch ( $screen->id ) {
-				case 'wp-autoplugin_page_wp-autoplugin-generate':
-					$default_step = 'generatePlan';
-					break;
-				case 'admin_page_wp-autoplugin-fix':
-					$default_step = 'generatePlan';
-					break;
-				case 'admin_page_wp-autoplugin-extend':
-					$default_step = 'generatePlan';
-					break;
-				case 'admin_page_wp-autoplugin-extend-hooks':
-					$default_step = 'generatePlan';
-					break;
-				case 'admin_page_wp-autoplugin-extend-theme':
-					$default_step = 'generatePlan';
-					break;
-				case 'admin_page_wp-autoplugin-explain':
-					$default_step = 'askQuestion';
-					break;
-			}
-		}
-
 		// Get the API handler to fetch the next task model.
 		$next_task_model = $this->api_handler->get_next_task_model();
 		?>

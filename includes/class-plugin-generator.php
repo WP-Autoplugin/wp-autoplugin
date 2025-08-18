@@ -76,7 +76,7 @@ class Plugin_Generator {
 			- detailed_feature_description: Provide a detailed description of each feature, explaining how it should be implemented.
 			- user_interface: Describe the user interface elements and how users will interact with the plugin.
 			- security_considerations: Discuss any security measures that need to be incorporated to ensure the plugin's safety.
-			- testing_plan: Outline a plan for testing the plugin to ensure it functions correctly. There will be no test suite for the plugin, you just have to explain how the plugin works, so it can be tested correctly. The user may not be technical, so the plan should be clear and easy to follow.
+			- testing_plan: Outline a plan for testing the plugin to ensure it functions correctly. There will be no test suite for the plugin, you just have to explain how the plugin works, so it can be tested correctly. The user may not be technical, so the plan should be clear and easy to follow. Do not tell the user how to install the plugin, just explain how it works.
 
 			Do not add any additional commentary. Make sure your response only contains a valid JSON object with the specified sections. Do not use Markdown formatting in your answer.
 			PROMPT;
@@ -107,7 +107,7 @@ class Plugin_Generator {
 			- user_interface: Describe the user interface elements and how users will interact with the plugin. Focus on essential UI elements only.
 			- user_flows: Describe the main steps users will follow to accomplish key tasks with the plugin. Outline each flow as a sequence of actions, focusing on typical scenarios and making them easy to understand for non-technical users.
 			- security_considerations: Discuss any security measures that need to be incorporated to ensure the plugin's safety.
-			- testing_plan: Outline a plan for testing the plugin to ensure it functions correctly. There will be no test suite for the plugin, you just have to explain how the plugin works, so it can be tested correctly. The user may not be technical, so the plan should be clear and easy to follow.
+			- testing_plan: Outline a plan for testing the plugin to ensure it functions correctly. There will be no test suite for the plugin, you just have to explain how the plugin works, so it can be tested correctly. The user may not be technical, so the plan should be clear and easy to follow. Do not tell the user how to install the plugin, just explain how it works.
 			- project_structure: Define the file and directory structure for this plugin. This should include:
 				- directories: Array of directory paths needed for the plugin (e.g., "includes/", "assets/css/", "assets/js/", "admin/")
 				- files: Array of file objects, each containing:
