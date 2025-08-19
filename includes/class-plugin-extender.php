@@ -76,7 +76,6 @@ Provide a machine-readable plan in strict JSON (no markdown code fences, no comm
 Notes:
 - Only include files in `project_structure.files` that will be modified or added.
 - Do NOT include any code in your response. Only the JSON object above.
-- Always increment the version number in the plugin header if applicable.
 PROMPT;
 
 		return $this->ai_api->send_prompt( $prompt );
@@ -145,7 +144,6 @@ Format your response as follows:
 - Output only the code for {$file_path} wrapped in a proper code block for the file type (```{$lang}).
 - If the file does not exist yet (action is ADD), create it with complete, working content.
 - If the file is being updated (action is UPDATE), ensure it contains all necessary code, not just the changes.
-- Increment the version number in the plugin header if applicable.
 PROMPT;
 
 		return $this->ai_api->send_prompt( $prompt );
