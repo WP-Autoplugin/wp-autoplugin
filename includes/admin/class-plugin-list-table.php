@@ -88,7 +88,7 @@ class Plugin_List_Table extends \WP_List_Table {
 		}
 
 		$actions['fix']     = sprintf( '<a href="%s">%s</a>', esc_url( wp_nonce_url( admin_url( 'admin.php?page=wp-autoplugin-fix&plugin=' . $item['plugin_path'] ), 'wp-autoplugin-fix-plugin', 'nonce' ) ), esc_html__( 'Fix', 'wp-autoplugin' ) );
-		$actions['extend']  = sprintf( '<a href="%s">%s</a>', esc_url( wp_nonce_url( admin_url( 'admin.php?page=wp-autoplugin-extend&plugin=' . $item['plugin_path'] ), 'wp-autoplugin-extend-plugin', 'nonce' ) ), esc_html__( 'Extend', 'wp-autoplugin' ) );
+		$actions['extend']  = sprintf( '<a href="%s">%s</a>', esc_url( wp_nonce_url( admin_url( 'admin.php?page=wp-autoplugin-extend&plugin=' . $item['plugin_path'] ), 'wp-autoplugin-extend-plugin', 'nonce' ) ), esc_html__( 'Modify', 'wp-autoplugin' ) );
 		$actions['explain'] = sprintf( '<a href="%s">%s</a>', esc_url( wp_nonce_url( admin_url( 'admin.php?page=wp-autoplugin-explain&plugin=' . $item['plugin_path'] ), 'wp-autoplugin-explain-plugin', 'nonce' ) ), esc_html__( 'Explain', 'wp-autoplugin' ) );
 		$actions['delete']  = sprintf( '<a href="%s">%s</a>', esc_url( wp_nonce_url( admin_url( 'admin.php?page=wp-autoplugin&action=delete&plugin=' . $item['plugin_path'] ), 'wp-autoplugin-activate-plugin', 'nonce' ) ), esc_html__( 'Delete', 'wp-autoplugin' ) );
 

@@ -23,6 +23,15 @@
                 onShowStep[step]();
             }
 
+            // Update footer model based on current step
+            if (window.updateFooterModel && window.getModelForStep) {
+                const modelType = window.getModelForStep(step);
+                window.updateFooterModel(modelType);
+            }
+            
+            // Set current step on body for reference
+            document.body.setAttribute('data-current-step', step);
+
             history.pushState({ state: step }, '', null);
         },
 

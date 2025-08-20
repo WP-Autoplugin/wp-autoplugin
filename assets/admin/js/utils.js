@@ -31,9 +31,12 @@ function buildAccordion(plan) {
     }
 
     let accordion = '';
+    let hasActive = false;
+    let index = 0;
+    const skipParts = new Set(['testing_plan', 'technically_feasible', 'explanation', 'hooks']);
     for (const part in plan) {
         // Hide testing_plan for now; store it globally for later display.
-        if (part === 'testing_plan') {
+        if (skipParts.has(part)) {
             if (typeof plan[part] === 'object') {
                 wp_autoplugin.testing_plan = buildSubSections(plan[part]);
             } else {
@@ -41,10 +44,12 @@ function buildAccordion(plan) {
             }
             continue;
         }
+        
         let content = plan[part];
         let className = 'autoplugin-accordion';
         if (part === 'plugin_name') {
             className += ' active';
+            hasActive = true;
         }
         accordion += `<div class="${className}">`;
         accordion += '<h3 class="autoplugin-accordion-heading">';
@@ -55,20 +60,95 @@ function buildAccordion(plan) {
         accordion += '</div>';
         accordion += '</h3>';
         accordion += '<div class="autoplugin-accordion-content">';
-        if (typeof content === 'object') {
+        
+        // Special handling for project_structure
+        if (part === 'project_structure') {
+            accordion += buildProjectStructureDisplay(content);
+        } else if (typeof content === 'object') {
             content = buildSubSections(content);
-        }
-        // Put content in a textarea for editing (except plugin_name → text input)
-        if (part === 'plugin_name') {
-            accordion += `<input type="text" value="${content}" id="plugin_name" />`;
-        } else {
             accordion += `<textarea rows="10">${content.trim()}</textarea>`;
+        } else {
+            // Normalize non-string values
+            const normalized = (content === null || content === undefined) ? '' : String(content);
+            // Put content in a textarea for editing (except plugin_name → text input)
+            if (part === 'plugin_name') {
+                accordion += `<input type="text" value="${normalized}" id="plugin_name" />`;
+            } else {
+                accordion += `<textarea rows="10">${normalized.trim()}</textarea>`;
+            }
         }
         accordion += '</div>';
         accordion += '</div>';
+        index++;
+    }
+
+    // If nothing marked active (e.g. no plugin_name in plan), open the first section
+    if (!hasActive) {
+        // Add ' active' to the first accordion container
+        accordion = accordion.replace('class="autoplugin-accordion"', 'class="autoplugin-accordion active"');
     }
 
     return accordion;
+}
+
+/**
+ * Build project structure display for complex plugins.
+ */
+function buildProjectStructureDisplay(structure) {
+    let display = '<div class="project-structure-display">';
+    
+    // Display directories
+    if (structure.directories && structure.directories.length > 0) {
+        display += '<div class="directories-section">';
+        display += '<h4>Directories:</h4>';
+        display += '<div class="directory-tree">';
+        structure.directories.forEach(dir => {
+            display += `<div class="directory-item"><span class="folder-icon">📁</span> ${dir}</div>`;
+        });
+        display += '</div>';
+        display += '</div>';
+    }
+    
+    // Display files
+    if (structure.files && structure.files.length > 0) {
+        display += '<div class="files-section">';
+        display += '<h4>Files:</h4>';
+        display += '<div class="files-table">';
+        display += '<table>';
+        display += '<thead><tr><th>File</th><th>Type</th><th>Description</th></tr></thead>';
+        display += '<tbody>';
+        structure.files.forEach((file, index) => {
+            const icon = getFileIcon(file.type);
+            display += `<tr>`;
+            display += `<td><span class="file-icon">${icon}</span> ${file.path}</td>`;
+            display += `<td><span class="file-type ${file.type}">${file.type.toUpperCase()}</span></td>`;
+            display += `<td><input type="text" value="${file.description}" data-file-index="${index}" class="file-description-input" /></td>`;
+            display += `</tr>`;
+        });
+        display += '</tbody>';
+        display += '</table>';
+        display += '</div>';
+        display += '</div>';
+    }
+    
+    display += '</div>';
+    return display;
+}
+
+/**
+ * Get icon for file type.
+ */
+function getFileIcon(type) {
+    switch (type) {
+        case 'php':
+            return '🐘';
+        case 'js':
+            return '📜';
+        case 'css':
+            return '🎨';
+        default:
+            return '📄';
+    }
 }
 
 /**

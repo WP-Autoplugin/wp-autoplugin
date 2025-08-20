@@ -90,7 +90,7 @@ class Custom_API extends OpenAI_API {
 		$response = wp_remote_post(
 			$this->api_url,
 			[
-				'timeout' => 60,
+				'timeout' => 300,
 				'headers' => $headers,
 				'body'    => wp_json_encode( $body ),
 			]
@@ -101,6 +101,9 @@ class Custom_API extends OpenAI_API {
 		}
 
 		$data = json_decode( wp_remote_retrieve_body( $response ), true );
+
+		// Extract token usage for reporting.
+		$this->last_token_usage = $this->extract_token_usage( $data, 'custom' );
 
 		if ( empty( $data['choices'][0]['message']['content'] ) ) {
 			return new \WP_Error(

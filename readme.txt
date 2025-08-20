@@ -4,7 +4,7 @@ Donate link: https://wp-autoplugin.com
 Tags: ai, plugin generator, development, wordpress, automation
 Requires at least: 6.0
 Tested up to: 6.7
-Stable tag: 1.5
+Stable tag: 1.6
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -18,6 +18,9 @@ WP-Autoplugin is a free and open-source WordPress plugin that leverages AI to as
 **Features:**
 - Generate WordPress plugins using AI.
 - Fix bugs and extend functionality of plugins.
+- Complex plugin mode for advanced multi-file plugin generation.
+- Specialized model settings to delegate different tasks (planning, coding, reviewing) to specific AI models.
+- Detailed token usage tracking for better cost management.
 - Support for multiple AI models, including OpenAI, Anthropic, Google Gemini, with custom API support to use any OpenAI-compatible model.
 - Full control over generated code.
 - Privacy-focused: no data collection or external communication, except for the AI API you choose.
@@ -58,7 +61,20 @@ Yes, the plugin is completely free with no ads or account requirements. However,
 = Is the generated code production-ready? =
 While WP-Autoplugin aims to generate high-quality code adhering to WordPress standards, we recommend testing the code thoroughly before using it on a production site.
 
+= What's the difference between simple and complex plugin mode? =
+Simple mode generates single-file plugins, while complex mode can create sophisticated multi-file plugins with proper file structure, classes, and organization. Complex mode uses more tokens but produces more professional, scalable plugins.
+
+= Can I use different AI models for different tasks? =
+Yes, you can configure specialized models in the settings to use different AI models for planning, coding, and reviewing tasks, allowing you to optimize performance and costs.
+
 == Changelog ==
+
+= 1.6 =
+* Added complex plugin mode for multi-file plugin generation
+* Added specialized model settings to delegate tasks to specific AI models
+* Added detailed token usage tracking and display
+* Improved plugin generation architecture
+* Enhanced UI with better progress indicators
 
 = 1.5 =
 * Added Extend Themes feature to extend existing themes with hooks

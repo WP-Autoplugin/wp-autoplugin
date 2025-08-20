@@ -52,6 +52,14 @@ class Anthropic_API extends API {
 
 		// Set the temperature and max tokens based on the model.
 		$model_params = [
+			'claude-opus-4-20250514'     => [
+				'temperature' => 0.2,
+				'max_tokens'  => 8192,
+			],
+			'claude-sonnet-4-20250514'   => [
+				'temperature' => 0.2,
+				'max_tokens'  => 8192,
+			],
 			'claude-3-7-sonnet-20250219' => [
 				'temperature' => 0.2,
 				'max_tokens'  => 8192,
@@ -158,7 +166,7 @@ class Anthropic_API extends API {
 		$response = wp_remote_post(
 			'https://api.anthropic.com/v1/messages',
 			[
-				'timeout' => 60,
+				'timeout' => 300,
 				'headers' => $headers,
 				'body'    => wp_json_encode( $body ),
 			]
@@ -196,7 +204,7 @@ class Anthropic_API extends API {
 			$response = wp_remote_post(
 				'https://api.anthropic.com/v1/messages',
 				[
-					'timeout' => 60,
+					'timeout' => 300,
 					'headers' => $headers,
 					'body'    => wp_json_encode( $body ),
 				]
@@ -217,6 +225,9 @@ class Anthropic_API extends API {
 			// Merge the new response with the old one.
 			$data['content'][0]['text'] .= $new_data['content'][0]['text'];
 		}
+
+		// Extract token usage for reporting.
+		$this->last_token_usage = $this->extract_token_usage( $data, 'anthropic' );
 
 		if ( isset( $data['content'][0]['text'] ) ) {
 			return $data['content'][0]['text'];

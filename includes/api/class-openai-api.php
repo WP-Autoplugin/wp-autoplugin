@@ -222,7 +222,7 @@ class OpenAI_API extends API {
 		$response = wp_remote_post(
 			$this->api_url,
 			[
-				'timeout' => 60,
+				'timeout' => 300,
 				'headers' => [
 					'Authorization' => 'Bearer ' . $this->api_key,
 					'Content-Type'  => 'application/json',
@@ -258,7 +258,7 @@ class OpenAI_API extends API {
 			$response = wp_remote_post(
 				$this->api_url,
 				[
-					'timeout' => 60,
+					'timeout' => 300,
 					'headers' => [
 						'Authorization' => 'Bearer ' . $this->api_key,
 						'Content-Type'  => 'application/json',
@@ -282,6 +282,9 @@ class OpenAI_API extends API {
 			// Merge the new response with the old one.
 			$data['choices'][0]['message']['content'] .= $new_data['choices'][0]['message']['content'];
 		}
+
+		// Extract token usage for reporting.
+		$this->last_token_usage = $this->extract_token_usage( $data, 'openai' );
 
 		if ( isset( $data['choices'][0]['message']['content'] ) ) {
 			return $data['choices'][0]['message']['content'];

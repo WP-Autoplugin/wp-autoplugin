@@ -43,7 +43,7 @@ $theme_data = wp_get_theme( $theme_slug );
 				</p>
 			</details>
 			<form method="post" action="" id="extend-theme-form">
-				<p><?php esc_html_e( 'Describe the extension you would like to make to the theme using its hooks:', 'wp-autoplugin' ); ?></p>
+				<p><?php esc_html_e( 'Describe the extension you would like to make to the theme:', 'wp-autoplugin' ); ?></p>
 				<textarea name="theme_issue" id="theme_issue" rows="10" cols="100"></textarea>
 				<?php submit_button( esc_html__( 'Generate Extension Plan', 'wp-autoplugin' ), 'primary', 'generate_plan' ); ?>
 				<input type="hidden" name="theme_slug" value="<?php echo esc_attr( $theme_slug ); ?>" id="theme_slug" />
@@ -55,11 +55,7 @@ $theme_data = wp_get_theme( $theme_slug );
 		<h1><?php esc_html_e( 'Generated Extension Plan', 'wp-autoplugin' ); ?></h1>
 		<form method="post" action="" id="extend-theme-code-form">
 			<p><?php esc_html_e( 'Review or edit the generated plan for the extension plugin:', 'wp-autoplugin' ); ?></p>
-			<textarea name="theme_plan_container" id="theme_plan_container" rows="20" cols="100"></textarea>
-			<p>
-				<label for="plugin_name"><?php esc_html_e( 'Plugin Name:', 'wp-autoplugin' ); ?></label><br />
-				<input type="text" name="plugin_name" id="plugin_name" value="" style="width: 50%;" />
-			</p>
+			<div id="plugin_plan_container"></div>
 			<div class="autoplugin-actions">
 				<button type="button" id="edit-issue" class="button"><?php esc_html_e( '« Edit Description', 'wp-autoplugin' ); ?></button>
 				<?php submit_button( esc_html__( 'Generate Extension Code', 'wp-autoplugin' ), 'primary', 'extend_code' ); ?>
@@ -68,11 +64,30 @@ $theme_data = wp_get_theme( $theme_slug );
 		<div id="extend-theme-code-message" class="autoplugin-message"></div>
 	</div>
 	<div class="wrap wp-autoplugin step-3-done" style="display: none;">
-		<?php /* translators: %s: theme name. */ ?>
+		<?php /* translators: %s: theme/plugin name. */ ?>
 		<h1><?php printf( esc_html__( 'Extension Plugin for: %s', 'wp-autoplugin' ), esc_html( $theme_data->get( 'Name' ) ) ); ?></h1>
 		<form method="post" action="" id="extended-theme-plugin-form">
-			<p><?php esc_html_e( 'The extension plugin code has been generated. Review it before saving:', 'wp-autoplugin' ); ?></p>
-			<textarea name="extended_plugin_code" id="extended_plugin_code" rows="20" cols="100"></textarea>
+			<p><?php esc_html_e( 'Review the generated code before saving:', 'wp-autoplugin' ); ?></p>
+
+			<!-- Simple (single-file) mode -->
+			<div id="simple-plugin-content">
+				<textarea name="extended_plugin_code" id="extended_plugin_code" rows="20" cols="100"></textarea>
+			</div>
+
+			<!-- Complex (multi-file) mode -->
+			<div id="complex-plugin-content" style="display: none;">
+				<div class="generation-progress" style="display: none;">
+					<div class="progress-bar-container">
+						<div class="progress-bar" id="file-generation-progress"></div>
+					</div>
+					<span class="progress-text" id="progress-text"><?php esc_html_e( 'Generating files...', 'wp-autoplugin' ); ?></span>
+				</div>
+
+				<div class="generated-files-container" id="extended-files-container">
+					<div class="files-tabs" id="files-tabs"></div>
+					<div class="file-content" id="file-content"></div>
+				</div>
+			</div>
 
 			<div class="autoplugin-code-warning">
 				<strong><?php esc_html_e( 'Warning:', 'wp-autoplugin' ); ?></strong> <?php esc_html_e( 'AI-generated code may be unstable or insecure; use only after careful review and testing.', 'wp-autoplugin' ); ?>
@@ -85,5 +100,5 @@ $theme_data = wp_get_theme( $theme_slug );
 		</form>
 		<div id="extended-theme-plugin-message" class="autoplugin-message"></div>
 	</div>
-	<?php $this->output_admin_footer(); ?>
+	<?php $this->admin->output_admin_footer(); ?>
 </div>
