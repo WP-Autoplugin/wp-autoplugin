@@ -19,6 +19,7 @@ WP-Autoplugin offers practical solutions for various WordPress development scena
 - **Lightweight Alternatives**: Create simple, focused plugins to replace large, feature-heavy plugins that may slow down your site or include unnecessary features and advertisements.
 - **Custom Solutions**: Develop site-specific plugins tailored to your unique requirements, eliminating the need for complex workarounds or multiple plugins.
 - **Developer Foundations**: Generate solid base plugins that developers can extend and build upon, streamlining the process of creating complex, custom plugins.
+- **Professional Multi-File Plugins**: Create sophisticated plugins with proper file structure, organization, and scalability using complex plugin mode.
 
 ## Plugin Highlights
 
@@ -27,6 +28,9 @@ WP-Autoplugin offers practical solutions for various WordPress development scena
 - **Privacy-Focused**: No data collection or external communication (except for the AI API you choose).
 - **BYOK (Bring Your Own Key)**: Use your own API key from the AI provider of your choice.
 - **Flexible AI Models**: Choose from a variety of AI models to suit your needs, or set up custom models.
+- **Specialized Models**: Configure different AI models for specific tasks (planning, coding, reviewing).
+- **Simple & Complex Modes**: Generate single-file plugins for quick solutions or multi-file plugins for complex functionality.
+- **Token Usage Tracking**: Monitor your API usage with detailed token consumption information.
 - **Use in Your Language**: The plugin is fully translatable and has built-in support for 10+ languages.
 
 ## How It Works
@@ -37,14 +41,63 @@ WP-Autoplugin offers practical solutions for various WordPress development scena
 
 You can also use WP-Autoplugin to **fix bugs**, **add new features**, or **explain plugins** you've created with the tool. The **Explain Plugin** feature allows you to ask questions or obtain general overviews of generated plugins, helping you better understand their functionality and structure.
 
-## Extend Third-Party Plugins with Hooks
+## Complex Plugin Generation
 
-WP-Autoplugin allows you to easily extend **any plugin** directly from the WordPress Plugins page:
+WP-Autoplugin's complex plugin mode enables the creation of sophisticated, multi-file plugins with:
 
-- Click on the "**Extend Plugin**" action link for the plugin you'd like to enhance.
-- WP-Autoplugin will analyze the selected plugin, extracting available action and filter hooks along with relevant contextual details.
+- **Proper File Structure**: Organized directories and file hierarchies
+- **Object-Oriented Design**: Well-structured classes and namespaces
+- **Scalable Architecture**: Plugins designed for growth and maintenance
+- **Professional Standards**: Code that follows WordPress development best practices
+
+<details>
+<summary>Click to view complex plugin generation screenshot</summary>
+
+![Complex plugin generation interface](https://wp-autoplugin.com/screenshot-6.png)
+
+</details>
+
+## Specialized Models Configuration
+
+Optimize your plugin generation workflow by assigning different AI models to specific tasks:
+
+- **Planner Model**: Handles plugin analysis and extension planning
+- **Coder Model**: Focuses on code generation and implementation
+- **Reviewer Model**: Provides code explanations and reviews
+
+This approach allows you to:
+- Use reasoning models for planning complex architectures
+- Employ fast, cost-effective models for simple coding tasks
+- Leverage specialized models for code review and explanations
+- Optimize both performance and API costs
+
+## Token Usage Tracking
+
+Monitor your API consumption with detailed usage information:
+- Real-time token count display during generation
+- Per-step token usage breakdown
+- Duration of each API request
+
+This helps you:
+- Control API costs effectively
+- Choose the most cost-efficient models for your needs
+- Understand the token impact of different generation modes
+
+<details>
+<summary>Click to view token usage information screenshot</summary>
+
+![Token usage information](https://wp-autoplugin.com/screenshot-7.png)
+
+</details>
+
+## Extend Third-Party Plugins and Themes with Hooks
+
+WP-Autoplugin allows you to easily extend **any plugin** or **theme** directly from the WordPress admin dashboard:
+
+- Click on the "**Extend Plugin**" action link for the plugin you'd like to enhance, or look for the "**Extend**" button on the Appearance > Themes page.
+- WP-Autoplugin will analyze the selected plugin or theme, extracting available action and filter hooks along with relevant contextual details.
 - Provide a description of the desired extension; WP-Autoplugin assesses the technical feasibility using available hooks.
-- A new extension plugin will be generated based on your description, allowing seamless integration with the existing plugin functionality.
+- A new extension plugin will be generated based on your description, allowing seamless integration with the existing functionality.
 
 Demo video: [Extend a third-party plugin with WP-Autoplugin](https://www.youtube.com/watch?v=_9RnFcEGncY)
 
@@ -56,16 +109,22 @@ When you activate an AI-generated plugin, WP-Autoplugin will automatically detec
 
 WP-Autoplugin supports 30+ AI models, including:
 
+- Claude 4.1 Opus
+- Claude 4 Sonnet
 - Claude 3.7 Sonnet
 - Claude 3.5 Sonnet
 - Claude 3.5 Haiku
-- o3-mini
-- GPT-4.5
+- o3
+- o4-mini
+- GPT-5
+- GPT-5-mini
+- GPT-5-nano
 - GPT-4o
 - GPT-4o mini
-- Google Gemini 2.0 Pro
-- Google Gemini 2.0 Flash
-- xAI Grok 2
+- Google Gemini 2.5 Pro
+- Google Gemini 2.5 Flash
+- Google Gemini 2.5 Flash Lite
+- xAI Grok 4
 
 While WP-Autoplugin is free to use, you may need to pay for API usage based on your chosen model.
 
@@ -77,7 +136,7 @@ WP-Autoplugin supports custom models: you can plug in any OpenAI-compatible API 
 
 To use WP-Autoplugin, you'll need an API key from an AI provider. Insert your key in the plugin settings to get started. Your API key remains on your server and is not shared with anyone.
 
-Some AI platforms currently offer free plans and include SOTA models, like **Gemini 2.0 Pro** through [Google AI Studio](https://aistudio.google.com/). Refer to the respective websites for pricing information.
+Some AI platforms currently offer free plans and include SOTA models, like **Gemini 2.5 Pro** through [Google AI Studio](https://aistudio.google.com/). Refer to the respective websites for pricing information.
 
 ## AI-Generated Plugins
 
@@ -94,12 +153,6 @@ WP-Autoplugin aims to generate code that adheres to WordPress coding standards. 
 - Reviewing and testing all generated code before use in a production environment.
 - Conducting thorough testing on a staging site before deployment.
 - Considering a professional security audit for critical applications.
-
-## Limitations
-
-WP-Autoplugin has some limitations to be aware of:
-- Works best with simple plugins; may struggle with complex, multi-feature plugins.
-- Plugins require thorough testing before use on production sites.
 
 ## Installation
 
@@ -156,9 +209,11 @@ WP-Autoplugin is licensed under the GPLv3 or later.
 ## Changelog
 
 ### 1.6
-- Support for complex, multi-file plugins
-- Added detailed token usage information
-- Various UI improvements
+- Added complex plugin mode for multi-file plugin generation
+- Added specialized model settings to delegate tasks to specific AI models
+- Added detailed token usage tracking and display
+- Improved plugin generation architecture
+- Enhanced UI with better progress indicators
 
 ### 1.5
 - Added Extend Themes feature to extend existing themes with hooks
