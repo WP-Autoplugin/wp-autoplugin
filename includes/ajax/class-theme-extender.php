@@ -226,7 +226,7 @@ class Theme_Extender {
 		}
 
 		$file_type    = isset( $file_info['type'] ) ? $file_info['type'] : 'php';
-		$file_content = \WP_Autoplugin\AI_Utils::strip_code_fences( $file_content, $file_type );
+		$file_content = \WP_Autoplugin\AI_Utils::strip_code_fences( $file_content );
 
 		$token_usage = $coder_api->get_last_token_usage();
 

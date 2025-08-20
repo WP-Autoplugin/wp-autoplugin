@@ -134,9 +134,9 @@ class Generator {
 			wp_send_json_error( $file_content->get_error_message() );
 		}
 
-		// Strip out code fences based on file type.
+		// Strip out code fences.
 		$file_type    = $file_info['type'];
-		$file_content = \WP_Autoplugin\AI_Utils::strip_code_fences( $file_content, $file_type );
+		$file_content = \WP_Autoplugin\AI_Utils::strip_code_fences( $file_content );
 
 		// Get token usage from the actual API that was used.
 		$token_usage = $coder_api->get_last_token_usage();
