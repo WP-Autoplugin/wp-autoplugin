@@ -205,6 +205,7 @@ class Model {
 			}
 
 			if ( ! $valid_model ) {
+				// Translators: %s: model name.
 				wp_send_json_error( [ 'message' => sprintf( esc_html__( 'Invalid model specified: %s', 'wp-autoplugin' ), $model ) ] );
 			}
 		}

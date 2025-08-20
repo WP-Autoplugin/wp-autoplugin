@@ -64,7 +64,7 @@ $theme_data = wp_get_theme( $theme_slug );
 		<div id="extend-theme-code-message" class="autoplugin-message"></div>
 	</div>
 	<div class="wrap wp-autoplugin step-3-done" style="display: none;">
-		<?php /* translators: %s: theme name. */ ?>
+		<?php /* translators: %s: theme/plugin name. */ ?>
 		<h1><?php printf( esc_html__( 'Extension Plugin for: %s', 'wp-autoplugin' ), esc_html( $theme_data->get( 'Name' ) ) ); ?></h1>
 		<form method="post" action="" id="extended-theme-plugin-form">
 			<p><?php esc_html_e( 'Review the generated code before saving:', 'wp-autoplugin' ); ?></p>

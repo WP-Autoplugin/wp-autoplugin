@@ -224,6 +224,7 @@ class Plugin_Installer {
 				$file_content = isset( $generated_files[ $file_info['path'] ] ) ? $generated_files[ $file_info['path'] ] : '';
 
 				if ( empty( $file_content ) ) {
+					// Translators: %s: file path.
 					return new \WP_Error( 'missing_file_content', sprintf( __( 'Missing content for file: %s', 'wp-autoplugin' ), $file_info['path'] ) );
 				}
 
@@ -235,6 +236,7 @@ class Plugin_Installer {
 
 				$result = $wp_filesystem->put_contents( $file_path, $file_content, FS_CHMOD_FILE );
 				if ( false === $result ) {
+					// Translators: %s: file path.
 					return new \WP_Error( 'file_creation_error', sprintf( __( 'Error creating file: %s', 'wp-autoplugin' ), $file_info['path'] ) );
 				}
 
@@ -317,6 +319,7 @@ class Plugin_Installer {
 
 			$ext = strtolower( pathinfo( $target_path, PATHINFO_EXTENSION ) );
 			if ( ! in_array( $ext, $allowed_ext, true ) ) {
+				// Translators: %s: file path.
 				return new \WP_Error( 'invalid_file_type', sprintf( __( 'Unsupported file type for update: %s', 'wp-autoplugin' ), $rel_path ) );
 			}
 
@@ -328,6 +331,7 @@ class Plugin_Installer {
 
 			$result = $wp_filesystem->put_contents( $target_path, (string) $contents, FS_CHMOD_FILE );
 			if ( false === $result ) {
+				// Translators: %s: file path.
 				return new \WP_Error( 'file_write_error', sprintf( __( 'Failed to write file: %s', 'wp-autoplugin' ), $rel_path ) );
 			}
 		}
@@ -444,6 +448,7 @@ class Plugin_Installer {
 
 		$deleted = delete_plugins( [ $plugin ] );
 		if ( is_wp_error( $deleted ) ) {
+			// Translators: %s: error message.
 			Admin\Notices::add_notice( sprintf( esc_html__( 'Error deleting plugin: %s', 'wp-autoplugin' ), $deleted->get_error_message() ), 'error' );
 		} else {
 			$autoplugins = array_diff( $autoplugins, [ $plugin ] );
