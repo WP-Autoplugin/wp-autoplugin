@@ -348,23 +348,37 @@ class GitHub_Updater {
 	 *
 	 * @return object
 	 */
-	public function get_plugin_info( $false, $action, $response ) { // phpcs:ignore
-		if ( ! isset( $response->slug ) || $response->slug !== $this->config['slug'] ) {
-			return false;
+	public function get_plugin_info( $result, $action, $args ) {
+		if ( 'plugin_information' !== $action ) {
+			return $result;
 		}
 
-		$response->slug          = $this->config['slug'];
-		$response->plugin_name   = $this->config['plugin_name'];
-		$response->version       = $this->config['new_version'];
-		$response->author        = $this->config['author'];
-		$response->homepage      = $this->config['homepage'];
-		$response->requires      = $this->config['requires'];
-		$response->tested        = $this->config['tested'];
-		$response->download_link = $this->config['zip_url'];
-		$response->sections      = [ 'description' => $this->config['description'] ];
+		if ( empty( $args->slug ) || $args->slug !== $this->config['proper_folder_name'] ) {
+			return $result; // Not our plugin.
+		}
 
-		return $response;
+		$resp = new \stdClass();
+
+		$resp->name          = $this->config['plugin_name'];
+		$resp->slug          = $this->config['proper_folder_name']; // IMPORTANT: folder slug
+		$resp->version       = $this->config['new_version'];
+		$resp->author        = $this->config['author'];
+		$resp->homepage      = $this->config['homepage'];
+		$resp->requires      = $this->config['requires'];
+		$resp->tested        = $this->config['tested'];
+		$resp->download_link = $this->config['zip_url'];
+
+		// You already pull this from GitHub in set_defaults()
+		$desc = $this->config['description'] ? $this->config['description'] : '';
+		$resp->sections = [
+			'description' => wp_kses_post( $desc ),
+			// You can add more tabs if you want:
+			// 'changelog'   => wp_kses_post( $this->maybe_get_changelog_from_readme() ),
+		];
+
+		return $resp;
 	}
+
 
 	/**
 	 * Post-installation hook.
