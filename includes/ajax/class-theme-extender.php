@@ -157,4 +157,86 @@ class Theme_Extender {
 			]
 		);
 	}
+
+	/**
+	 * AJAX handler for generating a single file for theme-hooks-based extension (complex flow).
+	 *
+	 * Expected POST:
+	 * - theme_slug (string)
+	 * - file_index (int)
+	 * - theme_plan (JSON string)
+	 * - project_structure (JSON string)
+	 * - generated_files (JSON string)
+	 * - hooks (JSON array of hook names)
+	 */
+	public function generate_extend_theme_file() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( esc_html__( 'You are not allowed to access this page.', 'wp-autoplugin' ) );
+		}
+		check_ajax_referer( 'wp_autoplugin_generate', 'security' );
+
+		$theme_slug        = isset( $_POST['theme_slug'] ) ? sanitize_text_field( wp_unslash( $_POST['theme_slug'] ) ) : '';
+		$file_index        = isset( $_POST['file_index'] ) ? intval( wp_unslash( $_POST['file_index'] ) ) : 0;
+		$theme_plan        = isset( $_POST['theme_plan'] ) ? wp_unslash( $_POST['theme_plan'] ) : '';
+		$project_structure = isset( $_POST['project_structure'] ) ? wp_unslash( $_POST['project_structure'] ) : '';
+		$generated_files   = isset( $_POST['generated_files'] ) ? wp_unslash( $_POST['generated_files'] ) : '';
+		$hooks_param       = isset( $_POST['hooks'] ) ? wp_unslash( $_POST['hooks'] ) : '[]';
+
+		$theme_plan_array        = json_decode( $theme_plan, true );
+		$project_structure_array = json_decode( $project_structure, true );
+		$generated_files_array   = json_decode( $generated_files, true );
+		$hook_names              = json_decode( $hooks_param, true );
+
+		if ( ! $project_structure_array || ! isset( $project_structure_array['files'] ) || ! $theme_plan_array ) {
+			wp_send_json_error( esc_html__( 'Invalid input data.', 'wp-autoplugin' ) );
+		}
+
+		$files = $project_structure_array['files'];
+		if ( ! isset( $files[ $file_index ] ) ) {
+			wp_send_json_error( esc_html__( 'File index out of range.', 'wp-autoplugin' ) );
+		}
+
+		// Load hooks for this theme and filter to selected ones.
+		$all_hooks      = \WP_Autoplugin\Hooks_Extender::get_theme_hooks( $theme_slug );
+		$selected_hooks = [];
+		if ( is_array( $hook_names ) && ! empty( $hook_names ) ) {
+			$selected_hooks = array_values(
+				array_filter(
+					$all_hooks,
+					function ( $hook ) use ( $hook_names ) {
+						return in_array( $hook['name'], $hook_names, true );
+					}
+				)
+			);
+		} else {
+			$selected_hooks = $all_hooks;
+		}
+
+		// Original theme name.
+		$theme_data           = wp_get_theme( $theme_slug );
+		$original_theme_name  = $theme_data->get( 'Name' );
+
+		$coder_api = $this->admin->api_handler->get_coder_api();
+		$extender  = new \WP_Autoplugin\Hooks_Extender( $coder_api );
+		$file_info = $files[ $file_index ];
+		$file_content = $extender->generate_theme_extension_file( $original_theme_name, $selected_hooks, $file_info, $project_structure_array, $theme_plan_array, is_array( $generated_files_array ) ? $generated_files_array : [] );
+
+		if ( is_wp_error( $file_content ) ) {
+			wp_send_json_error( $file_content->get_error_message() );
+		}
+
+		$file_type    = isset( $file_info['type'] ) ? $file_info['type'] : 'php';
+		$file_content = \WP_Autoplugin\AI_Utils::strip_code_fences( $file_content, $file_type );
+
+		$token_usage = $coder_api->get_last_token_usage();
+
+		wp_send_json_success(
+			[
+				'file_path'    => $file_info['path'],
+				'file_content' => $file_content,
+				'file_type'    => $file_type,
+				'token_usage'  => $token_usage,
+			]
+		);
+	}
 }

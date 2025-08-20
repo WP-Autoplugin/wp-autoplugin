@@ -73,7 +73,7 @@ class Ajax {
 			'fixer'          => [ 'generate_fix_plan', 'generate_fix_code', 'fix_plugin', 'generate_fix_file' ],
 			'extender'       => [ 'generate_extend_plan', 'generate_extend_code', 'extend_plugin', 'generate_extend_file' ],
 			'hooks_extender' => [ 'extract_hooks', 'generate_extend_hooks_plan', 'generate_extend_hooks_code', 'generate_extend_hooks_file' ],
-			'theme_extender' => [ 'extract_theme_hooks', 'generate_extend_theme_plan', 'generate_extend_theme_code' ],
+			'theme_extender' => [ 'extract_theme_hooks', 'generate_extend_theme_plan', 'generate_extend_theme_code', 'generate_extend_theme_file' ],
 			'explainer'      => [ 'explain_plugin' ],
 			'model'          => [ 'add_model', 'remove_model', 'change_model', 'change_models' ],
 		];

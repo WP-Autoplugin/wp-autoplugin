@@ -317,6 +317,14 @@ class Scripts {
 				[],
 				WP_AUTOPLUGIN_VERSION
 			);
+
+			// Reuse generator styles for multi-file editor UI
+			wp_enqueue_style(
+				'wp-autoplugin-generator-shared',
+				WP_AUTOPLUGIN_URL . 'assets/admin/css/generator.css',
+				[],
+				WP_AUTOPLUGIN_VERSION
+			);
 		}
 
 		// Footer script with localized data.
