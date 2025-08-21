@@ -115,6 +115,9 @@ WP-Autoplugin supports 30+ AI models, including:
 - GPT-5
 - GPT-5-mini
 - GPT-5-nano
+- GPT-4.1
+- GPT-4.1-mini
+- GPT-4.1-nano
 - GPT-4o
 - GPT-4o mini
 - Google Gemini 2.5 Pro
