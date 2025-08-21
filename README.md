@@ -24,13 +24,9 @@ WP-Autoplugin offers practical solutions for various WordPress development scena
 ## Plugin Highlights
 
 - **Completely Free**: No premium version, no ads, no account required.
-- **Open Source**: Contributions are welcome.
 - **Privacy-Focused**: No data collection or external communication (except for the AI API you choose).
 - **BYOK (Bring Your Own Key)**: Use your own API key from the AI provider of your choice.
 - **Flexible AI Models**: Choose from a variety of AI models to suit your needs, or set up custom models.
-- **Specialized Models**: Configure different AI models for specific tasks (planning, coding, reviewing).
-- **Simple & Complex Modes**: Generate single-file plugins for quick solutions or multi-file plugins for complex functionality.
-- **Token Usage Tracking**: Monitor your API usage with detailed token consumption information.
 - **Use in Your Language**: The plugin is fully translatable and has built-in support for 10+ languages.
 
 ## How It Works
