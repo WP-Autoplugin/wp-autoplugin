@@ -88,8 +88,6 @@ class GitHub_Updater {
 		add_filter( 'pre_set_site_transient_update_plugins', [ $this, 'api_check' ] );
 		add_filter( 'plugins_api', [ $this, 'get_plugin_info' ], 10, 3 );
 		add_filter( 'upgrader_post_install', [ $this, 'upgrader_post_install' ], 10, 3 );
-		add_filter( 'http_request_timeout', [ $this, 'http_request_timeout' ] );
-		add_filter( 'http_request_args', [ $this, 'http_request_sslverify' ], 10, 2 );
 
 		// Optionally override the plugin details modal with a simple message.
 		if ( ! empty( $this->config['override_modal_with_message'] ) ) {
