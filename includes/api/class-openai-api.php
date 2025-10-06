@@ -163,6 +163,9 @@ class OpenAI_API extends API {
 				'temperature' => 0.2,
 				'max_tokens'  => 4096,
 			],
+			'gpt-5-codex'       => [ // Handled by OpenAI_Responses_API.
+				'max_tokens' => 128000,
+			],
 		];
 
 		if ( isset( $model_params[ $this->original_model ] ) ) {

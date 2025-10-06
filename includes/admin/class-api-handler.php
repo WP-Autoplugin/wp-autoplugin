@@ -56,14 +56,14 @@ class Api_Handler {
 
 		$api = null;
 
-                if ( ! empty( $openai_api_key ) && array_key_exists( $model, Admin::get_models()['OpenAI'] ) ) {
-                        if ( 'gpt-5-codex' === $model ) {
-                                $api = new OpenAI_Responses_API();
-                        } else {
-                                $api = new OpenAI_API();
-                        }
-                        $api->set_api_key( $openai_api_key );
-                        $api->set_model( $model );
+		if ( ! empty( $openai_api_key ) && array_key_exists( $model, Admin::get_models()['OpenAI'] ) ) {
+			if ( 'gpt-5-codex' === $model ) {
+				$api = new OpenAI_Responses_API();
+			} else {
+				$api = new OpenAI_API();
+			}
+			$api->set_api_key( $openai_api_key );
+			$api->set_model( $model );
 		} elseif ( ! empty( $anthropic_api_key ) && array_key_exists( $model, Admin::get_models()['Anthropic'] ) ) {
 			$api = new Anthropic_API();
 			$api->set_api_key( $anthropic_api_key );
