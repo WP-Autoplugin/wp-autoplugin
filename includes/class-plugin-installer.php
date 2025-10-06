@@ -64,7 +64,7 @@ class Plugin_Installer {
 		$plugin_file = '';
 		if ( strpos( $plugin_name, '/' ) !== false && substr( $plugin_name, -4 ) === '.php' ) {
 			// Treat as update to an existing plugin file path relative to WP_PLUGIN_DIR.
-			$clean_rel   = wp_normalize_path( $plugin_name );
+			$clean_rel = wp_normalize_path( $plugin_name );
 			if ( strpos( $clean_rel, '../' ) !== false ) {
 				return new \WP_Error( 'invalid_path', __( 'Plugin path cannot contain "../".', 'wp-autoplugin' ) );
 			}
@@ -104,29 +104,29 @@ class Plugin_Installer {
 	 */
 	private function normalize_file_paths( $project_structure, $generated_files ) {
 		if ( ! isset( $project_structure['files'] ) || empty( $project_structure['files'] ) ) {
-			return array( $project_structure, $generated_files );
+			return [ $project_structure, $generated_files ];
 		}
 
 		$file_paths = array_column( $project_structure['files'], 'path' );
-		
+
 		// Find common prefix
 		$common_prefix = '';
 		if ( count( $file_paths ) > 1 ) {
-			$first_path = $file_paths[0];
+			$first_path   = $file_paths[0];
 			$prefix_parts = explode( '/', $first_path );
-			
+
 			// Check if first part is common to all paths
 			if ( strpos( $first_path, '/' ) !== false ) {
 				$potential_prefix = $prefix_parts[0] . '/';
-				$all_have_prefix = true;
-				
+				$all_have_prefix  = true;
+
 				foreach ( $file_paths as $path ) {
 					if ( strpos( $path, $potential_prefix ) !== 0 ) {
 						$all_have_prefix = false;
 						break;
 					}
 				}
-				
+
 				if ( $all_have_prefix ) {
 					$common_prefix = $potential_prefix;
 				}
@@ -135,21 +135,21 @@ class Plugin_Installer {
 
 		// Remove common prefix if found
 		if ( ! empty( $common_prefix ) ) {
-			$normalized_generated_files = array();
-			
+			$normalized_generated_files = [];
+
 			foreach ( $project_structure['files'] as &$file_info ) {
-				$old_path = $file_info['path'];
-				$new_path = substr( $file_info['path'], strlen( $common_prefix ) );
+				$old_path          = $file_info['path'];
+				$new_path          = substr( $file_info['path'], strlen( $common_prefix ) );
 				$file_info['path'] = $new_path;
-				
+
 				// Update generated_files keys
 				if ( isset( $generated_files[ $old_path ] ) ) {
 					$normalized_generated_files[ $new_path ] = $generated_files[ $old_path ];
 				}
 			}
-			
+
 			$generated_files = $normalized_generated_files;
-			
+
 			// Also update directories if they exist
 			if ( isset( $project_structure['directories'] ) ) {
 				foreach ( $project_structure['directories'] as &$directory ) {
@@ -162,7 +162,7 @@ class Plugin_Installer {
 			}
 		}
 
-		return array( $project_structure, $generated_files );
+		return [ $project_structure, $generated_files ];
 	}
 
 	/**
@@ -220,7 +220,7 @@ class Plugin_Installer {
 				if ( strpos( $file_path, '../' ) !== false ) {
 					return new \WP_Error( 'invalid_path', __( 'Invalid file path.', 'wp-autoplugin' ) );
 				}
-				$file_path = $plugin_dir . $file_path;
+				$file_path    = $plugin_dir . $file_path;
 				$file_content = isset( $generated_files[ $file_info['path'] ] ) ? $generated_files[ $file_info['path'] ] : '';
 
 				if ( empty( $file_content ) ) {
@@ -293,7 +293,7 @@ class Plugin_Installer {
 		}
 
 		// Sanitize and constrain plugin root inside plugins directory.
-		$plugin_file     = wp_normalize_path( $plugin_file );
+		$plugin_file = wp_normalize_path( $plugin_file );
 		if ( strpos( $plugin_file, '../' ) !== false ) {
 			return new \WP_Error( 'invalid_path', __( 'Plugin path cannot contain "../".', 'wp-autoplugin' ) );
 		}

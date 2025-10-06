@@ -101,15 +101,15 @@ class OpenAI_API extends API {
 				'max_tokens'       => 100000,
 				'reasoning_effort' => 'high',
 			],
-			'o3-low'       => [
+			'o3-low'            => [
 				'max_tokens'       => 100000,
 				'reasoning_effort' => 'low',
 			],
-			'o3-medium'    => [
+			'o3-medium'         => [
 				'max_tokens'       => 100000,
 				'reasoning_effort' => 'medium',
 			],
-			'o3-high'      => [
+			'o3-high'           => [
 				'max_tokens'       => 100000,
 				'reasoning_effort' => 'high',
 			],

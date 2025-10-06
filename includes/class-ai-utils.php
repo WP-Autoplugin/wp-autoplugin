@@ -79,4 +79,3 @@ class AI_Utils {
 		return $content;
 	}
 }
-

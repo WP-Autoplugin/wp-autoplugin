@@ -45,32 +45,32 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<td><input type="password" name="wp_autoplugin_xai_api_key" value="<?php echo esc_attr( get_option( 'wp_autoplugin_xai_api_key' ) ); ?>" class="large-text" /></td>
 			</tr>
 <?php
-			function render_model_dropdown( $name, $selected_value ) {
-				$models = Admin::get_models();
-				$custom_models = get_option( 'wp_autoplugin_custom_models', [] );
-				
-				echo '<select name="' . esc_attr( $name ) . '" id="' . esc_attr( $name ) . '">';
-				echo '<option value="" ' . selected( $selected_value, '', false ) . '>' . esc_html__( 'Use Default Model', 'wp-autoplugin' ) . '</option>';
-				
-				foreach ( $models as $provider => $model ) {
-					echo '<optgroup label="' . esc_attr( $provider ) . '">';
-					foreach ( $model as $key => $value ) {
-						echo '<option value="' . esc_attr( $key ) . '" ' . selected( $selected_value, $key, false ) . '>' . esc_html( $value ) . '</option>';
-					}
-					echo '</optgroup>';
-				}
-				
-				if ( ! empty( $custom_models ) ) {
-					echo '<optgroup label="' . esc_attr__( 'Custom Models', 'wp-autoplugin' ) . '">';
-					foreach ( $custom_models as $model ) {
-						echo '<option value="' . esc_attr( $model['name'] ) . '" ' . selected( $selected_value, $model['name'], false ) . '>' . esc_html( $model['name'] ) . '</option>';
-					}
-					echo '</optgroup>';
-				}
-				
-				echo '</select>';
-			}
-			?>
+function render_model_dropdown( $name, $selected_value ) {
+	$models        = Admin::get_models();
+	$custom_models = get_option( 'wp_autoplugin_custom_models', [] );
+
+	echo '<select name="' . esc_attr( $name ) . '" id="' . esc_attr( $name ) . '">';
+	echo '<option value="" ' . selected( $selected_value, '', false ) . '>' . esc_html__( 'Use Default Model', 'wp-autoplugin' ) . '</option>';
+
+	foreach ( $models as $provider => $model ) {
+		echo '<optgroup label="' . esc_attr( $provider ) . '">';
+		foreach ( $model as $key => $value ) {
+			echo '<option value="' . esc_attr( $key ) . '" ' . selected( $selected_value, $key, false ) . '>' . esc_html( $value ) . '</option>';
+		}
+		echo '</optgroup>';
+	}
+
+	if ( ! empty( $custom_models ) ) {
+		echo '<optgroup label="' . esc_attr__( 'Custom Models', 'wp-autoplugin' ) . '">';
+		foreach ( $custom_models as $model ) {
+			echo '<option value="' . esc_attr( $model['name'] ) . '" ' . selected( $selected_value, $model['name'], false ) . '>' . esc_html( $model['name'] ) . '</option>';
+		}
+		echo '</optgroup>';
+	}
+
+	echo '</select>';
+}
+?>
 			<tr valign="top">
 				<th scope="row"><?php esc_html_e( 'Default Model', 'wp-autoplugin' ); ?></th>
 				<td>
@@ -103,9 +103,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 		
 		<?php
 		// Check if any specialized model is set.
-		$planner_model = get_option( 'wp_autoplugin_planner_model' );
-		$coder_model = get_option( 'wp_autoplugin_coder_model' );
-		$reviewer_model = get_option( 'wp_autoplugin_reviewer_model' );
+		$planner_model          = get_option( 'wp_autoplugin_planner_model' );
+		$coder_model            = get_option( 'wp_autoplugin_coder_model' );
+		$reviewer_model         = get_option( 'wp_autoplugin_reviewer_model' );
 		$has_specialized_models = ! empty( $planner_model ) || ! empty( $coder_model ) || ! empty( $reviewer_model );
 		?>
 		<div class="wp-autoplugin-per-step-models" style="<?php echo $has_specialized_models ? '' : 'display: none;'; ?>">

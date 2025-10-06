@@ -46,7 +46,7 @@ class Plugin_Explainer {
 	 */
 	public function explain_plugin( $plugin_code_or_files ) {
 		$code_context = $this->build_code_context( $plugin_code_or_files );
-		$prompt = <<<PROMPT
+		$prompt       = <<<PROMPT
 			I have a WordPress plugin I would like you to analyze and explain. The plugin may be a single file or a multi-file codebase. Here is the codebase:
 
 			$code_context
@@ -73,7 +73,7 @@ class Plugin_Explainer {
 	 */
 	public function answer_plugin_question( $plugin_code_or_files, $question ) {
 		$code_context = $this->build_code_context( $plugin_code_or_files );
-		$prompt = <<<PROMPT
+		$prompt       = <<<PROMPT
 			I have a WordPress plugin and a specific question about it. The plugin may be a single file or a multi-file codebase. Here is the codebase:
 
 			$code_context
@@ -110,7 +110,7 @@ class Plugin_Explainer {
 		$aspect_prompt = isset( $aspect_prompts[ $aspect ] ) ? 'Please analyze this plugin with a focus on ' . $aspect_prompts[ $aspect ] . '.' : 'Provide a general analysis.';
 
 		$code_context = $this->build_code_context( $plugin_code_or_files );
-		$prompt = <<<PROMPT
+		$prompt       = <<<PROMPT
 			I have a WordPress plugin I would like you to analyze. The plugin may be a single file or a multi-file codebase. Here is the codebase:
 
 			$code_context

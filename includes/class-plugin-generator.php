@@ -46,7 +46,7 @@ class Plugin_Generator {
 	 */
 	public function generate_plugin_plan( $input ) {
 		$plugin_mode = get_option( 'wp_autoplugin_plugin_mode', 'simple' );
-		
+
 		if ( 'complex' === $plugin_mode ) {
 			return $this->generate_complex_plugin_plan( $input );
 		} else {
@@ -139,13 +139,13 @@ class Plugin_Generator {
 	 */
 	public function generate_plugin_code( $plan ) {
 		$plugin_mode = get_option( 'wp_autoplugin_plugin_mode', 'simple' );
-		
+
 		if ( 'complex' === $plugin_mode ) {
 			// For complex mode, this method shouldn't be used directly
 			// Instead, use generate_plugin_file() for individual files
 			return new \WP_Error( 'invalid_mode', 'Use generate_plugin_file() for complex mode plugins.' );
 		}
-		
+
 		$prompt = <<<PROMPT
 			Build a single-file WordPress plugin based on the specification below. Do not use Markdown formatting in your answer. Ensure the response does not contain any explanation or commentary, ONLY the complete, working code without any placeholders. "Add X here" comments are not allowed in the code, you need to write out the full, working code.
 
@@ -170,12 +170,12 @@ class Plugin_Generator {
 	 * @return string|WP_Error
 	 */
 	public function generate_plugin_file( $file_info, $plan, $project_structure, $generated_files = [] ) {
-		$file_type = $file_info['type'];
-		$file_path = $file_info['path'];
+		$file_type        = $file_info['type'];
+		$file_path        = $file_info['path'];
 		$file_description = $file_info['description'];
-		
+
 		$context = $this->build_file_context( $generated_files, $project_structure );
-		
+
 		if ( 'php' === $file_type ) {
 			return $this->generate_php_file( $file_path, $file_description, $plan, $context );
 		} elseif ( 'css' === $file_type ) {
@@ -183,7 +183,7 @@ class Plugin_Generator {
 		} elseif ( 'js' === $file_type ) {
 			return $this->generate_js_file( $file_path, $file_description, $plan, $context );
 		}
-		
+
 		return new \WP_Error( 'invalid_file_type', 'Unsupported file type: ' . $file_type );
 	}
 
@@ -321,7 +321,7 @@ class Plugin_Generator {
 		$context = "Project Structure:\n";
 
 		if ( isset( $project_structure['directories'] ) ) {
-			$context .= "Directories: " . implode( ', ', $project_structure['directories'] ) . "\n";
+			$context .= 'Directories: ' . implode( ', ', $project_structure['directories'] ) . "\n";
 		}
 
 		if ( isset( $project_structure['files'] ) ) {
@@ -332,13 +332,13 @@ class Plugin_Generator {
 		}
 
 		if ( ! empty( $generated_files ) ) {
-			$context .= "\nPreviously Generated Files:\n";
-			$file_count = count( $generated_files );
+			$context    .= "\nPreviously Generated Files:\n";
+			$file_count  = count( $generated_files );
 			$lines_limit = $file_count > 5 ? 1000 : 2000; // Reduce context for more files
 
 			foreach ( $generated_files as $file_path => $file_content ) {
-				$context .= "File: $file_path\n";
-				$lines = explode( "\n", $file_content );
+				$context    .= "File: $file_path\n";
+				$lines       = explode( "\n", $file_content );
 				$lines_count = count( $lines );
 				if ( $lines_count > $lines_limit ) {
 					$context .= "Content (truncated):\n";

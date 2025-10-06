@@ -196,9 +196,9 @@ class Hooks_Extender {
 		$plugin_data          = get_plugin_data( WP_CONTENT_DIR . '/plugins/' . $plugin_file );
 		$original_plugin_name = $plugin_data['Name'];
 
-		$coder_api = $this->admin->api_handler->get_coder_api();
-		$extender  = new \WP_Autoplugin\Hooks_Extender( $coder_api );
-		$file_info = $files[ $file_index ];
+		$coder_api    = $this->admin->api_handler->get_coder_api();
+		$extender     = new \WP_Autoplugin\Hooks_Extender( $coder_api );
+		$file_info    = $files[ $file_index ];
 		$file_content = $extender->generate_hooks_extension_file( $original_plugin_name, $selected_hooks, $file_info, $project_structure_array, $plugin_plan_array, is_array( $generated_files_array ) ? $generated_files_array : [] );
 
 		if ( is_wp_error( $file_content ) ) {
