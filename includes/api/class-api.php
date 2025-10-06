@@ -61,7 +61,10 @@ class API {
 	 * @return array Normalized token usage with 'input_tokens' and 'output_tokens'.
 	 */
 	protected function extract_token_usage( $response, $provider ) {
-		$usage = [ 'input_tokens' => 0, 'output_tokens' => 0 ];
+		$usage = [
+			'input_tokens'  => 0,
+			'output_tokens' => 0,
+		];
 
 		if ( ! is_array( $response ) ) {
 			return $usage;

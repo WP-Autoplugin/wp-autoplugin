@@ -9,6 +9,7 @@ namespace WP_Autoplugin\Admin;
 
 use WP_Autoplugin\API;
 use WP_Autoplugin\OpenAI_API;
+use WP_Autoplugin\OpenAI_Responses_API;
 use WP_Autoplugin\Anthropic_API;
 use WP_Autoplugin\Google_Gemini_API;
 use WP_Autoplugin\XAI_API;
@@ -56,7 +57,11 @@ class Api_Handler {
 		$api = null;
 
 		if ( ! empty( $openai_api_key ) && array_key_exists( $model, Admin::get_models()['OpenAI'] ) ) {
-			$api = new OpenAI_API();
+			if ( 'gpt-5-codex' === $model ) {
+				$api = new OpenAI_Responses_API();
+			} else {
+				$api = new OpenAI_API();
+			}
 			$api->set_api_key( $openai_api_key );
 			$api->set_model( $model );
 		} elseif ( ! empty( $anthropic_api_key ) && array_key_exists( $model, Admin::get_models()['Anthropic'] ) ) {

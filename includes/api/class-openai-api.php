@@ -101,15 +101,15 @@ class OpenAI_API extends API {
 				'max_tokens'       => 100000,
 				'reasoning_effort' => 'high',
 			],
-			'o3-low'       => [
+			'o3-low'            => [
 				'max_tokens'       => 100000,
 				'reasoning_effort' => 'low',
 			],
-			'o3-medium'    => [
+			'o3-medium'         => [
 				'max_tokens'       => 100000,
 				'reasoning_effort' => 'medium',
 			],
-			'o3-high'      => [
+			'o3-high'           => [
 				'max_tokens'       => 100000,
 				'reasoning_effort' => 'high',
 			],
@@ -163,6 +163,18 @@ class OpenAI_API extends API {
 				'temperature' => 0.2,
 				'max_tokens'  => 4096,
 			],
+			'gpt-5'             => [
+				'max_tokens' => 128000,
+			],
+			'gpt-5-mini'        => [
+				'max_tokens' => 128000,
+			],
+			'gpt-5-nano'        => [
+				'max_tokens' => 128000,
+			],
+			'gpt-5-codex'       => [ // Handled by OpenAI_Responses_API.
+				'max_tokens' => 128000,
+			],
 		];
 
 		if ( isset( $model_params[ $this->original_model ] ) ) {
@@ -208,6 +220,8 @@ class OpenAI_API extends API {
 			$body['max_completion_tokens'] = $this->max_tokens;
 			$body['reasoning_effort']      = $this->reasoning_effort;
 		} elseif ( 'o1' === $this->model || 'o1-preview' === $this->model ) {
+			$body['max_completion_tokens'] = $this->max_tokens;
+		} elseif ( in_array( $this->model, [ 'gpt-5', 'gpt-5-mini', 'gpt-5-nano', 'gpt-5-codex' ], true ) ) {
 			$body['max_completion_tokens'] = $this->max_tokens;
 		} else {
 			$body['temperature'] = $this->temperature;
@@ -304,6 +318,7 @@ class OpenAI_API extends API {
 			'temperature',
 			'max_tokens',
 			'max_completion_tokens',
+			'max_output_tokens',
 			'reasoning_effort',
 			'messages',
 			'response_format',

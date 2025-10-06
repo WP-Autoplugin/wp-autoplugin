@@ -430,12 +430,17 @@ class GitHub_Updater {
 			$candidates[] = ltrim( $this->config['readme'], '/' );
 		}
 		// Fallbacks (common names / case variants).
-		$candidates = array_unique( array_merge( $candidates, [
-			'readme.txt',
-			'README.txt',
-			'README.md',
-			'readme.md',
-		] ) );
+		$candidates = array_unique(
+			array_merge(
+				$candidates,
+				[
+					'readme.txt',
+					'README.txt',
+					'README.md',
+					'readme.md',
+				]
+			)
+		);
 
 		$body = '';
 		foreach ( $candidates as $file ) {
@@ -538,7 +543,7 @@ class GitHub_Updater {
 		$text = preg_replace( "/\r\n|\r/", "\n", (string) $text );
 
 		$lines = preg_split( '/\n/', $text );
-		$buf   = array();
+		$buf   = [];
 		$in_ul = false;
 		foreach ( $lines as $line ) {
 			// Handle heading lines: = Heading =, == Heading ==, etc.
@@ -604,8 +609,8 @@ class GitHub_Updater {
 
 		// Un-escape our processed HTML tags
 		$text = str_replace(
-			array( '&lt;strong&gt;', '&lt;/strong&gt;', '&lt;a href=&quot;', '&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;', '&lt;/a&gt;' ),
-			array( '<strong>', '</strong>', '<a href="', '" target="_blank" rel="noopener noreferrer">', '</a>' ),
+			[ '&lt;strong&gt;', '&lt;/strong&gt;', '&lt;a href=&quot;', '&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;', '&lt;/a&gt;' ],
+			[ '<strong>', '</strong>', '<a href="', '" target="_blank" rel="noopener noreferrer">', '</a>' ],
 			$text
 		);
 

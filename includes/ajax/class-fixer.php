@@ -64,7 +64,7 @@ class Fixer {
 					return true;
 				}
 			);
-			$iterator = new \RecursiveIteratorIterator( $filter, \RecursiveIteratorIterator::LEAVES_ONLY );
+			$iterator    = new \RecursiveIteratorIterator( $filter, \RecursiveIteratorIterator::LEAVES_ONLY );
 
 			foreach ( $iterator as $file ) {
 				/** @var \SplFileInfo $file */

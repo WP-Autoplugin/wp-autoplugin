@@ -117,9 +117,9 @@ class Theme_Extender {
 			wp_send_json_error( esc_html__( 'Missing required parameters.', 'wp-autoplugin' ) );
 		}
 
-		$theme_slug = sanitize_text_field( wp_unslash( $_POST['theme_slug'] ) );
-		$ai_plan    = sanitize_text_field( wp_unslash( $_POST['theme_plan'] ) );
-		$hooks      = \WP_Autoplugin\Hooks_Extender::get_theme_hooks( $theme_slug );
+		$theme_slug  = sanitize_text_field( wp_unslash( $_POST['theme_slug'] ) );
+		$ai_plan     = sanitize_text_field( wp_unslash( $_POST['theme_plan'] ) );
+		$hooks       = \WP_Autoplugin\Hooks_Extender::get_theme_hooks( $theme_slug );
 		$hooks_param = json_decode( sanitize_text_field( wp_unslash( $_POST['hooks'] ) ), true );
 
 		// The $hooks_param is an array of hook names. Keep only the hooks that are in the plan.
@@ -213,12 +213,12 @@ class Theme_Extender {
 		}
 
 		// Original theme name.
-		$theme_data           = wp_get_theme( $theme_slug );
-		$original_theme_name  = $theme_data->get( 'Name' );
+		$theme_data          = wp_get_theme( $theme_slug );
+		$original_theme_name = $theme_data->get( 'Name' );
 
-		$coder_api = $this->admin->api_handler->get_coder_api();
-		$extender  = new \WP_Autoplugin\Hooks_Extender( $coder_api );
-		$file_info = $files[ $file_index ];
+		$coder_api    = $this->admin->api_handler->get_coder_api();
+		$extender     = new \WP_Autoplugin\Hooks_Extender( $coder_api );
+		$file_info    = $files[ $file_index ];
 		$file_content = $extender->generate_theme_extension_file( $original_theme_name, $selected_hooks, $file_info, $project_structure_array, $theme_plan_array, is_array( $generated_files_array ) ? $generated_files_array : [] );
 
 		if ( is_wp_error( $file_content ) ) {

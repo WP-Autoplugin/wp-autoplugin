@@ -14,6 +14,7 @@ return apply_filters(
 	[
 		'OpenAI'    => [
 			'gpt-5'             => 'GPT-5',
+			'gpt-5-codex'       => 'GPT-5 Codex',
 			'gpt-5-mini'        => 'GPT-5 mini',
 			'gpt-5-nano'        => 'GPT-5 nano',
 			'gpt-5-chat-latest' => 'ChatGPT-5-latest',

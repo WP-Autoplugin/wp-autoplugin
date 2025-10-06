@@ -91,8 +91,8 @@ class Scripts {
 		);
 
 		$localized_data = [
-			'ajax_url' => esc_url(admin_url('admin-ajax.php')),
-			'nonce' => wp_create_nonce('wp_autoplugin_generate'),
+			'ajax_url' => esc_url( admin_url( 'admin-ajax.php' ) ),
+			'nonce'    => wp_create_nonce( 'wp_autoplugin_generate' ),
 			'messages' => $this->get_localized_messages(),
 		];
 
@@ -127,14 +127,14 @@ class Scripts {
 				true
 			);
 
-			$localized_data['fix_url'] = esc_url(admin_url('admin.php?page=wp-autoplugin-fix&nonce=' . wp_create_nonce('wp-autoplugin-fix-plugin')));
-			$localized_data['activate_url'] = esc_url(admin_url('admin.php?page=wp-autoplugin&action=activate&nonce=' . wp_create_nonce('wp-autoplugin-activate-plugin')));
-			$localized_data['testing_plan'] = '';
+			$localized_data['fix_url']         = esc_url( admin_url( 'admin.php?page=wp-autoplugin-fix&nonce=' . wp_create_nonce( 'wp-autoplugin-fix-plugin' ) ) );
+			$localized_data['activate_url']    = esc_url( admin_url( 'admin.php?page=wp-autoplugin&action=activate&nonce=' . wp_create_nonce( 'wp-autoplugin-activate-plugin' ) ) );
+			$localized_data['testing_plan']    = '';
 			$localized_data['plugin_examples'] = [
-				esc_html__('A simple contact form with honeypot spam protection.', 'wp-autoplugin'),
-				esc_html__('A custom post type for testimonials.', 'wp-autoplugin'),
-				esc_html__('A widget that displays recent posts.', 'wp-autoplugin'),
-				esc_html__('A simple image compression tool.', 'wp-autoplugin'),
+				esc_html__( 'A simple contact form with honeypot spam protection.', 'wp-autoplugin' ),
+				esc_html__( 'A custom post type for testimonials.', 'wp-autoplugin' ),
+				esc_html__( 'A widget that displays recent posts.', 'wp-autoplugin' ),
+				esc_html__( 'A simple image compression tool.', 'wp-autoplugin' ),
 			];
 
 			wp_enqueue_style(
@@ -166,7 +166,7 @@ class Scripts {
 				true
 			);
 
-			$localized_data['activate_url'] = esc_url(admin_url('admin.php?page=wp-autoplugin&action=activate&nonce=' . wp_create_nonce('wp-autoplugin-activate-plugin')));
+			$localized_data['activate_url']     = esc_url( admin_url( 'admin.php?page=wp-autoplugin&action=activate&nonce=' . wp_create_nonce( 'wp-autoplugin-activate-plugin' ) ) );
 			$localized_data['is_plugin_active'] = $is_plugin_active;
 
 			wp_enqueue_style(
@@ -206,7 +206,7 @@ class Scripts {
 				true
 			);
 
-			$localized_data['activate_url'] = esc_url(admin_url('admin.php?page=wp-autoplugin&action=activate&nonce=' . wp_create_nonce('wp-autoplugin-activate-plugin')));
+			$localized_data['activate_url']     = esc_url( admin_url( 'admin.php?page=wp-autoplugin&action=activate&nonce=' . wp_create_nonce( 'wp-autoplugin-activate-plugin' ) ) );
 			$localized_data['is_plugin_active'] = $is_plugin_active;
 
 			wp_enqueue_style(
@@ -277,7 +277,7 @@ class Scripts {
 				true
 			);
 
-			$localized_data['activate_url'] = esc_url(admin_url('admin.php?page=wp-autoplugin&action=activate&nonce=' . wp_create_nonce('wp-autoplugin-activate-plugin')));
+			$localized_data['activate_url']     = esc_url( admin_url( 'admin.php?page=wp-autoplugin&action=activate&nonce=' . wp_create_nonce( 'wp-autoplugin-activate-plugin' ) ) );
 			$localized_data['is_plugin_active'] = $is_plugin_active;
 
 			wp_enqueue_style(
@@ -309,7 +309,7 @@ class Scripts {
 				true
 			);
 
-			$localized_data['activate_url'] = esc_url(admin_url('admin.php?page=wp-autoplugin&action=activate&nonce=' . wp_create_nonce('wp-autoplugin-activate-plugin')));
+			$localized_data['activate_url'] = esc_url( admin_url( 'admin.php?page=wp-autoplugin&action=activate&nonce=' . wp_create_nonce( 'wp-autoplugin-activate-plugin' ) ) );
 
 			wp_enqueue_style(
 				'wp-autoplugin-extend-theme',
@@ -374,17 +374,17 @@ class Scripts {
 			'wp-autoplugin-footer',
 			'wpAutopluginFooter',
 			[
-				'nonce'                 => wp_create_nonce( 'wp_autoplugin_nonce' ),
-				'models'                => [
+				'nonce'                    => wp_create_nonce( 'wp_autoplugin_nonce' ),
+				'models'                   => [
 					'default'  => get_option( 'wp_autoplugin_model' ),
 					'planner'  => $api_handler->get_planner_model(),
 					'coder'    => $api_handler->get_coder_model(),
 					'reviewer' => $api_handler->get_reviewer_model(),
 				],
-				'default_step'          => $default_step,
-				'no_token_data'         => esc_html__( 'No token usage data available yet.', 'wp-autoplugin' ),
-				'total_usage'           => esc_html__( 'Total Usage', 'wp-autoplugin' ),
-				'step_breakdown'        => esc_html__( 'Step Breakdown', 'wp-autoplugin' ),
+				'default_step'             => $default_step,
+				'no_token_data'            => esc_html__( 'No token usage data available yet.', 'wp-autoplugin' ),
+				'total_usage'              => esc_html__( 'Total Usage', 'wp-autoplugin' ),
+				'step_breakdown'           => esc_html__( 'Step Breakdown', 'wp-autoplugin' ),
 				'error_saving_models'      => esc_html__( 'Failed to save models.', 'wp-autoplugin' ),
 				'error_saving_models_ajax' => esc_html__( 'An error occurred while saving models.', 'wp-autoplugin' ),
 			]

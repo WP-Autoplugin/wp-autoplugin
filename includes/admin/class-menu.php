@@ -190,9 +190,9 @@ class Menu {
 		}
 
 		// Sanitize and constrain plugin path inside plugins directory.
-		$plugin_file = sanitize_text_field( wp_unslash( $_GET['plugin'] ) ); // phpcs:ignore WordPress.Security.NonceVerification
-		$plugin_file = ltrim( str_replace( [ '..\\', '../', '\\' ], '/', $plugin_file ), '/' );
-		$plugin_path = wp_normalize_path( WP_PLUGIN_DIR . '/' . $plugin_file );
+		$plugin_file  = sanitize_text_field( wp_unslash( $_GET['plugin'] ) ); // phpcs:ignore WordPress.Security.NonceVerification
+		$plugin_file  = ltrim( str_replace( [ '..\\', '../', '\\' ], '/', $plugin_file ), '/' );
+		$plugin_path  = wp_normalize_path( WP_PLUGIN_DIR . '/' . $plugin_file );
 		$plugins_base = wp_normalize_path( trailingslashit( WP_PLUGIN_DIR ) );
 		if ( strpos( $plugin_path, $plugins_base ) !== 0 || ! file_exists( $plugin_path ) ) {
 			wp_die( esc_html__( 'The specified plugin does not exist.', 'wp-autoplugin' ) );
@@ -231,9 +231,9 @@ class Menu {
 			wp_die( esc_html__( 'Security check failed.', 'wp-autoplugin' ) );
 		}
 
-		$plugin_file = sanitize_text_field( wp_unslash( $_GET['plugin'] ) ); // phpcs:ignore WordPress.Security.NonceVerification
-		$plugin_file = ltrim( str_replace( [ '..\\', '../', '\\' ], '/', $plugin_file ), '/' );
-		$plugin_path = wp_normalize_path( WP_PLUGIN_DIR . '/' . $plugin_file );
+		$plugin_file  = sanitize_text_field( wp_unslash( $_GET['plugin'] ) ); // phpcs:ignore WordPress.Security.NonceVerification
+		$plugin_file  = ltrim( str_replace( [ '..\\', '../', '\\' ], '/', $plugin_file ), '/' );
+		$plugin_path  = wp_normalize_path( WP_PLUGIN_DIR . '/' . $plugin_file );
 		$plugins_base = wp_normalize_path( trailingslashit( WP_PLUGIN_DIR ) );
 		if ( strpos( $plugin_path, $plugins_base ) !== 0 || ! file_exists( $plugin_path ) ) {
 			wp_die( esc_html__( 'The specified plugin does not exist.', 'wp-autoplugin' ) );
@@ -260,7 +260,7 @@ class Menu {
 		}
 
 		$theme_slug = sanitize_text_field( wp_unslash( $_GET['theme'] ) ); // phpcs:ignore WordPress.Security.NonceVerification
-		$theme = wp_get_theme( $theme_slug );
+		$theme      = wp_get_theme( $theme_slug );
 		if ( ! $theme->exists() ) {
 			wp_die( esc_html__( 'The specified theme does not exist.', 'wp-autoplugin' ) );
 		}

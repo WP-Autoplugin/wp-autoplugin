@@ -28,7 +28,7 @@ class Action_Links {
 
 	/**
 	 * Add an "Extend Plugin" link to the plugin list table.
- *
+	 *
 	 * @param array  $actions The plugin action links.
 	 * @param string $plugin_file The plugin file.
 	 *
@@ -51,15 +51,15 @@ class Action_Links {
 
 	/**
 	 * Add an "Extend Theme" link to the theme list table (Multisite).
- *
+	 *
 	 * @param array  $actions The theme action links.
 	 * @param string $theme The theme slug.
 	 *
 	 * @return array
 	 */
 	public function add_extend_theme_link( $actions, $theme ) {
-		$extend_url = admin_url( 'admin.php?page=wp-autoplugin-extend-theme&theme=' . rawurlencode( $theme ) );
-		$extend_url = wp_nonce_url( $extend_url, 'wp-autoplugin-extend-theme', 'nonce' );
+		$extend_url              = admin_url( 'admin.php?page=wp-autoplugin-extend-theme&theme=' . rawurlencode( $theme ) );
+		$extend_url              = wp_nonce_url( $extend_url, 'wp-autoplugin-extend-theme', 'nonce' );
 		$actions['extend_theme'] = '<a href="' . esc_url( $extend_url ) . '">' . esc_html__( 'Extend Theme', 'wp-autoplugin' ) . '</a>';
 		return $actions;
 	}
@@ -75,7 +75,9 @@ class Action_Links {
 			return;
 		}
 
-		wp_add_inline_script( 'theme', "
+		wp_add_inline_script(
+			'theme',
+			"
 			jQuery(document).ready(function($) {
 				console.log('Adding Extend Theme button to theme list table.');
 
@@ -88,7 +90,8 @@ class Action_Links {
 					}
 				});
 			});
-		" );
+		"
+		);
 	}
 
 	/**

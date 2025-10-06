@@ -321,15 +321,15 @@ class Hooks_Extender {
 		}
 
 		if ( 'php' === $file_type ) {
-			$prompt = "Generate only the PHP code for a single file in a multi-file WordPress extension plugin that extends the theme \"$original_theme_name\" using its hooks.\n\n";
-			$prompt .= "File Path: $file_path\n";
-			$prompt .= "File Purpose: $file_description\n\n";
-			$prompt .= "Plugin Plan (JSON):\n" . $plan_json . "\n\n";
-			$prompt .= "Available Hooks to use:\n$hooks_list\n\n";
-			$prompt .= "Project Context:\n$context\n\n";
-			$prompt .= "Requirements:\n";
-			$prompt .= "- Follow WordPress coding standards; use tabs for indentation\n";
-			$prompt .= "- Correctly use the specified hooks in this file's implementation\n";
+			$prompt       = "Generate only the PHP code for a single file in a multi-file WordPress extension plugin that extends the theme \"$original_theme_name\" using its hooks.\n\n";
+			$prompt      .= "File Path: $file_path\n";
+			$prompt      .= "File Purpose: $file_description\n\n";
+			$prompt      .= "Plugin Plan (JSON):\n" . $plan_json . "\n\n";
+			$prompt      .= "Available Hooks to use:\n$hooks_list\n\n";
+			$prompt      .= "Project Context:\n$context\n\n";
+			$prompt      .= "Requirements:\n";
+			$prompt      .= "- Follow WordPress coding standards; use tabs for indentation\n";
+			$prompt      .= "- Correctly use the specified hooks in this file's implementation\n";
 			$is_main_file = ( false === strpos( $file_path, '/' ) ) && ( substr( $file_path, -4 ) === '.php' );
 			if ( $is_main_file ) {
 				$prompt .= "- This is the main plugin file; include a proper WordPress plugin header\n";
@@ -341,16 +341,16 @@ class Hooks_Extender {
 
 			return $this->ai_api->send_prompt( $prompt );
 		} elseif ( 'css' === $file_type ) {
-			$prompt = "Generate only the CSS code for the following file in a WordPress extension plugin:\n\n";
+			$prompt  = "Generate only the CSS code for the following file in a WordPress extension plugin:\n\n";
 			$prompt .= "File Path: $file_path\n";
 			$prompt .= "File Purpose: $file_description\n\n";
-			$prompt .= "Do not include explanations or markdown. Return only raw CSS.";
+			$prompt .= 'Do not include explanations or markdown. Return only raw CSS.';
 			return $this->ai_api->send_prompt( $prompt );
 		} elseif ( 'js' === $file_type ) {
-			$prompt = "Generate only the JavaScript code for the following file in a WordPress extension plugin:\n\n";
+			$prompt  = "Generate only the JavaScript code for the following file in a WordPress extension plugin:\n\n";
 			$prompt .= "File Path: $file_path\n";
 			$prompt .= "File Purpose: $file_description\n\n";
-			$prompt .= "Use jQuery if needed. Do not include explanations or markdown. Return only raw JavaScript.";
+			$prompt .= 'Use jQuery if needed. Do not include explanations or markdown. Return only raw JavaScript.';
 			return $this->ai_api->send_prompt( $prompt );
 		}
 
@@ -382,7 +382,7 @@ class Hooks_Extender {
 		}
 
 		if ( 'php' === $file_type ) {
-			$prompt = "Generate only the PHP code for a single file in a multi-file WordPress extension plugin that extends \"$original_plugin\" using its hooks.\n\n";
+			$prompt  = "Generate only the PHP code for a single file in a multi-file WordPress extension plugin that extends \"$original_plugin\" using its hooks.\n\n";
 			$prompt .= "File Path: $file_path\n";
 			$prompt .= "File Purpose: $file_description\n\n";
 			$prompt .= "Plugin Plan (JSON):\n" . $plan_json . "\n\n";
@@ -403,16 +403,16 @@ class Hooks_Extender {
 
 			return $this->ai_api->send_prompt( $prompt );
 		} elseif ( 'css' === $file_type ) {
-			$prompt = "Generate only the CSS code for the following file in a WordPress extension plugin:\n\n";
+			$prompt  = "Generate only the CSS code for the following file in a WordPress extension plugin:\n\n";
 			$prompt .= "File Path: $file_path\n";
 			$prompt .= "File Purpose: $file_description\n\n";
-			$prompt .= "Do not include explanations or markdown. Return only raw CSS.";
+			$prompt .= 'Do not include explanations or markdown. Return only raw CSS.';
 			return $this->ai_api->send_prompt( $prompt );
 		} elseif ( 'js' === $file_type ) {
-			$prompt = "Generate only the JavaScript code for the following file in a WordPress extension plugin:\n\n";
+			$prompt  = "Generate only the JavaScript code for the following file in a WordPress extension plugin:\n\n";
 			$prompt .= "File Path: $file_path\n";
 			$prompt .= "File Purpose: $file_description\n\n";
-			$prompt .= "Use jQuery if needed. Do not include explanations or markdown. Return only raw JavaScript.";
+			$prompt .= 'Use jQuery if needed. Do not include explanations or markdown. Return only raw JavaScript.';
 			return $this->ai_api->send_prompt( $prompt );
 		}
 
@@ -436,9 +436,9 @@ class Hooks_Extender {
 		if ( isset( $project_structure['files'] ) && is_array( $project_structure['files'] ) ) {
 			$context .= "Files:\n";
 			foreach ( $project_structure['files'] as $file ) {
-				$path = isset( $file['path'] ) ? $file['path'] : '';
-				$type = isset( $file['type'] ) ? $file['type'] : '';
-				$desc = isset( $file['description'] ) ? $file['description'] : '';
+				$path     = isset( $file['path'] ) ? $file['path'] : '';
+				$type     = isset( $file['type'] ) ? $file['type'] : '';
+				$desc     = isset( $file['description'] ) ? $file['description'] : '';
 				$context .= "- $path ($type): $desc\n";
 			}
 		}
@@ -447,8 +447,8 @@ class Hooks_Extender {
 			$context .= "\nPreviously Generated Files:\n";
 			foreach ( $generated_files as $file_path => $file_content ) {
 				$context .= "File: $file_path\n";
-				$lines   = explode( "\n", (string) $file_content );
-				$snippet = implode( "\n", array_slice( $lines, 0, 200 ) );
+				$lines    = explode( "\n", (string) $file_content );
+				$snippet  = implode( "\n", array_slice( $lines, 0, 200 ) );
 				$context .= "```\n$snippet\n```\n";
 			}
 		}

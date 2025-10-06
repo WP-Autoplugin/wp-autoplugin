@@ -47,7 +47,7 @@ class Plugin_Extender {
 	 */
 	public function plan_plugin_extension( $plugin_code_or_files, $plugin_changes ) {
 		$code_context = $this->build_code_context( $plugin_code_or_files );
-		$prompt = <<<PROMPT
+		$prompt       = <<<PROMPT
 I have a WordPress plugin I would like to modify. Here is the plugin codebase:
 
 $code_context
@@ -99,29 +99,31 @@ PROMPT;
 		$action    = isset( $file_info['action'] ) ? $file_info['action'] : 'update';
 
 		$lang = 'php';
-		if ( 'css' === $file_type ) { $lang = 'css'; }
-		elseif ( 'js' === $file_type ) { $lang = 'javascript'; }
+		if ( 'css' === $file_type ) {
+			$lang = 'css'; } elseif ( 'js' === $file_type ) {
+			$lang = 'javascript'; }
 
-		$generated_context = '';
-		if ( is_array( $generated_files ) && ! empty( $generated_files ) ) {
-			$generated_context = "Previously updated/added files in this extension run:\n";
-			foreach ( $generated_files as $path => $contents ) {
-				$gLang = 'php';
-				if ( preg_match( '/\\.css$/i', $path ) ) { $gLang = 'css'; }
-				elseif ( preg_match( '/\\.(js|mjs)$/i', $path ) ) { $gLang = 'javascript'; }
-				$lines = explode( "\n", (string) $contents );
-				$max   = 1200;
-				if ( count( $lines ) > $max ) {
-					$contents = implode( "\n", array_slice( $lines, 0, $max ) ) . "\n/* ... truncated ... */";
+			$generated_context = '';
+			if ( is_array( $generated_files ) && ! empty( $generated_files ) ) {
+				$generated_context = "Previously updated/added files in this extension run:\n";
+				foreach ( $generated_files as $path => $contents ) {
+					$gLang = 'php';
+					if ( preg_match( '/\\.css$/i', $path ) ) {
+						$gLang = 'css'; } elseif ( preg_match( '/\\.(js|mjs)$/i', $path ) ) {
+										$gLang = 'javascript'; }
+						$lines = explode( "\n", (string) $contents );
+						$max   = 1200;
+						if ( count( $lines ) > $max ) {
+							$contents = implode( "\n", array_slice( $lines, 0, $max ) ) . "\n/* ... truncated ... */";
+						}
+						$generated_context .= "\nFile: {$path}\n```{$gLang}\n{$contents}\n```\n";
 				}
-				$generated_context .= "\nFile: {$path}\n```{$gLang}\n{$contents}\n```\n";
 			}
-		}
 
-		// To do: Make sure the "increment version number" instruction is
-		// only applied when editing the main plugin file.
+			// To do: Make sure the "increment version number" instruction is
+			// only applied when editing the main plugin file.
 
-		$prompt = <<<PROMPT
+			$prompt = <<<PROMPT
 You are extending an existing WordPress plugin codebase. Here is the current codebase:
 
 $code_context
@@ -146,7 +148,7 @@ Format your response as follows:
 - If the file is being updated (action is UPDATE), ensure it contains all necessary code, not just the changes.
 PROMPT;
 
-		return $this->ai_api->send_prompt( $prompt );
+			return $this->ai_api->send_prompt( $prompt );
 	}
 
 	/**
