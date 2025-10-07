@@ -17,6 +17,134 @@ if ( ! defined( 'ABSPATH' ) ) {
 class AI_Utils {
 
 	/**
+	 * Models that support multimodal prompts for image input.
+	 *
+	 * @return array
+	 */
+	public static function get_supported_image_models() {
+		return [
+			'gpt-4o',
+			'gpt-4o-mini',
+			'gpt-4.1',
+			'gpt-4.1-mini',
+			'gpt-4.1-nano',
+			'gpt-5',
+			'gpt-5-mini',
+			'gpt-5-nano',
+		];
+	}
+
+	/**
+	 * Parse JSON-encoded prompt images from a request.
+	 *
+	 * @param string|array $raw_images Raw JSON string or array payload.
+	 * @param int          $max_images Maximum number of images to accept.
+	 * @return array[]
+	 */
+	public static function parse_prompt_images( $raw_images, $max_images = 6 ) {
+		if ( empty( $raw_images ) ) {
+			return [];
+		}
+
+		$data = $raw_images;
+		if ( is_string( $raw_images ) ) {
+			$data = json_decode( wp_unslash( $raw_images ), true );
+		}
+
+		if ( ! is_array( $data ) ) {
+			return [];
+		}
+
+		$images = [];
+		foreach ( $data as $item ) {
+			if ( count( $images ) >= $max_images ) {
+				break;
+			}
+			if ( ! is_array( $item ) ) {
+				continue;
+			}
+
+			$base64 = isset( $item['data'] ) ? trim( (string) $item['data'] ) : '';
+			$mime   = isset( $item['mime'] ) ? trim( (string) $item['mime'] ) : '';
+			$name   = isset( $item['name'] ) ? sanitize_file_name( (string) $item['name'] ) : '';
+
+			if ( '' === $base64 || 0 !== strpos( $mime, 'image/' ) ) {
+				continue;
+			}
+			if ( ! preg_match( '/^[A-Za-z0-9+\/]+={0,2}$/', $base64 ) ) {
+				continue;
+			}
+
+			$images[] = [
+				'data' => $base64,
+				'mime' => $mime,
+				'name' => $name,
+			];
+		}
+
+		return $images;
+	}
+
+	/**
+	 * Build OpenAI-style multimodal messages for text plus images.
+	 *
+	 * @param string $prompt         The user prompt text.
+	 * @param array  $prompt_images  Array of parsed prompt images.
+	 * @param string $system_message Optional system prompt.
+	 * @return array
+	 */
+	public static function build_openai_multimodal_messages( $prompt, $prompt_images, $system_message = '' ) {
+		$messages = [];
+		if ( ! empty( $system_message ) ) {
+			$messages[] = [
+				'role'    => 'system',
+				'content' => $system_message,
+			];
+		}
+
+		$content = [
+			[
+				'type' => 'text',
+				'text' => $prompt,
+			],
+		];
+
+		foreach ( $prompt_images as $image ) {
+			$mime = isset( $image['mime'] ) ? $image['mime'] : 'image/jpeg';
+			$data = isset( $image['data'] ) ? $image['data'] : '';
+			if ( empty( $data ) ) {
+				continue;
+			}
+
+			$content[] = [
+				'image_url' => 'data:' . $mime . ';base64,' . $data,
+			];
+		}
+
+		$messages[] = [
+			'role'    => 'user',
+			'content' => $content,
+		];
+
+		return $messages;
+	}
+
+	/**
+	 * Determine whether the provided API instance supports prompt images.
+	 *
+	 * @param API $api The API instance.
+	 * @return bool
+	 */
+	public static function api_supports_prompt_images( $api ) {
+		if ( ! $api instanceof \WP_Autoplugin\OpenAI_API ) {
+			return false;
+		}
+
+		$model = method_exists( $api, 'get_selected_model' ) ? $api->get_selected_model() : '';
+		return in_array( $model, self::get_supported_image_models(), true );
+	}
+
+	/**
 	 * Build a readable context for either a single string or multiple files.
 	 * Wraps contents in language-specific code fences and truncates long files.
 	 *

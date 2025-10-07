@@ -12,9 +12,14 @@
 
     const messageExplainPlugin = document.getElementById('explain-plugin-message');
     const messageExplanation = document.getElementById('explanation-message');
-    
+
     const explanationContainer = document.getElementById('plugin_explanation_container');
     const questionDisplay = document.getElementById('question-display');
+
+    const promptAttachments = wpAutoPluginCommon.initPromptAttachments({
+        textarea: questionField,
+        modelKey: ['reviewer', 'default']
+    });
     
     // ----- State Variables -----
     let currentState = 'askQuestion';
@@ -106,6 +111,7 @@
         formData.append('plugin_file', document.getElementById('plugin_file').value);
         formData.append('explain_focus', explanationFocus);
         formData.append('security', wp_autoplugin.nonce);
+        promptAttachments.appendToFormData(formData);
 
         try {
             const response = await wpAutoPluginCommon.sendRequest(formData);

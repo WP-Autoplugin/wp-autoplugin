@@ -50,7 +50,7 @@ class Hooks_Extender {
 	 * @param string $plugin_changes Description of the desired changes.
 	 * @return string|WP_Error The AI-generated plan in JSON format.
 	 */
-	public function plan_plugin_hooks_extension( $original_plugin, $hooks, $plugin_changes ) {
+	public function plan_plugin_hooks_extension( $original_plugin, $hooks, $plugin_changes, $prompt_images = [] ) {
 		$hooks_list = '';
 		foreach ( $hooks as $hook ) {
 			$hooks_list .= "```\n{$hook['type']}: '{$hook['name']}'\n\nContext:\n{$hook['context']}\n```\n\n";
@@ -124,7 +124,12 @@ class Hooks_Extender {
 			PROMPT;
 		}
 
-		$plan_data = $this->ai_api->send_prompt( $prompt, '', [ 'response_format' => [ 'type' => 'json_object' ] ] );
+		$params    = [ 'response_format' => [ 'type' => 'json_object' ] ];
+		if ( ! empty( $prompt_images ) && AI_Utils::api_supports_prompt_images( $this->ai_api ) ) {
+			$params['messages'] = AI_Utils::build_openai_multimodal_messages( $prompt, $prompt_images );
+		}
+
+		$plan_data = $this->ai_api->send_prompt( $prompt, '', $params );
 
 		return $plan_data;
 	}
@@ -175,7 +180,7 @@ class Hooks_Extender {
 	 * @param string $theme_changes Description of the desired changes.
 	 * @return string|WP_Error The AI-generated plan in JSON format.
 	 */
-	public function plan_theme_hooks_extension( $original_theme_name, $hooks, $theme_changes ) {
+	public function plan_theme_hooks_extension( $original_theme_name, $hooks, $theme_changes, $prompt_images = [] ) {
 		$hooks_list = '';
 		foreach ( $hooks as $hook ) {
 			$hooks_list .= "```\n{$hook['type']}: '{$hook['name']}'\n\nContext:\n{$hook['context']}\n```\n\n";
@@ -253,7 +258,12 @@ class Hooks_Extender {
 			PROMPT;
 		}
 
-		$plan_data = $this->ai_api->send_prompt( $prompt, '', [ 'response_format' => [ 'type' => 'json_object' ] ] );
+		$params    = [ 'response_format' => [ 'type' => 'json_object' ] ];
+		if ( ! empty( $prompt_images ) && AI_Utils::api_supports_prompt_images( $this->ai_api ) ) {
+			$params['messages'] = AI_Utils::build_openai_multimodal_messages( $prompt, $prompt_images );
+		}
+
+		$plan_data = $this->ai_api->send_prompt( $prompt, '', $params );
 
 		return $plan_data;
 	}

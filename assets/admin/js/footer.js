@@ -1,6 +1,7 @@
 jQuery(document).ready(function($) {
 	// Store model information for dynamic updates
 	window.wpAutopluginModels = wpAutopluginFooter.models;
+	window.dispatchEvent(new CustomEvent('wpAutopluginModelsUpdated'));
 	
 	// Global token tracking
 	window.wpAutopluginTokens = {
@@ -246,6 +247,7 @@ jQuery(document).ready(function($) {
 					window.wpAutopluginModels.planner = plannerModel || defaultModel;
 					window.wpAutopluginModels.coder = coderModel || defaultModel;
 					window.wpAutopluginModels.reviewer = reviewerModel || defaultModel;
+					window.dispatchEvent(new CustomEvent('wpAutopluginModelsUpdated'));
 					
 					// Hide modal
 					$('#model-selection-modal').hide();

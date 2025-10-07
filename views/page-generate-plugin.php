@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<form method="post" action="" id="generate-plan-form">
 			<?php wp_nonce_field( 'generate_plan', 'generate_plan_nonce' ); ?>
 			<p><?php esc_html_e( 'Enter a description of the plugin you want to generate:', 'wp-autoplugin' ); ?></p>
-			<input name="plugin_description" id="plugin_description" type="text" size="100" />
+			<textarea name="plugin_description" id="plugin_description" rows="8" cols="100"></textarea>
 			<?php submit_button( __( 'Generate Plan', 'wp-autoplugin' ), 'primary button-hero', 'generate_plan', false ); ?>
 		</form>
 		<div id="generate-plan-message" class="autoplugin-message"></div>

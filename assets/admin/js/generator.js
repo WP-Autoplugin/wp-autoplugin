@@ -12,6 +12,12 @@
 
     const pluginPlanContainer = document.getElementById('plugin_plan_container');
     const pluginCodeTextarea  = document.getElementById('plugin_code');
+    const descriptionField    = document.getElementById('plugin_description');
+
+    const promptAttachments = wpAutoPluginCommon.initPromptAttachments({
+        textarea: descriptionField,
+        modelKey: 'planner'
+    });
 
     // ----- State Variables -----
     let currentState       = 'generatePlan';
@@ -61,14 +67,13 @@
     async function handleGeneratePlanSubmit(event) {
         event.preventDefault();
 
-        const descField = document.getElementById('plugin_description');
-        if (descField.value.trim() === '') {
+        if (descriptionField.value.trim() === '') {
             document.getElementById('generate-plan-message').innerHTML = wp_autoplugin.messages.empty_description;
             return;
         }
 
         generatePlanForm.parentElement.classList.add('loading');
-        pluginDescription = descField.value;
+        pluginDescription = descriptionField.value;
 
         const loader = loadingIndicator(document.getElementById('generate-plan-message'), wp_autoplugin.messages.generating_plan);
         loader.start();
@@ -77,6 +82,7 @@
         formData.append('action', 'wp_autoplugin_generate_plan');
         formData.append('plugin_description', pluginDescription);
         formData.append('security', wp_autoplugin.nonce);
+        promptAttachments.appendToFormData(formData);
 
         try {
             const response = await wpAutoPluginCommon.sendRequest(formData);

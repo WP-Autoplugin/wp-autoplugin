@@ -91,9 +91,10 @@ class Scripts {
 		);
 
 		$localized_data = [
-			'ajax_url' => esc_url( admin_url( 'admin-ajax.php' ) ),
-			'nonce'    => wp_create_nonce( 'wp_autoplugin_generate' ),
-			'messages' => $this->get_localized_messages(),
+			'ajax_url'               => esc_url( admin_url( 'admin-ajax.php' ) ),
+			'nonce'                  => wp_create_nonce( 'wp_autoplugin_generate' ),
+			'messages'               => $this->get_localized_messages(),
+			'supported_image_models' => \WP_Autoplugin\AI_Utils::get_supported_image_models(),
 		];
 
 		// The main list page.

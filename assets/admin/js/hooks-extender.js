@@ -24,6 +24,12 @@
     const hooksSummary = document.getElementById('hooks-summary');
     const hooksUl = document.getElementById('hooks-ul');
     const pluginFileInput = document.getElementById('plugin_file');
+    const issueField      = document.getElementById('plugin_issue');
+
+    const promptAttachments = wpAutoPluginCommon.initPromptAttachments({
+        textarea: issueField,
+        modelKey: 'planner'
+    });
 
     // ----- State Variables -----
     let editorInstance    = null;
@@ -112,7 +118,6 @@
     async function handleGeneratePlanSubmit(event) {
         event.preventDefault();
 
-        const issueField = document.getElementById('plugin_issue');
         if (issueField.value.trim() === '') {
             messageGeneratePlan.innerHTML = wp_autoplugin.messages.empty_description;
             return;
@@ -129,6 +134,7 @@
         formData.append('plugin_issue', issueDescription);
         formData.append('plugin_file', document.getElementById('plugin_file').value);
         formData.append('security', wp_autoplugin.nonce);
+        promptAttachments.appendToFormData(formData);
 
         try {
             const response = await wpAutoPluginCommon.sendRequest(formData);

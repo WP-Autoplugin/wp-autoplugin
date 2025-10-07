@@ -19,6 +19,12 @@
     const pluginCodeTextarea  = document.getElementById('fixed_plugin_code'); // hidden fallback
     const tabsContainer       = document.getElementById('files-tabs');
     const contentContainer    = document.getElementById('file-content');
+    const issueField          = document.getElementById('plugin_issue');
+
+    const promptAttachments = wpAutoPluginCommon.initPromptAttachments({
+        textarea: issueField,
+        modelKey: ['planner', 'reviewer', 'default']
+    });
 
     // ----- State Variables -----
     let editorInstance    = null; // legacy single-file editor (kept for fallback)
@@ -70,7 +76,6 @@
     async function handleGeneratePlanSubmit(event) {
         event.preventDefault();
 
-        const issueField = document.getElementById('plugin_issue');
         if (issueField.value.trim() === '') {
             messageGeneratePlan.innerHTML = wp_autoplugin.messages.empty_description;
             return;
@@ -87,6 +92,7 @@
         formData.append('plugin_issue', issueDescription);
         formData.append('plugin_file', document.getElementById('plugin_file').value);
         formData.append('security', wp_autoplugin.nonce);
+        promptAttachments.appendToFormData(formData);
 
         try {
             const response = await wpAutoPluginCommon.sendRequest(formData);

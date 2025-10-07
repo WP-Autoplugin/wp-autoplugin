@@ -44,13 +44,13 @@ class Plugin_Generator {
 	 *
 	 * @return string|WP_Error
 	 */
-	public function generate_plugin_plan( $input ) {
+	public function generate_plugin_plan( $input, $prompt_images = [] ) {
 		$plugin_mode = get_option( 'wp_autoplugin_plugin_mode', 'simple' );
 
 		if ( 'complex' === $plugin_mode ) {
-			return $this->generate_complex_plugin_plan( $input );
+			return $this->generate_complex_plugin_plan( $input, $prompt_images );
 		} else {
-			return $this->generate_simple_plugin_plan( $input );
+			return $this->generate_simple_plugin_plan( $input, $prompt_images );
 		}
 	}
 
@@ -61,7 +61,7 @@ class Plugin_Generator {
 	 *
 	 * @return string|WP_Error
 	 */
-	private function generate_simple_plugin_plan( $input ) {
+	private function generate_simple_plugin_plan( $input, $prompt_images = [] ) {
 		$prompt = <<<PROMPT
 			Generate a detailed technical specification and development plan for a WordPress plugin with the following features:
 
@@ -81,7 +81,12 @@ class Plugin_Generator {
 			Do not add any additional commentary. Make sure your response only contains a valid JSON object with the specified sections. Do not use Markdown formatting in your answer.
 			PROMPT;
 
-		return $this->ai_api->send_prompt( $prompt, '', [ 'response_format' => [ 'type' => 'json_object' ] ] );
+		$params = [ 'response_format' => [ 'type' => 'json_object' ] ];
+		if ( ! empty( $prompt_images ) && AI_Utils::api_supports_prompt_images( $this->ai_api ) ) {
+			$params['messages'] = AI_Utils::build_openai_multimodal_messages( $prompt, $prompt_images );
+		}
+
+		return $this->ai_api->send_prompt( $prompt, '', $params );
 	}
 
 	/**
@@ -91,7 +96,7 @@ class Plugin_Generator {
 	 *
 	 * @return string|WP_Error
 	 */
-	private function generate_complex_plugin_plan( $input ) {
+	private function generate_complex_plugin_plan( $input, $prompt_images = [] ) {
 		$prompt = <<<PROMPT
 			Generate a detailed technical specification and development plan for a WordPress plugin with the following features:
 			
@@ -127,7 +132,12 @@ class Plugin_Generator {
 			Do not add any additional commentary. Make sure your response only contains a valid JSON object with the specified sections. Do not use Markdown formatting in your answer.
 			PROMPT;
 
-		return $this->ai_api->send_prompt( $prompt, '', [ 'response_format' => [ 'type' => 'json_object' ] ] );
+		$params = [ 'response_format' => [ 'type' => 'json_object' ] ];
+		if ( ! empty( $prompt_images ) && AI_Utils::api_supports_prompt_images( $this->ai_api ) ) {
+			$params['messages'] = AI_Utils::build_openai_multimodal_messages( $prompt, $prompt_images );
+		}
+
+		return $this->ai_api->send_prompt( $prompt, '', $params );
 	}
 
 	/**

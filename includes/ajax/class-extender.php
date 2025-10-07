@@ -9,6 +9,7 @@ namespace WP_Autoplugin\Ajax;
 
 use WP_Autoplugin\Plugin_Extender;
 use WP_Autoplugin\Plugin_Installer;
+use WP_Autoplugin\AI_Utils;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -117,9 +118,10 @@ class Extender {
 			? sanitize_text_field( wp_unslash( $_POST['plugin_issue'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
 			: '';
 
-		$planner_api = $this->admin->api_handler->get_planner_api();
-		$extender    = new \WP_Autoplugin\Plugin_Extender( $planner_api );
-		$plan_data   = $extender->plan_plugin_extension( $codebase['files'], $problem );
+		$planner_api   = $this->admin->api_handler->get_planner_api();
+		$extender      = new \WP_Autoplugin\Plugin_Extender( $planner_api );
+		$prompt_images = isset( $_POST['prompt_images'] ) ? AI_Utils::parse_prompt_images( $_POST['prompt_images'] ) : [];
+		$plan_data     = $extender->plan_plugin_extension( $codebase['files'], $problem, $prompt_images );
 		if ( is_wp_error( $plan_data ) ) {
 			wp_send_json_error( $plan_data->get_error_message() );
 		}

@@ -45,7 +45,7 @@ class Plugin_Fixer {
 	 *
 	 * @return string|WP_Error
 	 */
-	public function identify_issue( $plugin_code_or_files, $problem ) {
+	public function identify_issue( $plugin_code_or_files, $problem, $prompt_images = [] ) {
 		$code_context = $this->build_code_context( $plugin_code_or_files );
 
 		$prompt = <<<PROMPT
@@ -79,7 +79,12 @@ Notes:
 - Do NOT include any code in this response. Only the JSON object above.
 PROMPT;
 
-		return $this->ai_api->send_prompt( $prompt );
+		$params = [];
+		if ( ! empty( $prompt_images ) && AI_Utils::api_supports_prompt_images( $this->ai_api ) ) {
+			$params['messages'] = AI_Utils::build_openai_multimodal_messages( $prompt, $prompt_images );
+		}
+
+		return $this->ai_api->send_prompt( $prompt, '', $params );
 	}
 
 	/**

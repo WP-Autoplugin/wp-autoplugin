@@ -324,4 +324,13 @@ class OpenAI_API extends API {
 			'response_format',
 		];
 	}
+
+	/**
+	 * Get the originally selected model name.
+	 *
+	 * @return string
+	 */
+	public function get_selected_model() {
+		return $this->original_model ? $this->original_model : $this->model;
+	}
 }
