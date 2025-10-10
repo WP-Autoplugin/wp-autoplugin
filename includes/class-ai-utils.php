@@ -130,18 +130,87 @@ class AI_Utils {
 	}
 
 	/**
+	 * Build Gemini-style multimodal contents array for text plus images.
+	 *
+	 * @param string $prompt        The user prompt text.
+	 * @param array  $prompt_images Array of parsed prompt images.
+	 * @return array
+	 */
+	public static function build_gemini_multimodal_contents( $prompt, $prompt_images ) {
+		$parts = [];
+
+		foreach ( $prompt_images as $image ) {
+			$mime = isset( $image['mime'] ) ? $image['mime'] : 'image/jpeg';
+			$data = isset( $image['data'] ) ? $image['data'] : '';
+			if ( empty( $data ) ) {
+				continue;
+			}
+
+			$parts[] = [
+				'inline_data' => [
+					'mime_type' => $mime,
+					'data'      => $data,
+				],
+			];
+		}
+
+		$parts[] = [
+			'text' => $prompt,
+		];
+
+		return [
+			[
+				'parts' => $parts,
+			],
+		];
+	}
+
+	/**
 	 * Determine whether the provided API instance supports prompt images.
 	 *
 	 * @param API $api The API instance.
 	 * @return bool
 	 */
 	public static function api_supports_prompt_images( $api ) {
-		if ( ! $api instanceof \WP_Autoplugin\OpenAI_API ) {
-			return false;
+		if ( $api instanceof \WP_Autoplugin\OpenAI_API ) {
+			$model = method_exists( $api, 'get_selected_model' ) ? $api->get_selected_model() : '';
+			return in_array( $model, self::get_supported_image_models(), true );
 		}
 
-		$model = method_exists( $api, 'get_selected_model' ) ? $api->get_selected_model() : '';
-		return in_array( $model, self::get_supported_image_models(), true );
+		if ( $api instanceof \WP_Autoplugin\Google_Gemini_API ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Get provider-specific payload overrides for multimodal prompts.
+	 *
+	 * @param API    $api           The API instance.
+	 * @param string $prompt        The user prompt text.
+	 * @param array  $prompt_images Parsed prompt images.
+	 * @param string $system_message Optional system message.
+	 * @return array
+	 */
+	public static function get_multimodal_payload( $api, $prompt, $prompt_images, $system_message = '' ) {
+		if ( empty( $prompt_images ) || ! self::api_supports_prompt_images( $api ) ) {
+			return [];
+		}
+
+		if ( $api instanceof \WP_Autoplugin\OpenAI_API ) {
+			return [
+				'messages' => self::build_openai_multimodal_messages( $prompt, $prompt_images, $system_message ),
+			];
+		}
+
+		if ( $api instanceof \WP_Autoplugin\Google_Gemini_API ) {
+			return [
+				'contents' => self::build_gemini_multimodal_contents( $prompt, $prompt_images ),
+			];
+		}
+
+		return [];
 	}
 
 	/**

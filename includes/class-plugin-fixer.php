@@ -79,10 +79,7 @@ Notes:
 - Do NOT include any code in this response. Only the JSON object above.
 PROMPT;
 
-		$params = [];
-		if ( ! empty( $prompt_images ) && AI_Utils::api_supports_prompt_images( $this->ai_api ) ) {
-			$params['messages'] = AI_Utils::build_openai_multimodal_messages( $prompt, $prompt_images );
-		}
+		$params  = AI_Utils::get_multimodal_payload( $this->ai_api, $prompt, $prompt_images );
 
 		return $this->ai_api->send_prompt( $prompt, '', $params );
 	}

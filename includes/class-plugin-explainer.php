@@ -60,10 +60,7 @@ class Plugin_Explainer {
 			Format your response in clear sections with headings. Be thorough but concise. Use Markdown.
 			PROMPT;
 
-		$params = [];
-		if ( ! empty( $prompt_images ) && AI_Utils::api_supports_prompt_images( $this->ai_api ) ) {
-			$params['messages'] = AI_Utils::build_openai_multimodal_messages( $prompt, $prompt_images );
-		}
+		$params = AI_Utils::get_multimodal_payload( $this->ai_api, $prompt, $prompt_images );
 
 		return $this->ai_api->send_prompt( $prompt, '', $params );
 	}
@@ -93,10 +90,7 @@ class Plugin_Explainer {
 			Be thorough but concise. Use Markdown for formatting.
 			PROMPT;
 
-		$params = [];
-		if ( ! empty( $prompt_images ) && AI_Utils::api_supports_prompt_images( $this->ai_api ) ) {
-			$params['messages'] = AI_Utils::build_openai_multimodal_messages( $prompt, $prompt_images );
-		}
+		$params = AI_Utils::get_multimodal_payload( $this->ai_api, $prompt, $prompt_images );
 
 		return $this->ai_api->send_prompt( $prompt, '', $params );
 	}
@@ -130,10 +124,7 @@ class Plugin_Explainer {
 			Format your response in clear sections with meaningful headings. Be thorough but concise. Use Markdown.
 			PROMPT;
 
-		$params = [];
-		if ( ! empty( $prompt_images ) && AI_Utils::api_supports_prompt_images( $this->ai_api ) ) {
-			$params['messages'] = AI_Utils::build_openai_multimodal_messages( $prompt, $prompt_images );
-		}
+		$params = AI_Utils::get_multimodal_payload( $this->ai_api, $prompt, $prompt_images );
 
 		return $this->ai_api->send_prompt( $prompt, '', $params );
 	}

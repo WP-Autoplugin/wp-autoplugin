@@ -125,8 +125,9 @@ class Hooks_Extender {
 		}
 
 		$params    = [ 'response_format' => [ 'type' => 'json_object' ] ];
-		if ( ! empty( $prompt_images ) && AI_Utils::api_supports_prompt_images( $this->ai_api ) ) {
-			$params['messages'] = AI_Utils::build_openai_multimodal_messages( $prompt, $prompt_images );
+		$payload   = AI_Utils::get_multimodal_payload( $this->ai_api, $prompt, $prompt_images );
+		if ( ! empty( $payload ) ) {
+			$params = array_merge( $params, $payload );
 		}
 
 		$plan_data = $this->ai_api->send_prompt( $prompt, '', $params );
@@ -259,8 +260,9 @@ class Hooks_Extender {
 		}
 
 		$params    = [ 'response_format' => [ 'type' => 'json_object' ] ];
-		if ( ! empty( $prompt_images ) && AI_Utils::api_supports_prompt_images( $this->ai_api ) ) {
-			$params['messages'] = AI_Utils::build_openai_multimodal_messages( $prompt, $prompt_images );
+		$payload   = AI_Utils::get_multimodal_payload( $this->ai_api, $prompt, $prompt_images );
+		if ( ! empty( $payload ) ) {
+			$params = array_merge( $params, $payload );
 		}
 
 		$plan_data = $this->ai_api->send_prompt( $prompt, '', $params );

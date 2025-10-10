@@ -130,7 +130,17 @@
             if (!model || typeof model !== 'string') {
                 return false;
             }
-            return supportedImageModelsNormalized.includes(model.toLowerCase().trim());
+            const normalized = model.toLowerCase().trim();
+            if (!normalized) {
+                return false;
+            }
+            if (supportedImageModelsNormalized.includes(normalized)) {
+                return true;
+            }
+            if (normalized.startsWith('gemini')) {
+                return true;
+            }
+            return false;
         }
 
         function updateButtonVisibility() {

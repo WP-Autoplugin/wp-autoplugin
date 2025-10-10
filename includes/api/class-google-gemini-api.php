@@ -97,18 +97,35 @@ class Google_Gemini_API extends API {
 			unset( $override_body['safetySettings'] );
 		}
 
-		// Build the request body.
-		$body = [
-			'contents'         => [
+		// Determine contents (supports multimodal override).
+		if ( isset( $override_body['contents'] ) && is_array( $override_body['contents'] ) ) {
+			$contents = $override_body['contents'];
+			unset( $override_body['contents'] );
+		} else {
+			$contents = [
 				[
 					'parts' => [
 						[ 'text' => $prompt ],
 					],
 				],
-			],
+			];
+		}
+
+		// Strip off response_format if present (not supported by Gemini).
+		if ( isset( $override_body['response_format'] ) ) {
+			unset( $override_body['response_format'] );
+		}
+
+		// Build the request body.
+		$body = [
+			'contents'         => $contents,
 			'safetySettings'   => $safety_settings,
 			'generationConfig' => $generation_config,
 		];
+
+		if ( ! empty( $override_body ) ) {
+			$body = array_merge( $body, $override_body );
+		}
 
 		$headers = [
 			'Content-Type' => 'application/json',
