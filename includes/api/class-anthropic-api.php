@@ -52,6 +52,10 @@ class Anthropic_API extends API {
 
 		// Set the temperature and max tokens based on the model.
 		$model_params = [
+			'claude-sonnet-4-5-20250929' => [
+				'temperature' => 0.2,
+				'max_tokens'  => 8192,
+			],
 			'claude-opus-4-20250514'     => [
 				'temperature' => 0.2,
 				'max_tokens'  => 8192,
@@ -118,30 +122,41 @@ class Anthropic_API extends API {
 	 * @return mixed The response from the API.
 	 */
 	public function send_prompt( $prompt, $system_message = '', $override_body = [] ) {
-		$messages = [];
-		if ( ! empty( $system_message ) ) {
-			$messages[] = [
-				'role'    => 'system',
-				'content' => $system_message,
-			];
-		}
-
-		$messages[] = [
-			'role'    => 'user',
-			'content' => $prompt,
-		];
-
-		$body = [
+		$payload = [
 			'model'       => $this->model,
 			'temperature' => $this->temperature,
 			'max_tokens'  => $this->max_tokens,
-			'messages'    => $messages,
+			'messages'    => [
+				[
+					'role'    => 'user',
+					'content' => [
+						[
+							'type' => 'text',
+							'text' => $prompt,
+						],
+					],
+				],
+			],
 		];
 
-		// Keep only allowed keys in the override body.
-		$allowed_keys  = [ 'model', 'temperature', 'max_tokens', 'messages' ];
+		if ( ! empty( $system_message ) ) {
+			$payload['system'] = $system_message;
+		}
+
+		if ( isset( $override_body['messages'] ) ) {
+			$payload['messages'] = $override_body['messages'];
+			unset( $override_body['messages'] );
+		}
+
+		if ( isset( $override_body['system'] ) ) {
+			$payload['system'] = $override_body['system'];
+			unset( $override_body['system'] );
+		}
+
+		// Keep only allowed keys alongside overrides.
+		$allowed_keys  = [ 'model', 'temperature', 'max_tokens', 'messages', 'system', 'thinking' ];
 		$override_body = array_intersect_key( $override_body, array_flip( $allowed_keys ) );
-		$body          = array_merge( $body, $override_body );
+		$body          = array_merge( $payload, $override_body );
 
 		$headers = [
 			'x-api-key'         => $this->api_key,

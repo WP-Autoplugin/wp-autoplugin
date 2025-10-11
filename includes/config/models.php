@@ -40,6 +40,7 @@ return apply_filters(
 			'gpt-3.5-turbo'     => 'GPT-3.5 Turbo',
 		],
 		'Anthropic' => [
+			'claude-sonnet-4-5-20250929' => 'Claude Sonnet 4.5-20250929',
 			'claude-opus-4-1-20250805'   => 'Claude Opus 4.1-20250805',
 			'claude-opus-4-20250514'     => 'Claude Opus 4-20250514',
 			'claude-sonnet-4-20250514'   => 'Claude Sonnet 4-20250514',

@@ -140,6 +140,9 @@
             if (normalized.startsWith('gemini')) {
                 return true;
             }
+            if (normalized.startsWith('claude')) {
+                return true;
+            }
             return false;
         }
 

@@ -31,6 +31,8 @@ class AI_Utils {
 			'gpt-5',
 			'gpt-5-mini',
 			'gpt-5-nano',
+			'gpt-5-chat-latest',
+			'gpt-5-codex',
 		];
 	}
 
@@ -166,6 +168,41 @@ class AI_Utils {
 	}
 
 	/**
+	 * Build Anthropic-style content array for text plus images.
+	 *
+	 * @param string $prompt        The user prompt text.
+	 * @param array  $prompt_images Array of parsed prompt images.
+	 * @return array
+	 */
+	public static function build_anthropic_multimodal_content( $prompt, $prompt_images ) {
+		$content = [];
+
+		foreach ( $prompt_images as $image ) {
+			$mime = isset( $image['mime'] ) ? $image['mime'] : 'image/jpeg';
+			$data = isset( $image['data'] ) ? $image['data'] : '';
+			if ( empty( $data ) ) {
+				continue;
+			}
+
+			$content[] = [
+				'type'   => 'image',
+				'source' => [
+					'type'      => 'base64',
+					'media_type' => $mime,
+					'data'      => $data,
+				],
+			];
+		}
+
+		$content[] = [
+			'type' => 'text',
+			'text' => $prompt,
+		];
+
+		return $content;
+	}
+
+	/**
 	 * Determine whether the provided API instance supports prompt images.
 	 *
 	 * @param API $api The API instance.
@@ -178,6 +215,10 @@ class AI_Utils {
 		}
 
 		if ( $api instanceof \WP_Autoplugin\Google_Gemini_API ) {
+			return true;
+		}
+
+		if ( $api instanceof \WP_Autoplugin\Anthropic_API ) {
 			return true;
 		}
 
@@ -207,6 +248,17 @@ class AI_Utils {
 		if ( $api instanceof \WP_Autoplugin\Google_Gemini_API ) {
 			return [
 				'contents' => self::build_gemini_multimodal_contents( $prompt, $prompt_images ),
+			];
+		}
+
+		if ( $api instanceof \WP_Autoplugin\Anthropic_API ) {
+			return [
+				'messages' => [
+					[
+						'role'    => 'user',
+						'content' => self::build_anthropic_multimodal_content( $prompt, $prompt_images ),
+					],
+				],
 			];
 		}
 
