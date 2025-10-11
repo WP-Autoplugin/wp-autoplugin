@@ -132,6 +132,53 @@ class AI_Utils {
 	}
 
 	/**
+	 * Build OpenAI Responses API multimodal input payload.
+	 *
+	 * @param string $prompt         The user prompt text.
+	 * @param array  $prompt_images  Array of parsed prompt images.
+	 * @param string $system_message Optional system prompt (handled separately via instructions).
+	 * @return array
+	 */
+	public static function build_openai_responses_multimodal_input( $prompt, $prompt_images, $system_message = '' ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found
+		$content = [];
+		$prompt  = (string) $prompt;
+
+		if ( '' !== $prompt ) {
+			$content[] = [
+				'type' => 'input_text',
+				'text' => $prompt,
+			];
+		}
+
+		foreach ( $prompt_images as $image ) {
+			$mime = isset( $image['mime'] ) ? $image['mime'] : 'image/jpeg';
+			$data = isset( $image['data'] ) ? $image['data'] : '';
+			if ( empty( $data ) ) {
+				continue;
+			}
+
+			$content[] = [
+				'type'      => 'input_image',
+				'image_url' => 'data:' . $mime . ';base64,' . $data,
+			];
+		}
+
+		if ( empty( $content ) ) {
+			$content[] = [
+				'type' => 'input_text',
+				'text' => '',
+			];
+		}
+
+		return [
+			[
+				'role'    => 'user',
+				'content' => $content,
+			],
+		];
+	}
+
+	/**
 	 * Build Gemini-style multimodal contents array for text plus images.
 	 *
 	 * @param string $prompt        The user prompt text.
@@ -237,6 +284,12 @@ class AI_Utils {
 	public static function get_multimodal_payload( $api, $prompt, $prompt_images, $system_message = '' ) {
 		if ( empty( $prompt_images ) || ! self::api_supports_prompt_images( $api ) ) {
 			return [];
+		}
+
+		if ( $api instanceof \WP_Autoplugin\OpenAI_Responses_API ) {
+			return [
+				'input' => self::build_openai_responses_multimodal_input( $prompt, $prompt_images, $system_message ),
+			];
 		}
 
 		if ( $api instanceof \WP_Autoplugin\OpenAI_API ) {

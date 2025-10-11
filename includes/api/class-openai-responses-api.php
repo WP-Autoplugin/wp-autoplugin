@@ -55,17 +55,8 @@ class OpenAI_Responses_API extends OpenAI_API {
 			];
 		}
 
-		// Map response_format to the Responses API text.format parameter.
+		// Ignore response_format for the Responses API (incompatible with text.format expectations).
 		if ( isset( $override_body['response_format'] ) ) {
-			if ( isset( $override_body['response_format']['type'] ) && 'json_object' === $override_body['response_format']['type'] && 1 === count( $override_body['response_format'] ) ) {
-				$body['text'] = [
-					'format' => 'json_object',
-				];
-			} else {
-				$body['text'] = [
-					'format' => $override_body['response_format'],
-				];
-			}
 			unset( $override_body['response_format'] );
 		}
 
