@@ -41,6 +41,10 @@ class AI_Utils {
 	 *
 	 * @param string|array $raw_images Raw JSON string or array payload.
 	 * @param int          $max_images Maximum number of images to accept.
+	 *
+	 * Filters:
+	 * - wp_autoplugin_max_prompt_image_bytes : int Maximum bytes per image (defaults to 5MB).
+	 * - wp_autoplugin_prompt_image_mime_types: array Allowed MIME types.
 	 * @return array[]
 	 */
 	public static function parse_prompt_images( $raw_images, $max_images = 6 ) {
@@ -57,7 +61,16 @@ class AI_Utils {
 			return [];
 		}
 
-		$images = [];
+		$images          = [];
+		$max_image_bytes = apply_filters( 'wp_autoplugin_max_prompt_image_bytes', 5 * 1024 * 1024 );
+		$allowed_mimes = apply_filters(
+			'wp_autoplugin_prompt_image_mime_types',
+			[ 'image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml' ]
+		);
+		$allowed_mimes = array_filter(
+			array_map( 'sanitize_mime_type', (array) $allowed_mimes )
+		);
+		$max_image_bytes = is_numeric( $max_image_bytes ) ? (int) $max_image_bytes : 0;
 		foreach ( $data as $item ) {
 			if ( count( $images ) >= $max_images ) {
 				break;
@@ -70,16 +83,34 @@ class AI_Utils {
 			$mime   = isset( $item['mime'] ) ? trim( (string) $item['mime'] ) : '';
 			$name   = isset( $item['name'] ) ? sanitize_file_name( (string) $item['name'] ) : '';
 
-			if ( '' === $base64 || 0 !== strpos( $mime, 'image/' ) ) {
+			if ( '' === $base64 || '' === $mime || 0 !== strpos( $mime, 'image/' ) ) {
 				continue;
 			}
 			if ( ! preg_match( '/^[A-Za-z0-9+\/]+={0,2}$/', $base64 ) ) {
 				continue;
 			}
 
+			$decoded = base64_decode( $base64, true );
+			if ( false === $decoded ) {
+				continue;
+			}
+
+			$bytes = strlen( $decoded );
+			if ( $max_image_bytes > 0 && $bytes > $max_image_bytes ) {
+				continue;
+			}
+
+			$sanitized_mime = sanitize_mime_type( $mime );
+			if ( empty( $sanitized_mime ) ) {
+				continue;
+			}
+			if ( ! in_array( $sanitized_mime, $allowed_mimes, true ) ) {
+				continue;
+			}
+
 			$images[] = [
-				'data' => $base64,
-				'mime' => $mime,
+				'data' => base64_encode( $decoded ),
+				'mime' => $sanitized_mime,
 				'name' => $name,
 			];
 		}
