@@ -25,6 +25,41 @@
     display: block;
 }
 
+.autoplugin-drop-overlay {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(31, 132, 213, 0.25);
+    z-index: 100000;
+    pointer-events: none;
+    color: #ffffff;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.autoplugin-drop-overlay::before {
+    content: '';
+    position: absolute;
+    inset: 24px;
+    border: 2px dashed #ffffff;
+    border-radius: 12px;
+}
+
+.autoplugin-drop-overlay.is-visible {
+    display: flex;
+}
+
+.autoplugin-drop-overlay__content {
+    position: relative;
+    padding: 20px 32px;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
 .autoplugin-prompt-wrapper textarea {
     width: 100%;
     padding: 10px;

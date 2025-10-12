@@ -61,6 +61,7 @@ class Scripts {
 			'plugin_activation_error'        => esc_html__( 'Error activating the plugin.', 'wp-autoplugin' ),
 			'extracting_hooks'               => esc_html__( 'Extracting hooks, please wait...', 'wp-autoplugin' ),
 			'no_hooks_found'                 => esc_html__( 'No hooks found in the codebase. Cannot extend the plugin.', 'wp-autoplugin' ),
+			'drop_files_to_attach'           => esc_html__( 'Drop files to attach', 'wp-autoplugin' ),
 		];
 	}
 

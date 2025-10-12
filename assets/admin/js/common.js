@@ -6,6 +6,235 @@
         : [];
     const supportedImageModelsNormalized = supportedImageModels.map((model) => (typeof model === 'string' ? model.toLowerCase().trim() : ''));
 
+    const dropManager = (function createDropManager() {
+        const handlers = [];
+        let overlay = null;
+        let overlayContent = null;
+        let activeHandler = null;
+        let dragCounter = 0;
+
+        function ensureOverlay(text) {
+            if (!overlay || !document.body.contains(overlay)) {
+                overlay = document.createElement('div');
+                overlay.className = 'autoplugin-drop-overlay';
+                overlay.setAttribute('aria-hidden', 'true');
+                overlayContent = document.createElement('div');
+                overlayContent.className = 'autoplugin-drop-overlay__content';
+                overlay.appendChild(overlayContent);
+                document.body.appendChild(overlay);
+            }
+
+            if (!overlayContent || !overlay.contains(overlayContent)) {
+                overlayContent = document.createElement('div');
+                overlayContent.className = 'autoplugin-drop-overlay__content';
+                overlay.appendChild(overlayContent);
+            }
+
+            overlayContent.textContent = text;
+        }
+
+        function hideOverlay() {
+            if (overlay) {
+                overlay.classList.remove('is-visible');
+                overlay.setAttribute('aria-hidden', 'true');
+                overlay.removeAttribute('data-active-id');
+            }
+            activeHandler = null;
+            dragCounter = 0;
+        }
+
+        function isHandlerEligible(handler) {
+            if (!handler || typeof handler.handleFiles !== 'function') {
+                return false;
+            }
+            if (typeof handler.isSupportedModel === 'function' && !handler.isSupportedModel()) {
+                return false;
+            }
+            if (typeof handler.isEnabled === 'function' && !handler.isEnabled()) {
+                return false;
+            }
+            return true;
+        }
+
+        function getEligibleHandler() {
+            if (activeHandler && isHandlerEligible(activeHandler)) {
+                return activeHandler;
+            }
+
+            activeHandler = null;
+            for (let i = handlers.length - 1; i >= 0; i--) {
+                if (isHandlerEligible(handlers[i])) {
+                    activeHandler = handlers[i];
+                    break;
+                }
+            }
+
+            return activeHandler;
+        }
+
+        function hasFiles(event) {
+            const transfer = event?.dataTransfer;
+            if (!transfer) {
+                return false;
+            }
+
+            const types = transfer.types;
+            if (types) {
+                if (typeof types.includes === 'function' && types.includes('Files')) {
+                    return true;
+                }
+                if (typeof types.contains === 'function' && types.contains('Files')) {
+                    return true;
+                }
+                if (Array.isArray(types) && types.indexOf('Files') !== -1) {
+                    return true;
+                }
+            }
+
+            return (transfer.files && transfer.files.length > 0) || (transfer.items && transfer.items.length > 0);
+        }
+
+        function getFiles(event) {
+            const transfer = event?.dataTransfer;
+            if (!transfer) {
+                return [];
+            }
+
+            if (transfer.files && transfer.files.length) {
+                return Array.from(transfer.files);
+            }
+
+            if (transfer.items && transfer.items.length) {
+                return Array.from(transfer.items)
+                    .filter((item) => item.kind === 'file')
+                    .map((item) => item.getAsFile())
+                    .filter(Boolean);
+            }
+
+            return [];
+        }
+
+        function showOverlay(handler) {
+            if (!handler) {
+                return;
+            }
+
+            const text = typeof handler.getOverlayText === 'function'
+                ? handler.getOverlayText()
+                : 'Drop files to attach';
+
+            ensureOverlay(text);
+
+            overlay.classList.add('is-visible');
+            overlay.setAttribute('aria-hidden', 'false');
+            overlay.dataset.activeId = handler.id || '';
+            activeHandler = handler;
+        }
+
+        function handleDragEnter(event) {
+            if (!hasFiles(event)) {
+                return;
+            }
+
+            const handler = getEligibleHandler();
+            if (!handler) {
+                hideOverlay();
+                return;
+            }
+
+            dragCounter += 1;
+            showOverlay(handler);
+
+            if (event.dataTransfer) {
+                event.dataTransfer.dropEffect = 'copy';
+            }
+
+            event.preventDefault();
+        }
+
+        function handleDragOver(event) {
+            if (!hasFiles(event)) {
+                hideOverlay();
+                return;
+            }
+
+            const handler = getEligibleHandler();
+            if (!handler) {
+                hideOverlay();
+                return;
+            }
+
+            showOverlay(handler);
+
+            if (event.dataTransfer) {
+                event.dataTransfer.dropEffect = 'copy';
+            }
+
+            event.preventDefault();
+        }
+
+        function handleDragLeave(event) {
+            if (hasFiles(event)) {
+                dragCounter = Math.max(0, dragCounter - 1);
+            } else {
+                dragCounter = 0;
+            }
+
+            if (dragCounter === 0) {
+                hideOverlay();
+            }
+        }
+
+        function handleDrop(event) {
+            const hadFiles = hasFiles(event);
+            const handler = getEligibleHandler();
+            hideOverlay();
+
+            if (hadFiles) {
+                event.preventDefault();
+            }
+
+            if (!handler) {
+                return;
+            }
+
+            const files = getFiles(event);
+            if (!files.length) {
+                return;
+            }
+
+            handler.handleFiles(files);
+        }
+
+        document.addEventListener('dragenter', handleDragEnter);
+        document.addEventListener('dragover', handleDragOver);
+        document.addEventListener('dragleave', handleDragLeave);
+        document.addEventListener('drop', handleDrop);
+
+        return {
+            register(handler) {
+                if (!handler || typeof handler.handleFiles !== 'function') {
+                    return function noop() {};
+                }
+
+                handlers.push(handler);
+
+                return function unregister() {
+                    const index = handlers.indexOf(handler);
+                    if (index !== -1) {
+                        handlers.splice(index, 1);
+                    }
+
+                    if (activeHandler === handler) {
+                        hideOverlay();
+                    }
+                };
+            }
+        };
+    })();
+
+    window.wpAutopluginDropManager = dropManager;
+
     function handleStepChange(steps, step, onShowStep) {
         Object.values(steps).forEach((el) => {
             if (el) {
@@ -109,6 +338,7 @@
 
         const attachments = [];
         let idCounter = 0;
+        let unregisterDropHandler = null;
 
         function currentModel() {
             if (typeof options.getModelName === 'function') {
@@ -260,6 +490,30 @@
         window.addEventListener('load', updateButtonVisibility, { once: true });
         renderAttachments();
 
+        const dropOverlayText = options.dropOverlayText
+            || window.wp_autoplugin?.messages?.drop_files_to_attach
+            || 'Drop files to attach';
+
+        function isWrapperVisible() {
+            if (!wrapper) {
+                return false;
+            }
+            return !!(wrapper.offsetWidth || wrapper.offsetHeight || wrapper.getClientRects().length);
+        }
+
+        unregisterDropHandler = dropManager.register({
+            id: debugId,
+            handleFiles: (files) => {
+                const imageFiles = files.filter((file) => file && file.type && file.type.startsWith('image/'));
+                if (imageFiles.length) {
+                    handleFiles(imageFiles);
+                }
+            },
+            isSupportedModel,
+            isEnabled: () => isWrapperVisible() && isSupportedModel(),
+            getOverlayText: () => dropOverlayText
+        });
+
         textarea.dataset.autopluginAttachments = '1';
 
         return {
@@ -283,6 +537,12 @@
             },
             getImages() {
                 return attachments.slice();
+            },
+            unregisterDrop() {
+                if (typeof unregisterDropHandler === 'function') {
+                    unregisterDropHandler();
+                    unregisterDropHandler = null;
+                }
             }
         };
     }
