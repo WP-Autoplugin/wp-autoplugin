@@ -234,9 +234,9 @@ class AI_Utils {
 			$content[] = [
 				'type'   => 'image',
 				'source' => [
-					'type'      => 'base64',
+					'type'       => 'base64',
 					'media_type' => $mime,
-					'data'      => $data,
+					'data'       => $data,
 				],
 			];
 		}

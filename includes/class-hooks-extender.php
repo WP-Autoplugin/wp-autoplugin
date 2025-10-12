@@ -124,8 +124,8 @@ class Hooks_Extender {
 			PROMPT;
 		}
 
-		$params    = [ 'response_format' => [ 'type' => 'json_object' ] ];
-		$payload   = AI_Utils::get_multimodal_payload( $this->ai_api, $prompt, $prompt_images );
+		$params  = [ 'response_format' => [ 'type' => 'json_object' ] ];
+		$payload = AI_Utils::get_multimodal_payload( $this->ai_api, $prompt, $prompt_images );
 		if ( ! empty( $payload ) ) {
 			$params = array_merge( $params, $payload );
 		}
@@ -259,8 +259,8 @@ class Hooks_Extender {
 			PROMPT;
 		}
 
-		$params    = [ 'response_format' => [ 'type' => 'json_object' ] ];
-		$payload   = AI_Utils::get_multimodal_payload( $this->ai_api, $prompt, $prompt_images );
+		$params  = [ 'response_format' => [ 'type' => 'json_object' ] ];
+		$payload = AI_Utils::get_multimodal_payload( $this->ai_api, $prompt, $prompt_images );
 		if ( ! empty( $payload ) ) {
 			$params = array_merge( $params, $payload );
 		}
