@@ -207,6 +207,11 @@ WP-Autoplugin is licensed under the GPLv3 or later.
 
 ## Changelog
 
+### 1.7
+- Added image input support for OpenAI, Anthropic and Google models
+- Added support for Claude Sonnet 4.5-20250929 model
+- Added support for GPT-5-Codex model and the OpenAI Responses API
+
 ### 1.6
 - Added complex plugin mode for multi-file plugin generation
 - Added specialized model settings to delegate tasks to specific AI models
