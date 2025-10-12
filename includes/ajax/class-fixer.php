@@ -9,6 +9,7 @@ namespace WP_Autoplugin\Ajax;
 
 use WP_Autoplugin\Plugin_Fixer;
 use WP_Autoplugin\Plugin_Installer;
+use WP_Autoplugin\AI_Utils;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -117,15 +118,16 @@ class Fixer {
 			? sanitize_text_field( wp_unslash( $_POST['plugin_issue'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
 			: '';
 
-		$reviewer_api = $this->admin->api_handler->get_reviewer_api();
-		$fixer        = new Plugin_Fixer( $reviewer_api );
-		$plan_data    = $fixer->identify_issue( $codebase['files'], $problem );
+		$planner_api   = $this->admin->api_handler->get_planner_api();
+		$fixer         = new Plugin_Fixer( $planner_api );
+		$prompt_images = isset( $_POST['prompt_images'] ) ? AI_Utils::parse_prompt_images( $_POST['prompt_images'] ) : [];
+		$plan_data     = $fixer->identify_issue( $codebase['files'], $problem, $prompt_images );
 		if ( is_wp_error( $plan_data ) ) {
 			wp_send_json_error( $plan_data->get_error_message() );
 		}
 
 		// Get token usage from the actual API that was used.
-		$token_usage = $reviewer_api->get_last_token_usage();
+		$token_usage = $planner_api->get_last_token_usage();
 
 		// Strip code fences if model returns ```json.
 		$plan_data = \WP_Autoplugin\AI_Utils::strip_code_fences( $plan_data, 'json' );

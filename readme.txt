@@ -4,7 +4,7 @@ Donate link: https://wp-autoplugin.com
 Tags: ai, plugin generator, development, wordpress, automation
 Requires at least: 6.0
 Tested up to: 6.7
-Stable tag: 1.6
+Stable tag: 1.7
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -68,6 +68,11 @@ Simple mode generates single-file plugins, while complex mode can create sophist
 Yes, you can configure specialized models in the settings to use different AI models for planning, coding, and reviewing tasks, allowing you to optimize performance and costs.
 
 == Changelog ==
+
+= 1.7 =
+* Added image input support for OpenAI, Anthropic and Google models
+* Added support for Claude Sonnet 4.5-20250929 model
+* Added support for GPT-5-Codex model and the OpenAI Responses API
 
 = 1.6 =
 * Added complex plugin mode for multi-file plugin generation

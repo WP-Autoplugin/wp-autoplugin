@@ -9,6 +9,7 @@ namespace WP_Autoplugin\Ajax;
 
 use WP_Autoplugin\Plugin_Generator;
 use WP_Autoplugin\Plugin_Installer;
+use WP_Autoplugin\AI_Utils;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -44,9 +45,10 @@ class Generator {
 			? sanitize_text_field( wp_unslash( $_POST['plugin_description'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
 			: '';
 
-		$planner_api = $this->admin->api_handler->get_planner_api();
-		$generator   = new Plugin_Generator( $planner_api );
-		$plan_data   = $generator->generate_plugin_plan( $plan );
+		$planner_api   = $this->admin->api_handler->get_planner_api();
+		$generator     = new Plugin_Generator( $planner_api );
+		$prompt_images = isset( $_POST['prompt_images'] ) ? AI_Utils::parse_prompt_images( $_POST['prompt_images'] ) : [];
+		$plan_data     = $generator->generate_plugin_plan( $plan, $prompt_images );
 		if ( is_wp_error( $plan_data ) ) {
 			wp_send_json_error( $plan_data->get_error_message() );
 		}

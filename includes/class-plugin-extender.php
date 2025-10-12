@@ -45,7 +45,7 @@ class Plugin_Extender {
 	 *
 	 * @return string|WP_Error
 	 */
-	public function plan_plugin_extension( $plugin_code_or_files, $plugin_changes ) {
+	public function plan_plugin_extension( $plugin_code_or_files, $plugin_changes, $prompt_images = [] ) {
 		$code_context = $this->build_code_context( $plugin_code_or_files );
 		$prompt       = <<<PROMPT
 I have a WordPress plugin I would like to modify. Here is the plugin codebase:
@@ -78,7 +78,9 @@ Notes:
 - Do NOT include any code in your response. Only the JSON object above.
 PROMPT;
 
-		return $this->ai_api->send_prompt( $prompt );
+		$params = AI_Utils::get_multimodal_payload( $this->ai_api, $prompt, $prompt_images );
+
+		return $this->ai_api->send_prompt( $prompt, '', $params );
 	}
 
 	/**

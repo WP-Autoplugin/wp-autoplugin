@@ -61,6 +61,7 @@ class Scripts {
 			'plugin_activation_error'        => esc_html__( 'Error activating the plugin.', 'wp-autoplugin' ),
 			'extracting_hooks'               => esc_html__( 'Extracting hooks, please wait...', 'wp-autoplugin' ),
 			'no_hooks_found'                 => esc_html__( 'No hooks found in the codebase. Cannot extend the plugin.', 'wp-autoplugin' ),
+			'drop_files_to_attach'           => esc_html__( 'Drop files to attach', 'wp-autoplugin' ),
 		];
 	}
 
@@ -91,9 +92,10 @@ class Scripts {
 		);
 
 		$localized_data = [
-			'ajax_url' => esc_url( admin_url( 'admin-ajax.php' ) ),
-			'nonce'    => wp_create_nonce( 'wp_autoplugin_generate' ),
-			'messages' => $this->get_localized_messages(),
+			'ajax_url'               => esc_url( admin_url( 'admin-ajax.php' ) ),
+			'nonce'                  => wp_create_nonce( 'wp_autoplugin_generate' ),
+			'messages'               => $this->get_localized_messages(),
+			'supported_image_models' => \WP_Autoplugin\AI_Utils::get_supported_image_models(),
 		];
 
 		// The main list page.

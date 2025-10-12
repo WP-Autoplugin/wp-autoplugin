@@ -44,7 +44,7 @@ class Plugin_Explainer {
 	 *
 	 * @return string|WP_Error
 	 */
-	public function explain_plugin( $plugin_code_or_files ) {
+	public function explain_plugin( $plugin_code_or_files, $prompt_images = [] ) {
 		$code_context = $this->build_code_context( $plugin_code_or_files );
 		$prompt       = <<<PROMPT
 			I have a WordPress plugin I would like you to analyze and explain. The plugin may be a single file or a multi-file codebase. Here is the codebase:
@@ -60,7 +60,9 @@ class Plugin_Explainer {
 			Format your response in clear sections with headings. Be thorough but concise. Use Markdown.
 			PROMPT;
 
-		return $this->ai_api->send_prompt( $prompt );
+		$params = AI_Utils::get_multimodal_payload( $this->ai_api, $prompt, $prompt_images );
+
+		return $this->ai_api->send_prompt( $prompt, '', $params );
 	}
 
 	/**
@@ -71,7 +73,7 @@ class Plugin_Explainer {
 	 *
 	 * @return string|WP_Error
 	 */
-	public function answer_plugin_question( $plugin_code_or_files, $question ) {
+	public function answer_plugin_question( $plugin_code_or_files, $question, $prompt_images = [] ) {
 		$code_context = $this->build_code_context( $plugin_code_or_files );
 		$prompt       = <<<PROMPT
 			I have a WordPress plugin and a specific question about it. The plugin may be a single file or a multi-file codebase. Here is the codebase:
@@ -88,7 +90,9 @@ class Plugin_Explainer {
 			Be thorough but concise. Use Markdown for formatting.
 			PROMPT;
 
-		return $this->ai_api->send_prompt( $prompt );
+		$params = AI_Utils::get_multimodal_payload( $this->ai_api, $prompt, $prompt_images );
+
+		return $this->ai_api->send_prompt( $prompt, '', $params );
 	}
 
 	/**
@@ -99,7 +103,7 @@ class Plugin_Explainer {
 	 *
 	 * @return string|WP_Error
 	 */
-	public function analyze_plugin_aspect( $plugin_code_or_files, $aspect ) {
+	public function analyze_plugin_aspect( $plugin_code_or_files, $aspect, $prompt_images = [] ) {
 		$aspect_prompts = [
 			'security'     => 'security considerations, potential vulnerabilities, and security best practices',
 			'performance'  => 'performance implications, optimization opportunities, and potential bottlenecks',
@@ -120,7 +124,9 @@ class Plugin_Explainer {
 			Format your response in clear sections with meaningful headings. Be thorough but concise. Use Markdown.
 			PROMPT;
 
-		return $this->ai_api->send_prompt( $prompt );
+		$params = AI_Utils::get_multimodal_payload( $this->ai_api, $prompt, $prompt_images );
+
+		return $this->ai_api->send_prompt( $prompt, '', $params );
 	}
 
 	/**

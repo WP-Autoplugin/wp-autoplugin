@@ -79,7 +79,8 @@ class Theme_Extender {
 		$theme_changes = sanitize_text_field( wp_unslash( $_POST['theme_issue'] ) );
 		$planner_api   = $this->admin->api_handler->get_planner_api();
 		$extender      = new \WP_Autoplugin\Hooks_Extender( $planner_api );
-		$plan_data     = $extender->plan_theme_hooks_extension( $original_theme_name, $hooks, $theme_changes );
+		$prompt_images = isset( $_POST['prompt_images'] ) ? \WP_Autoplugin\AI_Utils::parse_prompt_images( $_POST['prompt_images'] ) : [];
+		$plan_data     = $extender->plan_theme_hooks_extension( $original_theme_name, $hooks, $theme_changes, $prompt_images );
 		if ( is_wp_error( $plan_data ) ) {
 			wp_send_json_error( $plan_data->get_error_message() );
 		}

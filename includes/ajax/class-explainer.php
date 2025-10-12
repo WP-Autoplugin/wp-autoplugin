@@ -8,6 +8,7 @@
 namespace WP_Autoplugin\Ajax;
 
 use WP_Autoplugin\Plugin_Explainer;
+use WP_Autoplugin\AI_Utils;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -120,14 +121,15 @@ class Explainer {
 			? sanitize_text_field( wp_unslash( $_POST['explain_focus'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent method.
 			: 'general';
 
-		$reviewer_api = $this->admin->api_handler->get_reviewer_api();
-		$explainer    = new Plugin_Explainer( $reviewer_api );
+		$reviewer_api  = $this->admin->api_handler->get_reviewer_api();
+		$explainer     = new Plugin_Explainer( $reviewer_api );
+		$prompt_images = isset( $_POST['prompt_images'] ) ? AI_Utils::parse_prompt_images( $_POST['prompt_images'] ) : [];
 		if ( ! empty( $question ) ) {
-			$explanation = $explainer->answer_plugin_question( $codebase['files'], $question );
+			$explanation = $explainer->answer_plugin_question( $codebase['files'], $question, $prompt_images );
 		} elseif ( 'general' !== $focus ) {
-			$explanation = $explainer->analyze_plugin_aspect( $codebase['files'], $focus );
+			$explanation = $explainer->analyze_plugin_aspect( $codebase['files'], $focus, $prompt_images );
 		} else {
-			$explanation = $explainer->explain_plugin( $codebase['files'] );
+			$explanation = $explainer->explain_plugin( $codebase['files'], $prompt_images );
 		}
 
 		if ( is_wp_error( $explanation ) ) {

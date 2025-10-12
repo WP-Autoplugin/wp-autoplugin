@@ -98,13 +98,35 @@ class Ajax {
 		$action_input = isset( $_POST['action'] ) ? sanitize_text_field( wp_unslash( $_POST['action'] ) ) : '';
 		$method_name  = str_replace( 'wp_autoplugin_', '', $action_input );
 
+		$target_handler = null;
 		foreach ( $this->handlers as $handler ) {
 			if ( method_exists( $handler, $method_name ) ) {
-				$handler->$method_name();
-				return;
+				$target_handler = $handler;
+				break;
 			}
 		}
 
-		wp_send_json_error( esc_html__( 'Invalid AJAX action.', 'wp-autoplugin' ) );
+		if ( ! $target_handler ) {
+			wp_send_json_error( esc_html__( 'Invalid AJAX action.', 'wp-autoplugin' ) );
+		}
+
+		if ( $this->should_verify_shared_nonce( $target_handler ) ) {
+			if ( ! check_ajax_referer( 'wp_autoplugin_generate', 'security', false ) ) {
+				wp_send_json_error( esc_html__( 'Security check failed.', 'wp-autoplugin' ) );
+			}
+		}
+
+		$target_handler->$method_name();
+		return;
+	}
+
+	/**
+	 * Determine whether the shared generation nonce should be verified for a handler.
+	 *
+	 * @param object $handler The matched handler instance.
+	 * @return bool
+	 */
+	private function should_verify_shared_nonce( $handler ) {
+		return ! ( $handler instanceof Model );
 	}
 }

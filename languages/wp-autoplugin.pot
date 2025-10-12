@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the WP-Autoplugin plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP-Autoplugin 1.6\n"
+"Project-Id-Version: WP-Autoplugin 1.7\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-autoplugin\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-08-20T15:48:21+00:00\n"
+"POT-Creation-Date: 2025-10-12T15:53:30+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: wp-autoplugin\n"
@@ -53,7 +53,7 @@ msgstr ""
 msgid "Extend Theme"
 msgstr ""
 
-#: includes/admin/class-action-links.php:86
+#: includes/admin/class-action-links.php:88
 msgid "Extend"
 msgstr ""
 
@@ -320,54 +320,58 @@ msgstr ""
 msgid "No hooks found in the codebase. Cannot extend the plugin."
 msgstr ""
 
-#: includes/admin/class-scripts.php:134
-msgid "A simple contact form with honeypot spam protection."
-msgstr ""
-
-#: includes/admin/class-scripts.php:135
-msgid "A custom post type for testimonials."
+#: includes/admin/class-scripts.php:64
+msgid "Drop files to attach"
 msgstr ""
 
 #: includes/admin/class-scripts.php:136
-msgid "A widget that displays recent posts."
+msgid "A simple contact form with honeypot spam protection."
 msgstr ""
 
 #: includes/admin/class-scripts.php:137
+msgid "A custom post type for testimonials."
+msgstr ""
+
+#: includes/admin/class-scripts.php:138
+msgid "A widget that displays recent posts."
+msgstr ""
+
+#: includes/admin/class-scripts.php:139
 msgid "A simple image compression tool."
 msgstr ""
 
-#: includes/admin/class-scripts.php:385
+#: includes/admin/class-scripts.php:387
 #: views/footer-modal.php:161
 msgid "No token usage data available yet."
 msgstr ""
 
-#: includes/admin/class-scripts.php:386
+#: includes/admin/class-scripts.php:388
 msgid "Total Usage"
 msgstr ""
 
-#: includes/admin/class-scripts.php:387
+#: includes/admin/class-scripts.php:389
 msgid "Step Breakdown"
 msgstr ""
 
-#: includes/admin/class-scripts.php:388
+#: includes/admin/class-scripts.php:390
 msgid "Failed to save models."
 msgstr ""
 
-#: includes/admin/class-scripts.php:389
+#: includes/admin/class-scripts.php:391
 msgid "An error occurred while saving models."
 msgstr ""
 
 #: includes/ajax/class-ajax.php:95
 #: includes/ajax/class-hooks-extender.php:41
-#: includes/ajax/class-hooks-extender.php:92
-#: includes/ajax/class-hooks-extender.php:154
-#: includes/ajax/class-hooks-extender.php:231
+#: includes/ajax/class-hooks-extender.php:93
+#: includes/ajax/class-hooks-extender.php:155
+#: includes/ajax/class-hooks-extender.php:232
 #: includes/ajax/class-model.php:116
 #: includes/ajax/class-model.php:167
 #: includes/ajax/class-theme-extender.php:41
 #: includes/ajax/class-theme-extender.php:61
-#: includes/ajax/class-theme-extender.php:112
-#: includes/ajax/class-theme-extender.php:174
+#: includes/ajax/class-theme-extender.php:113
+#: includes/ajax/class-theme-extender.php:175
 msgid "You are not allowed to access this page."
 msgstr ""
 
@@ -375,40 +379,40 @@ msgstr ""
 msgid "Invalid AJAX action."
 msgstr ""
 
-#: includes/ajax/class-extender.php:201
-#: includes/ajax/class-fixer.php:252
-#: includes/ajax/class-generator.php:120
-#: includes/ajax/class-generator.php:208
-#: includes/ajax/class-generator.php:241
-#: includes/ajax/class-hooks-extender.php:171
-#: includes/ajax/class-theme-extender.php:191
+#: includes/ajax/class-extender.php:203
+#: includes/ajax/class-fixer.php:254
+#: includes/ajax/class-generator.php:122
+#: includes/ajax/class-generator.php:210
+#: includes/ajax/class-generator.php:243
+#: includes/ajax/class-hooks-extender.php:172
+#: includes/ajax/class-theme-extender.php:192
 msgid "Invalid input data."
 msgstr ""
 
-#: includes/ajax/class-extender.php:206
-#: includes/ajax/class-fixer.php:257
-#: includes/ajax/class-generator.php:125
-#: includes/ajax/class-hooks-extender.php:176
-#: includes/ajax/class-theme-extender.php:196
+#: includes/ajax/class-extender.php:208
+#: includes/ajax/class-fixer.php:259
+#: includes/ajax/class-generator.php:127
+#: includes/ajax/class-hooks-extender.php:177
+#: includes/ajax/class-theme-extender.php:197
 msgid "File index out of range."
 msgstr ""
 
-#: includes/ajax/class-fixer.php:200
+#: includes/ajax/class-fixer.php:202
 msgid "Invalid plugin path."
 msgstr ""
 
-#: includes/ajax/class-generator.php:58
+#: includes/ajax/class-generator.php:60
 msgid "Failed to decode the generated plan: "
 msgstr ""
 
-#: includes/ajax/class-generator.php:256
+#: includes/ajax/class-generator.php:258
 msgid "Failed to decode the review result."
 msgstr ""
 
 #: includes/ajax/class-hooks-extender.php:46
-#: includes/ajax/class-hooks-extender.php:97
+#: includes/ajax/class-hooks-extender.php:98
 #: includes/ajax/class-theme-extender.php:66
-#: includes/ajax/class-theme-extender.php:117
+#: includes/ajax/class-theme-extender.php:118
 msgid "Missing required parameters."
 msgstr ""
 
@@ -416,12 +420,12 @@ msgstr ""
 msgid "No hooks found in the plugin."
 msgstr ""
 
-#: includes/ajax/class-hooks-extender.php:71
-#: includes/ajax/class-theme-extender.php:91
+#: includes/ajax/class-hooks-extender.php:72
+#: includes/ajax/class-theme-extender.php:92
 msgid "Failed to decode the generated plan."
 msgstr ""
 
-#: includes/ajax/class-hooks-extender.php:237
+#: includes/ajax/class-hooks-extender.php:238
 msgid "No plugin file specified."
 msgstr ""
 
@@ -475,30 +479,31 @@ msgid "No hooks found in the theme."
 msgstr ""
 
 #: includes/api/class-custom-api.php:111
+#: includes/api/class-openai-responses-api.php:94
 msgid "Error communicating with the API."
 msgstr ""
 
-#: includes/class-github-updater.php:409
+#: includes/class-github-updater.php:407
 msgid "Plugin Information"
 msgstr ""
 
-#: includes/class-github-updater.php:410
+#: includes/class-github-updater.php:408
 msgid "See the GitHub page for details."
 msgstr ""
 
-#: includes/class-github-updater.php:411
+#: includes/class-github-updater.php:409
 msgid "GitHub Repository"
 msgstr ""
 
-#: includes/class-github-updater.php:634
+#: includes/class-github-updater.php:637
 msgid "The plugin has been updated, but could not be reactivated. Please reactivate it manually."
 msgstr ""
 
-#: includes/class-github-updater.php:635
+#: includes/class-github-updater.php:638
 msgid "Plugin reactivated successfully."
 msgstr ""
 
-#: includes/class-hooks-extender.php:185
+#: includes/class-hooks-extender.php:191
 msgid "(No custom hooks found in the theme code.)"
 msgstr ""
 
