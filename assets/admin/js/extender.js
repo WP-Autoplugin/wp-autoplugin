@@ -78,7 +78,8 @@
     async function handleGeneratePlanSubmit(event) {
         event.preventDefault();
 
-        if (issueField.value.trim() === '') {
+        const issueValue = issueField.value.trim();
+        if (issueValue === '' && !promptAttachments.hasImages()) {
             messageGeneratePlan.innerHTML = wp_autoplugin.messages.empty_description;
             return;
         }

@@ -67,7 +67,8 @@
     async function handleGeneratePlanSubmit(event) {
         event.preventDefault();
 
-        if (descriptionField.value.trim() === '') {
+        const descriptionValue = descriptionField.value.trim();
+        if (descriptionValue === '' && !promptAttachments.hasImages()) {
             document.getElementById('generate-plan-message').innerHTML = wp_autoplugin.messages.empty_description;
             return;
         }
