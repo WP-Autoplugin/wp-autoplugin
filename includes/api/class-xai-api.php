@@ -62,6 +62,10 @@ class XAI_API extends OpenAI_API {
 			'temperature',
 			'max_tokens',
 			'messages',
+			'response_format',
+			'top_p',
+			'seed',
+			'stop',
 		];
 	}
 }

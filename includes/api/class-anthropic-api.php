@@ -122,6 +122,20 @@ class Anthropic_API extends API {
 	 * @return mixed The response from the API.
 	 */
 	public function send_prompt( $prompt, $system_message = '', $override_body = [] ) {
+		// Read advanced settings from WordPress options.
+		$advanced_max_tokens     = get_option( 'wp_autoplugin_max_tokens', 0 );
+		$advanced_temperature    = get_option( 'wp_autoplugin_temperature', 0 );
+		$advanced_top_p          = get_option( 'wp_autoplugin_top_p', 0 );
+		$advanced_stop_sequences = get_option( 'wp_autoplugin_stop_sequences', '' );
+
+		// Override defaults with advanced settings if they are set.
+		if ( ! empty( $advanced_max_tokens ) ) {
+			$this->max_tokens = intval( $advanced_max_tokens );
+		}
+		if ( ! empty( $advanced_temperature ) ) {
+			$this->temperature = floatval( $advanced_temperature );
+		}
+
 		$payload = [
 			'model'       => $this->model,
 			'temperature' => $this->temperature,
@@ -143,6 +157,18 @@ class Anthropic_API extends API {
 			$payload['system'] = $system_message;
 		}
 
+		// Add advanced parameters if set.
+		if ( ! empty( $advanced_top_p ) ) {
+			$payload['top_p'] = floatval( $advanced_top_p );
+		}
+		if ( ! empty( $advanced_stop_sequences ) ) {
+			$stop_sequences = array_filter( array_map( 'trim', explode( "\n", $advanced_stop_sequences ) ) );
+			if ( ! empty( $stop_sequences ) ) {
+				// Anthropic uses 'stop_sequences' parameter.
+				$payload['stop_sequences'] = array_slice( $stop_sequences, 0, 4 ); // Max 4 stop sequences.
+			}
+		}
+
 		if ( isset( $override_body['messages'] ) ) {
 			$payload['messages'] = $override_body['messages'];
 			unset( $override_body['messages'] );
@@ -154,7 +180,7 @@ class Anthropic_API extends API {
 		}
 
 		// Keep only allowed keys alongside overrides.
-		$allowed_keys  = [ 'model', 'temperature', 'max_tokens', 'messages', 'system', 'thinking' ];
+		$allowed_keys  = [ 'model', 'temperature', 'max_tokens', 'messages', 'system', 'thinking', 'top_p', 'stop_sequences' ];
 		$override_body = array_intersect_key( $override_body, array_flip( $allowed_keys ) );
 		$body          = array_merge( $payload, $override_body );
 

@@ -145,8 +145,107 @@ function render_model_dropdown( $name, $selected_value ) {
 					<p class="description">
 						<?php esc_html_e( 'Complex mode uses more tokens. For best results, use capable models.', 'wp-autoplugin' ); ?>
 					</p>
+					<p>
+						<button type="button" id="toggle-advanced-params" class="button-link"><?php esc_html_e( 'Show advanced AI parameters', 'wp-autoplugin' ); ?> <span class="dashicons dashicons-arrow-down-alt2"></span></button>
+					</p>
 				</td>
 			</tr>
+		</table>
+
+		<?php
+		// Check if any advanced parameter is set.
+		$max_tokens       = get_option( 'wp_autoplugin_max_tokens', 0 );
+		$temperature      = get_option( 'wp_autoplugin_temperature', 0 );
+		$top_p            = get_option( 'wp_autoplugin_top_p', 0 );
+		$seed             = get_option( 'wp_autoplugin_seed', '' );
+		$stop_sequences   = get_option( 'wp_autoplugin_stop_sequences', '' );
+		$response_format  = get_option( 'wp_autoplugin_response_format', '' );
+		$has_advanced     = ! empty( $max_tokens ) || ! empty( $temperature ) || ! empty( $top_p ) || ! empty( $seed ) || ! empty( $stop_sequences ) || ! empty( $response_format );
+		?>
+		<div class="wp-autoplugin-advanced-params" style="<?php echo $has_advanced ? '' : 'display: none;'; ?>">
+			<h3><?php esc_html_e( 'Advanced AI Parameters', 'wp-autoplugin' ); ?></h3>
+			<p class="description" style="margin-bottom: 20px;">
+				<?php esc_html_e( 'These parameters override the default model settings. Leave empty (or 0) to use the model defaults. Changing these values may affect the quality and consistency of generated code.', 'wp-autoplugin' ); ?>
+			</p>
+			<table class="form-table">
+				<tr valign="top">
+					<th scope="row">
+						<?php esc_html_e( 'Max Tokens', 'wp-autoplugin' ); ?>
+						<span class="dashicons dashicons-info" title="<?php esc_attr_e( 'Maximum number of tokens to generate. Higher values allow longer code outputs. Set to 0 to use model default.', 'wp-autoplugin' ); ?>"></span>
+					</th>
+					<td>
+						<input type="number" name="wp_autoplugin_max_tokens" value="<?php echo esc_attr( $max_tokens ); ?>" min="0" max="200000" step="1" class="regular-text" />
+						<p class="description">
+							<?php esc_html_e( 'Recommended: 16384 or higher for complex plugins. 0 = use model default. Higher values prevent code truncation but increase API costs.', 'wp-autoplugin' ); ?>
+						</p>
+					</td>
+				</tr>
+				<tr valign="top">
+					<th scope="row">
+						<?php esc_html_e( 'Temperature', 'wp-autoplugin' ); ?>
+						<span class="dashicons dashicons-info" title="<?php esc_attr_e( 'Controls randomness. Lower values (0.0-0.5) make output more deterministic, higher values (0.5-2.0) make it more creative.', 'wp-autoplugin' ); ?>"></span>
+					</th>
+					<td>
+						<input type="number" name="wp_autoplugin_temperature" value="<?php echo esc_attr( $temperature ); ?>" min="0" max="2" step="0.1" class="regular-text" />
+						<p class="description">
+							<?php esc_html_e( 'Range: 0.0 to 2.0. Recommended: 0.2 for code generation. 0 = use model default.', 'wp-autoplugin' ); ?>
+						</p>
+					</td>
+				</tr>
+				<tr valign="top">
+					<th scope="row">
+						<?php esc_html_e( 'Top P', 'wp-autoplugin' ); ?>
+						<span class="dashicons dashicons-info" title="<?php esc_attr_e( 'Nucleus sampling. Controls diversity of output by limiting token choices to top probability mass.', 'wp-autoplugin' ); ?>"></span>
+					</th>
+					<td>
+						<input type="number" name="wp_autoplugin_top_p" value="<?php echo esc_attr( $top_p ); ?>" min="0" max="1" step="0.05" class="regular-text" />
+						<p class="description">
+							<?php esc_html_e( 'Range: 0.0 to 1.0. Recommended: 0.9-1.0. 0 = use model default. Not recommended to use with Temperature.', 'wp-autoplugin' ); ?>
+						</p>
+					</td>
+				</tr>
+				<tr valign="top">
+					<th scope="row">
+						<?php esc_html_e( 'Seed', 'wp-autoplugin' ); ?>
+						<span class="dashicons dashicons-info" title="<?php esc_attr_e( 'Random seed for reproducible outputs. Same seed with same inputs will produce similar outputs.', 'wp-autoplugin' ); ?>"></span>
+					</th>
+					<td>
+						<input type="number" name="wp_autoplugin_seed" value="<?php echo esc_attr( $seed ); ?>" min="0" step="1" class="regular-text" />
+						<p class="description">
+							<?php esc_html_e( 'Any positive integer. Leave empty for random generation. Useful for testing and debugging.', 'wp-autoplugin' ); ?>
+						</p>
+					</td>
+				</tr>
+				<tr valign="top">
+					<th scope="row">
+						<?php esc_html_e( 'Stop Sequences', 'wp-autoplugin' ); ?>
+						<span class="dashicons dashicons-info" title="<?php esc_attr_e( 'Sequences where the API will stop generating further tokens.', 'wp-autoplugin' ); ?>"></span>
+					</th>
+					<td>
+						<textarea name="wp_autoplugin_stop_sequences" rows="3" class="large-text"><?php echo esc_textarea( $stop_sequences ); ?></textarea>
+						<p class="description">
+							<?php esc_html_e( 'One stop sequence per line. Up to 4 sequences. Example: "```" to stop at code blocks.', 'wp-autoplugin' ); ?>
+						</p>
+					</td>
+				</tr>
+				<tr valign="top">
+					<th scope="row">
+						<?php esc_html_e( 'Response Format', 'wp-autoplugin' ); ?>
+						<span class="dashicons dashicons-info" title="<?php esc_attr_e( 'Force structured output format. Only works with compatible models (GPT-4o, GPT-4-turbo, etc.).', 'wp-autoplugin' ); ?>"></span>
+					</th>
+					<td>
+						<select name="wp_autoplugin_response_format" class="regular-text">
+							<option value="" <?php selected( $response_format, '' ); ?>><?php esc_html_e( 'Default (text)', 'wp-autoplugin' ); ?></option>
+							<option value="json_object" <?php selected( $response_format, 'json_object' ); ?>><?php esc_html_e( 'JSON Object', 'wp-autoplugin' ); ?></option>
+						</select>
+						<p class="description">
+							<?php esc_html_e( 'JSON Object mode ensures the model returns valid JSON. Only use when planning mode is enabled.', 'wp-autoplugin' ); ?>
+						</p>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<table class="form-table">
 			<tr valign="top">
 				<th scope="row"><?php esc_html_e( 'Custom Models', 'wp-autoplugin' ); ?></th>
 				<td>
@@ -184,7 +283,7 @@ function render_model_dropdown( $name, $selected_value ) {
 			const $section = $('.wp-autoplugin-per-step-models');
 			const $button = $(this);
 			const $icon = $button.find('.dashicons');
-			
+
 			if ($section.is(':visible')) {
 				$section.hide();
 				$button.html('<?php esc_html_e( 'Show specialized model settings', 'wp-autoplugin' ); ?> <span class="dashicons dashicons-arrow-down-alt2"></span>');
@@ -193,10 +292,27 @@ function render_model_dropdown( $name, $selected_value ) {
 				$button.html('<?php esc_html_e( 'Hide specialized model settings', 'wp-autoplugin' ); ?> <span class="dashicons dashicons-arrow-up-alt2"></span>');
 			}
 		});
+
+		// Toggle advanced parameters section
+		$('#toggle-advanced-params').on('click', function() {
+			const $section = $('.wp-autoplugin-advanced-params');
+			const $button = $(this);
+
+			if ($section.is(':visible')) {
+				$section.hide();
+				$button.html('<?php esc_html_e( 'Show advanced AI parameters', 'wp-autoplugin' ); ?> <span class="dashicons dashicons-arrow-down-alt2"></span>');
+			} else {
+				$section.show();
+				$button.html('<?php esc_html_e( 'Hide advanced AI parameters', 'wp-autoplugin' ); ?> <span class="dashicons dashicons-arrow-up-alt2"></span>');
+			}
+		});
 		
 		// Update toggle button text based on initial visibility
 		if ($('.wp-autoplugin-per-step-models').is(':visible')) {
 			$('#toggle-specialized-models').html('<?php esc_html_e( 'Hide specialized model settings', 'wp-autoplugin' ); ?> <span class="dashicons dashicons-arrow-up-alt2"></span>');
+		}
+		if ($('.wp-autoplugin-advanced-params').is(':visible')) {
+			$('#toggle-advanced-params').html('<?php esc_html_e( 'Hide advanced AI parameters', 'wp-autoplugin' ); ?> <span class="dashicons dashicons-arrow-up-alt2"></span>');
 		}
 		
 		// Later this may be moved to a wp_localize_script call
@@ -439,5 +555,47 @@ function render_model_dropdown( $name, $selected_value ) {
 		border-radius: 4px;
 		padding: 0 2rem;
 		margin-bottom: 15px;
+	}
+
+	/* Advanced Parameters Section */
+	.wp-autoplugin-advanced-params {
+		background: #fff;
+		border: 1px solid #ccd0d4;
+		border-radius: 4px;
+		padding: 0 2rem;
+		margin-bottom: 15px;
+		margin-top: 15px;
+	}
+
+	.wp-autoplugin-advanced-params h3 {
+		margin-top: 10px;
+		padding-top: 10px;
+		color: #1d2327;
+	}
+
+	.wp-autoplugin-advanced-params .dashicons-info {
+		color: #2271b1;
+		cursor: help;
+		font-size: 18px;
+		vertical-align: middle;
+	}
+
+	#toggle-advanced-params {
+		margin-top: 8px;
+		display: block;
+		color: #2271b1;
+		text-decoration: none;
+		padding: 0;
+	}
+
+	#toggle-advanced-params:focus {
+		box-shadow: none;
+		outline: none;
+	}
+
+	#toggle-advanced-params .dashicons {
+		font-size: 16px;
+		line-height: 1.5;
+		vertical-align: middle;
 	}
 </style>

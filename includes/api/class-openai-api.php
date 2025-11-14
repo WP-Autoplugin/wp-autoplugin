@@ -197,6 +197,22 @@ class OpenAI_API extends API {
 	 * @param array  $override_body The override body.
 	 */
 	public function send_prompt( $prompt, $system_message = '', $override_body = [] ) {
+		// Read advanced settings from WordPress options.
+		$advanced_max_tokens      = get_option( 'wp_autoplugin_max_tokens', 0 );
+		$advanced_temperature     = get_option( 'wp_autoplugin_temperature', 0 );
+		$advanced_top_p           = get_option( 'wp_autoplugin_top_p', 0 );
+		$advanced_seed            = get_option( 'wp_autoplugin_seed', '' );
+		$advanced_stop_sequences  = get_option( 'wp_autoplugin_stop_sequences', '' );
+		$advanced_response_format = get_option( 'wp_autoplugin_response_format', '' );
+
+		// Override defaults with advanced settings if they are set.
+		if ( ! empty( $advanced_max_tokens ) ) {
+			$this->max_tokens = intval( $advanced_max_tokens );
+		}
+		if ( ! empty( $advanced_temperature ) ) {
+			$this->temperature = floatval( $advanced_temperature );
+		}
+
 		$messages = [];
 		if ( ! empty( $system_message ) ) {
 			$messages[] = [
@@ -226,6 +242,23 @@ class OpenAI_API extends API {
 		} else {
 			$body['temperature'] = $this->temperature;
 			$body['max_tokens']  = $this->max_tokens;
+		}
+
+		// Add advanced parameters if set.
+		if ( ! empty( $advanced_top_p ) ) {
+			$body['top_p'] = floatval( $advanced_top_p );
+		}
+		if ( ! empty( $advanced_seed ) ) {
+			$body['seed'] = intval( $advanced_seed );
+		}
+		if ( ! empty( $advanced_stop_sequences ) ) {
+			$stop_sequences = array_filter( array_map( 'trim', explode( "\n", $advanced_stop_sequences ) ) );
+			if ( ! empty( $stop_sequences ) ) {
+				$body['stop'] = array_slice( $stop_sequences, 0, 4 ); // Max 4 stop sequences.
+			}
+		}
+		if ( ! empty( $advanced_response_format ) && 'json_object' === $advanced_response_format ) {
+			$body['response_format'] = [ 'type' => 'json_object' ];
 		}
 
 		// Keep only allowed keys in the override body.
@@ -322,6 +355,9 @@ class OpenAI_API extends API {
 			'reasoning_effort',
 			'messages',
 			'response_format',
+			'top_p',
+			'seed',
+			'stop',
 		];
 	}
 

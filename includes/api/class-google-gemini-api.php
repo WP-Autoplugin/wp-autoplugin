@@ -60,6 +60,17 @@ class Google_Gemini_API extends API {
 	 * @return mixed
 	 */
 	public function send_prompt( $prompt, $system_message = '', $override_body = [] ) {
+		// Read advanced settings from WordPress options.
+		$advanced_max_tokens  = get_option( 'wp_autoplugin_max_tokens', 0 );
+		$advanced_temperature = get_option( 'wp_autoplugin_temperature', 0 );
+		$advanced_top_p       = get_option( 'wp_autoplugin_top_p', 0 );
+		$advanced_seed        = get_option( 'wp_autoplugin_seed', '' );
+
+		// Override defaults with advanced settings if they are set.
+		if ( ! empty( $advanced_temperature ) ) {
+			$this->temperature = floatval( $advanced_temperature );
+		}
+
 		$url = 'https://generativelanguage.googleapis.com/v1beta/models/' . $this->model . ':generateContent?key=' . $this->api_key;
 
 		// Set max tokens for Gemini 2.5 Flash & Pro.
@@ -69,6 +80,11 @@ class Google_Gemini_API extends API {
 			stripos( $this->model, 'gemini-2.5-flash' ) !== false
 		) {
 			$max_tokens = 65535;
+		}
+
+		// Override with advanced setting if set.
+		if ( ! empty( $advanced_max_tokens ) ) {
+			$max_tokens = intval( $advanced_max_tokens );
 		}
 
 		// Default safetySettings.
@@ -84,6 +100,14 @@ class Google_Gemini_API extends API {
 			'temperature'     => $this->temperature,
 			'maxOutputTokens' => $max_tokens,
 		];
+
+		// Add advanced parameters if set.
+		if ( ! empty( $advanced_top_p ) ) {
+			$generation_config['topP'] = floatval( $advanced_top_p );
+		}
+		if ( ! empty( $advanced_seed ) ) {
+			$generation_config['seed'] = intval( $advanced_seed );
+		}
 
 		// Merge override_body['generationConfig'] into $generation_config.
 		if ( isset( $override_body['generationConfig'] ) && is_array( $override_body['generationConfig'] ) ) {

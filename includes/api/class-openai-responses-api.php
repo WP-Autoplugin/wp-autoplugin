@@ -40,6 +40,15 @@ class OpenAI_Responses_API extends OpenAI_API {
 	 * @return string|\WP_Error
 	 */
 	public function send_prompt( $prompt, $system_message = '', $override_body = [] ) {
+		// Read advanced settings from WordPress options.
+		$advanced_max_tokens = get_option( 'wp_autoplugin_max_tokens', 0 );
+		$advanced_top_p      = get_option( 'wp_autoplugin_top_p', 0 );
+
+		// Override defaults with advanced settings if they are set.
+		if ( ! empty( $advanced_max_tokens ) ) {
+			$this->max_tokens = intval( $advanced_max_tokens );
+		}
+
 		$body = [
 			'model' => $this->model,
 			'input' => $prompt,
@@ -58,6 +67,11 @@ class OpenAI_Responses_API extends OpenAI_API {
 			$body['reasoning'] = [
 				'effort' => $this->reasoning_effort,
 			];
+		}
+
+		// Add advanced parameters if set.
+		if ( ! empty( $advanced_top_p ) ) {
+			$body['top_p'] = floatval( $advanced_top_p );
 		}
 
 		// Ignore response_format for the Responses API (incompatible with text.format expectations).
