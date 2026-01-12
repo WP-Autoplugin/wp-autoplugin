@@ -62,6 +62,16 @@ class Scripts {
 			'extracting_hooks'               => esc_html__( 'Extracting hooks, please wait...', 'wp-autoplugin' ),
 			'no_hooks_found'                 => esc_html__( 'No hooks found in the codebase. Cannot extend the plugin.', 'wp-autoplugin' ),
 			'drop_files_to_attach'           => esc_html__( 'Drop files to attach', 'wp-autoplugin' ),
+			// Theme extender specific messages
+			'hooks_found_in_theme'           => esc_html__( '%d hooks found in the theme code', 'wp-autoplugin' ),
+			'no_theme_hooks_found'           => esc_html__( 'No hooks found in the theme code. You can still create an extension, but you may need to add hooks manually.', 'wp-autoplugin' ),
+			'error_extracting_hooks'         => esc_html__( 'Error extracting hooks:', 'wp-autoplugin' ),
+			'copied_to_clipboard'            => esc_html__( 'Copied!', 'wp-autoplugin' ),
+			'no_files_to_generate'           => esc_html__( 'Error: No files to generate.', 'wp-autoplugin' ),
+			'generating_file_progress'       => esc_html__( 'Generating %1$s (%2$d of %3$d)...', 'wp-autoplugin' ),
+			// Plugin hooks extender specific messages
+			'hooks_found_in_plugin'          => esc_html__( '%d hooks found in the plugin code', 'wp-autoplugin' ),
+			'no_plugin_hooks_found'          => esc_html__( 'No hooks found in the plugin code. Cannot proceed with extension.', 'wp-autoplugin' ),
 		];
 	}
 

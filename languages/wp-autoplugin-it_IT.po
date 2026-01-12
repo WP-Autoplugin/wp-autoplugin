@@ -1,32 +1,30 @@
-# Italian translations for WP-Autoplugin
-# Created by ChatGPT
 msgid ""
 msgstr ""
 "Project-Id-Version: WP-Autoplugin 1.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-autoplugin\n"
-"POT-Creation-Date: 2025-08-20T15:48:21+00:00\n"
-"PO-Revision-Date: 2025-01-10 12:00+0000\n"
 "Last-Translator: Nome Completo <EMAIL@ADDRESS>\n"
 "Language-Team: Italian <it@li.org>\n"
-"Language: it_IT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2025-08-20T15:48:21+00:00\n"
+"PO-Revision-Date: 2025-01-10 12:00+0000\n"
+"Language: it_IT\n"
 "X-Generator: ChatGPT\n"
 "X-Domain: wp-autoplugin\n"
 
 #. Plugin Name of the plugin
-#: wp-autoplugin.php includes/admin/class-menu.php:41
+#: wp-autoplugin.php
+#: includes/admin/class-menu.php:41
 #: includes/admin/class-menu.php:42
 msgid "WP-Autoplugin"
 msgstr "WP-Autoplugin"
 
 #. Description of the plugin
-#: wp-autoplugin.php includes/admin/class-updater.php:47
+#: wp-autoplugin.php
+#: includes/admin/class-updater.php:47
 msgid "A plugin that generates other plugins on-demand using AI."
-msgstr ""
-"Un plugin che genera altri plugin su richiesta utilizzando l’intelligenza "
-"artificiale."
+msgstr "Un plugin che genera altri plugin su richiesta utilizzando l’intelligenza artificiale."
 
 #. Author of the plugin
 #: wp-autoplugin.php
@@ -42,29 +40,33 @@ msgstr "https://wp-autoplugin.com"
 msgid "Modify (Patch)"
 msgstr ""
 
-#: includes/admin/class-action-links.php:46 includes/admin/class-menu.php:98
+#: includes/admin/class-action-links.php:46
+#: includes/admin/class-menu.php:98
 #: includes/admin/class-menu.php:99
 #, fuzzy
 msgid "Create Extension"
 msgstr "Genera piano"
 
-#: includes/admin/class-action-links.php:63 includes/admin/class-menu.php:107
+#: includes/admin/class-action-links.php:63
+#: includes/admin/class-menu.php:107
 #: includes/admin/class-menu.php:108
 #, fuzzy
 msgid "Extend Theme"
 msgstr "Estendi"
 
-#: includes/admin/class-action-links.php:86
+#: includes/admin/class-action-links.php:88
 msgid "Extend"
 msgstr "Estendi"
 
 #. translators: %s: version number.
 #: includes/admin/class-admin.php:75
+#, php-format
 msgid "WP-Autoplugin v%s"
 msgstr "WP-Autoplugin v%s"
 
 #. translators: %s: model name.
 #: includes/admin/class-admin.php:86
+#, php-format
 msgid "Model: %s"
 msgstr "Modello: %s"
 
@@ -77,47 +79,62 @@ msgstr "Salva modifiche"
 msgid "Click for token usage breakdown"
 msgstr ""
 
-#: includes/admin/class-bulk-actions.php:47 includes/admin/class-menu.php:189
-#: includes/admin/class-menu.php:231 includes/admin/class-menu.php:259
-#: includes/ajax/class-model.php:41 includes/ajax/class-model.php:82
-#: includes/ajax/class-model.php:120 includes/ajax/class-model.php:171
+#: includes/admin/class-bulk-actions.php:47
+#: includes/admin/class-menu.php:189
+#: includes/admin/class-menu.php:231
+#: includes/admin/class-menu.php:259
+#: includes/ajax/class-ajax.php:115
+#: includes/ajax/class-model.php:41
+#: includes/ajax/class-model.php:82
+#: includes/ajax/class-model.php:120
+#: includes/ajax/class-model.php:171
 msgid "Security check failed."
 msgstr "Verifica di sicurezza non riuscita."
 
-#: includes/admin/class-bulk-actions.php:51 includes/admin/class-menu.php:180
-#: includes/admin/class-menu.php:223 includes/admin/class-menu.php:251
+#: includes/admin/class-bulk-actions.php:51
+#: includes/admin/class-menu.php:180
+#: includes/admin/class-menu.php:223
+#: includes/admin/class-menu.php:251
 msgid "You do not have sufficient permissions to access this page."
 msgstr "Non hai i permessi necessari per accedere a questa pagina."
 
-#: includes/admin/class-menu.php:52 includes/admin/class-menu.php:53
-#: views/page-list-plugins.php:30 views/page-list-plugins.php:39
+#: includes/admin/class-menu.php:52
+#: includes/admin/class-menu.php:53
+#: views/page-list-plugins.php:30
+#: views/page-list-plugins.php:39
 msgid "Generate New Plugin"
 msgstr "Genera un nuovo plugin"
 
-#: includes/admin/class-menu.php:61 includes/admin/class-menu.php:62
+#: includes/admin/class-menu.php:61
+#: includes/admin/class-menu.php:62
 msgid "Settings"
 msgstr "Impostazioni"
 
-#: includes/admin/class-menu.php:71 includes/admin/class-menu.php:72
+#: includes/admin/class-menu.php:71
+#: includes/admin/class-menu.php:72
 msgid "Extend Plugin"
 msgstr "Estendi plugin"
 
-#: includes/admin/class-menu.php:80 includes/admin/class-menu.php:81
+#: includes/admin/class-menu.php:80
+#: includes/admin/class-menu.php:81
 #: views/page-fix-plugin.php:53
 msgid "Fix Plugin"
 msgstr "Correggi plugin"
 
-#: includes/admin/class-menu.php:89 includes/admin/class-menu.php:90
+#: includes/admin/class-menu.php:89
+#: includes/admin/class-menu.php:90
 #: views/page-explain-plugin.php:67
 #, fuzzy
 msgid "Explain Plugin"
 msgstr "Estendi plugin"
 
-#: includes/admin/class-menu.php:185 includes/admin/class-menu.php:227
+#: includes/admin/class-menu.php:185
+#: includes/admin/class-menu.php:227
 msgid "No plugin specified."
 msgstr "Nessun plugin specificato."
 
-#: includes/admin/class-menu.php:198 includes/admin/class-menu.php:239
+#: includes/admin/class-menu.php:198
+#: includes/admin/class-menu.php:239
 msgid "The specified plugin does not exist."
 msgstr "Il plugin specificato non esiste."
 
@@ -132,14 +149,8 @@ msgid "The specified theme does not exist."
 msgstr "Il plugin specificato non esiste."
 
 #: includes/admin/class-notices.php:44
-msgid ""
-"The <code>DISALLOW_FILE_MODS</code> constant is defined in your wp-"
-"config.php file, which prevents WP-Autoplugin from installing or updating "
-"plugins on your site."
-msgstr ""
-"La costante <code>DISALLOW_FILE_MODS</code> è definita nel tuo file wp-"
-"config.php, il che impedisce a WP-Autoplugin di installare o aggiornare "
-"plugin sul tuo sito."
+msgid "The <code>DISALLOW_FILE_MODS</code> constant is defined in your wp-config.php file, which prevents WP-Autoplugin from installing or updating plugins on your site."
+msgstr "La costante <code>DISALLOW_FILE_MODS</code> è definita nel tuo file wp-config.php, il che impedisce a WP-Autoplugin di installare o aggiornare plugin sul tuo sito."
 
 #: includes/admin/class-notices.php:68
 msgid "The plugin could not be activated due to a fatal error."
@@ -147,7 +158,7 @@ msgstr "Il plugin non può essere attivato a causa di un errore fatale."
 
 #. translators: 1: fix link start tag, 2: fix link end tag
 #: includes/admin/class-notices.php:74
-#, fuzzy
+#, fuzzy,php-format
 msgid "You can %1$sfix the error automatically%2$s."
 msgstr "Puoi <a href=\"%s\">correggere l’errore automaticamente</a>."
 
@@ -236,9 +247,7 @@ msgstr "Come testarlo?"
 
 #: includes/admin/class-scripts.php:43
 msgid "If you notice any issues, use the Fix button in the Autoplugins list."
-msgstr ""
-"Se noti dei problemi, utilizza il pulsante Correggi nella lista degli "
-"Autoplugin."
+msgstr "Se noti dei problemi, utilizza il pulsante Correggi nella lista degli Autoplugin."
 
 #: includes/admin/class-scripts.php:44
 msgid "Activate Plugin"
@@ -258,11 +267,13 @@ msgstr "Errore nella generazione del piano."
 msgid "Error generating explanation."
 msgstr "Errore nella generazione del piano."
 
-#: includes/admin/class-scripts.php:48 views/page-explain-plugin.php:51
+#: includes/admin/class-scripts.php:48
+#: views/page-explain-plugin.php:51
 msgid "Security Analysis"
 msgstr ""
 
-#: includes/admin/class-scripts.php:49 views/page-explain-plugin.php:55
+#: includes/admin/class-scripts.php:49
+#: views/page-explain-plugin.php:55
 msgid "Performance Review"
 msgstr ""
 
@@ -270,7 +281,8 @@ msgstr ""
 msgid "Code Quality Analysis"
 msgstr ""
 
-#: includes/admin/class-scripts.php:51 views/page-explain-plugin.php:63
+#: includes/admin/class-scripts.php:51
+#: views/page-explain-plugin.php:63
 msgid "Usage Instructions"
 msgstr ""
 
@@ -326,99 +338,105 @@ msgstr ""
 msgid "No hooks found in the codebase. Cannot extend the plugin."
 msgstr ""
 
-#: includes/admin/class-scripts.php:134
+#: includes/admin/class-scripts.php:146
 #, fuzzy
 msgid "A simple contact form with honeypot spam protection."
-msgstr ""
-"Un semplice modulo di contatto con protezione antispam di tipo honeypot"
+msgstr "Un semplice modulo di contatto con protezione antispam di tipo honeypot"
 
-#: includes/admin/class-scripts.php:135
+#: includes/admin/class-scripts.php:147
 #, fuzzy
 msgid "A custom post type for testimonials."
 msgstr "Un tipo di post personalizzato per le testimonianze"
 
-#: includes/admin/class-scripts.php:136
+#: includes/admin/class-scripts.php:148
 #, fuzzy
 msgid "A widget that displays recent posts."
 msgstr "Un widget che mostra gli articoli recenti"
 
-#: includes/admin/class-scripts.php:137
+#: includes/admin/class-scripts.php:149
 #, fuzzy
 msgid "A simple image compression tool."
 msgstr "Uno strumento semplice di compressione immagini"
 
-#: includes/admin/class-scripts.php:385 views/footer-modal.php:161
+#: includes/admin/class-scripts.php:397
+#: views/footer-modal.php:161
 msgid "No token usage data available yet."
 msgstr ""
 
-#: includes/admin/class-scripts.php:386
+#: includes/admin/class-scripts.php:398
 msgid "Total Usage"
 msgstr ""
 
-#: includes/admin/class-scripts.php:387
+#: includes/admin/class-scripts.php:399
 msgid "Step Breakdown"
 msgstr ""
 
-#: includes/admin/class-scripts.php:388
+#: includes/admin/class-scripts.php:400
 msgid "Failed to save models."
 msgstr ""
 
-#: includes/admin/class-scripts.php:389
+#: includes/admin/class-scripts.php:401
 #, fuzzy
 msgid "An error occurred while saving models."
 msgstr "Errore durante il salvataggio del modello"
 
-#: includes/ajax/class-ajax.php:95 includes/ajax/class-hooks-extender.php:41
-#: includes/ajax/class-hooks-extender.php:92
-#: includes/ajax/class-hooks-extender.php:154
-#: includes/ajax/class-hooks-extender.php:231 includes/ajax/class-model.php:116
-#: includes/ajax/class-model.php:167 includes/ajax/class-theme-extender.php:41
+#: includes/ajax/class-ajax.php:95
+#: includes/ajax/class-hooks-extender.php:41
+#: includes/ajax/class-hooks-extender.php:93
+#: includes/ajax/class-hooks-extender.php:155
+#: includes/ajax/class-hooks-extender.php:232
+#: includes/ajax/class-model.php:116
+#: includes/ajax/class-model.php:167
+#: includes/ajax/class-theme-extender.php:41
 #: includes/ajax/class-theme-extender.php:61
-#: includes/ajax/class-theme-extender.php:112
-#: includes/ajax/class-theme-extender.php:174
+#: includes/ajax/class-theme-extender.php:113
+#: includes/ajax/class-theme-extender.php:175
 #, fuzzy
 msgid "You are not allowed to access this page."
 msgstr "Non hai i permessi necessari per accedere a questa pagina."
 
-#: includes/ajax/class-ajax.php:108
+#: includes/ajax/class-ajax.php:110
 msgid "Invalid AJAX action."
 msgstr ""
 
-#: includes/ajax/class-extender.php:201 includes/ajax/class-fixer.php:252
-#: includes/ajax/class-generator.php:120 includes/ajax/class-generator.php:208
-#: includes/ajax/class-generator.php:241
-#: includes/ajax/class-hooks-extender.php:171
-#: includes/ajax/class-theme-extender.php:191
+#: includes/ajax/class-extender.php:203
+#: includes/ajax/class-fixer.php:254
+#: includes/ajax/class-generator.php:122
+#: includes/ajax/class-generator.php:210
+#: includes/ajax/class-generator.php:243
+#: includes/ajax/class-hooks-extender.php:172
+#: includes/ajax/class-theme-extender.php:192
 #, fuzzy
 msgid "Invalid input data."
 msgstr "Dati del modello non validi"
 
-#: includes/ajax/class-extender.php:206 includes/ajax/class-fixer.php:257
-#: includes/ajax/class-generator.php:125
-#: includes/ajax/class-hooks-extender.php:176
-#: includes/ajax/class-theme-extender.php:196
+#: includes/ajax/class-extender.php:208
+#: includes/ajax/class-fixer.php:259
+#: includes/ajax/class-generator.php:127
+#: includes/ajax/class-hooks-extender.php:177
+#: includes/ajax/class-theme-extender.php:197
 msgid "File index out of range."
 msgstr ""
 
-#: includes/ajax/class-fixer.php:200
+#: includes/ajax/class-fixer.php:202
 #, fuzzy
 msgid "Invalid plugin path."
 msgstr "Dati del modello non validi"
 
-#: includes/ajax/class-generator.php:58
+#: includes/ajax/class-generator.php:60
 #, fuzzy
 msgid "Failed to decode the generated plan: "
 msgstr "Rivedi o modifica il piano generato:"
 
-#: includes/ajax/class-generator.php:256
+#: includes/ajax/class-generator.php:258
 #, fuzzy
 msgid "Failed to decode the review result."
 msgstr "Rivedi o modifica il piano generato:"
 
 #: includes/ajax/class-hooks-extender.php:46
-#: includes/ajax/class-hooks-extender.php:97
+#: includes/ajax/class-hooks-extender.php:98
 #: includes/ajax/class-theme-extender.php:66
-#: includes/ajax/class-theme-extender.php:117
+#: includes/ajax/class-theme-extender.php:118
 msgid "Missing required parameters."
 msgstr ""
 
@@ -426,13 +444,13 @@ msgstr ""
 msgid "No hooks found in the plugin."
 msgstr ""
 
-#: includes/ajax/class-hooks-extender.php:71
-#: includes/ajax/class-theme-extender.php:91
+#: includes/ajax/class-hooks-extender.php:72
+#: includes/ajax/class-theme-extender.php:92
 #, fuzzy
 msgid "Failed to decode the generated plan."
 msgstr "Rivedi o modifica il piano generato:"
 
-#: includes/ajax/class-hooks-extender.php:237
+#: includes/ajax/class-hooks-extender.php:238
 #, fuzzy
 msgid "No plugin file specified."
 msgstr "Nessun plugin specificato."
@@ -478,7 +496,7 @@ msgstr ""
 
 #. Translators: %s: model name.
 #: includes/ajax/class-model.php:209
-#, fuzzy
+#, fuzzy,php-format
 msgid "Invalid model specified: %s"
 msgstr "Indice del modello non valido"
 
@@ -497,34 +515,31 @@ msgid "No hooks found in the theme."
 msgstr ""
 
 #: includes/api/class-custom-api.php:111
+#: includes/api/class-openai-responses-api.php:101
 msgid "Error communicating with the API."
 msgstr "Errore di comunicazione con l’API."
 
-#: includes/class-github-updater.php:409
+#: includes/class-github-updater.php:407
 msgid "Plugin Information"
 msgstr ""
 
-#: includes/class-github-updater.php:410
+#: includes/class-github-updater.php:408
 msgid "See the GitHub page for details."
 msgstr ""
 
-#: includes/class-github-updater.php:411
+#: includes/class-github-updater.php:409
 msgid "GitHub Repository"
 msgstr ""
 
-#: includes/class-github-updater.php:634
-msgid ""
-"The plugin has been updated, but could not be reactivated. Please reactivate "
-"it manually."
-msgstr ""
-"Il plugin è stato aggiornato ma non può essere riattivato. Per favore, "
-"riattivalo manualmente."
+#: includes/class-github-updater.php:637
+msgid "The plugin has been updated, but could not be reactivated. Please reactivate it manually."
+msgstr "Il plugin è stato aggiornato ma non può essere riattivato. Per favore, riattivalo manualmente."
 
-#: includes/class-github-updater.php:635
+#: includes/class-github-updater.php:638
 msgid "Plugin reactivated successfully."
 msgstr "Plugin riattivato con successo."
 
-#: includes/class-hooks-extender.php:185
+#: includes/class-hooks-extender.php:191
 msgid "(No custom hooks found in the theme code.)"
 msgstr ""
 
@@ -561,12 +576,13 @@ msgstr "Dati del modello non validi"
 
 #. Translators: %s: file path.
 #: includes/class-plugin-installer.php:228
+#, php-format
 msgid "Missing content for file: %s"
 msgstr ""
 
 #. Translators: %s: file path.
 #: includes/class-plugin-installer.php:240
-#, fuzzy
+#, fuzzy,php-format
 msgid "Error creating file: %s"
 msgstr "Errore durante la creazione del plugin."
 
@@ -586,11 +602,13 @@ msgstr "Il plugin specificato non esiste."
 
 #. Translators: %s: file path.
 #: includes/class-plugin-installer.php:323
+#, php-format
 msgid "Unsupported file type for update: %s"
 msgstr ""
 
 #. Translators: %s: file path.
 #: includes/class-plugin-installer.php:335
+#, php-format
 msgid "Failed to write file: %s"
 msgstr ""
 
@@ -613,7 +631,7 @@ msgstr "Plugin riattivato con successo."
 
 #. Translators: %s: error message.
 #: includes/class-plugin-installer.php:452
-#, fuzzy
+#, fuzzy,php-format
 msgid "Error deleting plugin: %s"
 msgstr "Errore durante l’attivazione del plugin: %s"
 
@@ -631,10 +649,14 @@ msgstr "Modelli personalizzati"
 msgid "Default Model:"
 msgstr ""
 
-#: views/footer-modal.php:28 views/footer-modal.php:62
-#: views/footer-modal.php:96 views/footer-modal.php:130
-#: views/page-settings.php:64 views/page-settings.php:88
-#: views/page-settings.php:151 views/page-settings.php:241
+#: views/footer-modal.php:28
+#: views/footer-modal.php:62
+#: views/footer-modal.php:96
+#: views/footer-modal.php:130
+#: views/page-settings.php:64
+#: views/page-settings.php:88
+#: views/page-settings.php:151
+#: views/page-settings.php:241
 msgid "Custom Models"
 msgstr "Modelli personalizzati"
 
@@ -642,8 +664,10 @@ msgstr "Modelli personalizzati"
 msgid "Planner Model:"
 msgstr ""
 
-#: views/footer-modal.php:46 views/footer-modal.php:80
-#: views/footer-modal.php:114 views/page-settings.php:53
+#: views/footer-modal.php:46
+#: views/footer-modal.php:80
+#: views/footer-modal.php:114
+#: views/page-settings.php:53
 msgid "Use Default Model"
 msgstr ""
 
@@ -673,29 +697,27 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: views/page-explain-plugin.php:20 views/page-extend-hooks.php:15
-#: views/page-extend-plugin.php:20 views/page-extend-theme.php:15
+#: views/page-explain-plugin.php:20
+#: views/page-extend-hooks.php:15
+#: views/page-extend-plugin.php:20
+#: views/page-extend-theme.php:15
 #: views/page-fix-plugin.php:20
 msgid "Nonce verification failed. Please try again."
 msgstr ""
 
 #. translators: %s: plugin name.
 #: views/page-explain-plugin.php:37
-#, fuzzy
+#, fuzzy,php-format
 msgid "Explain This Plugin: %s"
 msgstr "Estendi questo plugin: %s"
 
 #: views/page-explain-plugin.php:40
 #, fuzzy
-msgid ""
-"Enter a specific question about this plugin or leave blank for a general "
-"explanation:"
+msgid "Enter a specific question about this plugin or leave blank for a general explanation:"
 msgstr "Inserisci una descrizione del plugin che desideri generare:"
 
 #: views/page-explain-plugin.php:41
-msgid ""
-"E.g., How does this plugin store its data? | Leave empty for a complete "
-"explanation."
+msgid "E.g., How does this plugin store its data? | Leave empty for a complete explanation."
 msgstr ""
 
 #: views/page-explain-plugin.php:44
@@ -716,6 +738,7 @@ msgstr ""
 
 #. translators: %s: plugin name.
 #: views/page-explain-plugin.php:77
+#, php-format
 msgid "Explanation for: %s"
 msgstr ""
 
@@ -742,7 +765,7 @@ msgstr ""
 
 #. translators: %s: plugin name.
 #: views/page-extend-hooks.php:24
-#, fuzzy
+#, fuzzy,php-format
 msgid "Create Extension for: %s"
 msgstr "Plugin esteso: %s"
 
@@ -750,163 +773,174 @@ msgstr "Plugin esteso: %s"
 msgid "Extracting plugin hooks, please wait..."
 msgstr ""
 
-#: views/page-extend-hooks.php:36 views/page-extend-theme.php:40
+#: views/page-extend-hooks.php:36
+#: views/page-extend-theme.php:40
 msgid "Copy Hooks"
 msgstr ""
 
-#: views/page-extend-hooks.php:38 views/page-extend-theme.php:42
-msgid ""
-"Copy all hooks to clipboard, along with relevant context, to use with your "
-"LLM of choice."
+#: views/page-extend-hooks.php:38
+#: views/page-extend-theme.php:42
+msgid "Copy all hooks to clipboard, along with relevant context, to use with your LLM of choice."
 msgstr ""
 
 #: views/page-extend-hooks.php:42
 #, fuzzy
 msgid "Describe the extension you would like to create:"
-msgstr ""
-"Descrivi le modifiche che desideri apportare al plugin. Includi quanti più "
-"dettagli possibile:"
+msgstr "Descrivi le modifiche che desideri apportare al plugin. Includi quanti più dettagli possibile:"
 
-#: views/page-extend-hooks.php:44 views/page-extend-theme.php:48
+#: views/page-extend-hooks.php:44
+#: views/page-extend-theme.php:48
 #, fuzzy
 msgid "Generate Extension Plan"
 msgstr "Genera piano"
 
-#: views/page-extend-hooks.php:51 views/page-extend-theme.php:55
+#: views/page-extend-hooks.php:51
+#: views/page-extend-theme.php:55
 #, fuzzy
 msgid "Generated Extension Plan"
 msgstr "Piano generato"
 
-#: views/page-extend-hooks.php:53 views/page-extend-theme.php:57
+#: views/page-extend-hooks.php:53
+#: views/page-extend-theme.php:57
 #, fuzzy
 msgid "Review or edit the generated plan for the extension plugin:"
 msgstr "Rivedi o modifica il piano generato:"
 
-#: views/page-extend-hooks.php:56 views/page-extend-theme.php:60
+#: views/page-extend-hooks.php:56
+#: views/page-extend-theme.php:60
 #, fuzzy
 msgid "« Edit Description"
 msgstr "&laquo; Modifica descrizione"
 
-#: views/page-extend-hooks.php:57 views/page-extend-theme.php:61
+#: views/page-extend-hooks.php:57
+#: views/page-extend-theme.php:61
 #, fuzzy
 msgid "Generate Extension Code"
 msgstr "Genera codice del plugin"
 
 #. translators: %s: theme/plugin name.
-#: views/page-extend-hooks.php:64 views/page-extend-theme.php:68
-#, fuzzy
+#: views/page-extend-hooks.php:64
+#: views/page-extend-theme.php:68
+#, fuzzy,php-format
 msgid "Extension Plugin for: %s"
 msgstr "Plugin esteso: %s"
 
-#: views/page-extend-hooks.php:66 views/page-extend-theme.php:70
+#: views/page-extend-hooks.php:66
+#: views/page-extend-theme.php:70
 #, fuzzy
 msgid "Review the generated code before saving:"
 msgstr "Rivedi o modifica il piano generato:"
 
-#: views/page-extend-hooks.php:79 views/page-extend-plugin.php:81
-#: views/page-extend-theme.php:83 views/page-fix-plugin.php:83
+#: views/page-extend-hooks.php:79
+#: views/page-extend-plugin.php:81
+#: views/page-extend-theme.php:83
+#: views/page-fix-plugin.php:83
 #: views/page-generate-plugin.php:65
 #, fuzzy
 msgid "Generating files..."
 msgstr "Generazione del codice"
 
-#: views/page-extend-hooks.php:89 views/page-extend-plugin.php:99
-#: views/page-extend-theme.php:93 views/page-fix-plugin.php:101
+#: views/page-extend-hooks.php:89
+#: views/page-extend-plugin.php:99
+#: views/page-extend-theme.php:93
+#: views/page-fix-plugin.php:101
 #: views/page-generate-plugin.php:105
 msgid "Warning:"
 msgstr "Avvertenza:"
 
-#: views/page-extend-hooks.php:89 views/page-extend-theme.php:93
+#: views/page-extend-hooks.php:89
+#: views/page-extend-theme.php:93
 #: views/page-generate-plugin.php:105
-msgid ""
-"AI-generated code may be unstable or insecure; use only after careful review "
-"and testing."
-msgstr ""
-"Il codice generato dall’IA potrebbe essere instabile o insicuro; utilizzalo "
-"solo dopo un’attenta revisione e verifica."
+msgid "AI-generated code may be unstable or insecure; use only after careful review and testing."
+msgstr "Il codice generato dall’IA potrebbe essere instabile o insicuro; utilizzalo solo dopo un’attenta revisione e verifica."
 
-#: views/page-extend-hooks.php:93 views/page-extend-theme.php:97
+#: views/page-extend-hooks.php:93
+#: views/page-extend-theme.php:97
 #, fuzzy
 msgid "« Edit Plan"
 msgstr "&laquo; Modifica piano"
 
-#: views/page-extend-hooks.php:94 views/page-extend-theme.php:98
+#: views/page-extend-hooks.php:94
+#: views/page-extend-theme.php:98
 #, fuzzy
 msgid "Save Extension Plugin"
 msgstr "Estendi plugin"
 
 #. translators: %s: error message.
-#: views/page-extend-plugin.php:37 views/page-fix-plugin.php:39
+#: views/page-extend-plugin.php:37
+#: views/page-fix-plugin.php:39
+#, php-format
 msgid "Error while activating the plugin: %s"
 msgstr "Errore durante l’attivazione del plugin: %s"
 
 #. translators: %s: plugin name.
 #: views/page-extend-plugin.php:46
-#, fuzzy
+#, fuzzy,php-format
 msgid "Modify This Plugin: %s"
 msgstr "Correggi questo plugin: %s"
 
 #: views/page-extend-plugin.php:49
-msgid ""
-"Describe the changes you would like to make to the plugin. Include as much "
-"detail as possible:"
-msgstr ""
-"Descrivi le modifiche che desideri apportare al plugin. Includi quanti più "
-"dettagli possibile:"
+msgid "Describe the changes you would like to make to the plugin. Include as much detail as possible:"
+msgstr "Descrivi le modifiche che desideri apportare al plugin. Includi quanti più dettagli possibile:"
 
-#: views/page-extend-plugin.php:51 views/page-generate-plugin.php:26
+#: views/page-extend-plugin.php:51
+#: views/page-generate-plugin.php:26
 msgid "Generate Plan"
 msgstr "Genera piano"
 
-#: views/page-extend-plugin.php:57 views/page-fix-plugin.php:59
+#: views/page-extend-plugin.php:57
+#: views/page-fix-plugin.php:59
 #: views/page-generate-plugin.php:31
 msgid "Generated Plan"
 msgstr "Piano generato"
 
-#: views/page-extend-plugin.php:60 views/page-fix-plugin.php:62
+#: views/page-extend-plugin.php:60
+#: views/page-fix-plugin.php:62
 #: views/page-generate-plugin.php:34
 msgid "Review or edit the generated plan:"
 msgstr "Rivedi o modifica il piano generato:"
 
-#: views/page-extend-plugin.php:63 views/page-fix-plugin.php:65
+#: views/page-extend-plugin.php:63
+#: views/page-fix-plugin.php:65
 msgid "&laquo; Edit Issue"
 msgstr "&laquo; Modifica problema"
 
-#: views/page-extend-plugin.php:64 views/page-fix-plugin.php:66
+#: views/page-extend-plugin.php:64
+#: views/page-fix-plugin.php:66
 #: views/page-generate-plugin.php:41
 msgid "Generate Plugin Code"
 msgstr "Genera codice del plugin"
 
 #. translators: %s: plugin name.
 #: views/page-extend-plugin.php:71
+#, php-format
 msgid "Extended Plugin: %s"
 msgstr "Plugin esteso: %s"
 
 #: views/page-extend-plugin.php:74
 #, fuzzy
-msgid ""
-"The plugin has been modified successfully. You can review the changes before "
-"activating it:"
-msgstr ""
-"Il plugin è stato corretto con successo. Puoi rivedere le modifiche prima di "
-"attivarlo:"
+msgid "The plugin has been modified successfully. You can review the changes before activating it:"
+msgstr "Il plugin è stato corretto con successo. Puoi rivedere le modifiche prima di attivarlo:"
 
-#: views/page-extend-plugin.php:99 views/page-fix-plugin.php:101
+#: views/page-extend-plugin.php:99
+#: views/page-fix-plugin.php:101
 msgid "This plugin is active, changes will take effect immediately."
 msgstr "Questo plugin è attivo, le modifiche avranno effetto immediato."
 
-#: views/page-extend-plugin.php:104 views/page-fix-plugin.php:106
+#: views/page-extend-plugin.php:104
+#: views/page-fix-plugin.php:106
 #: views/page-generate-plugin.php:109
 msgid "&laquo; Edit Plan"
 msgstr "&laquo; Modifica piano"
 
-#: views/page-extend-plugin.php:105 views/page-fix-plugin.php:107
+#: views/page-extend-plugin.php:105
+#: views/page-fix-plugin.php:107
 msgid "Save Changes"
 msgstr "Salva modifiche"
 
 #. translators: %s: theme name.
 #: views/page-extend-theme.php:28
-#, fuzzy
+#, fuzzy,php-format
 msgid "Extend This Theme: %s"
 msgstr "Estendi questo plugin: %s"
 
@@ -917,9 +951,7 @@ msgstr ""
 #: views/page-extend-theme.php:46
 #, fuzzy
 msgid "Describe the extension you would like to make to the theme:"
-msgstr ""
-"Descrivi le modifiche che desideri apportare al plugin. Includi quanti più "
-"dettagli possibile:"
+msgstr "Descrivi le modifiche che desideri apportare al plugin. Includi quanti più dettagli possibile:"
 
 #: views/page-fix-plugin.php:32
 #, fuzzy
@@ -928,29 +960,23 @@ msgstr "Plugin"
 
 #. translators: %s: plugin name.
 #: views/page-fix-plugin.php:48
+#, php-format
 msgid "Fix This Plugin: %s"
 msgstr "Correggi questo plugin: %s"
 
 #: views/page-fix-plugin.php:51
-msgid ""
-"Describe the issue you are experiencing with the plugin. Include as much "
-"detail as possible and any error messages you are seeing:"
-msgstr ""
-"Descrivi il problema che stai riscontrando con il plugin. Includi quanti più "
-"dettagli possibile ed eventuali messaggi di errore che stai visualizzando:"
+msgid "Describe the issue you are experiencing with the plugin. Include as much detail as possible and any error messages you are seeing:"
+msgstr "Descrivi il problema che stai riscontrando con il plugin. Includi quanti più dettagli possibile ed eventuali messaggi di errore che stai visualizzando:"
 
 #. translators: %s: plugin name.
 #: views/page-fix-plugin.php:73
+#, php-format
 msgid "Fixed Plugin: %s"
 msgstr "Plugin corretto: %s"
 
 #: views/page-fix-plugin.php:76
-msgid ""
-"The plugin has been fixed successfully. You can review the changes before "
-"activating it:"
-msgstr ""
-"Il plugin è stato corretto con successo. Puoi rivedere le modifiche prima di "
-"attivarlo:"
+msgid "The plugin has been fixed successfully. You can review the changes before activating it:"
+msgstr "Il plugin è stato corretto con successo. Puoi rivedere le modifiche prima di attivarlo:"
 
 #: views/page-generate-plugin.php:21
 msgid "Generate Plugin"
@@ -969,12 +995,8 @@ msgid "Generated Plugin Code"
 msgstr "Codice del plugin generato"
 
 #: views/page-generate-plugin.php:53
-msgid ""
-"The plugin code has been generated successfully. You can review and edit the "
-"plugin file before activating it:"
-msgstr ""
-"Il codice del plugin è stato generato con successo. Puoi rivedere e "
-"modificare il file prima di attivarlo:"
+msgid "The plugin code has been generated successfully. You can review and edit the plugin file before activating it:"
+msgstr "Il codice del plugin è stato generato con successo. Puoi rivedere e modificare il file prima di attivarlo:"
 
 #: views/page-generate-plugin.php:59
 #, fuzzy
@@ -1014,13 +1036,8 @@ msgid "You don't have any autoplugins yet."
 msgstr "Non hai ancora nessun autoplugin."
 
 #: views/page-list-plugins.php:38
-msgid ""
-"Autoplugins are regular plugins, but they are generated by AI. You can "
-"manage them just like any other plugin. They will be listed here for your "
-"convenience."
-msgstr ""
-"Gli Autoplugin sono plugin regolari, ma generati dall’IA. Puoi gestirli come "
-"qualsiasi altro plugin. Saranno elencati qui per tua comodità."
+msgid "Autoplugins are regular plugins, but they are generated by AI. You can manage them just like any other plugin. They will be listed here for your convenience."
+msgstr "Gli Autoplugin sono plugin regolari, ma generati dall’IA. Puoi gestirli come qualsiasi altro plugin. Saranno elencati qui per tua comodità."
 
 #: views/page-settings.php:23
 msgid "WP-Autoplugin Settings"
@@ -1047,7 +1064,8 @@ msgstr "Chiave API xAI"
 msgid "Default Model"
 msgstr "Modelli personalizzati"
 
-#: views/page-settings.php:98 views/page-settings.php:190
+#: views/page-settings.php:98
+#: views/page-settings.php:190
 msgid "Show specialized model settings"
 msgstr ""
 
@@ -1056,9 +1074,7 @@ msgid "Planner Model"
 msgstr ""
 
 #: views/page-settings.php:117
-msgid ""
-"Used for planning plugin extensions and analyzing hooks. Falls back to "
-"Default Model if not set."
+msgid "Used for planning plugin extensions and analyzing hooks. Falls back to Default Model if not set."
 msgstr ""
 
 #: views/page-settings.php:121
@@ -1067,8 +1083,7 @@ msgid "Coder Model"
 msgstr "Modelli personalizzati"
 
 #: views/page-settings.php:124
-msgid ""
-"Used for generating and fixing code. Falls back to Default Model if not set."
+msgid "Used for generating and fixing code. Falls back to Default Model if not set."
 msgstr ""
 
 #: views/page-settings.php:128
@@ -1076,9 +1091,7 @@ msgid "Reviewer Model"
 msgstr ""
 
 #: views/page-settings.php:131
-msgid ""
-"Used for explaining code and reviewing generated plugins. Falls back to "
-"Default Model if not set."
+msgid "Used for explaining code and reviewing generated plugins. Falls back to Default Model if not set."
 msgstr ""
 
 #: views/page-settings.php:138
@@ -1110,7 +1123,8 @@ msgstr "URL dell’endpoint API"
 msgid "\"model\" Parameter Value"
 msgstr "Valore del parametro \"model\""
 
-#: views/page-settings.php:162 views/page-settings.php:207
+#: views/page-settings.php:162
+#: views/page-settings.php:207
 msgid "API Key"
 msgstr "Chiave API"
 
@@ -1123,16 +1137,11 @@ msgid "Add Custom Model"
 msgstr "Aggiungi modello personalizzato"
 
 #: views/page-settings.php:170
-msgid ""
-"Add any custom models you want to use with WP-Autoplugin. These models will "
-"be available in the model selection dropdown. The API must be compatible "
-"with the OpenAI API."
-msgstr ""
-"Aggiungi qualsiasi modello personalizzato che desideri utilizzare con WP-"
-"Autoplugin. Questi modelli saranno disponibili nel menu a discesa per la "
-"selezione dei modelli. L’API deve essere compatibile con l’API di OpenAI."
+msgid "Add any custom models you want to use with WP-Autoplugin. These models will be available in the model selection dropdown. The API must be compatible with the OpenAI API."
+msgstr "Aggiungi qualsiasi modello personalizzato che desideri utilizzare con WP-Autoplugin. Questi modelli saranno disponibili nel menu a discesa per la selezione dei modelli. L’API deve essere compatibile con l’API di OpenAI."
 
-#: views/page-settings.php:193 views/page-settings.php:199
+#: views/page-settings.php:193
+#: views/page-settings.php:199
 msgid "Hide specialized model settings"
 msgstr ""
 
@@ -1168,181 +1177,41 @@ msgstr "Sei sicuro di voler rimuovere questo modello?"
 msgid "Error saving model"
 msgstr "Errore durante il salvataggio del modello"
 
-#, fuzzy
-#~ msgid "Extend Plugin with Hooks"
-#~ msgstr "Estendi plugin"
+#: includes/admin/class-scripts.php:64
+msgid "Drop files to attach"
+msgstr ""
 
-#~ msgid "Error generating the plan."
-#~ msgstr "Errore nella generazione del piano."
+#: includes/admin/class-scripts.php:66
+#, php-format
+msgid "%d hooks found in the theme code"
+msgstr ""
 
-#~ msgid "Error creating the fixed plugin."
-#~ msgstr "Errore nella creazione del plugin corretto."
+#: includes/admin/class-scripts.php:67
+msgid "No hooks found in the theme code. You can still create an extension, but you may need to add hooks manually."
+msgstr ""
 
-#, fuzzy
-#~ msgid "Generating the fixed plugin code."
-#~ msgstr "Generazione del codice del plugin corretto"
+#: includes/admin/class-scripts.php:68
+msgid "Error extracting hooks:"
+msgstr ""
 
-#~ msgid "Error generating the fixed code."
-#~ msgstr "Errore durante la generazione del codice corretto."
+#: includes/admin/class-scripts.php:69
+msgid "Copied!"
+msgstr ""
 
-#, fuzzy
-#~ msgid "Creating the plugin."
-#~ msgstr "Creazione del plugin"
+#: includes/admin/class-scripts.php:70
+msgid "Error: No files to generate."
+msgstr ""
 
-#, fuzzy
-#~ msgid "Generating the extension plugin code."
-#~ msgstr "Generazione del codice del plugin esteso"
+#: includes/admin/class-scripts.php:71
+#, php-format
+msgid "Generating %1$s (%2$d of %3$d)..."
+msgstr ""
 
-#, fuzzy
-#~ msgid "Error generating the extension code."
-#~ msgstr "Errore durante la generazione del codice esteso."
+#: includes/admin/class-scripts.php:73
+#, php-format
+msgid "%d hooks found in the plugin code"
+msgstr ""
 
-#, fuzzy
-#~ msgid "Error creating the extension plugin."
-#~ msgstr "Errore durante la creazione del plugin esteso."
-
-#, fuzzy
-#~ msgid "The extension plugin has been created."
-#~ msgstr "Il codice del plugin è stato aggiornato."
-
-#, fuzzy
-#~ msgid "Extend This Plugin with Hooks: %s"
-#~ msgstr "Estendi questo plugin: %s"
-
-#, fuzzy
-#~ msgid "Plugin Name:"
-#~ msgstr "Plugin"
-
-#, fuzzy
-#~ msgid ""
-#~ "The extension plugin code has been generated. Review it before saving:"
-#~ msgstr ""
-#~ "Il codice del plugin è stato generato con successo. Puoi rivedere e "
-#~ "modificare il file prima di attivarlo:"
-
-#~ msgid ""
-#~ "The plugin has been extended successfully. You can review the changes "
-#~ "before activating it:"
-#~ msgstr ""
-#~ "Il plugin è stato esteso con successo. Puoi rivedere le modifiche prima "
-#~ "di attivarlo:"
-
-#~ msgid "Look for other issues in the plugin code as well"
-#~ msgstr "Cerca anche altri problemi nel codice del plugin"
-
-#~ msgid "Focus on the issue at hand"
-#~ msgstr "Concentrati sul problema principale"
-
-#~ msgid "A shortcode that shows a random quote"
-#~ msgstr "Uno shortcode che mostra una citazione casuale"
-
-#~ msgid "A user profile widget displaying avatar, bio, and website link"
-#~ msgstr ""
-#~ "Un widget di profilo utente che mostra avatar, biografia e link al sito"
-
-#~ msgid "A custom post type for managing FAQs"
-#~ msgstr "Un tipo di post personalizzato per gestire le FAQ"
-
-#~ msgid "A post views counter that tracks and displays view counts"
-#~ msgstr ""
-#~ "Un contatore di visualizzazioni che traccia e mostra il numero di visite"
-
-#~ msgid "Maintenance mode with a countdown timer to site return"
-#~ msgstr "Modalità manutenzione con un timer per il ritorno online del sito"
-
-#~ msgid "An admin quick links widget for the dashboard"
-#~ msgstr "Un widget di collegamenti rapidi per la bacheca di amministrazione"
-
-#~ msgid "Hide the admin bar for non-admin users"
-#~ msgstr ""
-#~ "Nascondi la barra di amministrazione per gli utenti non amministratori"
-
-#~ msgid "Hide specific menu items in the admin area"
-#~ msgstr "Nascondi voci di menu specifiche nell’area di amministrazione"
-
-#~ msgid "A social media share buttons plugin for posts"
-#~ msgstr ""
-#~ "Un plugin di pulsanti di condivisione sui social media per gli articoli"
-
-#~ msgid "A custom footer credit remover"
-#~ msgstr "Un rimuovi-credito personalizzato per il footer"
-
-#~ msgid "A plugin to add custom CSS to the WordPress login page"
-#~ msgstr ""
-#~ "Un plugin per aggiungere CSS personalizzati alla pagina di login di "
-#~ "WordPress"
-
-#~ msgid "A related posts display below single post content"
-#~ msgstr ""
-#~ "Una visualizzazione degli articoli correlati sotto il contenuto del "
-#~ "singolo articolo"
-
-#~ msgid "A custom excerpt length controller"
-#~ msgstr "Un controller personalizzato per la lunghezza dell’estratto"
-
-#~ msgid "A \"Back to Top\" button for long pages"
-#~ msgstr "Un pulsante \"Torna su\" per pagine lunghe"
-
-#~ msgid "A plugin to disable comments on specific post types"
-#~ msgstr "Un plugin per disabilitare i commenti su tipi di post specifici"
-
-#~ msgid "A simple Google Analytics integration"
-#~ msgstr "Un’integrazione semplice con Google Analytics"
-
-#~ msgid "An author box display below posts"
-#~ msgstr "Una casella autore mostrata sotto gli articoli"
-
-#~ msgid "A custom breadcrumb generator"
-#~ msgstr "Un generatore personalizzato di breadcrumb"
-
-#~ msgid "A plugin to add nofollow to external links"
-#~ msgstr "Un plugin per aggiungere nofollow ai link esterni"
-
-#~ msgid "A simple cookie consent banner"
-#~ msgstr "Un semplice banner per il consenso ai cookie"
-
-#~ msgid "A post expiration date setter"
-#~ msgstr "Un impostatore di data di scadenza per gli articoli"
-
-#~ msgid "A basic XML sitemap generator"
-#~ msgstr "Un generatore base di sitemap XML"
-
-#~ msgid "A custom login URL creator for added security"
-#~ msgstr "Un creatore di URL di login personalizzato per maggiore sicurezza"
-
-#~ msgid "A simple contact information display shortcode"
-#~ msgstr "Uno shortcode semplice per mostrare le informazioni di contatto"
-
-#~ msgid "A plugin to add estimated reading time to posts"
-#~ msgstr "Un plugin per aggiungere il tempo di lettura stimato agli articoli"
-
-#~ msgid "A custom RSS feed footer"
-#~ msgstr "Un footer personalizzato per il feed RSS"
-
-#~ msgid "A simple post duplication tool"
-#~ msgstr "Uno strumento semplice per duplicare gli articoli"
-
-#~ msgid "A basic schema markup generator"
-#~ msgstr "Un generatore base di marcatura schema"
-
-#~ msgid "A plugin to add custom admin footer text"
-#~ msgstr ""
-#~ "Un plugin per aggiungere testo personalizzato al footer di amministrazione"
-
-#~ msgid "A plugin to add custom taxonomies easily"
-#~ msgstr "Un plugin per aggiungere tassonomie personalizzate con facilità"
-
-#~ msgid "A simple email obfuscator to prevent spam"
-#~ msgstr "Un offuscatore di email semplice per prevenire lo spam"
-
-#~ msgid "A basic redirection manager"
-#~ msgstr "Un gestore di reindirizzamenti di base"
-
-#~ msgid "A plugin to add custom fields to user profiles"
-#~ msgstr "Un plugin per aggiungere campi personalizzati ai profili utente"
-
-#~ msgid "Installing the fix"
-#~ msgstr "Installazione della correzione"
-
-#~ msgid "Security check failed"
-#~ msgstr "Verifica di sicurezza non riuscita"
+#: includes/admin/class-scripts.php:74
+msgid "No hooks found in the plugin code. Cannot proceed with extension."
+msgstr ""
