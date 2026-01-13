@@ -162,11 +162,11 @@ msgstr "Bővítmény"
 
 #: includes/admin/class-plugin-list-table.php:84
 msgid "Deactivate"
-msgstr "Deaktiválás"
+msgstr "Kikapcsolás"
 
 #: includes/admin/class-plugin-list-table.php:87
 msgid "Activate"
-msgstr "Aktiválás"
+msgstr "Bekapcsolás"
 
 #: includes/admin/class-plugin-list-table.php:90
 msgid "Fix"
@@ -323,40 +323,40 @@ msgstr "Csatlakozási pontok kinyerése, kérlek várj..."
 msgid "No hooks found in the codebase. Cannot extend the plugin."
 msgstr "Nem találhatók csatlakozási pontok a kódbázisban. A bővítmény nem bővíthető."
 
-#: includes/admin/class-scripts.php:146
+#: includes/admin/class-scripts.php:180
 msgid "A simple contact form with honeypot spam protection."
 msgstr "Egyszerű kapcsolatfelvételi űrlap honeypot spam védelemmel."
 
-#: includes/admin/class-scripts.php:147
+#: includes/admin/class-scripts.php:181
 msgid "A custom post type for testimonials."
 msgstr "Egyedi bejegyzéstípus véleményekhez."
 
-#: includes/admin/class-scripts.php:148
+#: includes/admin/class-scripts.php:182
 msgid "A widget that displays recent posts."
 msgstr "Modul, amely megjeleníti a legújabb bejegyzéseket"
 
-#: includes/admin/class-scripts.php:149
+#: includes/admin/class-scripts.php:183
 msgid "A simple image compression tool."
 msgstr "Egyszerű képtömörítő eszköz."
 
-#: includes/admin/class-scripts.php:397
+#: includes/admin/class-scripts.php:431
 #: views/footer-modal.php:161
 msgid "No token usage data available yet."
 msgstr "Még nincs elérhető token-használati adat."
 
-#: includes/admin/class-scripts.php:398
+#: includes/admin/class-scripts.php:432
 msgid "Total Usage"
 msgstr "Teljes használat"
 
-#: includes/admin/class-scripts.php:399
+#: includes/admin/class-scripts.php:433
 msgid "Step Breakdown"
 msgstr "Lépések lebontása"
 
-#: includes/admin/class-scripts.php:400
+#: includes/admin/class-scripts.php:434
 msgid "Failed to save models."
 msgstr "Modellek mentése sikertelen."
 
-#: includes/admin/class-scripts.php:401
+#: includes/admin/class-scripts.php:435
 msgid "An error occurred while saving models."
 msgstr "Hiba történt a modellek mentése közben."
 
@@ -478,8 +478,8 @@ msgstr "Nincs megadva téma slug."
 msgid "No hooks found in the theme."
 msgstr "Nem találhatók csatlakozási pontok a témában."
 
-#: includes/api/class-custom-api.php:111
-#: includes/api/class-openai-responses-api.php:101
+#: includes/api/class-custom-api.php:121
+#: includes/api/class-openai-responses-api.php:111
 msgid "Error communicating with the API."
 msgstr "Hiba történt az API-val való kommunikáció közben."
 
@@ -608,8 +608,8 @@ msgstr "Alapértelmezett modell:"
 #: views/footer-modal.php:130
 #: views/page-settings.php:64
 #: views/page-settings.php:88
-#: views/page-settings.php:151
-#: views/page-settings.php:241
+#: views/page-settings.php:181
+#: views/page-settings.php:271
 msgid "Custom Models"
 msgstr "Egyedi modellek"
 
@@ -739,12 +739,12 @@ msgstr "Írd le a létrehozni kívánt bővítményt:"
 #: views/page-extend-hooks.php:44
 #: views/page-extend-theme.php:48
 msgid "Generate Extension Plan"
-msgstr "Bővítmény terv generálása"
+msgstr "Terv generálása"
 
 #: views/page-extend-hooks.php:51
 #: views/page-extend-theme.php:55
 msgid "Generated Extension Plan"
-msgstr "Generált bővítmény terv"
+msgstr "Generált terv"
 
 #: views/page-extend-hooks.php:53
 #: views/page-extend-theme.php:57
@@ -938,6 +938,7 @@ msgstr "A bővítménykód sikeresen generálva. Aktiválás előtt áttekinthet
 msgid "You can review and edit the generated code before installing:"
 msgstr "Telepítés előtt áttekintheted és szerkesztheted a generált kódot:"
 
+#: includes/admin/class-scripts.php:79
 #: views/page-generate-plugin.php:70
 msgid "AI is reviewing the complete codebase..."
 msgstr "Az AI a teljes kódbázist ellenőrzi..."
@@ -999,7 +1000,7 @@ msgid "Default Model"
 msgstr "Alapértelmezett modell"
 
 #: views/page-settings.php:98
-#: views/page-settings.php:190
+#: views/page-settings.php:220
 msgid "Show specialized model settings"
 msgstr "Speciális modell beállítások megjelenítése"
 
@@ -1043,69 +1044,69 @@ msgstr "Összetett bővítmény mód (többfájlos bővítmények)"
 msgid "Complex mode uses more tokens. For best results, use capable models."
 msgstr "Az összetett mód több tokent használ. A legjobb eredményekért használj hatékony modelleket."
 
-#: views/page-settings.php:159
+#: views/page-settings.php:189
 msgid "Model Name (User-defined Label)"
 msgstr "Modell neve (Felhasználó által definiált címke)"
 
-#: views/page-settings.php:160
+#: views/page-settings.php:190
 msgid "API Endpoint URL"
 msgstr "API végpont URL"
 
-#: views/page-settings.php:161
+#: views/page-settings.php:191
 msgid "\"model\" Parameter Value"
 msgstr "A \"model\" paraméter értéke"
 
-#: views/page-settings.php:162
-#: views/page-settings.php:207
+#: views/page-settings.php:192
+#: views/page-settings.php:237
 msgid "API Key"
 msgstr "API-kulcs"
 
-#: views/page-settings.php:163
+#: views/page-settings.php:193
 msgid "Additional Headers (one per line, name=value)"
 msgstr "További fejlécadatok (soronként egy, név=érték)"
 
-#: views/page-settings.php:164
+#: views/page-settings.php:194
 msgid "Add Custom Model"
 msgstr "Egyedi modell hozzáadása"
 
-#: views/page-settings.php:170
+#: views/page-settings.php:200
 msgid "Add any custom models you want to use with WP-Autoplugin. These models will be available in the model selection dropdown. The API must be compatible with the OpenAI API."
 msgstr "Adj hozzá bármilyen egyedi modellt, amelyet a WP-Autoplugin-nel szeretnél használni. Ezek a modellek elérhetőek lesznek a modellválasztó legördülő menüben. Az API-nak kompatibilisnek kell lennie az OpenAI API-val."
 
-#: views/page-settings.php:193
-#: views/page-settings.php:199
+#: views/page-settings.php:223
+#: views/page-settings.php:229
 msgid "Hide specialized model settings"
 msgstr "Speciális modell beállítások elrejtése"
 
-#: views/page-settings.php:204
+#: views/page-settings.php:234
 msgid "Details"
 msgstr "Részletek"
 
-#: views/page-settings.php:205
+#: views/page-settings.php:235
 msgid "URL"
 msgstr "URL"
 
-#: views/page-settings.php:206
+#: views/page-settings.php:236
 msgid "Model Parameter"
 msgstr "Modell paraméter"
 
-#: views/page-settings.php:208
+#: views/page-settings.php:238
 msgid "Headers"
 msgstr "Fejlécek"
 
-#: views/page-settings.php:209
+#: views/page-settings.php:239
 msgid "Remove"
 msgstr "Eltávolítás"
 
-#: views/page-settings.php:210
+#: views/page-settings.php:240
 msgid "Please fill out all required fields."
 msgstr "Töltsd ki az összes kötelező mezőt."
 
-#: views/page-settings.php:211
+#: views/page-settings.php:241
 msgid "Are you sure you want to remove this model?"
 msgstr "Biztosan el akarod távolítani ezt a modellt?"
 
-#: views/page-settings.php:212
+#: views/page-settings.php:242
 msgid "Error saving model"
 msgstr "Hiba történt a modell mentése közben."
 
@@ -1113,37 +1114,156 @@ msgstr "Hiba történt a modell mentése közben."
 msgid "Drop files to attach"
 msgstr "Húzd ide a fájlokat csatoláshoz"
 
-#: includes/admin/class-scripts.php:66
+#. translators: %d: Total number of hooks found.
+#: includes/admin/class-scripts.php:84
 #, php-format
 msgid "%d hooks found in the theme code"
 msgstr "%d csatlakozási pont található a téma kódjában"
 
-#: includes/admin/class-scripts.php:67
+#: includes/admin/class-scripts.php:85
 msgid "No hooks found in the theme code. You can still create an extension, but you may need to add hooks manually."
 msgstr "Nem találhatók csatlakozási pontok a téma kódjában. Továbbra is létrehozhatsz bővítményt, de lehet, hogy manuálisan kell hozzáadnod a csatlakozási pontokat."
 
-#: includes/admin/class-scripts.php:68
+#: includes/admin/class-scripts.php:86
 msgid "Error extracting hooks:"
 msgstr "Hiba a csatlakozási pontok kinyerése közben:"
 
-#: includes/admin/class-scripts.php:69
+#: includes/admin/class-scripts.php:87
 msgid "Copied!"
 msgstr "Másolva!"
 
-#: includes/admin/class-scripts.php:70
+#: includes/admin/class-scripts.php:88
 msgid "Error: No files to generate."
 msgstr "Hiba: Nincs generálandó fájl."
 
-#: includes/admin/class-scripts.php:71
+#. translators: 1: Plugin/Theme name, 2: Current item number, 3: Total number of items.
+#: includes/admin/class-scripts.php:90
 #, php-format
 msgid "Generating %1$s (%2$d of %3$d)..."
 msgstr "%1$s generálása (%2$d / %3$d)..."
 
-#: includes/admin/class-scripts.php:73
+#. translators: %d: Total number of hooks found.
+#: includes/admin/class-scripts.php:93
 #, php-format
 msgid "%d hooks found in the plugin code"
 msgstr "%d csatlakozási pont található a bővítmény kódjában"
 
-#: includes/admin/class-scripts.php:74
+#: includes/admin/class-scripts.php:94
 msgid "No hooks found in the plugin code. Cannot proceed with extension."
 msgstr "Nem találhatók csatlakozási pontok a bővítmény kódjában. A bővítmény létrehozása nem folytatható."
+
+#: views/page-settings.php:151
+msgid "AI Response Language"
+msgstr "AI válasz nyelve"
+
+#: views/page-settings.php:157
+msgid "Auto (WordPress language)"
+msgstr "Automatikus (WordPress nyelve)"
+
+#: views/page-settings.php:176
+msgid "Language for AI responses. Default uses your WordPress language setting."
+msgstr "Az AI válaszainak nyelve. Alapértelmezetten a WordPress nyelvi beállítását használja."
+
+#: includes/admin/class-scripts.php:130
+msgid "Plugin Name"
+msgstr "Bővítmény neve"
+
+#: includes/admin/class-scripts.php:131
+msgid "Design And Architecture"
+msgstr "Tervezés és architektúra"
+
+#: includes/admin/class-scripts.php:132
+msgid "Detailed Feature Description"
+msgstr "Részletes funkcióleírás"
+
+#: includes/admin/class-scripts.php:133
+msgid "User Interface"
+msgstr "Felhasználói felület"
+
+#: includes/admin/class-scripts.php:134
+msgid "User Flows"
+msgstr "Felhasználói folyamatok"
+
+#: includes/admin/class-scripts.php:135
+msgid "Security Considerations"
+msgstr "Biztonsági megfontolások"
+
+#: includes/admin/class-scripts.php:136
+msgid "Testing Plan"
+msgstr "Tesztelési terv"
+
+#: includes/admin/class-scripts.php:137
+msgid "Project Structure"
+msgstr "Projekt struktúra"
+
+#: includes/admin/class-scripts.php:138
+msgid "Technically Feasible"
+msgstr "Technikailag megvalósítható"
+
+#: includes/admin/class-scripts.php:139
+msgid "Explanation"
+msgstr "Magyarázat"
+
+#: includes/admin/class-scripts.php:140
+msgid "Hooks"
+msgstr "Csatlakozási pontok"
+
+#: includes/admin/class-scripts.php:141
+msgid "Plan"
+msgstr "Terv"
+
+#: includes/admin/class-scripts.php:65
+msgid "Attached image"
+msgstr "Csatolt kép"
+
+#: includes/admin/class-scripts.php:66
+msgid "Remove image"
+msgstr "Kép eltávolítása"
+
+#: includes/admin/class-scripts.php:67
+msgid "Are you sure you want to delete this plugin?"
+msgstr "Biztosan törölni akarod ezt a bővítményt?"
+
+#: includes/admin/class-scripts.php:68
+msgid "Error parsing explanation. Please try again."
+msgstr "Hiba a magyarázat feldolgozása közben. Kérlek, próbáld újra."
+
+#. translators: 1: File name.
+#: includes/admin/class-scripts.php:71
+#, php-format
+msgid "Error generating %s:"
+msgstr "Hiba a(z) %s generálása közben:"
+
+#: includes/admin/class-scripts.php:72
+msgid "Retry Current File"
+msgstr "Jelenlegi fájl újrapróbálása"
+
+#: includes/admin/class-scripts.php:73
+msgid "Retry From Here"
+msgstr "Újrakezd innen"
+
+#: includes/admin/class-scripts.php:74
+msgid "Skip This File"
+msgstr "Fájl kihagyása"
+
+#: includes/admin/class-scripts.php:75
+msgid "Skipped"
+msgstr "Kihagyva"
+
+#: includes/admin/class-scripts.php:76
+msgid "This file was skipped during generation"
+msgstr "Ez a fájl ki lett hagyva a generálás során"
+
+#. translators: 1: File name.
+#: includes/admin/class-scripts.php:78
+#, php-format
+msgid "Please add your %s code here"
+msgstr "Kérlek, add hozzá a(z) %s kódodat ide"
+
+#: includes/admin/class-scripts.php:80
+msgid "Review Error:"
+msgstr "Ellenőrzési hiba:"
+
+#: includes/admin/class-scripts.php:81
+msgid "Applying suggestions..."
+msgstr "Javaslatok alkalmazása..."

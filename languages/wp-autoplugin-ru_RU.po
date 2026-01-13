@@ -338,44 +338,44 @@ msgstr ""
 msgid "No hooks found in the codebase. Cannot extend the plugin."
 msgstr ""
 
-#: includes/admin/class-scripts.php:146
+#: includes/admin/class-scripts.php:180
 #, fuzzy
 msgid "A simple contact form with honeypot spam protection."
 msgstr "Простая контактная форма с защитой от спама типа honeypot"
 
-#: includes/admin/class-scripts.php:147
+#: includes/admin/class-scripts.php:181
 #, fuzzy
 msgid "A custom post type for testimonials."
 msgstr "Пользовательский тип записи для отзывов"
 
-#: includes/admin/class-scripts.php:148
+#: includes/admin/class-scripts.php:182
 #, fuzzy
 msgid "A widget that displays recent posts."
 msgstr "Виджет, отображающий последние записи"
 
-#: includes/admin/class-scripts.php:149
+#: includes/admin/class-scripts.php:183
 #, fuzzy
 msgid "A simple image compression tool."
 msgstr "Простое средство сжатия изображений"
 
-#: includes/admin/class-scripts.php:397
+#: includes/admin/class-scripts.php:431
 #: views/footer-modal.php:161
 msgid "No token usage data available yet."
 msgstr ""
 
-#: includes/admin/class-scripts.php:398
+#: includes/admin/class-scripts.php:432
 msgid "Total Usage"
 msgstr ""
 
-#: includes/admin/class-scripts.php:399
+#: includes/admin/class-scripts.php:433
 msgid "Step Breakdown"
 msgstr ""
 
-#: includes/admin/class-scripts.php:400
+#: includes/admin/class-scripts.php:434
 msgid "Failed to save models."
 msgstr ""
 
-#: includes/admin/class-scripts.php:401
+#: includes/admin/class-scripts.php:435
 #, fuzzy
 msgid "An error occurred while saving models."
 msgstr "Ошибка при сохранении модели"
@@ -514,8 +514,8 @@ msgstr "Плагин не указан."
 msgid "No hooks found in the theme."
 msgstr ""
 
-#: includes/api/class-custom-api.php:111
-#: includes/api/class-openai-responses-api.php:101
+#: includes/api/class-custom-api.php:121
+#: includes/api/class-openai-responses-api.php:111
 msgid "Error communicating with the API."
 msgstr "Ошибка при общении с API."
 
@@ -655,8 +655,8 @@ msgstr ""
 #: views/footer-modal.php:130
 #: views/page-settings.php:64
 #: views/page-settings.php:88
-#: views/page-settings.php:151
-#: views/page-settings.php:241
+#: views/page-settings.php:181
+#: views/page-settings.php:271
 msgid "Custom Models"
 msgstr "Пользовательские модели"
 
@@ -1003,6 +1003,7 @@ msgstr "Код плагина был успешно сгенерирован. В
 msgid "You can review and edit the generated code before installing:"
 msgstr "Просмотрите или отредактируйте сгенерированный план:"
 
+#: includes/admin/class-scripts.php:79
 #: views/page-generate-plugin.php:70
 msgid "AI is reviewing the complete codebase..."
 msgstr ""
@@ -1066,7 +1067,7 @@ msgid "Default Model"
 msgstr "Пользовательские модели"
 
 #: views/page-settings.php:98
-#: views/page-settings.php:190
+#: views/page-settings.php:220
 msgid "Show specialized model settings"
 msgstr ""
 
@@ -1112,69 +1113,69 @@ msgstr ""
 msgid "Complex mode uses more tokens. For best results, use capable models."
 msgstr ""
 
-#: views/page-settings.php:159
+#: views/page-settings.php:189
 msgid "Model Name (User-defined Label)"
 msgstr "Название модели (метка, определенная пользователем)"
 
-#: views/page-settings.php:160
+#: views/page-settings.php:190
 msgid "API Endpoint URL"
 msgstr "URL конечной точки API"
 
-#: views/page-settings.php:161
+#: views/page-settings.php:191
 msgid "\"model\" Parameter Value"
 msgstr "Значение параметра \"model\""
 
-#: views/page-settings.php:162
-#: views/page-settings.php:207
+#: views/page-settings.php:192
+#: views/page-settings.php:237
 msgid "API Key"
 msgstr "Ключ API"
 
-#: views/page-settings.php:163
+#: views/page-settings.php:193
 msgid "Additional Headers (one per line, name=value)"
 msgstr "Дополнительные заголовки (по одному на строку, имя=значение)"
 
-#: views/page-settings.php:164
+#: views/page-settings.php:194
 msgid "Add Custom Model"
 msgstr "Добавить пользовательскую модель"
 
-#: views/page-settings.php:170
+#: views/page-settings.php:200
 msgid "Add any custom models you want to use with WP-Autoplugin. These models will be available in the model selection dropdown. The API must be compatible with the OpenAI API."
 msgstr "Добавьте любые пользовательские модели, которые вы хотите использовать с WP-Autoplugin. Эти модели будут доступны в выпадающем меню выбора модели. API должен быть совместим с API OpenAI."
 
-#: views/page-settings.php:193
-#: views/page-settings.php:199
+#: views/page-settings.php:223
+#: views/page-settings.php:229
 msgid "Hide specialized model settings"
 msgstr ""
 
-#: views/page-settings.php:204
+#: views/page-settings.php:234
 msgid "Details"
 msgstr "Детали"
 
-#: views/page-settings.php:205
+#: views/page-settings.php:235
 msgid "URL"
 msgstr "URL"
 
-#: views/page-settings.php:206
+#: views/page-settings.php:236
 msgid "Model Parameter"
 msgstr "Параметр модели"
 
-#: views/page-settings.php:208
+#: views/page-settings.php:238
 msgid "Headers"
 msgstr "Заголовки"
 
-#: views/page-settings.php:209
+#: views/page-settings.php:239
 msgid "Remove"
 msgstr "Удалить"
 
-#: views/page-settings.php:210
+#: views/page-settings.php:240
 msgid "Please fill out all required fields."
 msgstr "Пожалуйста, заполните все обязательные поля."
 
-#: views/page-settings.php:211
+#: views/page-settings.php:241
 msgid "Are you sure you want to remove this model?"
 msgstr "Вы уверены, что хотите удалить эту модель?"
 
-#: views/page-settings.php:212
+#: views/page-settings.php:242
 msgid "Error saving model"
 msgstr "Ошибка при сохранении модели"
 
@@ -1182,37 +1183,156 @@ msgstr "Ошибка при сохранении модели"
 msgid "Drop files to attach"
 msgstr ""
 
-#: includes/admin/class-scripts.php:66
+#. translators: %d: Total number of hooks found.
+#: includes/admin/class-scripts.php:84
 #, php-format
 msgid "%d hooks found in the theme code"
 msgstr ""
 
-#: includes/admin/class-scripts.php:67
+#: includes/admin/class-scripts.php:85
 msgid "No hooks found in the theme code. You can still create an extension, but you may need to add hooks manually."
 msgstr ""
 
-#: includes/admin/class-scripts.php:68
+#: includes/admin/class-scripts.php:86
 msgid "Error extracting hooks:"
 msgstr ""
 
-#: includes/admin/class-scripts.php:69
+#: includes/admin/class-scripts.php:87
 msgid "Copied!"
 msgstr ""
 
-#: includes/admin/class-scripts.php:70
+#: includes/admin/class-scripts.php:88
 msgid "Error: No files to generate."
 msgstr ""
 
-#: includes/admin/class-scripts.php:71
+#. translators: 1: Plugin/Theme name, 2: Current item number, 3: Total number of items.
+#: includes/admin/class-scripts.php:90
 #, php-format
 msgid "Generating %1$s (%2$d of %3$d)..."
 msgstr ""
 
-#: includes/admin/class-scripts.php:73
+#. translators: %d: Total number of hooks found.
+#: includes/admin/class-scripts.php:93
 #, php-format
 msgid "%d hooks found in the plugin code"
 msgstr ""
 
-#: includes/admin/class-scripts.php:74
+#: includes/admin/class-scripts.php:94
 msgid "No hooks found in the plugin code. Cannot proceed with extension."
+msgstr ""
+
+#: views/page-settings.php:151
+msgid "AI Response Language"
+msgstr ""
+
+#: views/page-settings.php:157
+msgid "Auto (WordPress language)"
+msgstr ""
+
+#: views/page-settings.php:176
+msgid "Language for AI responses. Default uses your WordPress language setting."
+msgstr ""
+
+#: includes/admin/class-scripts.php:130
+msgid "Plugin Name"
+msgstr ""
+
+#: includes/admin/class-scripts.php:131
+msgid "Design And Architecture"
+msgstr ""
+
+#: includes/admin/class-scripts.php:132
+msgid "Detailed Feature Description"
+msgstr ""
+
+#: includes/admin/class-scripts.php:133
+msgid "User Interface"
+msgstr ""
+
+#: includes/admin/class-scripts.php:134
+msgid "User Flows"
+msgstr ""
+
+#: includes/admin/class-scripts.php:135
+msgid "Security Considerations"
+msgstr ""
+
+#: includes/admin/class-scripts.php:136
+msgid "Testing Plan"
+msgstr ""
+
+#: includes/admin/class-scripts.php:137
+msgid "Project Structure"
+msgstr ""
+
+#: includes/admin/class-scripts.php:138
+msgid "Technically Feasible"
+msgstr ""
+
+#: includes/admin/class-scripts.php:139
+msgid "Explanation"
+msgstr ""
+
+#: includes/admin/class-scripts.php:140
+msgid "Hooks"
+msgstr ""
+
+#: includes/admin/class-scripts.php:141
+msgid "Plan"
+msgstr ""
+
+#: includes/admin/class-scripts.php:65
+msgid "Attached image"
+msgstr ""
+
+#: includes/admin/class-scripts.php:66
+msgid "Remove image"
+msgstr ""
+
+#: includes/admin/class-scripts.php:67
+msgid "Are you sure you want to delete this plugin?"
+msgstr ""
+
+#: includes/admin/class-scripts.php:68
+msgid "Error parsing explanation. Please try again."
+msgstr ""
+
+#. translators: 1: File name.
+#: includes/admin/class-scripts.php:71
+#, php-format
+msgid "Error generating %s:"
+msgstr ""
+
+#: includes/admin/class-scripts.php:72
+msgid "Retry Current File"
+msgstr ""
+
+#: includes/admin/class-scripts.php:73
+msgid "Retry From Here"
+msgstr ""
+
+#: includes/admin/class-scripts.php:74
+msgid "Skip This File"
+msgstr ""
+
+#: includes/admin/class-scripts.php:75
+msgid "Skipped"
+msgstr ""
+
+#: includes/admin/class-scripts.php:76
+msgid "This file was skipped during generation"
+msgstr ""
+
+#. translators: 1: File name.
+#: includes/admin/class-scripts.php:78
+#, php-format
+msgid "Please add your %s code here"
+msgstr ""
+
+#: includes/admin/class-scripts.php:80
+msgid "Review Error:"
+msgstr ""
+
+#: includes/admin/class-scripts.php:81
+msgid "Applying suggestions..."
 msgstr ""

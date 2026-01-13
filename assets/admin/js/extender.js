@@ -383,7 +383,7 @@
 
     async function startFileGeneration() {
         if (!projectStructure.files || projectStructure.files.length === 0) {
-            messageReviewCode.innerHTML = 'Error: No files to generate.';
+            messageReviewCode.innerHTML = wp_autoplugin.messages.no_files_to_generate || 'Error: No files to generate.';
             return;
         }
         generatedFiles = {};

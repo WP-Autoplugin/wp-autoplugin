@@ -403,13 +403,13 @@
 
                 const img = document.createElement('img');
                 img.src = item.dataUrl;
-                img.alt = item.name || 'Attached image';
+                img.alt = item.name || window.wp_autoplugin?.messages?.attached_image || 'Attached image';
                 thumb.appendChild(img);
 
                 const remove = document.createElement('button');
                 remove.type = 'button';
                 remove.className = 'autoplugin-attachment-remove';
-                remove.setAttribute('aria-label', 'Remove image');
+                remove.setAttribute('aria-label', window.wp_autoplugin?.messages?.remove_image || 'Remove image');
                 remove.innerHTML = '&times;';
                 remove.addEventListener('click', () => {
                     const index = attachments.findIndex((attachment) => attachment.id === item.id);

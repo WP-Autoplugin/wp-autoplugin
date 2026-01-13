@@ -4,7 +4,8 @@
         var deleteButtons = document.querySelectorAll('.delete a');
         for (var i = 0; i < deleteButtons.length; i++) {
             deleteButtons[i].addEventListener('click', function (e) {
-                if (!confirm('Are you sure you want to delete this plugin?')) {
+                var message = wp_autoplugin?.messages?.delete_confirmation || 'Are you sure you want to delete this plugin?';
+                if (!confirm(message)) {
                     e.preventDefault();
                 }
             });

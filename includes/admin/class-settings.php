@@ -38,5 +38,6 @@ class Settings {
 		register_setting( 'wp_autoplugin_settings', 'wp_autoplugin_coder_model' );
 		register_setting( 'wp_autoplugin_settings', 'wp_autoplugin_reviewer_model' );
 		register_setting( 'wp_autoplugin_settings', 'wp_autoplugin_plugin_mode' );
+		register_setting( 'wp_autoplugin_settings', 'wp_autoplugin_ai_language' );
 	}
 }

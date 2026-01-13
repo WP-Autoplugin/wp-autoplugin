@@ -54,7 +54,10 @@ function buildAccordion(plan) {
         accordion += `<div class="${className}">`;
         accordion += '<h3 class="autoplugin-accordion-heading">';
         accordion += '<div class="autoplugin-accordion-trigger">';
-        const partTitle = part.replace(/_/g, ' ').replace(/\b\w/g, letter => letter.toUpperCase());
+        // Use translated field label if available, otherwise format the key
+        const partTitle = (wp_autoplugin.field_labels && wp_autoplugin.field_labels[part])
+            ? wp_autoplugin.field_labels[part]
+            : part.replace(/_/g, ' ').replace(/\b\w/g, letter => letter.toUpperCase());
         accordion += `<span class="title">${partTitle}</span>`;
         accordion += '<span class="icon"></span>';
         accordion += '</div>';
