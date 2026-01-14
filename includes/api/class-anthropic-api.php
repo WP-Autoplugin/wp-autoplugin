@@ -127,10 +127,7 @@ class Anthropic_API extends API {
             || isset($override_body['responseMimeType'])
             || (isset($override_body['generationConfig']['responseMimeType']) && strpos($override_body['generationConfig']['responseMimeType'], 'json') !== false);
         $system_message .= AI_Utils::get_language_instruction($json_mode);
-        // For JSON mode, also append language instruction to the prompt itself for better compliance
-        if ($json_mode) {
-            $prompt .= AI_Utils::get_language_instruction(true);
-        }
+        $prompt .= AI_Utils::get_language_instruction($json_mode);
 
 		$payload = [
 			'model'       => $this->model,
