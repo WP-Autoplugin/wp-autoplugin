@@ -67,29 +67,29 @@ class Scripts {
 			'delete_confirmation'            => esc_html__( 'Are you sure you want to delete this plugin?', 'wp-autoplugin' ),
 			'error_parsing_explanation'      => esc_html__( 'Error parsing explanation. Please try again.', 'wp-autoplugin' ),
 			// File generation error messages
-            // translators: 1: File name.
+			// translators: 1: File name.
 			'error_generating_file'          => esc_html__( 'Error generating %s:', 'wp-autoplugin' ),
 			'retry_current_file'             => esc_html__( 'Retry Current File', 'wp-autoplugin' ),
 			'retry_from_here'                => esc_html__( 'Retry From Here', 'wp-autoplugin' ),
 			'skip_this_file'                 => esc_html__( 'Skip This File', 'wp-autoplugin' ),
 			'skipped'                        => esc_html__( 'Skipped', 'wp-autoplugin' ),
 			'file_skipped_comment'           => esc_html__( 'This file was skipped during generation', 'wp-autoplugin' ),
-            // translators: 1: File name.
+			// translators: 1: File name.
 			'please_add_code'                => esc_html__( 'Please add your %s code here', 'wp-autoplugin' ),
 			'ai_reviewing_codebase'          => esc_html__( 'AI is reviewing the complete codebase...', 'wp-autoplugin' ),
 			'review_error'                   => esc_html__( 'Review Error:', 'wp-autoplugin' ),
 			'applying_suggestions'           => esc_html__( 'Applying suggestions...', 'wp-autoplugin' ),
 			// Theme extender specific messages
-            // translators: %d: Total number of hooks found.
+			// translators: %d: Total number of hooks found.
 			'hooks_found_in_theme'           => esc_html__( '%d hooks found in the theme code', 'wp-autoplugin' ),
 			'no_theme_hooks_found'           => esc_html__( 'No hooks found in the theme code. You can still create an extension, but you may need to add hooks manually.', 'wp-autoplugin' ),
 			'error_extracting_hooks'         => esc_html__( 'Error extracting hooks:', 'wp-autoplugin' ),
 			'copied_to_clipboard'            => esc_html__( 'Copied!', 'wp-autoplugin' ),
 			'no_files_to_generate'           => esc_html__( 'Error: No files to generate.', 'wp-autoplugin' ),
-            // translators: 1: Plugin/Theme name, 2: Current item number, 3: Total number of items.
+			// translators: 1: Plugin/Theme name, 2: Current item number, 3: Total number of items.
 			'generating_file_progress'       => esc_html__( 'Generating %1$s (%2$d of %3$d)...', 'wp-autoplugin' ),
 			// Plugin hooks extender specific messages
-            // translators: %d: Total number of hooks found.
+			// translators: %d: Total number of hooks found.
 			'hooks_found_in_plugin'          => esc_html__( '%d hooks found in the plugin code', 'wp-autoplugin' ),
 			'no_plugin_hooks_found'          => esc_html__( 'No hooks found in the plugin code. Cannot proceed with extension.', 'wp-autoplugin' ),
 		];

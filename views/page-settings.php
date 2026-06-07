@@ -152,20 +152,20 @@ function render_model_dropdown( $name, $selected_value ) {
 				<td>
 					<select name="wp_autoplugin_ai_language" id="wp_autoplugin_ai_language">
 						<?php
-						$current_language = get_option( 'wp_autoplugin_ai_language', '' );
+						$current_language    = get_option( 'wp_autoplugin_ai_language', '' );
 						$supported_languages = [
-							''        => __( 'Auto (WordPress language)', 'wp-autoplugin' ),
-							'en_US'   => 'English',
-							'fr_FR'   => 'Français (French)',
-							'es_ES'   => 'Español (Spanish)',
-							'de_DE'   => 'Deutsch (German)',
-							'pt_PT'   => 'Português (Portuguese)',
-							'it_IT'   => 'Italiano (Italian)',
-							'hu_HU'   => 'Magyar (Hungarian)',
-							'nl_NL'   => 'Nederlands (Dutch)',
-							'pl_PL'   => 'Polski (Polish)',
-							'tr_TR'   => 'Türkçe (Turkish)',
-							'ru_RU'   => 'Русский (Russian)',
+							''      => __( 'Auto (WordPress language)', 'wp-autoplugin' ),
+							'en_US' => 'English',
+							'fr_FR' => 'Français (French)',
+							'es_ES' => 'Español (Spanish)',
+							'de_DE' => 'Deutsch (German)',
+							'pt_PT' => 'Português (Portuguese)',
+							'it_IT' => 'Italiano (Italian)',
+							'hu_HU' => 'Magyar (Hungarian)',
+							'nl_NL' => 'Nederlands (Dutch)',
+							'pl_PL' => 'Polski (Polish)',
+							'tr_TR' => 'Türkçe (Turkish)',
+							'ru_RU' => 'Русский (Russian)',
 						];
 						foreach ( $supported_languages as $code => $name ) {
 							echo '<option value="' . esc_attr( $code ) . '" ' . selected( $current_language, $code, false ) . '>' . esc_html( $name ) . '</option>';

@@ -66,11 +66,11 @@ class AI_Utils {
 
 		$images          = [];
 		$max_image_bytes = apply_filters( 'wp_autoplugin_max_prompt_image_bytes', 5 * 1024 * 1024 );
-		$allowed_mimes = apply_filters(
+		$allowed_mimes   = apply_filters(
 			'wp_autoplugin_prompt_image_mime_types',
 			[ 'image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml' ]
 		);
-		$allowed_mimes = array_filter(
+		$allowed_mimes   = array_filter(
 			array_map( 'sanitize_mime_type', (array) $allowed_mimes )
 		);
 		$max_image_bytes = is_numeric( $max_image_bytes ) ? (int) $max_image_bytes : 0;
@@ -448,13 +448,13 @@ class AI_Utils {
 
 		// Different instructions for JSON mode vs regular mode
 		if ( $json_mode ) {
-			return "
+			return '
 
-CRITICAL REQUIREMENT: You MUST write ALL text content in the JSON response (including all field values, descriptions, explanations, plans, and any other text) in " . $language_name . ". This is mandatory - do not use English or any other language. Every single text string in the JSON must be in " . $language_name . ".";
+CRITICAL REQUIREMENT: You MUST write ALL text content in the JSON response (including all field values, descriptions, explanations, plans, and any other text) in ' . $language_name . '. This is mandatory - do not use English or any other language. Every single text string in the JSON must be in ' . $language_name . '.';
 		} else {
-			return "
+			return '
 
-IMPORTANT: You must respond in " . $language_name . '. All explanations, comments, and messages must be in ' . $language_name . '.';
+IMPORTANT: You must respond in ' . $language_name . '. All explanations, comments, and messages must be in ' . $language_name . '.';
 		}
 	}
 }

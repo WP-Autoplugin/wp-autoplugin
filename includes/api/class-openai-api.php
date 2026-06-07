@@ -197,12 +197,12 @@ class OpenAI_API extends API {
 	 * @param array  $override_body The override body.
 	 */
 	public function send_prompt( $prompt, $system_message = '', $override_body = [] ) {
-        // Detect JSON mode from override_body or response format
-        $json_mode = isset($override_body['response_format'])
-            || isset($override_body['responseMimeType'])
-            || (isset($override_body['generationConfig']['responseMimeType']) && strpos($override_body['generationConfig']['responseMimeType'], 'json') !== false);
-        $system_message .= AI_Utils::get_language_instruction($json_mode);
-        $prompt .= AI_Utils::get_language_instruction($json_mode);
+		// Detect JSON mode from override_body or response format
+		$json_mode       = isset( $override_body['response_format'] )
+			|| isset( $override_body['responseMimeType'] )
+			|| ( isset( $override_body['generationConfig']['responseMimeType'] ) && strpos( $override_body['generationConfig']['responseMimeType'], 'json' ) !== false );
+		$system_message .= AI_Utils::get_language_instruction( $json_mode );
+		$prompt         .= AI_Utils::get_language_instruction( $json_mode );
 
 		$messages = [];
 		if ( ! empty( $system_message ) ) {
