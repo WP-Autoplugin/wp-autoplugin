@@ -177,7 +177,8 @@
             return DOMPurify.sanitize(marked.parse(text));
         } catch (e) {
             console.error('Markdown parsing failed:', e);
-            return '<p>Error parsing explanation. Please try again.</p>';
+            const errorMsg = wp_autoplugin?.messages?.error_parsing_explanation || 'Error parsing explanation. Please try again.';
+            return '<p>' + errorMsg + '</p>';
         }
     }
 

@@ -96,20 +96,20 @@
                 const hooks = data.data;
                 extractedHooks = hooks; // Store hooks for later use
                 if (hooks.length > 0) {
-                    hooksSummary.textContent = `${hooks.length} hooks found in the plugin code`;
+                    hooksSummary.textContent = wp_autoplugin.messages.hooks_found_in_plugin.replace('%d', hooks.length);
                     hooksUl.innerHTML = hooks.map(hook => `<li>${hook.name} (${hook.type})</li>`).join('');
                     hooksContent.style.display = 'block';
                 } else {
-                    messageGeneratePlan.innerHTML = wp_autoplugin.messages.no_hooks_found || 'No hooks found in the plugin code. Cannot proceed with extension.';
+                    messageGeneratePlan.innerHTML = wp_autoplugin.messages.no_plugin_hooks_found;
                 }
             } else {
-                messageGeneratePlan.innerHTML = 'Error extracting hooks: ' + (data.data || 'Unknown error');
+                messageGeneratePlan.innerHTML = wp_autoplugin.messages.error_extracting_hooks + ' ' + (data.data || 'Unknown error');
             }
         })
         .catch(error => {
             loader.stop();
             hooksLoading.style.display = 'none';
-            messageGeneratePlan.innerHTML = 'Error extracting hooks: ' + error.message;
+            messageGeneratePlan.innerHTML = wp_autoplugin.messages.error_extracting_hooks + ' ' + error.message;
         });
     }
 
@@ -340,7 +340,7 @@
         navigator.clipboard.writeText(hooksText).then(() => {
             const button = this;
             const originalText = button.textContent;
-            button.textContent = 'Copied!';
+            button.textContent = wp_autoplugin.messages.copied_to_clipboard;
             setTimeout(() => {
                 button.textContent = originalText;
             }, 2000);
@@ -382,7 +382,7 @@
 
     async function startFileGeneration() {
         if (!projectStructure.files || projectStructure.files.length === 0) {
-            messageReviewCode.innerHTML = 'Error: No files to generate.';
+            messageReviewCode.innerHTML = wp_autoplugin.messages.no_files_to_generate;
             return;
         }
         generatedFiles = {};
@@ -492,6 +492,12 @@
         const progressText = document.getElementById('progress-text');
         const percentage = (current / total) * 100;
         if (progressBar) progressBar.style.width = percentage + '%';
-        if (progressText) progressText.innerHTML = `Generating <code>${fileName}</code> (${current} of ${total})...`;
+        if (progressText) {
+            const message = wp_autoplugin.messages.generating_file_progress
+                .replace('%1$s', `<code>${fileName}</code>`)
+                .replace('%2$d', current)
+                .replace('%3$d', total);
+            progressText.innerHTML = message;
+        }
     }
 })();

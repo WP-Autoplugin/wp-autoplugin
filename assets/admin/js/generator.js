@@ -323,7 +323,7 @@
 
     async function startFileGeneration() {
         if (!projectStructure.files || projectStructure.files.length === 0) {
-            document.getElementById('create-plugin-message').innerHTML = 'Error: No files to generate.';
+            document.getElementById('create-plugin-message').innerHTML = wp_autoplugin.messages.no_files_to_generate || 'Error: No files to generate.';
             return;
         }
 
@@ -559,7 +559,7 @@
 
     async function startCodeReview() {
         document.getElementById('code-review-section').style.display = 'block';
-        document.getElementById('review-progress-text').textContent = 'AI is reviewing the complete codebase...';
+        document.getElementById('review-progress-text').textContent = wp_autoplugin.messages.ai_reviewing_codebase || 'AI is reviewing the complete codebase...';
         
         const formData = new FormData();
         formData.append('action', 'wp_autoplugin_review_code');
@@ -644,7 +644,8 @@
     function showReviewError(errorMessage) {
         document.getElementById('review-results').style.display = 'block';
         document.querySelector('.review-progress').style.display = 'none';
-        document.getElementById('review-summary').innerHTML = `<strong>Review Error:</strong> ${errorMessage}`;
+        const reviewErrorLabel = wp_autoplugin.messages.review_error || 'Review Error:';
+        document.getElementById('review-summary').innerHTML = `<strong>${reviewErrorLabel}</strong> ${errorMessage}`;
         
         // Skip review and finish generation
         finishGeneration();
@@ -652,9 +653,9 @@
 
     async function applySuggestions() {
         if (!reviewData || !reviewData.suggestions) return;
-        
+
         document.getElementById('apply-suggestions').disabled = true;
-        document.getElementById('apply-suggestions').textContent = 'Applying suggestions...';
+        document.getElementById('apply-suggestions').textContent = wp_autoplugin.messages.applying_suggestions || 'Applying suggestions...';
         
         // Add suggested files to project structure
         const newFiles = [];
@@ -813,20 +814,25 @@
 
     function showFileGenerationError(file, errorMessage) {
         const messageContainer = document.getElementById('create-plugin-message');
+        const errorGeneratingLabel = wp_autoplugin.messages.error_generating_file ? wp_autoplugin.messages.error_generating_file.replace('%s', file.path) : `Error generating ${file.path}:`;
+        const retryCurrentFileLabel = wp_autoplugin.messages.retry_current_file || 'Retry Current File';
+        const retryFromHereLabel = wp_autoplugin.messages.retry_from_here || 'Retry From Here';
+        const skipThisFileLabel = wp_autoplugin.messages.skip_this_file || 'Skip This File';
+
         messageContainer.innerHTML = `
             <div class="error-message">
-                <strong>Error generating ${file.path}:</strong><br>
+                <strong>${errorGeneratingLabel}</strong><br>
                 ${errorMessage}
             </div>
             <div class="retry-actions">
                 <button type="button" class="button" onclick="retryCurrentFile()">
-                    Retry Current File
+                    ${retryCurrentFileLabel}
                 </button>
                 <button type="button" class="button" onclick="retryFromFile(${currentFileIndex})">
-                    Retry From Here
+                    ${retryFromHereLabel}
                 </button>
                 <button type="button" class="button" onclick="skipCurrentFile()">
-                    Skip This File
+                    ${skipThisFileLabel}
                 </button>
             </div>
         `;
@@ -882,11 +888,13 @@
         if (tab) {
             const status = tab.querySelector('.status-indicator');
             status.className = 'status-indicator error';
-            status.title = 'Skipped';
+            status.title = wp_autoplugin.messages.skipped || 'Skipped';
         }
-        
+
         // Create empty content for skipped file
-        generatedFiles[file.path] = `// This file was skipped during generation\n// Please add your ${file.type.toUpperCase()} code here\n`;
+        const fileSkippedComment = wp_autoplugin.messages.file_skipped_comment || 'This file was skipped during generation';
+        const pleaseAddCode = wp_autoplugin.messages.please_add_code ? wp_autoplugin.messages.please_add_code.replace('%s', file.type.toUpperCase()) : `Please add your ${file.type.toUpperCase()} code here`;
+        generatedFiles[file.path] = `// ${fileSkippedComment}\n// ${pleaseAddCode}\n`;
         
         // Update editor content
         const textarea = document.getElementById(`file-editor-${currentFileIndex}`);

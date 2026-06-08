@@ -23,19 +23,22 @@ class AI_Utils {
 	 */
 	public static function get_supported_image_models() {
 		return [
-			'gpt-4o',
-			'gpt-4o-mini',
-			'gpt-4.1',
-			'gpt-4.1-mini',
-			'gpt-4.1-nano',
+			'gpt-5.5',
+			'gpt-5.5-pro',
+			'gpt-5.4',
+			'gpt-5.4-pro',
+			'gpt-5.4-mini',
+			'gpt-5.4-nano',
+			'gpt-5-pro',
 			'gpt-5',
 			'gpt-5-mini',
 			'gpt-5-nano',
-			'gpt-5-chat-latest',
-			'gpt-5-codex',
-			'gpt-5.1-codex',
-			'gpt-5.1-codex-max',
-			'gpt-5.1-codex-mini',
+			'gpt-4.1-2025-04-14',
+			'gpt-4.1-mini-2025-04-14',
+			'gpt-4o',
+			'gpt-4o-mini',
+			'o3',
+			'o3-pro',
 		];
 	}
 
@@ -66,11 +69,11 @@ class AI_Utils {
 
 		$images          = [];
 		$max_image_bytes = apply_filters( 'wp_autoplugin_max_prompt_image_bytes', 5 * 1024 * 1024 );
-		$allowed_mimes = apply_filters(
+		$allowed_mimes   = apply_filters(
 			'wp_autoplugin_prompt_image_mime_types',
 			[ 'image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml' ]
 		);
-		$allowed_mimes = array_filter(
+		$allowed_mimes   = array_filter(
 			array_map( 'sanitize_mime_type', (array) $allowed_mimes )
 		);
 		$max_image_bytes = is_numeric( $max_image_bytes ) ? (int) $max_image_bytes : 0;
@@ -413,5 +416,48 @@ class AI_Utils {
 			}
 		}
 		return $content;
+	}
+
+	/**
+	 * Get the language instruction for AI responses based on settings.
+	 *
+	 * @param bool $json_mode Whether the response will be in JSON format.
+	 * @return string The language instruction to append to system messages.
+	 */
+	public static function get_language_instruction( $json_mode = false ) {
+		$language_setting = get_option( 'wp_autoplugin_ai_language', '' );
+
+		// If empty, use WordPress locale
+		if ( empty( $language_setting ) ) {
+			$language_setting = get_locale();
+		}
+
+		// Map language codes to language names for the instruction
+		$language_map = [
+			'en_US' => 'English',
+			'fr_FR' => 'French',
+			'es_ES' => 'Spanish',
+			'de_DE' => 'German',
+			'pt_PT' => 'Portuguese',
+			'it_IT' => 'Italian',
+			'hu_HU' => 'Hungarian',
+			'nl_NL' => 'Dutch',
+			'pl_PL' => 'Polish',
+			'tr_TR' => 'Turkish',
+			'ru_RU' => 'Russian',
+		];
+
+		$language_name = isset( $language_map[ $language_setting ] ) ? $language_map[ $language_setting ] : 'English';
+
+		// Different instructions for JSON mode vs regular mode
+		if ( $json_mode ) {
+			return '
+
+CRITICAL REQUIREMENT: You MUST write ALL text content in the JSON response (including all field values, descriptions, explanations, plans, and any other text) in ' . $language_name . '. This is mandatory - do not use English or any other language. Every single text string in the JSON must be in ' . $language_name . '.';
+		} else {
+			return '
+
+IMPORTANT: You must respond in ' . $language_name . '. All explanations, comments, and messages must be in ' . $language_name . '.';
+		}
 	}
 }

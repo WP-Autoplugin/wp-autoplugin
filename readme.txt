@@ -67,6 +67,28 @@ Simple mode generates single-file plugins, while complex mode can create sophist
 = Can I use different AI models for different tasks? =
 Yes, you can configure specialized models in the settings to use different AI models for planning, coding, and reviewing tasks, allowing you to optimize performance and costs.
 
+
+== External Services ==
+
+WP-Autoplugin relies on third-party AI APIs. No data is transmitted until you configure your chosen API connections in the plugin settings.
+
+**Google Generative Language API**  
+- [Terms of Service](https://policies.google.com/terms)  
+- [Generative AI Additional Terms](https://policies.google.com/terms/generative-ai)  
+- [Privacy Policy](https://policies.google.com/privacy)
+
+**OpenAI**  
+- [Terms of Use](https://openai.com/policies/terms-of-use/)  
+- [Privacy Policy](https://openai.com/policies/privacy-policy/)
+
+**xAI**  
+- [Terms of Service](https://x.ai/legal/terms-of-service)  
+- [Privacy Policy](https://x.ai/legal/privacy-policy)
+
+**Anthropic**  
+- [Terms of Service](https://www.anthropic.com/terms-of-service)  
+- [Privacy Policy](https://www.anthropic.com/privacy-policy)
+
 == Changelog ==
 
 = 1.7.1 =

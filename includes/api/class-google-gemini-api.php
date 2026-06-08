@@ -60,14 +60,18 @@ class Google_Gemini_API extends API {
 	 * @return mixed
 	 */
 	public function send_prompt( $prompt, $system_message = '', $override_body = [] ) {
+		// Detect JSON mode from override_body or response format
+		$json_mode       = isset( $override_body['response_format'] )
+			|| isset( $override_body['responseMimeType'] )
+			|| ( isset( $override_body['generationConfig']['responseMimeType'] ) && strpos( $override_body['generationConfig']['responseMimeType'], 'json' ) !== false );
+		$system_message .= AI_Utils::get_language_instruction( $json_mode );
+		$prompt         .= AI_Utils::get_language_instruction( $json_mode );
+
 		$url = 'https://generativelanguage.googleapis.com/v1beta/models/' . $this->model . ':generateContent?key=' . $this->api_key;
 
-		// Set max tokens for Gemini 2.5 Flash & Pro.
+		// Set max tokens for Gemini 2.5 Flash & above.
 		$max_tokens = $this->max_tokens;
-		if (
-			stripos( $this->model, 'gemini-2.5-pro' ) !== false ||
-			stripos( $this->model, 'gemini-2.5-flash' ) !== false
-		) {
+		if ( in_array( $this->model, [ 'gemini-2.5-flash', 'gemini-2.5-pro', 'gemini-3.1-pro-preview', 'gemini-3.5-flash', 'gemini-3-flash-preview', 'gemini-3.1-flash-lite' ], true ) ) {
 			$max_tokens = 65535;
 		}
 

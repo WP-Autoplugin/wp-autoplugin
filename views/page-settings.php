@@ -148,6 +148,36 @@ function render_model_dropdown( $name, $selected_value ) {
 				</td>
 			</tr>
 			<tr valign="top">
+				<th scope="row"><?php esc_html_e( 'AI Response Language', 'wp-autoplugin' ); ?></th>
+				<td>
+					<select name="wp_autoplugin_ai_language" id="wp_autoplugin_ai_language">
+						<?php
+						$current_language    = get_option( 'wp_autoplugin_ai_language', '' );
+						$supported_languages = [
+							''      => __( 'Auto (WordPress language)', 'wp-autoplugin' ),
+							'en_US' => 'English',
+							'fr_FR' => 'Français (French)',
+							'es_ES' => 'Español (Spanish)',
+							'de_DE' => 'Deutsch (German)',
+							'pt_PT' => 'Português (Portuguese)',
+							'it_IT' => 'Italiano (Italian)',
+							'hu_HU' => 'Magyar (Hungarian)',
+							'nl_NL' => 'Nederlands (Dutch)',
+							'pl_PL' => 'Polski (Polish)',
+							'tr_TR' => 'Türkçe (Turkish)',
+							'ru_RU' => 'Русский (Russian)',
+						];
+						foreach ( $supported_languages as $code => $name ) {
+							echo '<option value="' . esc_attr( $code ) . '" ' . selected( $current_language, $code, false ) . '>' . esc_html( $name ) . '</option>';
+						}
+						?>
+					</select>
+					<p class="description">
+						<?php esc_html_e( 'Language for AI responses. Default uses your WordPress language setting.', 'wp-autoplugin' ); ?>
+					</p>
+				</td>
+			</tr>
+			<tr valign="top">
 				<th scope="row"><?php esc_html_e( 'Custom Models', 'wp-autoplugin' ); ?></th>
 				<td>
 					<div id="custom-models-list">

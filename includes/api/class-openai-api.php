@@ -89,91 +89,67 @@ class OpenAI_API extends API {
 
 		// Set the temperature and max tokens based on the model.
 		$model_params = [
-			'o3-mini-low'       => [
-				'max_tokens'       => 100000,
-				'reasoning_effort' => 'low',
+			'gpt-5.5'      => [
+				'max_tokens'       => 128000,
+				'reasoning_effort' => 'medium', // Supports: none, low, medium, high, xhigh.
 			],
-			'o3-mini-medium'    => [
-				'max_tokens'       => 100000,
+			'gpt-5.5-pro'  => [
+				'max_tokens' => 128000,
+			],
+			'gpt-5.4'      => [
+				'max_tokens'       => 128000,
+				'reasoning_effort' => 'none', // Supports: none, low, medium, high, xhigh.
+			],
+			'gpt-5.4-pro'  => [
+				'max_tokens'       => 128000,
+				'reasoning_effort' => 'medium', // Supports: medium, high, xhigh.
+			],
+			'gpt-5.4-mini' => [
+				'max_tokens'       => 128000,
 				'reasoning_effort' => 'medium',
 			],
-			'o3-mini-high'      => [
-				'max_tokens'       => 100000,
-				'reasoning_effort' => 'high',
-			],
-			'o3-low'            => [
-				'max_tokens'       => 100000,
-				'reasoning_effort' => 'low',
-			],
-			'o3-medium'         => [
-				'max_tokens'       => 100000,
+			'gpt-5.4-nano' => [
+				'max_tokens'       => 128000,
 				'reasoning_effort' => 'medium',
 			],
-			'o3-high'           => [
-				'max_tokens'       => 100000,
-				'reasoning_effort' => 'high',
+			'gpt-5-pro'    => [
+				'max_tokens'       => 272000,
+				'reasoning_effort' => 'high', // Only supports high.
 			],
-			'o4-mini-low'       => [
-				'max_tokens'       => 100000,
-				'reasoning_effort' => 'low',
+			'gpt-5'        => [
+				'max_tokens'       => 128000,
+				'reasoning_effort' => 'medium', // Supports: minimal, low, medium, high.
 			],
-			'o4-mini-medium'    => [
-				'max_tokens'       => 100000,
+			'gpt-5-mini'   => [
+				'max_tokens'       => 128000,
 				'reasoning_effort' => 'medium',
 			],
-			'o4-mini-high'      => [
-				'max_tokens'       => 100000,
-				'reasoning_effort' => 'high',
+			'gpt-5-nano'   => [
+				'max_tokens'       => 128000,
+				'reasoning_effort' => 'medium',
 			],
-			'o1'                => [
-				'max_tokens' => 32000,
-			],
-			'o1-preview'        => [
-				'max_tokens' => 32000,
-			],
-			'gpt-4o'            => [
-				'temperature' => 0.2,
-				'max_tokens'  => 4096,
-			],
-			'gpt-4.1'           => [
+			'gpt-4.1'      => [
 				'temperature' => 0.2,
 				'max_tokens'  => 32768,
 			],
-			'gpt-4.1-mini'      => [
+			'gpt-4.1-mini' => [
 				'temperature' => 0.2,
 				'max_tokens'  => 32768,
 			],
-			'gpt-4.1-nano'      => [
-				'temperature' => 0.2,
-				'max_tokens'  => 32768,
-			],
-			'chatgpt-4o-latest' => [
+			'gpt-4o'       => [
 				'temperature' => 0.2,
 				'max_tokens'  => 16384,
 			],
-			'gpt-4o-mini'       => [
+			'gpt-4o-mini'  => [
 				'temperature' => 0.2,
-				'max_tokens'  => 4096,
+				'max_tokens'  => 16384,
 			],
-			'gpt-4-turbo'       => [
-				'temperature' => 0.2,
-				'max_tokens'  => 4096,
+			'o3'           => [
+				'max_tokens'       => 100000,
+				'reasoning_effort' => 'medium',
 			],
-			'gpt-3.5-turbo'     => [
-				'temperature' => 0.2,
-				'max_tokens'  => 4096,
-			],
-			'gpt-5'             => [
-				'max_tokens' => 128000,
-			],
-			'gpt-5-mini'        => [
-				'max_tokens' => 128000,
-			],
-			'gpt-5-nano'        => [
-				'max_tokens' => 128000,
-			],
-			'gpt-5-codex'       => [ // Handled by OpenAI_Responses_API.
-				'max_tokens' => 128000,
+			'o3-pro'       => [
+				'max_tokens' => 100000,
 			],
 		];
 
@@ -197,6 +173,13 @@ class OpenAI_API extends API {
 	 * @param array  $override_body The override body.
 	 */
 	public function send_prompt( $prompt, $system_message = '', $override_body = [] ) {
+		// Detect JSON mode from override_body or response format
+		$json_mode       = isset( $override_body['response_format'] )
+			|| isset( $override_body['responseMimeType'] )
+			|| ( isset( $override_body['generationConfig']['responseMimeType'] ) && strpos( $override_body['generationConfig']['responseMimeType'], 'json' ) !== false );
+		$system_message .= AI_Utils::get_language_instruction( $json_mode );
+		$prompt         .= AI_Utils::get_language_instruction( $json_mode );
+
 		$messages = [];
 		if ( ! empty( $system_message ) ) {
 			$messages[] = [

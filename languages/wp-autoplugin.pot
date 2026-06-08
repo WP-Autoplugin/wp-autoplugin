@@ -1,17 +1,17 @@
-# Copyright (C) 2025 Balázs Piller
+# Copyright (C) 2026 Balázs Piller
 # This file is distributed under the same license as the WP-Autoplugin plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP-Autoplugin 1.7\n"
+"Project-Id-Version: WP AutoPlugin 1.7.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-autoplugin\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-10-12T15:53:30+00:00\n"
+"POT-Creation-Date: 2026-01-13T16:53:21+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.11.0\n"
+"X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: wp-autoplugin\n"
 
 #. Plugin Name of the plugin
@@ -59,11 +59,13 @@ msgstr ""
 
 #. translators: %s: version number.
 #: includes/admin/class-admin.php:75
+#, php-format
 msgid "WP-Autoplugin v%s"
 msgstr ""
 
 #. translators: %s: model name.
 #: includes/admin/class-admin.php:86
+#, php-format
 msgid "Model: %s"
 msgstr ""
 
@@ -79,6 +81,7 @@ msgstr ""
 #: includes/admin/class-menu.php:189
 #: includes/admin/class-menu.php:231
 #: includes/admin/class-menu.php:259
+#: includes/ajax/class-ajax.php:115
 #: includes/ajax/class-model.php:41
 #: includes/ajax/class-model.php:82
 #: includes/ajax/class-model.php:120
@@ -150,6 +153,7 @@ msgstr ""
 
 #. translators: 1: fix link start tag, 2: fix link end tag
 #: includes/admin/class-notices.php:74
+#, php-format
 msgid "You can %1$sfix the error automatically%2$s."
 msgstr ""
 
@@ -324,40 +328,187 @@ msgstr ""
 msgid "Drop files to attach"
 msgstr ""
 
+#: includes/admin/class-scripts.php:65
+msgid "Attached image"
+msgstr ""
+
+#: includes/admin/class-scripts.php:66
+msgid "Remove image"
+msgstr ""
+
+#: includes/admin/class-scripts.php:67
+msgid "Are you sure you want to delete this plugin?"
+msgstr ""
+
+#: includes/admin/class-scripts.php:68
+msgid "Error parsing explanation. Please try again."
+msgstr ""
+
+#. translators: 1: File name.
+#: includes/admin/class-scripts.php:71
+#, php-format
+msgid "Error generating %s:"
+msgstr ""
+
+#: includes/admin/class-scripts.php:72
+msgid "Retry Current File"
+msgstr ""
+
+#: includes/admin/class-scripts.php:73
+msgid "Retry From Here"
+msgstr ""
+
+#: includes/admin/class-scripts.php:74
+msgid "Skip This File"
+msgstr ""
+
+#: includes/admin/class-scripts.php:75
+msgid "Skipped"
+msgstr ""
+
+#: includes/admin/class-scripts.php:76
+msgid "This file was skipped during generation"
+msgstr ""
+
+#. translators: 1: File name.
+#: includes/admin/class-scripts.php:78
+#, php-format
+msgid "Please add your %s code here"
+msgstr ""
+
+#: includes/admin/class-scripts.php:79
+#: views/page-generate-plugin.php:70
+msgid "AI is reviewing the complete codebase..."
+msgstr ""
+
+#: includes/admin/class-scripts.php:80
+msgid "Review Error:"
+msgstr ""
+
+#: includes/admin/class-scripts.php:81
+msgid "Applying suggestions..."
+msgstr ""
+
+#. translators: %d: Total number of hooks found.
+#: includes/admin/class-scripts.php:84
+#, php-format
+msgid "%d hooks found in the theme code"
+msgstr ""
+
+#: includes/admin/class-scripts.php:85
+msgid "No hooks found in the theme code. You can still create an extension, but you may need to add hooks manually."
+msgstr ""
+
+#: includes/admin/class-scripts.php:86
+msgid "Error extracting hooks:"
+msgstr ""
+
+#: includes/admin/class-scripts.php:87
+msgid "Copied!"
+msgstr ""
+
+#: includes/admin/class-scripts.php:88
+msgid "Error: No files to generate."
+msgstr ""
+
+#. translators: 1: Plugin/Theme name, 2: Current item number, 3: Total number of items.
+#: includes/admin/class-scripts.php:90
+#, php-format
+msgid "Generating %1$s (%2$d of %3$d)..."
+msgstr ""
+
+#. translators: %d: Total number of hooks found.
+#: includes/admin/class-scripts.php:93
+#, php-format
+msgid "%d hooks found in the plugin code"
+msgstr ""
+
+#: includes/admin/class-scripts.php:94
+msgid "No hooks found in the plugin code. Cannot proceed with extension."
+msgstr ""
+
+#: includes/admin/class-scripts.php:130
+msgid "Plugin Name"
+msgstr ""
+
+#: includes/admin/class-scripts.php:131
+msgid "Design And Architecture"
+msgstr ""
+
+#: includes/admin/class-scripts.php:132
+msgid "Detailed Feature Description"
+msgstr ""
+
+#: includes/admin/class-scripts.php:133
+msgid "User Interface"
+msgstr ""
+
+#: includes/admin/class-scripts.php:134
+msgid "User Flows"
+msgstr ""
+
+#: includes/admin/class-scripts.php:135
+msgid "Security Considerations"
+msgstr ""
+
 #: includes/admin/class-scripts.php:136
-msgid "A simple contact form with honeypot spam protection."
+msgid "Testing Plan"
 msgstr ""
 
 #: includes/admin/class-scripts.php:137
-msgid "A custom post type for testimonials."
+msgid "Project Structure"
 msgstr ""
 
 #: includes/admin/class-scripts.php:138
-msgid "A widget that displays recent posts."
+msgid "Technically Feasible"
 msgstr ""
 
 #: includes/admin/class-scripts.php:139
+msgid "Explanation"
+msgstr ""
+
+#: includes/admin/class-scripts.php:140
+msgid "Hooks"
+msgstr ""
+
+#: includes/admin/class-scripts.php:141
+msgid "Plan"
+msgstr ""
+
+#: includes/admin/class-scripts.php:180
+msgid "A simple contact form with honeypot spam protection."
+msgstr ""
+
+#: includes/admin/class-scripts.php:181
+msgid "A custom post type for testimonials."
+msgstr ""
+
+#: includes/admin/class-scripts.php:182
+msgid "A widget that displays recent posts."
+msgstr ""
+
+#: includes/admin/class-scripts.php:183
 msgid "A simple image compression tool."
 msgstr ""
 
-#: includes/admin/class-scripts.php:387
+#: includes/admin/class-scripts.php:431
 #: views/footer-modal.php:161
 msgid "No token usage data available yet."
 msgstr ""
 
-#: includes/admin/class-scripts.php:388
+#: includes/admin/class-scripts.php:432
 msgid "Total Usage"
 msgstr ""
 
-#: includes/admin/class-scripts.php:389
+#: includes/admin/class-scripts.php:433
 msgid "Step Breakdown"
 msgstr ""
 
-#: includes/admin/class-scripts.php:390
+#: includes/admin/class-scripts.php:434
 msgid "Failed to save models."
 msgstr ""
 
-#: includes/admin/class-scripts.php:391
+#: includes/admin/class-scripts.php:435
 msgid "An error occurred while saving models."
 msgstr ""
 
@@ -375,7 +526,7 @@ msgstr ""
 msgid "You are not allowed to access this page."
 msgstr ""
 
-#: includes/ajax/class-ajax.php:108
+#: includes/ajax/class-ajax.php:110
 msgid "Invalid AJAX action."
 msgstr ""
 
@@ -463,6 +614,7 @@ msgstr ""
 
 #. Translators: %s: model name.
 #: includes/ajax/class-model.php:209
+#, php-format
 msgid "Invalid model specified: %s"
 msgstr ""
 
@@ -478,8 +630,8 @@ msgstr ""
 msgid "No hooks found in the theme."
 msgstr ""
 
-#: includes/api/class-custom-api.php:111
-#: includes/api/class-openai-responses-api.php:94
+#: includes/api/class-custom-api.php:121
+#: includes/api/class-openai-responses-api.php:111
 msgid "Error communicating with the API."
 msgstr ""
 
@@ -536,11 +688,13 @@ msgstr ""
 
 #. Translators: %s: file path.
 #: includes/class-plugin-installer.php:228
+#, php-format
 msgid "Missing content for file: %s"
 msgstr ""
 
 #. Translators: %s: file path.
 #: includes/class-plugin-installer.php:240
+#, php-format
 msgid "Error creating file: %s"
 msgstr ""
 
@@ -558,11 +712,13 @@ msgstr ""
 
 #. Translators: %s: file path.
 #: includes/class-plugin-installer.php:323
+#, php-format
 msgid "Unsupported file type for update: %s"
 msgstr ""
 
 #. Translators: %s: file path.
 #: includes/class-plugin-installer.php:335
+#, php-format
 msgid "Failed to write file: %s"
 msgstr ""
 
@@ -582,6 +738,7 @@ msgstr ""
 
 #. Translators: %s: error message.
 #: includes/class-plugin-installer.php:452
+#, php-format
 msgid "Error deleting plugin: %s"
 msgstr ""
 
@@ -603,8 +760,8 @@ msgstr ""
 #: views/footer-modal.php:130
 #: views/page-settings.php:64
 #: views/page-settings.php:88
-#: views/page-settings.php:151
-#: views/page-settings.php:241
+#: views/page-settings.php:181
+#: views/page-settings.php:271
 msgid "Custom Models"
 msgstr ""
 
@@ -653,6 +810,7 @@ msgstr ""
 
 #. translators: %s: plugin name.
 #: views/page-explain-plugin.php:37
+#, php-format
 msgid "Explain This Plugin: %s"
 msgstr ""
 
@@ -682,6 +840,7 @@ msgstr ""
 
 #. translators: %s: plugin name.
 #: views/page-explain-plugin.php:77
+#, php-format
 msgid "Explanation for: %s"
 msgstr ""
 
@@ -707,6 +866,7 @@ msgstr ""
 
 #. translators: %s: plugin name.
 #: views/page-extend-hooks.php:24
+#, php-format
 msgid "Create Extension for: %s"
 msgstr ""
 
@@ -756,6 +916,7 @@ msgstr ""
 #. translators: %s: theme/plugin name.
 #: views/page-extend-hooks.php:64
 #: views/page-extend-theme.php:68
+#, php-format
 msgid "Extension Plugin for: %s"
 msgstr ""
 
@@ -799,11 +960,13 @@ msgstr ""
 #. translators: %s: error message.
 #: views/page-extend-plugin.php:37
 #: views/page-fix-plugin.php:39
+#, php-format
 msgid "Error while activating the plugin: %s"
 msgstr ""
 
 #. translators: %s: plugin name.
 #: views/page-extend-plugin.php:46
+#, php-format
 msgid "Modify This Plugin: %s"
 msgstr ""
 
@@ -841,6 +1004,7 @@ msgstr ""
 
 #. translators: %s: plugin name.
 #: views/page-extend-plugin.php:71
+#, php-format
 msgid "Extended Plugin: %s"
 msgstr ""
 
@@ -866,6 +1030,7 @@ msgstr ""
 
 #. translators: %s: theme name.
 #: views/page-extend-theme.php:28
+#, php-format
 msgid "Extend This Theme: %s"
 msgstr ""
 
@@ -883,6 +1048,7 @@ msgstr ""
 
 #. translators: %s: plugin name.
 #: views/page-fix-plugin.php:48
+#, php-format
 msgid "Fix This Plugin: %s"
 msgstr ""
 
@@ -892,6 +1058,7 @@ msgstr ""
 
 #. translators: %s: plugin name.
 #: views/page-fix-plugin.php:73
+#, php-format
 msgid "Fixed Plugin: %s"
 msgstr ""
 
@@ -921,10 +1088,6 @@ msgstr ""
 
 #: views/page-generate-plugin.php:59
 msgid "You can review and edit the generated code before installing:"
-msgstr ""
-
-#: views/page-generate-plugin.php:70
-msgid "AI is reviewing the complete codebase..."
 msgstr ""
 
 #: views/page-generate-plugin.php:74
@@ -984,7 +1147,7 @@ msgid "Default Model"
 msgstr ""
 
 #: views/page-settings.php:98
-#: views/page-settings.php:190
+#: views/page-settings.php:220
 msgid "Show specialized model settings"
 msgstr ""
 
@@ -1028,68 +1191,80 @@ msgstr ""
 msgid "Complex mode uses more tokens. For best results, use capable models."
 msgstr ""
 
-#: views/page-settings.php:159
+#: views/page-settings.php:151
+msgid "AI Response Language"
+msgstr ""
+
+#: views/page-settings.php:157
+msgid "Auto (WordPress language)"
+msgstr ""
+
+#: views/page-settings.php:176
+msgid "Language for AI responses. Default uses your WordPress language setting."
+msgstr ""
+
+#: views/page-settings.php:189
 msgid "Model Name (User-defined Label)"
 msgstr ""
 
-#: views/page-settings.php:160
+#: views/page-settings.php:190
 msgid "API Endpoint URL"
 msgstr ""
 
-#: views/page-settings.php:161
+#: views/page-settings.php:191
 msgid "\"model\" Parameter Value"
 msgstr ""
 
-#: views/page-settings.php:162
-#: views/page-settings.php:207
+#: views/page-settings.php:192
+#: views/page-settings.php:237
 msgid "API Key"
 msgstr ""
 
-#: views/page-settings.php:163
+#: views/page-settings.php:193
 msgid "Additional Headers (one per line, name=value)"
 msgstr ""
 
-#: views/page-settings.php:164
+#: views/page-settings.php:194
 msgid "Add Custom Model"
 msgstr ""
 
-#: views/page-settings.php:170
+#: views/page-settings.php:200
 msgid "Add any custom models you want to use with WP-Autoplugin. These models will be available in the model selection dropdown. The API must be compatible with the OpenAI API."
 msgstr ""
 
-#: views/page-settings.php:193
-#: views/page-settings.php:199
+#: views/page-settings.php:223
+#: views/page-settings.php:229
 msgid "Hide specialized model settings"
 msgstr ""
 
-#: views/page-settings.php:204
+#: views/page-settings.php:234
 msgid "Details"
 msgstr ""
 
-#: views/page-settings.php:205
+#: views/page-settings.php:235
 msgid "URL"
 msgstr ""
 
-#: views/page-settings.php:206
+#: views/page-settings.php:236
 msgid "Model Parameter"
 msgstr ""
 
-#: views/page-settings.php:208
+#: views/page-settings.php:238
 msgid "Headers"
 msgstr ""
 
-#: views/page-settings.php:209
+#: views/page-settings.php:239
 msgid "Remove"
 msgstr ""
 
-#: views/page-settings.php:210
+#: views/page-settings.php:240
 msgid "Please fill out all required fields."
 msgstr ""
 
-#: views/page-settings.php:211
+#: views/page-settings.php:241
 msgid "Are you sure you want to remove this model?"
 msgstr ""
 
-#: views/page-settings.php:212
+#: views/page-settings.php:242
 msgid "Error saving model"
 msgstr ""
