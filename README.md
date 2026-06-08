@@ -105,27 +105,40 @@ When you activate an AI-generated plugin, WP-Autoplugin will automatically detec
 
 WP-Autoplugin supports 30+ AI models, including:
 
-- Claude 4.5 Opus
-- Claude 4.5 Sonnet
-- Claude 4.5 Haiku
+- Claude Opus 4.8
+- Claude Opus 4.7
+- Claude Opus 4.6
+- Claude Opus 4.5
+- Claude Sonnet 4.6
+- Claude Sonnet 4.5
+- Claude Haiku 4.5
 - o3
-- o4-mini
-- GPT-5.1
-- GPT-5.1-Codex
-- GPT-5.1-Codex-Max
-- GPT-5.1-Codex-Mini
-- GPT-5-mini
-- GPT-5-nano
+- o3-pro
+- GPT-5.5
+- GPT-5.5 Pro
+- GPT-5.4
+- GPT-5.4 Pro
+- GPT-5.4 mini
+- GPT-5.4 nano
+- GPT-5 Pro
+- GPT-5
+- GPT-5 mini
+- GPT-5 nano
 - GPT-4.1
-- GPT-4.1-mini
-- GPT-4.1-nano
+- GPT-4.1 mini
 - GPT-4o
 - GPT-4o mini
-- Google Gemini 3 Pro
+- Google Gemini 3.1 Pro Preview
+- Google Gemini 3.5 Flash
+- Google Gemini 3 Flash Preview
+- Google Gemini 3.1 Flash Lite
 - Google Gemini 2.5 Pro
 - Google Gemini 2.5 Flash
 - Google Gemini 2.5 Flash Lite
-- xAI Grok 4
+- xAI Grok 4.3
+- xAI Grok 4.3 Latest
+- xAI Grok Latest
+- xAI Grok Build 0.1
 
 While WP-Autoplugin is free to use, you may need to pay for API usage based on your chosen model.
 
