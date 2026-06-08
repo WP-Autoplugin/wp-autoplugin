@@ -51,58 +51,35 @@ class Anthropic_API extends API {
 		$this->model = sanitize_text_field( $model );
 
 		// Set the temperature and max tokens based on the model.
+		// max_tokens = max output tokens for the synchronous Messages API.
 		$model_params = [
+			'claude-opus-4-8'            => [
+				'max_tokens' => 128000,
+				// Do not send non-default temperature/top_p/top_k.
+			],
+			'claude-opus-4-7'            => [
+				'max_tokens' => 128000,
+				// Do not send non-default temperature/top_p/top_k.
+			],
+			'claude-opus-4-6'            => [
+				'temperature' => 0.2,
+				'max_tokens'  => 128000,
+			],
+			'claude-opus-4-5-20251101'   => [
+				'temperature' => 0.2,
+				'max_tokens'  => 64000,
+			],
+			'claude-sonnet-4-6'          => [
+				'temperature' => 0.2,
+				'max_tokens'  => 64000,
+			],
 			'claude-sonnet-4-5-20250929' => [
 				'temperature' => 0.2,
-				'max_tokens'  => 8192,
+				'max_tokens'  => 64000,
 			],
-			'claude-opus-4-20250514'     => [
+			'claude-haiku-4-5-20251001'  => [
 				'temperature' => 0.2,
-				'max_tokens'  => 8192,
-			],
-			'claude-sonnet-4-20250514'   => [
-				'temperature' => 0.2,
-				'max_tokens'  => 8192,
-			],
-			'claude-3-7-sonnet-20250219' => [
-				'temperature' => 0.2,
-				'max_tokens'  => 8192,
-			],
-			'claude-3-7-sonnet-latest'   => [
-				'temperature' => 0.2,
-				'max_tokens'  => 8192,
-			],
-			'claude-3-7-sonnet-thinking' => [
-				'temperature' => 1,      // Must be omitted or 1.0 for thinking mode.
-				'max_tokens'  => 128000, // Requires a special header (see below).
-			],
-			'claude-3-5-sonnet-20240620' => [
-				'temperature' => 0.2,
-				'max_tokens'  => 8192,
-			],
-			'claude-3-5-sonnet-latest'   => [
-				'temperature' => 0.2,
-				'max_tokens'  => 8192,
-			],
-			'claude-3-5-haiku-latest'    => [
-				'temperature' => 0.2,
-				'max_tokens'  => 8192,
-			],
-			'claude-3-5-haiku-20241022'  => [
-				'temperature' => 0.2,
-				'max_tokens'  => 8192,
-			],
-			'claude-3-opus-20240229'     => [
-				'temperature' => 0.2,
-				'max_tokens'  => 4096,
-			],
-			'claude-3-sonnet-20240229'   => [
-				'temperature' => 0.2,
-				'max_tokens'  => 4096,
-			],
-			'claude-3-haiku-20240307'    => [
-				'temperature' => 0.2,
-				'max_tokens'  => 4096,
+				'max_tokens'  => 64000,
 			],
 		];
 

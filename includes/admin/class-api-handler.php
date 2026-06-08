@@ -57,8 +57,8 @@ class Api_Handler {
 		$api = null;
 
 		if ( ! empty( $openai_api_key ) && array_key_exists( $model, Admin::get_models()['OpenAI'] ) ) {
-			// gpt-5-codex, gpt-5.1-codex, gpt-5.1-codex-max, gpt-5.1-codex-mini.
-			if ( str_contains( $model, 'codex' ) ) {
+			// gpt-5.5-pro, gpt-5.4-pro, gpt-5-pro, and o3-pro are Responses API-only models.
+			if ( str_contains( $model, '-pro' ) ) {
 				$api = new OpenAI_Responses_API();
 			} else {
 				$api = new OpenAI_API();

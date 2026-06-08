@@ -69,12 +69,9 @@ class Google_Gemini_API extends API {
 
 		$url = 'https://generativelanguage.googleapis.com/v1beta/models/' . $this->model . ':generateContent?key=' . $this->api_key;
 
-		// Set max tokens for Gemini 2.5 Flash & Pro.
+		// Set max tokens for Gemini 2.5 Flash & above.
 		$max_tokens = $this->max_tokens;
-		if (
-			stripos( $this->model, 'gemini-2.5-pro' ) !== false ||
-			stripos( $this->model, 'gemini-2.5-flash' ) !== false
-		) {
+		if ( in_array( $this->model, [ 'gemini-2.5-flash', 'gemini-2.5-pro', 'gemini-3.1-pro-preview', 'gemini-3.5-flash', 'gemini-3-flash-preview', 'gemini-3.1-flash-lite' ], true ) ) {
 			$max_tokens = 65535;
 		}
 
