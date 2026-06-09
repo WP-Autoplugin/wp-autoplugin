@@ -117,7 +117,6 @@ class Ajax {
 		}
 
 		$target_handler->$method_name();
-		return;
 	}
 
 	/**

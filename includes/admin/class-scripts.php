@@ -255,7 +255,7 @@ class Scripts {
 				WP_AUTOPLUGIN_VERSION
 			);
 
-			// Reuse generator styles for multi-file editor UI
+			// Reuse generator styles for multi-file editor UI.
 			wp_enqueue_style(
 				'wp-autoplugin-generator-shared',
 				WP_AUTOPLUGIN_URL . 'assets/admin/css/generator.css',
@@ -295,7 +295,7 @@ class Scripts {
 				WP_AUTOPLUGIN_VERSION
 			);
 
-			// Reuse generator styles for multi-file editor UI
+			// Reuse generator styles for multi-file editor UI.
 			wp_enqueue_style(
 				'wp-autoplugin-generator-shared',
 				WP_AUTOPLUGIN_URL . 'assets/admin/css/generator.css',
@@ -366,7 +366,7 @@ class Scripts {
 				WP_AUTOPLUGIN_VERSION
 			);
 
-			// Reuse generator styles so Project Structure table matches other flows
+			// Reuse generator styles so Project Structure table matches other flows.
 			wp_enqueue_style(
 				'wp-autoplugin-generator-shared',
 				WP_AUTOPLUGIN_URL . 'assets/admin/css/generator.css',
@@ -397,7 +397,7 @@ class Scripts {
 				WP_AUTOPLUGIN_VERSION
 			);
 
-			// Reuse generator styles for multi-file editor UI
+			// Reuse generator styles for multi-file editor UI.
 			wp_enqueue_style(
 				'wp-autoplugin-generator-shared',
 				WP_AUTOPLUGIN_URL . 'assets/admin/css/generator.css',

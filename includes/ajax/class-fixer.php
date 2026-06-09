@@ -54,21 +54,27 @@ class Fixer {
 			// Exclude common non-source directories.
 			$exclude_dirs = [ 'vendor', 'node_modules', '.git', 'tests', 'docs', 'build', 'dist' ];
 
-			$dirIterator = new \RecursiveDirectoryIterator( $abs_root, \FilesystemIterator::SKIP_DOTS );
-			$filter      = new \RecursiveCallbackFilterIterator(
-				$dirIterator,
+			$dir_iterator = new \RecursiveDirectoryIterator( $abs_root, \FilesystemIterator::SKIP_DOTS );
+			$filter       = new \RecursiveCallbackFilterIterator(
+				$dir_iterator,
 				function ( $current ) use ( $exclude_dirs ) {
-					/** @var \SplFileInfo $current */
+					/** Current file system item.
+					 *
+					 * @var \SplFileInfo $current
+					 */
 					if ( $current->isDir() ) {
 						return ! in_array( $current->getFilename(), $exclude_dirs, true );
 					}
 					return true;
 				}
 			);
-			$iterator    = new \RecursiveIteratorIterator( $filter, \RecursiveIteratorIterator::LEAVES_ONLY );
+			$iterator     = new \RecursiveIteratorIterator( $filter, \RecursiveIteratorIterator::LEAVES_ONLY );
 
 			foreach ( $iterator as $file ) {
-				/** @var \SplFileInfo $file */
+				/** Source file.
+				 *
+				 * @var \SplFileInfo $file
+				 */
 				if ( ! $file->isFile() ) {
 					continue;
 				}
@@ -108,8 +114,8 @@ class Fixer {
 	 * @return void
 	 */
 	public function generate_fix_plan() {
-		$plugin_file = isset( $_POST['plugin_file'] )
-			? sanitize_text_field( wp_unslash( $_POST['plugin_file'] ) )
+		$plugin_file = isset( $_POST['plugin_file'] ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent AJAX router.
+			? sanitize_text_field( wp_unslash( $_POST['plugin_file'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent AJAX router.
 			: '';
 
 		$codebase = $this->collect_plugin_codebase( $plugin_file );
@@ -120,7 +126,9 @@ class Fixer {
 
 		$planner_api   = $this->admin->api_handler->get_planner_api();
 		$fixer         = new Plugin_Fixer( $planner_api );
-		$prompt_images = isset( $_POST['prompt_images'] ) ? AI_Utils::parse_prompt_images( $_POST['prompt_images'] ) : [];
+		$prompt_images = isset( $_POST['prompt_images'] ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent AJAX router.
+			? AI_Utils::parse_prompt_images( wp_unslash( $_POST['prompt_images'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Parser validates image JSON, MIME type, base64 shape, file name, and size.
+			: [];
 		$plan_data     = $fixer->identify_issue( $codebase['files'], $problem, $prompt_images );
 		if ( is_wp_error( $plan_data ) ) {
 			wp_send_json_error( $plan_data->get_error_message() );
@@ -146,8 +154,8 @@ class Fixer {
 	 * @return void
 	 */
 	public function generate_fix_code() {
-		$plugin_file = isset( $_POST['plugin_file'] )
-			? sanitize_text_field( wp_unslash( $_POST['plugin_file'] ) )
+		$plugin_file = isset( $_POST['plugin_file'] ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent AJAX router.
+			? sanitize_text_field( wp_unslash( $_POST['plugin_file'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent AJAX router.
 			: '';
 
 		$codebase = $this->collect_plugin_codebase( $plugin_file );
@@ -186,9 +194,9 @@ class Fixer {
 	 * @return void
 	 */
 	public function fix_plugin() {
-		$code        = isset( $_POST['plugin_code'] ) ? wp_unslash( $_POST['plugin_code'] ) : '';
-		$plugin_file = isset( $_POST['plugin_file'] )
-			? sanitize_text_field( wp_unslash( $_POST['plugin_file'] ) )
+		$code        = isset( $_POST['plugin_code'] ) ? wp_unslash( $_POST['plugin_code'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Generated plugin code must stay intact for installation.
+		$plugin_file = isset( $_POST['plugin_file'] ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent AJAX router.
+			? sanitize_text_field( wp_unslash( $_POST['plugin_file'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent AJAX router.
 			: '';
 
 		// Constrain plugin_file to plugins directory.
@@ -235,8 +243,8 @@ class Fixer {
 	 * AJAX: generate a single fixed file during Fix flow (complex mode).
 	 */
 	public function generate_fix_file() {
-		$plugin_file = isset( $_POST['plugin_file'] )
-			? sanitize_text_field( wp_unslash( $_POST['plugin_file'] ) )
+		$plugin_file = isset( $_POST['plugin_file'] ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent AJAX router.
+			? sanitize_text_field( wp_unslash( $_POST['plugin_file'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent AJAX router.
 			: '';
 
 		$codebase = $this->collect_plugin_codebase( $plugin_file );

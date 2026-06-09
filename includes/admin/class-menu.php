@@ -25,6 +25,8 @@ class Menu {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param Admin $admin The admin instance.
 	 */
 	public function __construct( $admin ) {
 		$this->admin = $admin;

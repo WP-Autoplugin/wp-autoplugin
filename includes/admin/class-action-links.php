@@ -68,6 +68,7 @@ class Action_Links {
 	 * Add "Extend Theme" action links to the plugin list table.
 	 * Note: this is hooked to 'admin_enqueue_scripts'.
 	 *
+	 * @param string $hook The current admin page hook.
 	 * @return void
 	 */
 	public function add_extend_theme_action_links( $hook ) {

@@ -41,6 +41,7 @@ class Plugin_Generator {
 	 * Prompt the AI to generate a plan for a WordPress plugin.
 	 *
 	 * @param string $input The plugin features.
+	 * @param array  $prompt_images Prompt images.
 	 *
 	 * @return string|WP_Error
 	 */
@@ -58,6 +59,7 @@ class Plugin_Generator {
 	 * Generate a plan for a simple single-file plugin.
 	 *
 	 * @param string $input The plugin features.
+	 * @param array  $prompt_images Prompt images.
 	 *
 	 * @return string|WP_Error
 	 */
@@ -94,6 +96,7 @@ class Plugin_Generator {
 	 * Generate a plan for a complex multi-file plugin.
 	 *
 	 * @param string $input The plugin features.
+	 * @param array  $prompt_images Prompt images.
 	 *
 	 * @return string|WP_Error
 	 */
@@ -153,8 +156,8 @@ class Plugin_Generator {
 		$plugin_mode = get_option( 'wp_autoplugin_plugin_mode', 'simple' );
 
 		if ( 'complex' === $plugin_mode ) {
-			// For complex mode, this method shouldn't be used directly
-			// Instead, use generate_plugin_file() for individual files
+			// For complex mode, this method shouldn't be used directly.
+			// Instead, use generate_plugin_file() for individual files.
 			return new \WP_Error( 'invalid_mode', 'Use generate_plugin_file() for complex mode plugins.' );
 		}
 
@@ -346,7 +349,7 @@ class Plugin_Generator {
 		if ( ! empty( $generated_files ) ) {
 			$context    .= "\nPreviously Generated Files:\n";
 			$file_count  = count( $generated_files );
-			$lines_limit = $file_count > 5 ? 1000 : 2000; // Reduce context for more files
+			$lines_limit = $file_count > 5 ? 1000 : 2000; // Reduce context for more files.
 
 			foreach ( $generated_files as $file_path => $file_content ) {
 				$context    .= "File: $file_path\n";

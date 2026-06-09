@@ -54,21 +54,27 @@ class Extender {
 			// Exclude common non-source directories.
 			$exclude_dirs = [ 'vendor', 'node_modules', '.git', 'tests', 'docs', 'build', 'dist' ];
 
-			$dirIterator = new \RecursiveDirectoryIterator( $abs_root, \FilesystemIterator::SKIP_DOTS );
-			$filter      = new \RecursiveCallbackFilterIterator(
-				$dirIterator,
+			$dir_iterator = new \RecursiveDirectoryIterator( $abs_root, \FilesystemIterator::SKIP_DOTS );
+			$filter       = new \RecursiveCallbackFilterIterator(
+				$dir_iterator,
 				function ( $current ) use ( $exclude_dirs ) {
-					/** @var \SplFileInfo $current */
+					/** Current file system item.
+					 *
+					 * @var \SplFileInfo $current
+					 */
 					if ( $current->isDir() ) {
 						return ! in_array( $current->getFilename(), $exclude_dirs, true );
 					}
 					return true;
 				}
 			);
-			$iterator    = new \RecursiveIteratorIterator( $filter, \RecursiveIteratorIterator::LEAVES_ONLY );
+			$iterator     = new \RecursiveIteratorIterator( $filter, \RecursiveIteratorIterator::LEAVES_ONLY );
 
 			foreach ( $iterator as $file ) {
-				/** @var \SplFileInfo $file */
+				/** Source file.
+				 *
+				 * @var \SplFileInfo $file
+				 */
 				if ( ! $file->isFile() ) {
 					continue;
 				}
@@ -108,8 +114,8 @@ class Extender {
 	 * @return void
 	 */
 	public function generate_extend_plan() {
-		$plugin_file = isset( $_POST['plugin_file'] )
-			? sanitize_text_field( wp_unslash( $_POST['plugin_file'] ) )
+		$plugin_file = isset( $_POST['plugin_file'] ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent AJAX router.
+			? sanitize_text_field( wp_unslash( $_POST['plugin_file'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent AJAX router.
 			: '';
 
 		$codebase = $this->collect_plugin_codebase( $plugin_file );
@@ -120,7 +126,9 @@ class Extender {
 
 		$planner_api   = $this->admin->api_handler->get_planner_api();
 		$extender      = new \WP_Autoplugin\Plugin_Extender( $planner_api );
-		$prompt_images = isset( $_POST['prompt_images'] ) ? AI_Utils::parse_prompt_images( $_POST['prompt_images'] ) : [];
+		$prompt_images = isset( $_POST['prompt_images'] ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent AJAX router.
+			? AI_Utils::parse_prompt_images( wp_unslash( $_POST['prompt_images'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Parser validates image JSON, MIME type, base64 shape, file name, and size.
+			: [];
 		$plan_data     = $extender->plan_plugin_extension( $codebase['files'], $problem, $prompt_images );
 		if ( is_wp_error( $plan_data ) ) {
 			wp_send_json_error( $plan_data->get_error_message() );
@@ -146,8 +154,8 @@ class Extender {
 	 * @return void
 	 */
 	public function generate_extend_code() {
-		$plugin_file = isset( $_POST['plugin_file'] )
-			? sanitize_text_field( wp_unslash( $_POST['plugin_file'] ) )
+		$plugin_file = isset( $_POST['plugin_file'] ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent AJAX router.
+			? sanitize_text_field( wp_unslash( $_POST['plugin_file'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent AJAX router.
 			: '';
 
 		$codebase = $this->collect_plugin_codebase( $plugin_file );
@@ -185,8 +193,8 @@ class Extender {
 	 * - generated_files (JSON string)
 	 */
 	public function generate_extend_file() {
-		$plugin_file = isset( $_POST['plugin_file'] )
-			? sanitize_text_field( wp_unslash( $_POST['plugin_file'] ) )
+		$plugin_file = isset( $_POST['plugin_file'] ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent AJAX router.
+			? sanitize_text_field( wp_unslash( $_POST['plugin_file'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent AJAX router.
 			: '';
 
 		$codebase = $this->collect_plugin_codebase( $plugin_file );
@@ -238,9 +246,9 @@ class Extender {
 	 * @return void
 	 */
 	public function extend_plugin() {
-		$code        = isset( $_POST['plugin_code'] ) ? wp_unslash( $_POST['plugin_code'] ) : '';
-		$plugin_file = isset( $_POST['plugin_file'] )
-			? sanitize_text_field( wp_unslash( $_POST['plugin_file'] ) )
+		$code        = isset( $_POST['plugin_code'] ) ? wp_unslash( $_POST['plugin_code'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Generated plugin code must stay intact for installation.
+		$plugin_file = isset( $_POST['plugin_file'] ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent AJAX router.
+			? sanitize_text_field( wp_unslash( $_POST['plugin_file'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent AJAX router.
 			: '';
 
 		$installer = Plugin_Installer::get_instance();

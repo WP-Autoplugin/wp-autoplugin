@@ -53,21 +53,27 @@ class Explainer {
 			// Exclude common non-source directories.
 			$exclude_dirs = [ 'vendor', 'node_modules', '.git', 'tests', 'docs', 'build', 'dist' ];
 
-			$dirIterator = new \RecursiveDirectoryIterator( $abs_root, \FilesystemIterator::SKIP_DOTS );
-			$filter      = new \RecursiveCallbackFilterIterator(
-				$dirIterator,
+			$dir_iterator = new \RecursiveDirectoryIterator( $abs_root, \FilesystemIterator::SKIP_DOTS );
+			$filter       = new \RecursiveCallbackFilterIterator(
+				$dir_iterator,
 				function ( $current ) use ( $exclude_dirs ) {
-					/** @var \SplFileInfo $current */
+					/** Current file system item.
+					 *
+					 * @var \SplFileInfo $current
+					 */
 					if ( $current->isDir() ) {
 						return ! in_array( $current->getFilename(), $exclude_dirs, true );
 					}
 					return true;
 				}
 			);
-			$iterator    = new \RecursiveIteratorIterator( $filter, \RecursiveIteratorIterator::LEAVES_ONLY );
+			$iterator     = new \RecursiveIteratorIterator( $filter, \RecursiveIteratorIterator::LEAVES_ONLY );
 
 			foreach ( $iterator as $file ) {
-				/** @var \SplFileInfo $file */
+				/** Source file.
+				 *
+				 * @var \SplFileInfo $file
+				 */
 				if ( ! $file->isFile() ) {
 					continue;
 				}
@@ -107,8 +113,8 @@ class Explainer {
 	 * @return void
 	 */
 	public function explain_plugin() {
-		$plugin_file = isset( $_POST['plugin_file'] )
-			? sanitize_text_field( wp_unslash( $_POST['plugin_file'] ) )
+		$plugin_file = isset( $_POST['plugin_file'] ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent AJAX router.
+			? sanitize_text_field( wp_unslash( $_POST['plugin_file'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent AJAX router.
 			: '';
 
 		$codebase = $this->collect_plugin_codebase( $plugin_file );
@@ -123,7 +129,9 @@ class Explainer {
 
 		$reviewer_api  = $this->admin->api_handler->get_reviewer_api();
 		$explainer     = new Plugin_Explainer( $reviewer_api );
-		$prompt_images = isset( $_POST['prompt_images'] ) ? AI_Utils::parse_prompt_images( $_POST['prompt_images'] ) : [];
+		$prompt_images = isset( $_POST['prompt_images'] ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent AJAX router.
+			? AI_Utils::parse_prompt_images( wp_unslash( $_POST['prompt_images'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Parser validates image JSON, MIME type, base64 shape, file name, and size.
+			: [];
 		if ( ! empty( $question ) ) {
 			$explanation = $explainer->answer_plugin_question( $codebase['files'], $question, $prompt_images );
 		} elseif ( 'general' !== $focus ) {

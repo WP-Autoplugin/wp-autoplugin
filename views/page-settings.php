@@ -45,6 +45,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<td><input type="password" name="wp_autoplugin_xai_api_key" value="<?php echo esc_attr( get_option( 'wp_autoplugin_xai_api_key' ) ); ?>" class="large-text" /></td>
 			</tr>
 <?php
+/**
+ * Render a model dropdown field.
+ *
+ * @param string $name           Field name.
+ * @param string $selected_value Selected model value.
+ * @return void
+ */
 function render_model_dropdown( $name, $selected_value ) {
 	$models        = Admin::get_models();
 	$custom_models = get_option( 'wp_autoplugin_custom_models', [] );

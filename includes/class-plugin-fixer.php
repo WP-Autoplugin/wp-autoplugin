@@ -42,6 +42,7 @@ class Plugin_Fixer {
 	 *
 	 * @param string|array $plugin_code_or_files The plugin code string OR array of [ path => contents ].
 	 * @param string       $problem              The problem encountered.
+	 * @param array        $prompt_images        Prompt images.
 	 *
 	 * @return string|WP_Error
 	 */
@@ -111,16 +112,16 @@ PROMPT;
 			if ( is_array( $generated_files ) && ! empty( $generated_files ) ) {
 				$generated_context = "Previously updated/added files in this fix run:\n";
 				foreach ( $generated_files as $path => $contents ) {
-					$gLang = 'php';
+					$g_lang = 'php';
 					if ( preg_match( '/\\.css$/i', $path ) ) {
-						$gLang = 'css'; } elseif ( preg_match( '/\\.(js|mjs)$/i', $path ) ) {
-										$gLang = 'javascript'; }
+						$g_lang = 'css'; } elseif ( preg_match( '/\\.(js|mjs)$/i', $path ) ) {
+										$g_lang = 'javascript'; }
 						$lines = explode( "\n", (string) $contents );
 						$max   = 1200;
 						if ( count( $lines ) > $max ) {
 							$contents = implode( "\n", array_slice( $lines, 0, $max ) ) . "\n/* ... truncated ... */";
 						}
-						$generated_context .= "\nFile: {$path}\n```{$gLang}\n{$contents}\n```\n";
+						$generated_context .= "\nFile: {$path}\n```{$g_lang}\n{$contents}\n```\n";
 				}
 			}
 
@@ -171,6 +172,8 @@ PROMPT;
 	 * @return string|WP_Error
 	 */
 	public function fix_plugin( $plugin_code_or_files, $problem, $ai_description, $is_complex = false, $main_file = '' ) {
+		unset( $main_file );
+
 		$code_context = $this->build_code_context( $plugin_code_or_files );
 
 		$instructions = $is_complex

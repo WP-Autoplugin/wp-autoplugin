@@ -48,6 +48,7 @@ class Hooks_Extender {
 	 * @param string $original_plugin The plugin name (e.g., 'Rank Math SEO').
 	 * @param array  $hooks Array of hooks with name, type, and context.
 	 * @param string $plugin_changes Description of the desired changes.
+	 * @param array  $prompt_images Prompt images.
 	 * @return string|WP_Error The AI-generated plan in JSON format.
 	 */
 	public function plan_plugin_hooks_extension( $original_plugin, $hooks, $plugin_changes, $prompt_images = [] ) {
@@ -179,6 +180,7 @@ class Hooks_Extender {
 	 * @param string $original_theme_name The theme name (e.g., 'Twenty Twenty-Four').
 	 * @param array  $hooks Array of hooks with name, type, and context.
 	 * @param string $theme_changes Description of the desired changes.
+	 * @param array  $prompt_images Prompt images.
 	 * @return string|WP_Error The AI-generated plan in JSON format.
 	 */
 	public function plan_theme_hooks_extension( $original_theme_name, $hooks, $theme_changes, $prompt_images = [] ) {
@@ -403,7 +405,8 @@ class Hooks_Extender {
 			$prompt .= "Requirements:\n";
 			$prompt .= "- Follow WordPress coding standards; use tabs for indentation\n";
 			$prompt .= "- Correctly use the specified hooks in this file's implementation\n";
-			// Detect main file (simple heuristic: top-level PHP file)
+
+			// Detect main file (simple heuristic: top-level PHP file).
 			$is_main_file = ( false === strpos( $file_path, '/' ) ) && ( substr( $file_path, -4 ) === '.php' );
 			if ( $is_main_file ) {
 				$prompt .= "- This is the main plugin file; include a proper WordPress plugin header\n";

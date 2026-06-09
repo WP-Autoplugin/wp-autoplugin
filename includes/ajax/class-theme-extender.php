@@ -79,7 +79,7 @@ class Theme_Extender {
 		$theme_changes = sanitize_text_field( wp_unslash( $_POST['theme_issue'] ) );
 		$planner_api   = $this->admin->api_handler->get_planner_api();
 		$extender      = new \WP_Autoplugin\Hooks_Extender( $planner_api );
-		$prompt_images = isset( $_POST['prompt_images'] ) ? \WP_Autoplugin\AI_Utils::parse_prompt_images( $_POST['prompt_images'] ) : [];
+		$prompt_images = isset( $_POST['prompt_images'] ) ? \WP_Autoplugin\AI_Utils::parse_prompt_images( wp_unslash( $_POST['prompt_images'] ) ) : []; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Parser validates image JSON, MIME type, base64 shape, file name, and size.
 		$plan_data     = $extender->plan_theme_hooks_extension( $original_theme_name, $hooks, $theme_changes, $prompt_images );
 		if ( is_wp_error( $plan_data ) ) {
 			wp_send_json_error( $plan_data->get_error_message() );
@@ -178,10 +178,10 @@ class Theme_Extender {
 
 		$theme_slug        = isset( $_POST['theme_slug'] ) ? sanitize_text_field( wp_unslash( $_POST['theme_slug'] ) ) : '';
 		$file_index        = isset( $_POST['file_index'] ) ? intval( wp_unslash( $_POST['file_index'] ) ) : 0;
-		$theme_plan        = isset( $_POST['theme_plan'] ) ? wp_unslash( $_POST['theme_plan'] ) : '';
-		$project_structure = isset( $_POST['project_structure'] ) ? wp_unslash( $_POST['project_structure'] ) : '';
-		$generated_files   = isset( $_POST['generated_files'] ) ? wp_unslash( $_POST['generated_files'] ) : '';
-		$hooks_param       = isset( $_POST['hooks'] ) ? wp_unslash( $_POST['hooks'] ) : '[]';
+		$theme_plan        = isset( $_POST['theme_plan'] ) ? wp_unslash( $_POST['theme_plan'] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON plan must stay intact for decoding below.
+		$project_structure = isset( $_POST['project_structure'] ) ? wp_unslash( $_POST['project_structure'] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON project structure must stay intact for decoding below.
+		$generated_files   = isset( $_POST['generated_files'] ) ? wp_unslash( $_POST['generated_files'] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Generated file map contains source code and must stay intact.
+		$hooks_param       = isset( $_POST['hooks'] ) ? wp_unslash( $_POST['hooks'] ) : '[]'; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON hook list must stay intact for decoding below.
 
 		$theme_plan_array        = json_decode( $theme_plan, true );
 		$project_structure_array = json_decode( $project_structure, true );

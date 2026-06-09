@@ -92,7 +92,7 @@ class API {
 			case 'openai':
 			case 'xai':
 			case 'custom':
-				// Check for both naming conventions
+				// Check for both naming conventions.
 				if ( isset( $response['usage']['prompt_tokens'] ) ) {
 					$usage['input_tokens'] = (int) $response['usage']['prompt_tokens'];
 				} elseif ( isset( $response['usage']['input_tokens'] ) ) {
