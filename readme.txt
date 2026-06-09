@@ -4,7 +4,7 @@ Donate link: https://wp-autoplugin.com
 Tags: ai, plugin generator, development, wordpress, automation
 Requires at least: 6.0
 Tested up to: 6.9
-Stable tag: 1.7.1
+Stable tag: 1.8.0
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -90,6 +90,11 @@ WP-Autoplugin relies on third-party AI APIs. No data is transmitted until you co
 - [Privacy Policy](https://www.anthropic.com/privacy-policy)
 
 == Changelog ==
+
+= 1.8.0 =
+* Updated translations (thanks ShutterStarTW)
+* New setting: AI output language (thanks ShutterStarTW)
+* Added support for new Google, Anthropic, OpenAI and xAI models
 
 = 1.7.1 =
 * Added support for new models across all providers
