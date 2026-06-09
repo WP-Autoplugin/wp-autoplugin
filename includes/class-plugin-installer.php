@@ -109,13 +109,13 @@ class Plugin_Installer {
 
 		$file_paths = array_column( $project_structure['files'], 'path' );
 
-		// Find common prefix
+		// Find common prefix.
 		$common_prefix = '';
 		if ( count( $file_paths ) > 1 ) {
 			$first_path   = $file_paths[0];
 			$prefix_parts = explode( '/', $first_path );
 
-			// Check if first part is common to all paths
+			// Check if first part is common to all paths.
 			if ( strpos( $first_path, '/' ) !== false ) {
 				$potential_prefix = $prefix_parts[0] . '/';
 				$all_have_prefix  = true;
@@ -133,7 +133,7 @@ class Plugin_Installer {
 			}
 		}
 
-		// Remove common prefix if found
+		// Remove common prefix if found.
 		if ( ! empty( $common_prefix ) ) {
 			$normalized_generated_files = [];
 
@@ -142,7 +142,7 @@ class Plugin_Installer {
 				$new_path          = substr( $file_info['path'], strlen( $common_prefix ) );
 				$file_info['path'] = $new_path;
 
-				// Update generated_files keys
+				// Update generated_files keys.
 				if ( isset( $generated_files[ $old_path ] ) ) {
 					$normalized_generated_files[ $new_path ] = $generated_files[ $old_path ];
 				}
@@ -150,14 +150,14 @@ class Plugin_Installer {
 
 			$generated_files = $normalized_generated_files;
 
-			// Also update directories if they exist
+				// Also update directories if they exist.
 			if ( isset( $project_structure['directories'] ) ) {
 				foreach ( $project_structure['directories'] as &$directory ) {
 					if ( strpos( $directory, $common_prefix ) === 0 ) {
 						$directory = substr( $directory, strlen( $common_prefix ) );
 					}
 				}
-				// Remove empty directories after prefix removal
+				// Remove empty directories after prefix removal.
 				$project_structure['directories'] = array_filter( $project_structure['directories'] );
 			}
 		}
@@ -212,7 +212,7 @@ class Plugin_Installer {
 			}
 		}
 
-		// Write all files
+		// Write all files.
 		$main_file = '';
 		if ( isset( $project_structure['files'] ) ) {
 			foreach ( $project_structure['files'] as $file_info ) {
@@ -228,7 +228,7 @@ class Plugin_Installer {
 					return new \WP_Error( 'missing_file_content', sprintf( __( 'Missing content for file: %s', 'wp-autoplugin' ), $file_info['path'] ) );
 				}
 
-				// Create directory for the file if it doesn't exist
+				// Create directory for the file if it doesn't exist.
 				$file_dir = dirname( $file_path );
 				if ( ! $wp_filesystem->exists( $file_dir ) ) {
 					wp_mkdir_p( $file_dir );
@@ -240,7 +240,7 @@ class Plugin_Installer {
 					return new \WP_Error( 'file_creation_error', sprintf( __( 'Error creating file: %s', 'wp-autoplugin' ), $file_info['path'] ) );
 				}
 
-				// Identify the main plugin file (should be in root and end with .php)
+				// Identify the main plugin file (should be in root and end with .php).
 				if ( ! strpos( $file_info['path'], '/' ) && 'php' === $file_info['type'] ) {
 					$main_file = $file_info['path'];
 				}
@@ -248,7 +248,7 @@ class Plugin_Installer {
 		}
 
 		if ( empty( $main_file ) ) {
-			// Fallback to find the first php file in the root directory
+			// Fallback to find the first php file in the root directory.
 			if ( isset( $project_structure['files'] ) ) {
 				foreach ( $project_structure['files'] as $file_info ) {
 					if ( ! strpos( $file_info['path'], '/' ) && 'php' === $file_info['type'] ) {
@@ -263,7 +263,7 @@ class Plugin_Installer {
 			return new \WP_Error( 'no_main_file', __( 'No main plugin file found.', 'wp-autoplugin' ) );
 		}
 
-		// Add the plugin to the list of autoplugins
+		// Add the plugin to the list of autoplugins.
 		$autoplugins   = get_option( 'wp_autoplugins', [] );
 		$autoplugins[] = $plugin_name . '/' . $main_file;
 		$autoplugins   = array_values( array_unique( $autoplugins ) );
@@ -311,7 +311,7 @@ class Plugin_Installer {
 			if ( strpos( $rel_path, '../' ) !== false ) {
 				return new \WP_Error( 'invalid_path', __( 'Invalid file path.', 'wp-autoplugin' ) );
 			}
-			// Ensure path stays inside plugin directory
+			// Ensure path stays inside plugin directory.
 			if ( strpos( $rel_path, $plugin_root_rel . '/' ) === 0 ) {
 				$rel_path = substr( $rel_path, strlen( $plugin_root_rel . '/' ) );
 			}
@@ -323,7 +323,7 @@ class Plugin_Installer {
 				return new \WP_Error( 'invalid_file_type', sprintf( __( 'Unsupported file type for update: %s', 'wp-autoplugin' ), $rel_path ) );
 			}
 
-			// Ensure directory exists
+			// Ensure directory exists.
 			$dir = dirname( $target_path );
 			if ( ! $wp_filesystem->exists( $dir ) ) {
 				wp_mkdir_p( $dir );

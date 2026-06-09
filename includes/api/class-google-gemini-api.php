@@ -60,7 +60,7 @@ class Google_Gemini_API extends API {
 	 * @return mixed
 	 */
 	public function send_prompt( $prompt, $system_message = '', $override_body = [] ) {
-		// Detect JSON mode from override_body or response format
+		// Detect JSON mode from override_body or response format.
 		$json_mode       = isset( $override_body['response_format'] )
 			|| isset( $override_body['responseMimeType'] )
 			|| ( isset( $override_body['generationConfig']['responseMimeType'] ) && strpos( $override_body['generationConfig']['responseMimeType'], 'json' ) !== false );
@@ -158,11 +158,6 @@ class Google_Gemini_API extends API {
 
 		$candidate = $data['candidates'][0];
 
-		// Check for finish reason errors.
-		if ( isset( $candidate['finishReason'] ) && $candidate['finishReason'] === 'MAX_TOKENS' ) {
-			// return new \WP_Error( 'max_tokens_error', 'The response was cut off due to maximum token limit. Please try generating a shorter response or reduce the context size.' );
-		}
-
 		if ( ! isset( $candidate['content']['parts'] ) ) {
 			return new \WP_Error( 'api_error', 'Error communicating with the Google Gemini API.' . "\n" . print_r( $data, true ) ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r
 		}
@@ -170,7 +165,7 @@ class Google_Gemini_API extends API {
 		$parts     = $candidate['content']['parts'];
 		$last_part = end( $parts );
 
-		// Extract token usage
+		// Extract token usage.
 		$this->last_token_usage = $this->extract_token_usage( $data, 'google' );
 
 		return $last_part['text'];

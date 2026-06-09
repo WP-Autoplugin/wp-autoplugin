@@ -222,6 +222,11 @@ WP-Autoplugin is licensed under the GPLv3 or later.
 
 ## Changelog
 
+### 1.8.0
+- Updated translations (thanks ShutterStarTW)
+- New setting: AI output language (thanks ShutterStarTW)
+- Added support for new Google, Anthropic, OpenAI and xAI models
+
 ### 1.7.1
 - Added support for new models across all providers
 

@@ -99,7 +99,7 @@ class Anthropic_API extends API {
 	 * @return mixed The response from the API.
 	 */
 	public function send_prompt( $prompt, $system_message = '', $override_body = [] ) {
-		// Detect JSON mode from override_body or response format
+		// Detect JSON mode from override_body or response format.
 		$json_mode       = isset( $override_body['response_format'] )
 			|| isset( $override_body['responseMimeType'] )
 			|| ( isset( $override_body['generationConfig']['responseMimeType'] ) && strpos( $override_body['generationConfig']['responseMimeType'], 'json' ) !== false );

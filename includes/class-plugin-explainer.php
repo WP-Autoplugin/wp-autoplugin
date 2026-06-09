@@ -41,6 +41,7 @@ class Plugin_Explainer {
 	 * Generate a general explanation of a WordPress plugin (single-file or multi-file).
 	 *
 	 * @param string|array $plugin_code_or_files Code string or [ path => contents ].
+	 * @param array        $prompt_images        Prompt images.
 	 *
 	 * @return string|WP_Error
 	 */
@@ -70,6 +71,7 @@ class Plugin_Explainer {
 	 *
 	 * @param string|array $plugin_code_or_files Code string or [ path => contents ].
 	 * @param string       $question             The specific question about the plugin.
+	 * @param array        $prompt_images        Prompt images.
 	 *
 	 * @return string|WP_Error
 	 */
@@ -100,6 +102,7 @@ class Plugin_Explainer {
 	 *
 	 * @param string|array $plugin_code_or_files Code string or [ path => contents ].
 	 * @param string       $aspect               The specific aspect to analyze.
+	 * @param array        $prompt_images        Prompt images.
 	 *
 	 * @return string|WP_Error
 	 */

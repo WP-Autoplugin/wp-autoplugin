@@ -336,8 +336,8 @@ class GitHub_Updater {
 			$response              = new \stdClass();
 			$response->new_version = $this->config['new_version'];
 			$response->id          = $this->config['slug'];
-			$response->slug        = $this->config['proper_folder_name']; // folder slug for modal
-			$response->plugin      = $this->config['slug']; // plugin basename (folder/main.php)
+			$response->slug        = $this->config['proper_folder_name']; // Folder slug for modal.
+			$response->plugin      = $this->config['slug']; // Plugin basename (folder/main.php).
 			$response->url         = $this->config['github_url'];
 			$response->package     = $this->config['zip_url'];
 
@@ -368,7 +368,7 @@ class GitHub_Updater {
 		$resp = new \stdClass();
 
 		$resp->name          = $this->config['plugin_name'];
-		$resp->slug          = $this->config['proper_folder_name']; // folder slug
+		$resp->slug          = $this->config['proper_folder_name']; // Folder slug.
 		$resp->version       = $this->config['new_version'];
 		$resp->author        = $this->config['author'];
 		$resp->homepage      = $this->config['homepage'];
@@ -395,18 +395,18 @@ class GitHub_Updater {
 	 * Requires $this->config['override_modal_with_message'] = true.
 	 */
 	public function pre_plugin_information() {
-		$plugin = isset( $_GET['plugin'] ) ? sanitize_text_field( wp_unslash( $_GET['plugin'] ) ) : '';
+		$plugin = isset( $_GET['plugin'] ) ? sanitize_text_field( wp_unslash( $_GET['plugin'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only modal routing does not change state.
 
 		if ( $plugin !== $this->config['proper_folder_name'] ) {
 			return; // Not our plugin; let WP proceed.
 		}
 
-		$github = ! empty( $this->config['github_url'] ) ? esc_url( $this->config['github_url'] ) : '#';
+		$github = ! empty( $this->config['github_url'] ) ? $this->config['github_url'] : '#';
 
 		echo '<div class="wrap">';
 		echo '<h2>' . esc_html__( 'Plugin Information', 'wp-autoplugin' ) . '</h2>';
 		echo '<p>' . esc_html__( 'See the GitHub page for details.', 'wp-autoplugin' ) . '</p>';
-		echo '<p><a href="' . $github . '" target="_blank" rel="noopener noreferrer">' . esc_html__( 'GitHub Repository', 'wp-autoplugin' ) . '</a></p>';
+		echo '<p><a href="' . esc_url( $github ) . '" target="_blank" rel="noopener noreferrer">' . esc_html__( 'GitHub Repository', 'wp-autoplugin' ) . '</a></p>';
 		echo '</div>';
 
 		exit; // Stop Core from loading the default (wp.org) screen.
@@ -464,17 +464,17 @@ class GitHub_Updater {
 	private function get_description_html_from_readme_or_fallback() {
 		$readme = $this->get_readme_body();
 		if ( '' !== $readme ) {
-			// Try WordPress readme.txt: == Description == ... until next == Heading ==
+			// Try WordPress readme.txt: == Description == ... until next == Heading ==.
 			if ( preg_match( '/^==\s*Description\s*==\s*(.+?)(?=^\s*==\s*[^=]+==|\z)/ims', $readme, $m ) ) {
 				return $this->simple_markdownish_to_html( trim( $m[1] ) );
 			}
 
-			// Try Markdown: ## Description ... until next ##
+			// Try Markdown: ## Description ... until next ##.
 			if ( preg_match( '/^##+\s*Description\s*$([\s\S]*?)(?=^\s*##+\s+\S|\z)/im', $readme, $m ) ) {
 				return $this->simple_markdownish_to_html( trim( $m[1] ) );
 			}
 
-			// Fallback for Markdown: content after H1 (# Title) until next H2 (## ...)
+			// Fallback for Markdown: content after H1 (# Title) until next H2 (## ...).
 			if ( preg_match( '/^#\s+.*\n([\s\S]*?)(?=^\s*##\s+\S|\z)/m', $readme, $m ) ) {
 				$chunk = trim( $m[1] );
 				if ( '' !== $chunk ) {
@@ -482,7 +482,7 @@ class GitHub_Updater {
 				}
 			}
 
-			// Or: everything until the first major heading (## Installation/Usage/Changelog)
+			// Or: everything until the first major heading (## Installation/Usage/Changelog).
 			if ( preg_match( '/^([\s\S]*?)(?=^\s*##\s+(?:Installation|Usage|Changelog|FAQ|Screenshots)\b|\z)/im', $readme, $m ) ) {
 				$chunk = trim( $m[1] );
 				if ( '' !== $chunk ) {
@@ -536,7 +536,7 @@ class GitHub_Updater {
 	 * - Converts **bold** text to <strong> tags
 	 * - Converts Markdown links [text](url) to HTML links
 	 *
-	 * @param string $text
+	 * @param string $text Text to convert.
 	 * @return string HTML
 	 */
 	private function simple_markdownish_to_html( $text ) {
@@ -546,17 +546,17 @@ class GitHub_Updater {
 		$buf   = [];
 		$in_ul = false;
 		foreach ( $lines as $line ) {
-			// Handle heading lines: = Heading =, == Heading ==, etc.
+				// Handle heading lines: = Heading =, == Heading ==, etc.
 			if ( preg_match( '/^(\s*)(=+)\s*(.+?)\s*\2\s*$/', $line, $hm ) ) {
 				if ( $in_ul ) {
 					$buf[] = '</ul>';
 					$in_ul = false;
 				}
-				$level        = min( strlen( $hm[2] ), 6 ); // H1-H6 max
+				$level        = min( strlen( $hm[2] ), 6 ); // H1-H6 max.
 				$heading_text = $this->process_inline_markdown( trim( $hm[3] ) );
 				$buf[]        = '<h' . $level . '>' . $heading_text . '</h' . $level . '>';
 			} elseif ( preg_match( '/^\s*[-*]\s+(.+)$/', $line, $mm ) ) {
-				// Handle list items
+				// Handle list items.
 				if ( ! $in_ul ) {
 					$buf[] = '<ul>';
 					$in_ul = true;
@@ -586,28 +586,28 @@ class GitHub_Updater {
 	/**
 	 * Process inline Markdown elements like **bold** and [text](url) links.
 	 *
-	 * @param string $text
-	 * @return string HTML with inline elements processed
+	 * @param string $text Text to process.
+	 * @return string HTML with inline elements processed.
 	 */
 	private function process_inline_markdown( $text ) {
-		// Escape any HTML in the text first
+		// Escape any HTML in the text first.
 		$text = esc_html( $text );
 
-		// Convert **bold** to <strong>
+		// Convert **bold** to <strong>.
 		$text = preg_replace( '/\*\*([^*]+)\*\*/', '<strong>$1</strong>', $text );
 
-		// Convert [text](url) to <a> tags
+		// Convert [text](url) to <a> tags.
 		$text = preg_replace_callback(
 			'/\[([^\]]+)\]\(([^)]+)\)/',
 			function ( $matches ) {
-				$link_text = $matches[1]; // Already escaped above
+				$link_text = $matches[1]; // Already escaped above.
 				$url       = esc_url( html_entity_decode( $matches[2] ) );
 				return '<a href="' . $url . '" target="_blank" rel="noopener noreferrer">' . $link_text . '</a>';
 			},
 			$text
 		);
 
-		// Un-escape our processed HTML tags
+		// Un-escape our processed HTML tags.
 		$text = str_replace(
 			[ '&lt;strong&gt;', '&lt;/strong&gt;', '&lt;a href=&quot;', '&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;', '&lt;/a&gt;' ],
 			[ '<strong>', '</strong>', '<a href="', '" target="_blank" rel="noopener noreferrer">', '</a>' ],

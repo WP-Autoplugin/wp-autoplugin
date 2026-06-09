@@ -1,3 +1,11 @@
+<?php
+/**
+ * Model selection modal.
+ *
+ * @package WP-Autoplugin
+ */
+
+?>
 <!-- Model Selection Modal -->
 <div id="model-selection-modal" style="display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);">
 	<div style="background-color: #fefefe; margin: 10% auto; padding: 20px; border: 1px solid #888; width: 500px; max-width: 90%; border-radius: 4px;">

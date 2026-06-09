@@ -47,7 +47,9 @@ class Generator {
 
 		$planner_api   = $this->admin->api_handler->get_planner_api();
 		$generator     = new Plugin_Generator( $planner_api );
-		$prompt_images = isset( $_POST['prompt_images'] ) ? AI_Utils::parse_prompt_images( $_POST['prompt_images'] ) : [];
+		$prompt_images = isset( $_POST['prompt_images'] ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in the parent AJAX router.
+			? AI_Utils::parse_prompt_images( wp_unslash( $_POST['prompt_images'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Parser validates image JSON, MIME type, base64 shape, file name, and size.
+			: [];
 		$plan_data     = $generator->generate_plugin_plan( $plan, $prompt_images );
 		if ( is_wp_error( $plan_data ) ) {
 			wp_send_json_error( $plan_data->get_error_message() );

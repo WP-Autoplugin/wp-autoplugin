@@ -96,7 +96,7 @@ class AI_Utils {
 				continue;
 			}
 
-			$decoded = base64_decode( $base64, true );
+			$decoded = base64_decode( $base64, true ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- Prompt images are transferred as validated base64 data URLs.
 			if ( false === $decoded ) {
 				continue;
 			}
@@ -115,7 +115,7 @@ class AI_Utils {
 			}
 
 			$images[] = [
-				'data' => base64_encode( $decoded ),
+				'data' => base64_encode( $decoded ), // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode -- Prompt images are passed to AI APIs as base64 image payloads.
 				'mime' => $sanitized_mime,
 				'name' => $name,
 			];
@@ -176,7 +176,7 @@ class AI_Utils {
 	 * @param string $system_message Optional system prompt (handled separately via instructions).
 	 * @return array
 	 */
-	public static function build_openai_responses_multimodal_input( $prompt, $prompt_images, $system_message = '' ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found
+	public static function build_openai_responses_multimodal_input( $prompt, $prompt_images, $system_message = '' ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- Signature mirrors other multimodal builders.
 		$content = [];
 		$prompt  = (string) $prompt;
 
@@ -384,7 +384,7 @@ class AI_Utils {
 			return $context;
 		}
 
-		// Single-file code (assumed PHP by default)
+		// Single-file code (assumed PHP by default).
 		return "```php\n" . (string) $plugin_code_or_files . "\n```";
 	}
 
@@ -427,12 +427,12 @@ class AI_Utils {
 	public static function get_language_instruction( $json_mode = false ) {
 		$language_setting = get_option( 'wp_autoplugin_ai_language', '' );
 
-		// If empty, use WordPress locale
+		// If empty, use WordPress locale.
 		if ( empty( $language_setting ) ) {
 			$language_setting = get_locale();
 		}
 
-		// Map language codes to language names for the instruction
+		// Map language codes to language names for the instruction.
 		$language_map = [
 			'en_US' => 'English',
 			'fr_FR' => 'French',
@@ -449,7 +449,7 @@ class AI_Utils {
 
 		$language_name = isset( $language_map[ $language_setting ] ) ? $language_map[ $language_setting ] : 'English';
 
-		// Different instructions for JSON mode vs regular mode
+		// Different instructions for JSON mode vs regular mode.
 		if ( $json_mode ) {
 			return '
 
