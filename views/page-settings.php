@@ -174,6 +174,8 @@ function render_model_dropdown( $name, $selected_value ) {
 							'tr_TR' => 'Türkçe (Turkish)',
 							'ru_RU' => 'Русский (Russian)',
 						];
+
+						$supported_languages = apply_filters( 'wp_autoplugin_supported_languages', $supported_languages );
 						foreach ( $supported_languages as $code => $name ) {
 							echo '<option value="' . esc_attr( $code ) . '" ' . selected( $current_language, $code, false ) . '>' . esc_html( $name ) . '</option>';
 						}
