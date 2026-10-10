@@ -5,6 +5,12 @@ use WP_Autoplugin\V2\Domain\AI\Model_Output_Limits;
 /** Covers provider-documented output ceilings for built-in v2 models. */
 final class ModelOutputLimitsTest extends WP_UnitTestCase {
 	public function test_known_model_families_use_their_native_output_maximums(): void {
+		foreach ( [ 'gpt-6-astra', 'gpt-6-sol', 'gpt-6-luna', 'gpt-6.1-sol' ] as $model ) {
+			$this->assertSame( 128000, Model_Output_Limits::maximum( 'openai', $model ) );
+		}
+		foreach ( [ 'claude-opus-5-5', 'claude-sonnet-5-5', 'claude-haiku-5-5' ] as $model ) {
+			$this->assertSame( 128000, Model_Output_Limits::maximum( 'anthropic', $model ) );
+		}
 		$this->assertSame( 128000, Model_Output_Limits::maximum( 'openai', 'gpt-5.4-mini' ) );
 		$this->assertSame( 32768, Model_Output_Limits::maximum( 'openai', 'gpt-4.1' ) );
 		$this->assertSame( 16384, Model_Output_Limits::maximum( 'openai', 'gpt-4o-mini' ) );

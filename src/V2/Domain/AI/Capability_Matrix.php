@@ -7,7 +7,7 @@ namespace WP_Autoplugin\V2\Domain\AI;
  */
 final class Capability_Matrix {
 	private const IMAGE_MODEL_PATTERNS = [
-		'openai'    => '/^(?:gpt-(?:4\.1|4o|5(?:\.\d+)?)|o3)(?:$|-)/',
+		'openai'    => '/^(?:gpt-(?:4\.1|4o|[56](?:\.\d+)?)|o3)(?:$|-)/',
 		'anthropic' => '/^claude-/',
 		'google'    => '/^gemini-/',
 		'xai'       => '/^grok-/',

@@ -58,6 +58,13 @@ final class ModelCatalogTest extends WP_UnitTestCase {
 	public function test_registry_contains_the_latest_requested_provider_models(): void {
 		$models = Model_Registry::all();
 
+		$this->assertSame( 'GPT-6.1 Sol', $models['OpenAI']['gpt-6.1-sol'] );
+		$this->assertSame( 'GPT-6 Astra', $models['OpenAI']['gpt-6-astra'] );
+		$this->assertSame( 'GPT-6 Sol', $models['OpenAI']['gpt-6-sol'] );
+		$this->assertSame( 'GPT-6 Luna', $models['OpenAI']['gpt-6-luna'] );
+		$this->assertSame( 'Claude Opus 5.5', $models['Anthropic']['claude-opus-5-5'] );
+		$this->assertSame( 'Claude Sonnet 5.5', $models['Anthropic']['claude-sonnet-5-5'] );
+		$this->assertSame( 'Claude Haiku 5.5', $models['Anthropic']['claude-haiku-5-5'] );
 		$this->assertSame( 'GPT-5.6 Sol', $models['OpenAI']['gpt-5.6-sol'] );
 		$this->assertSame( 'GPT-5.6 Terra', $models['OpenAI']['gpt-5.6-terra'] );
 		$this->assertSame( 'GPT-5.6 Luna', $models['OpenAI']['gpt-5.6-luna'] );
@@ -67,6 +74,23 @@ final class ModelCatalogTest extends WP_UnitTestCase {
 		$this->assertSame( 'Gemini 3.6 Flash', $models['Google']['gemini-3.6-flash'] );
 		$this->assertSame( 'Gemini 3.5 Flash-Lite', $models['Google']['gemini-3.5-flash-lite'] );
 		$this->assertSame( 'Grok 4.5', $models['xAI']['grok-4.5'] );
+	}
+
+	public function test_new_models_are_available_for_each_role_with_images_and_native_tools(): void {
+		update_option( 'wp_autoplugin_openai_api_key', 'test-key' );
+		update_option( 'wp_autoplugin_anthropic_api_key', 'test-key' );
+		$catalog = new Model_Catalog();
+		foreach ( [ 'gpt-6.1-sol', 'gpt-6-astra', 'gpt-6-sol', 'gpt-6-luna', 'claude-opus-5-5', 'claude-sonnet-5-5', 'claude-haiku-5-5' ] as $model ) {
+			foreach ( [ 'planner', 'coder', 'reviewer' ] as $role ) {
+				$selection = $catalog->update( $role, $model, 'max' );
+				$this->assertFalse( is_wp_error( $selection ) );
+				$this->assertTrue( $selection['available'] );
+				$this->assertTrue( $selection['images'] );
+				$this->assertTrue( $selection['direct'] );
+				$this->assertTrue( $selection['native_read_tools'] );
+				$this->assertSame( 'max', $selection['effort'] );
+			}
+		}
 	}
 
 	public function test_role_selection_inherits_default_and_can_be_detached_or_restored(): void {

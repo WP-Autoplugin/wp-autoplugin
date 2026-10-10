@@ -4,7 +4,7 @@ Donate link: https://wp-autoplugin.com
 Tags: ai, plugin generator, development, wordpress, automation
 Requires at least: 6.6
 Tested up to: 7.0
-Stable tag: 2.0.1
+Stable tag: 2.0.2
 Requires PHP: 8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -144,6 +144,12 @@ Update and plugin-information checks query `https://api.github.com` and read hea
 * [GitHub General Privacy Statement](https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement)
 
 == Changelog ==
+
+= 2.0.2 =
+
+* Added GPT-6 Astra, Sol, Luna, and GPT-6.1 Sol for OpenAI.
+* Added Claude Opus, Sonnet, and Haiku 5.5 for Anthropic.
+* Added matching model effort controls, output-token limits, and image-input support.
 
 = 2.0.1 =
 

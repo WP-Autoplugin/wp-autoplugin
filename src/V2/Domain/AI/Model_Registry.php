@@ -14,6 +14,10 @@ final class Model_Registry {
 	public static function all(): array {
 		$models = [
 			'OpenAI'    => [
+				'gpt-6.1-sol'   => 'GPT-6.1 Sol',
+				'gpt-6-astra'   => 'GPT-6 Astra',
+				'gpt-6-sol'     => 'GPT-6 Sol',
+				'gpt-6-luna'    => 'GPT-6 Luna',
 				'gpt-5.6-sol'   => 'GPT-5.6 Sol',
 				'gpt-5.6-terra' => 'GPT-5.6 Terra',
 				'gpt-5.6-luna'  => 'GPT-5.6 Luna',
@@ -35,6 +39,9 @@ final class Model_Registry {
 				'o3-pro'        => 'o3-pro',
 			],
 			'Anthropic' => [
+				'claude-opus-5-5'            => 'Claude Opus 5.5',
+				'claude-sonnet-5-5'          => 'Claude Sonnet 5.5',
+				'claude-haiku-5-5'           => 'Claude Haiku 5.5',
 				'claude-fable-5'             => 'Claude Fable 5',
 				'claude-opus-5'              => 'Claude Opus 5',
 				'claude-sonnet-5'            => 'Claude Sonnet 5',

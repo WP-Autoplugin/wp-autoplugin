@@ -1,7 +1,7 @@
 {
   "name": "wp-autoplugin-v2-admin",
   "private": true,
-  "version": "2.0.1",
+  "version": "2.0.2",
   "scripts": {
     "build": "wp-scripts build assets/v2/src/index.tsx assets/v2/src/settings.ts --output-path=assets/v2/build",
     "start": "wp-scripts start assets/v2/src/index.tsx assets/v2/src/settings.ts --output-path=assets/v2/build",

@@ -22,13 +22,34 @@ final class Model_Effort {
 	 * @return array<string, array{provider:string,levels:array<int,string>,default:string}>
 	 */
 	public static function capabilities(): array {
-		$openai_standard = [ 'none', 'low', 'medium', 'high', 'xhigh' ];
-		$openai_gpt_5_6  = [ 'none', 'low', 'medium', 'high', 'xhigh', 'max' ];
-		$openai_gpt_5    = [ 'minimal', 'low', 'medium', 'high' ];
-		$anthropic       = [ 'low', 'medium', 'high', 'max' ];
-		$anthropic_5     = [ 'low', 'medium', 'high', 'xhigh', 'max' ];
+		$openai_standard  = [ 'none', 'low', 'medium', 'high', 'xhigh' ];
+		$openai_gpt_5_6   = [ 'none', 'low', 'medium', 'high', 'xhigh', 'max' ];
+		$openai_reasoning = [ 'low', 'medium', 'high', 'xhigh', 'max' ];
+		$openai_gpt_5     = [ 'minimal', 'low', 'medium', 'high' ];
+		$anthropic        = [ 'low', 'medium', 'high', 'max' ];
+		$anthropic_5      = [ 'low', 'medium', 'high', 'xhigh', 'max' ];
 
 		$capabilities = [
+			'gpt-6.1-sol'              => [
+				'provider' => 'openai',
+				'levels'   => $openai_reasoning,
+				'default'  => 'medium',
+			],
+			'gpt-6-astra'              => [
+				'provider' => 'openai',
+				'levels'   => $openai_reasoning,
+				'default'  => 'medium',
+			],
+			'gpt-6-sol'                => [
+				'provider' => 'openai',
+				'levels'   => $openai_gpt_5_6,
+				'default'  => 'medium',
+			],
+			'gpt-6-luna'               => [
+				'provider' => 'openai',
+				'levels'   => $openai_gpt_5_6,
+				'default'  => 'medium',
+			],
 			'gpt-5.6-sol'              => [
 				'provider' => 'openai',
 				'levels'   => $openai_gpt_5_6,
@@ -95,6 +116,21 @@ final class Model_Effort {
 				'default'  => 'medium',
 			],
 			'claude-fable-5'           => [
+				'provider' => 'anthropic',
+				'levels'   => $anthropic_5,
+				'default'  => 'high',
+			],
+			'claude-opus-5-5'          => [
+				'provider' => 'anthropic',
+				'levels'   => $anthropic_5,
+				'default'  => 'medium',
+			],
+			'claude-haiku-5-5'         => [
+				'provider' => 'anthropic',
+				'levels'   => $anthropic_5,
+				'default'  => 'medium',
+			],
+			'claude-sonnet-5-5'        => [
 				'provider' => 'anthropic',
 				'levels'   => $anthropic_5,
 				'default'  => 'high',

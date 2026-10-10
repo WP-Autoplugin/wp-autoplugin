@@ -14,7 +14,7 @@ final class GitHubUpdaterTest extends WP_UnitTestCase {
 	public function test_real_plugin_header_declares_release_and_update_metadata(): void {
 		$plugin = get_plugin_data( WP_AUTOPLUGIN_DIR . 'wp-autoplugin.php', false, false );
 
-		$this->assertSame( '2.0.1', $plugin['Version'] );
+		$this->assertSame( '2.0.2', $plugin['Version'] );
 		$this->assertSame( '6.6', $plugin['RequiresWP'] );
 		$this->assertSame( '8.0', $plugin['RequiresPHP'] );
 		$this->assertSame( 'https://wp-autoplugin.com/updates/wp-autoplugin', $plugin['UpdateURI'] );

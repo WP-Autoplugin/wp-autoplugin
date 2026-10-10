@@ -47,7 +47,7 @@ final class Model_Output_Limits {
 	}
 
 	private static function openai( string $model ): ?int {
-		if ( str_starts_with( $model, 'gpt-5' ) ) {
+		if ( str_starts_with( $model, 'gpt-5' ) || str_starts_with( $model, 'gpt-6' ) ) {
 			return 128000;
 		}
 		if ( str_starts_with( $model, 'gpt-4.1' ) ) {
@@ -68,6 +68,7 @@ final class Model_Output_Limits {
 			str_starts_with( $model, 'claude-fable-5' )
 			|| str_starts_with( $model, 'claude-opus-5' )
 			|| str_starts_with( $model, 'claude-sonnet-5' )
+			|| str_starts_with( $model, 'claude-haiku-5-5' )
 			|| str_starts_with( $model, 'claude-opus-4-8' )
 			|| str_starts_with( $model, 'claude-opus-4-7' )
 			|| str_starts_with( $model, 'claude-opus-4-6' )
